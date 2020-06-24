@@ -32,7 +32,7 @@ Install python sdk named 'storops'. It can be installed using pip , based on app
 
   * Clone the latest development repository and install the ansible modules.
 
-  git clone https://github.com/dell/ansible-unity
+  git clone https://github.com/dell/ansible-unity.git
   
   cd ansible-unity/dellemc_ansible
 
