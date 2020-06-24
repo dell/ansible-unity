@@ -1,0 +1,205 @@
+# Copyright: (c) 2020, DellEMC
+
+"""import storops lib"""
+try:
+    from storops import UnitySystem
+    from storops.unity.client import UnityClient
+    HAS_UNITY_SDK = True
+except ImportError:
+    HAS_UNITY_SDK = False
+
+'''import pkg_resources'''
+try:
+    from pkg_resources import parse_version
+    import pkg_resources
+    PKG_RSRC_IMPORTED = True
+except ImportError:
+    PKG_RSRC_IMPORTED = False
+
+import logging
+import math
+import urllib3
+urllib3.disable_warnings()
+from decimal import Decimal
+
+
+'''Check required libraries'''
+
+
+def get_unity_sdk():
+    return HAS_UNITY_SDK
+
+
+'''
+This method provides common access parameters required for the ansible 
+modules on Unity StorageSystem
+options:
+  management_host:
+    description:
+    - IP/FQDN of Unity unisphere host.
+    required: true
+  port:
+    description:
+    - port at which Unity unisphere api is listening.
+    required: false
+  verifycert:
+    description:
+    - Whether or not to verify client SSL certificate.
+    required: false
+  username:
+    description:
+    - User name to access on to unity unisphere host
+    required: true
+  password:
+    description:
+    - password to access on to unity unispherehost
+    required: true
+
+'''
+
+
+def get_unity_management_host_parameters():
+    return dict(
+        unispherehost=dict(type='str', required=True),
+        username=dict(type='str', required=True),
+        password=dict(type='str', required=True, no_log=True),
+        verifycert=dict(type='bool', required=False, default=True),
+        port=dict(type='int', required=False, default=443)
+    )
+
+
+'''
+This method is to establish connection with Unity array using storops SDK.
+parameters:
+  module_params - Ansible module parameters which contain below unity 
+                  unisphere details to establish connection.
+                - management_host: IP/FQDN of unity unisphere host.
+                - port:port at which Unity unisphere api is hosted.
+                - verifycert: Boolean value to inform system whether to 
+                  verify client certificate or not.
+                - username:  User name to access on to unity management host
+                - password: Password to access unity management host    
+returns connection object to access Unity Unisphere using storops SDK
+'''
+
+
+def get_unity_unisphere_connection(module_params):
+    if HAS_UNITY_SDK:
+        conn = UnitySystem(host=module_params['unispherehost'],
+                           port=module_params['port'],
+                           verify=module_params['verifycert'],
+                           username=module_params['username'],
+                           password=module_params['password'])
+        return conn
+
+
+'''
+This method checks if supported version of storops SDK installed.
+'''
+
+
+def storops_version_check():
+    try:
+        supported_version = False
+        if not PKG_RSRC_IMPORTED:
+            unsupported_version_message = "Unable to import " \
+                                          "'pkg_resources', please install" \
+                                          " the required package"
+        else:
+            min_ver = '1.2.5'
+            curr_version = pkg_resources.require("storops")[0].version
+            unsupported_version_message = "Storops {0} is not supported " \
+                                          "by this module. Minimum supported" \
+                                          " version is :{1}".format(
+                                           curr_version, min_ver)
+
+            supported_version = parse_version(curr_version) >= parse_version(
+                                                               min_ver)
+
+        storops_version = dict(
+            supported_version=supported_version,
+            unsupported_version_message=unsupported_version_message)
+
+        return storops_version
+
+    except Exception as e:
+        unsupported_version_message = "Getting Storops SDK version, failed" \
+                                      " with Error {0}".format(str(e))
+
+        storops_version = dict(
+            supported_version=False,
+            unsupported_version_message=unsupported_version_message)
+        return storops_version
+
+
+'''
+This method is to initialize logger and return the logger object 
+parameters:
+     - module_name: Name of module to be part of log message.
+     - log_file_name: name of the file in which the log meessages get appended.
+     - log_devel: log level.
+returns logger object 
+'''
+
+
+def get_logger(module_name, log_file_name='dellemc_ansible_provisioning.log',
+               log_devel=logging.INFO):
+    FORMAT = '%(asctime)-15s %(filename)s %(levelname)s : %(message)s'
+    logging.basicConfig(filename=log_file_name, format=FORMAT)
+    LOG = logging.getLogger(module_name)
+    LOG.setLevel(log_devel)
+    return LOG
+
+
+'''
+Convert the given size to bytes
+'''
+KB_IN_BYTES = 1024
+MB_IN_BYTES = 1024 * 1024
+GB_IN_BYTES = 1024 * 1024 * 1024
+TB_IN_BYTES = 1024 * 1024 * 1024 * 1024
+
+
+def get_size_bytes(size, cap_units):
+    if size is not None and size > 0:
+        if cap_units in ('kb', 'KB'):
+            return size * KB_IN_BYTES
+        elif cap_units in ('mb', 'MB'):
+            return size * MB_IN_BYTES
+        elif cap_units in ('gb', 'GB'):
+            return size * GB_IN_BYTES
+        elif cap_units in ('tb', 'TB'):
+            return size * TB_IN_BYTES
+        else:
+            return size
+    else:
+        return 0
+
+
+'''
+Convert size in byte with actual unit like KB,MB,GB,TB,PB etc.
+'''
+
+
+def convert_size_with_unit(size_bytes):
+    if not isinstance(size_bytes, int):
+        raise ValueError('This method takes Integer type argument only')
+    if size_bytes == 0:
+        return "0B"
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(size_bytes, 1024)))
+    p = math.pow(1024, i)
+    s = round(size_bytes / p, 2)
+    return "%s %s" % (s, size_name[i])
+
+
+'''
+Convert the given size to size in GB, size is restricted to 2 decimal places
+'''
+
+
+def get_size_in_gb(size, cap_units):
+    size_in_bytes = get_size_bytes(size, cap_units)
+    size = Decimal(size_in_bytes / GB_IN_BYTES)
+    size_in_gb = round(size)
+    return size_in_gb
