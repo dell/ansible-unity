@@ -14,22 +14,22 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r"""
 
 module: dellemc_unity_volume
-version_added: '2.7'
-short_description: Manage volume on Unity Storage System
+version_added: '1.1.0'
+short_description: Manage volume on Unity storage system
 description:
-- Managing volume on Unity Storage System includes-
+- Managing volume on Unity storage system includes-
   Create new volume,
   Modify volume attributes,
   Map Volume to host,
   Unmap volume to host,
   Display volume details,
   Delete volume
-  
+
 extends_documentation_fragment:
-  - dellemc_unity.dellemc_unity
+  - dellemc.unity.dellemc_unity.unity
 
 author:
-- Arindam Datta (@arindam-emc) <arindam.datta@dell.com>
+- Arindam Datta (@arindam-emc) <ansible.team@dell.com>
 
 options:
   vol_name:
@@ -59,13 +59,13 @@ options:
     type: int
   cap_unit:
     description:
-     - The unit of the volume size. It defaults to 'GB'
+     - The unit of the volume size. It defaults to 'GB', if not specified.
     choices: ['GB' , 'TB']
-    default: 'GB'
     type: str
   description:
     description:
     - Description about the volume.
+    - Description can be removed by passing empty string ("").
     type: str
   snap_schedule:
     description:
@@ -90,7 +90,7 @@ options:
   io_limit_policy:
     description:
     - IO limit policy associated with this volume.
-      Once it's set cannot be removed through ansible module but it can 
+      Once it's set cannot be removed through ansible module but it can
       be changed.
     type: str
   host_name:
@@ -110,7 +110,7 @@ options:
     - Host Lun Unit to be mapped/unmapped with this volume.
     - It's an optional parameter, hlu can be specified along
       with host_name or host_id and mapping_state.
-    - If hlu is not specified, unity will choose it automatically. 
+    - If hlu is not specified, unity will choose it automatically.
       The maximum value supported is 255.
     type: int
   mapping_state:
@@ -147,7 +147,7 @@ EXAMPLES = r"""
     description: "{{description}}"
     pool_name: "{{pool}}"
     size: 2
-    cap_unit: "{{cap_GB}}"        
+    cap_unit: "{{cap_GB}}"
     state: "{{state_present}}"
 
 - name: Expand Volume by volume id
@@ -233,44 +233,44 @@ volume_details:
             type: str
         name:
             description:
-                - Name of the volume 
+                - Name of the volume
             type: str
         description:
             description:
                 - description about the volume
             type: str
-        is_compression_enabled:
+        is_data_reduction_enabled:
             description:
-                - Whether or not compression enabled on this volume 
+                - Whether or not compression enabled on this volume
             type: bool
         size_total_with_unit:
             description:
-                - Size of the volume with actual unit. 
+                - Size of the volume with actual unit.
             type: str
         snap_schedule:
             description:
                 - Snapshot schedule applied to this volume
-            type: complex            
+            type: dict
         tiering_policy:
             description:
-                - Tiering policy applied to this volume 
-            type: enum            
+                - Tiering policy applied to this volume
+            type: str
         current_sp:
             description:
-                - Current storage processor for this volume 
-            type: enum             
+                - Current storage processor for this volume
+            type: str
         pool:
             description:
                 - The pool in which this volume is allocated.
-            type: complex             
+            type: dict
         host_access:
             description:
-                - Host mapped to this volume 
-            type: complex
+                - Host mapped to this volume
+            type: list
         io_limit_policy:
             description:
                 - IO limit policy associated with this volume
-            type: complex
+            type: dict
         wwn:
             description:
                 - The world wide name of this volume
@@ -279,20 +279,14 @@ volume_details:
             description:
                 - Indicates whether thin provisioning is enabled for this
                   volume
-            type: bool        
+            type: bool
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.storage.dell import \
-    dellemc_ansible_unity_utils as utils
-from storops.exception import UnityResourceNotFoundError
-from storops.connection.exceptions import HttpError
-from storops.unity.enums import TieringPolicyEnum, NodeEnum, HostLUNAccessEnum
-from storops.unity.resource.lun import UnityLun
-from storops.unity.resource.pool import UnityPoolList, UnityPool
-from storops.unity.resource.snap_schedule import UnitySnapScheduleList, \
-    UnitySnapSchedule
+from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
+    import dellemc_ansible_unity_utils as utils
 import logging
+
 
 LOG = utils.get_logger('dellemc_unity_volume', log_devel=logging.INFO)
 
@@ -366,7 +360,7 @@ class UnityVolume(object):
                 LOG.info("Failed to get the volume %s", id_or_name)
                 return None
 
-        except HttpError as e:
+        except utils.HttpError as e:
             if e.http_status == 401:
                 cred_err = "Incorrect username or password , {0}".format(
                     e.message)
@@ -376,7 +370,7 @@ class UnityVolume(object):
                 msg = errormsg.format(id_or_name, str(e))
                 self.module.fail_json(msg=msg)
 
-        except UnityResourceNotFoundError as e:
+        except utils.UnityResourceNotFoundError as e:
             errormsg.format(id_or_name, str(e))
             LOG.error(errormsg)
             return None
@@ -428,14 +422,14 @@ class UnityVolume(object):
         try:
             LOG.debug("Attempting to get Snapshot Schedule with name %s",
                       name)
-            obj_ss = UnitySnapScheduleList.get(self.unity_conn._cli,
-                                               name=name)
+            obj_ss = utils.UnitySnapScheduleList.get(self.unity_conn._cli,
+                                                     name=name)
             if obj_ss and (len(obj_ss) > 0):
                 LOG.info("Successfully got Snapshot Schedule %s", obj_ss)
                 return obj_ss
             else:
-                errormsg = "Failed to get snapshot schedule " \
-                           "with name {0}".format(name)
+                msg = "Failed to get snapshot schedule " \
+                      "with name {0}".format(name)
                 LOG.error(msg)
                 self.module.fail_json(msg=msg)
 
@@ -496,8 +490,8 @@ class UnityVolume(object):
                 LOG.info("Successfully got pool %s", obj_pool)
                 return obj_pool
             else:
-                msg = "Failed to get the pool with {0}".format(
-                         id_or_name)
+                msg = "Failed to get the pool with " \
+                      "{0}".format(id_or_name)
                 LOG.error(msg)
                 self.module.fail_json(msg=msg)
 
@@ -512,8 +506,8 @@ class UnityVolume(object):
              :return: storage processor enum
         """
 
-        if sp in NodeEnum.__members__:
-            return NodeEnum[sp]
+        if sp in utils.NodeEnum.__members__:
+            return utils.NodeEnum[sp]
         else:
             errormsg = "Invalid choice {0} for storage processor".format(
                 sp)
@@ -526,8 +520,8 @@ class UnityVolume(object):
              :return: tiering_policy enum
         """
 
-        if tiering_policy in TieringPolicyEnum.__members__:
-            return TieringPolicyEnum[tiering_policy]
+        if tiering_policy in utils.TieringPolicyEnum.__members__:
+            return utils.TieringPolicyEnum[tiering_policy]
         else:
             errormsg = "Invalid choice {0} for tiering policy".format(
                 tiering_policy)
@@ -604,21 +598,21 @@ class UnityVolume(object):
                 host_id_list.append(host_access.id)
                 host = self.get_host(host_id=host_access.id).update()
                 host_dict = host.host_luns._get_properties()
-                LOG.debug("check if hlu present : {0}".format(host_dict))
+                LOG.debug("check if hlu present : %s", host_dict)
                 if "hlu" in host_dict.keys():
                     hlu_list.append(host_dict['hlu'])
 
-            LOG.debug("Host Dictionaries:- host_id: %s, "
-                     "hlu: %s", host_id_list,  hlu_list)
+            LOG.debug("Host Dictionaries:- host_id: %s, hlu: %s",
+                      host_id_list, hlu_list)
 
             if mapping_state == 'mapped':
-                if (self.param_host_id not in host_id_list): \
-                       #<hlu list not available in API response> or (hlu not in hlu_list):
+                if (self.param_host_id not in host_id_list):
+                    # <hlu list not available in API response> or (hlu not in hlu_list):
                     to_modify = True
 
             if mapping_state == 'unmapped':
                 if (self.param_host_id in host_id_list):
-                    #<hlu list not available in API response> or (hlu in hlu_list):
+                    # <hlu list not available in API response> or (hlu in hlu_list):
                     to_modify = True
 
             LOG.debug("host_access_modify_required : %s ", str(to_modify))
@@ -630,9 +624,10 @@ class UnityVolume(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
-    def volume_modify_required(self, obj_vol):
+    def volume_modify_required(self, obj_vol, cap_unit):
         """Check if volume modification is required
             :param obj_vol: volume instance
+            :param cap_unit: capacity unit
             :return: Boolean value to indicate if modification is required
         """
 
@@ -648,7 +643,6 @@ class UnityVolume(object):
                 to_update.update({'description': description})
 
             size = self.module.params['size']
-            cap_unit = self.module.params['cap_unit']
             if size and cap_unit:
                 size_byte = int(utils.get_size_bytes(size, cap_unit))
                 if size_byte < obj_vol.size_total:
@@ -659,7 +653,7 @@ class UnityVolume(object):
 
             compression = self.module.params['compression']
             if compression is not None and \
-                    compression != obj_vol.is_compression_enabled:
+                    compression != obj_vol.is_data_reduction_enabled:
                 to_update.update({'is_compression': compression})
 
             is_thin = self.module.params['is_thin']
@@ -708,8 +702,8 @@ class UnityVolume(object):
 
         except Exception as e:
             errormsg = "Failed to determine if volume {0},requires " \
-                       "modification, with error {1}".format(
-                obj_vol.name, str(e))
+                       "modification, with error {1}".format(obj_vol.name,
+                                                             str(e))
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
@@ -783,8 +777,8 @@ class UnityVolume(object):
                            io_limit_policy=to_modify_dict['io_limit_policy'],
                            tiering_policy=to_modify_dict['tiering_policy'],
                            snap_schedule=to_modify_dict['snap_schedule'],
-                           is_snap_schedule_paused=
-                           to_modify_dict['is_snap_schedule_paused'],
+                           is_snap_schedule_paused=to_modify_dict[
+                               'is_snap_schedule_paused'],
                            is_compression=to_modify_dict['is_compression'])
 
         except Exception as e:
@@ -857,7 +851,7 @@ class UnityVolume(object):
             for key in self.module.params:
                 val = self.module.params[key]
                 if key not in no_chk_list and isinstance(val, str) \
-                    and val == invalid_string:
+                        and val == invalid_string:
                     errmsg = 'Invalid input parameter "" for {0}'.format(
                         key)
                     self.module.fail_json(msg=errmsg)
@@ -905,8 +899,7 @@ class UnityVolume(object):
             self.module.fail_json(msg="Size can not be 0 (Zero)")
 
         if size and not cap_unit:
-            self.module.params['cap_unit'] = 'GB'
-            cap_unit = self.module.params['cap_unit']
+            cap_unit = 'GB'
 
         if (cap_unit is not None) and not size:
             self.module.fail_json(msg="cap_unit can be specified along "
@@ -944,7 +937,7 @@ class UnityVolume(object):
         if obj_vol:
             volume_details = obj_vol._get_properties()
             vol_id = obj_vol.get_id()
-            to_modify_dict = self.volume_modify_required(obj_vol)
+            to_modify_dict = self.volume_modify_required(obj_vol, cap_unit)
             LOG.debug("Volume Modify Required: %s", to_modify_dict)
             if obj_vol.host_access:
                 to_modify_host = self.host_access_modify_required(
@@ -979,14 +972,14 @@ class UnityVolume(object):
                 if hlu:
                     host_access = [
                         {'host': host,
-                         'accessMask': HostLUNAccessEnum.PRODUCTION,
+                         'accessMask': utils.HostLUNAccessEnum.PRODUCTION,
                          'hlu': hlu}]
                 else:
                     host_access = [
                         {'host': host,
-                         'accessMask': HostLUNAccessEnum.PRODUCTION}]
+                         'accessMask': utils.HostLUNAccessEnum.PRODUCTION}]
 
-            size = utils.get_size_in_gb(size,cap_unit)
+            size = utils.get_size_in_gb(size, cap_unit)
 
             obj_pool = self.get_pool(pool_name=pool_name, pool_id=pool_id)
 
@@ -1038,7 +1031,7 @@ def get_unity_volume_parameters():
         pool_id=dict(required=False, type='str'),
         size=dict(required=False, type='int'),
         cap_unit=dict(required=False, type='str', choices=['GB', 'TB']),
-        is_thin=dict(required=False, type='bool'),
+        is_thin=dict(required=False, type='bool', default=True),
         compression=dict(required=False, type='bool'),
         sp=dict(required=False, type='str', choices=['SPA', 'SPB']),
         io_limit_policy=dict(required=False, type='str'),

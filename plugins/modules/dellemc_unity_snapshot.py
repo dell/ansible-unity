@@ -12,17 +12,17 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 module: dellemc_unity_snapshot
-short_description: Manage snapshot on the Unity Storage System
+short_description: Manage snapshots on the Unity storage system
 description:
-- Managing Snapshot on the Unity Storage System includes create snapshot,
+- Managing snapshots on the Unity storage system includes create snapshot,
   delete snapshot, update snapshot, get snapshot, map host and unmap host.
-version_added: "2.7"
+version_added: "1.1.0"
 
 extends_documentation_fragment:
-  - dellemc_unity.dellemc_unity
+  - dellemc.unity.dellemc_unity.unity
 
 author:
-- P Srinivas Rao (@srinivas-rao5) srinivas_rao5@dell.com
+- P Srinivas Rao (@srinivas-rao5) <ansible.team@dell.com>
 options:
   snapshot_name:
     description:
@@ -227,14 +227,9 @@ snapshot_details:
 
 import logging
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.storage.dell import \
-    dellemc_ansible_unity_utils as utils
-from storops.unity.resource import snap
-from storops.unity.enums import FilesystemSnapAccessTypeEnum, SnapStateEnum,\
-    SnapAccessLevelEnum
+from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
+    import dellemc_ansible_unity_utils as utils
 from datetime import datetime
-from storops.connection.exceptions import HttpError
-from storops.exception import UnityResourceNotFoundError
 
 LOG = utils.get_logger('dellemc_unity_snapshot',
                        log_devel=logging.INFO)
@@ -282,7 +277,7 @@ class UnitySnapshot(object):
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params)
-        self.snap_obj = snap.UnitySnap(self.unity_conn)
+        self.snap_obj = utils.snap.UnitySnap(self.unity_conn)
         LOG.info('Connection established with the Unity Array')
 
     def validate_expiry_time(self, expiry_time):
@@ -386,7 +381,7 @@ class UnitySnapshot(object):
         try:
             return self.unity_conn.get_snap(name=name, _id=id)
 
-        except HttpError as e:
+        except utils.HttpError as e:
             if e.http_status == 401:
                 cred_err = "Incorrect username or password , {0}".format(
                     e.message)
@@ -396,7 +391,7 @@ class UnitySnapshot(object):
                 LOG.error(err_msg)
                 self.module.fail_json(msg=err_msg)
 
-        except UnityResourceNotFoundError as e:
+        except utils.UnityResourceNotFoundError as e:
             err_msg = msg % (snapshot, str(e))
             LOG.error(err_msg)
             return None

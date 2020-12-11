@@ -15,7 +15,7 @@ DOCUMENTATION = r'''
 ---
 module: dellemc_unity_storagepool
 
-version_added: '2.7'
+version_added: '1.1.0'
 
 short_description: Manage storage pool on Unity
 
@@ -25,10 +25,10 @@ description:
 - Modify storage pool
 
 extends_documentation_fragment:
-  - dellemc_unity.dellemc_unity
+  - dellemc.unity.dellemc_unity.unity
 
 author:
-- Ambuj Dubey (@AmbujDube) <ambuj.dubey@dell.com>
+- Ambuj Dubey (@AmbujDube) <ansible.team@dell.com>
 
 options:
   pool_name:
@@ -190,13 +190,10 @@ RETURN = r'''
             type: str
  '''
 
-from storops.unity.resource.pool import UnityPool
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.storage.dell import \
-    dellemc_ansible_unity_utils as utils
-import re
+from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
+    import dellemc_ansible_unity_utils as utils
 import logging
-import math
 
 LOG = utils.get_logger('dellemc_unity_storagepool', log_devel=logging.INFO)
 HAS_UNITY_SDK = utils.get_unity_sdk()
@@ -264,7 +261,7 @@ class UnityStoragePool(object):
             details['snap_size_used_with_unit'] = utils.\
                 convert_size_with_unit(int(details['snap_size_used']))
 
-            pool_instance = UnityPool.get(self.conn._cli, details['id'])
+            pool_instance = utils.UnityPool.get(self.conn._cli, details['id'])
             pool_tier_list = []
             pool_tier_list.append((pool_instance.tiers)._get_properties())
             pool_tier_dict = {}
@@ -325,7 +322,7 @@ class UnityStoragePool(object):
     def pool_modify(self, id, new_pool_name,
                     pool_description, fast_cache, fast_vp):
         """ Modify attributes of storage pool """
-        pool_obj = UnityPool.get(self.conn._cli, id)
+        pool_obj = utils.UnityPool.get(self.conn._cli, id)
         try:
             pool_obj.modify(name=new_pool_name, description=pool_description,
                             is_fast_cache_enabled=fast_cache,
