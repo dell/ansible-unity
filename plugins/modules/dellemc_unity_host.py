@@ -14,7 +14,7 @@ DOCUMENTATION = r'''
 ---
 module: dellemc_unity_host
 
-version_added: '2.7'
+version_added: '1.1.0'
 
 short_description: Manage Host operations on Unity.
 
@@ -27,10 +27,10 @@ description:
 - Deletion of a Host.
 
 extends_documentation_fragment:
-  - dellemc_unity.dellemc_unity
+  - dellemc.unity.dellemc_unity.unity
 
 author:
-- Rajshree Khare (@kharer5) <Rajshree.Khare@dell.com>
+- Rajshree Khare (@kharer5) <ansible.team@dell.com>
 
 options:
   host_name:
@@ -68,6 +68,7 @@ options:
     description:
     - List of initiators to be added/removed to/from host.
     type: list
+    elements: str
 
   initiator_state:
     description:
@@ -208,15 +209,10 @@ host_details:
             type: str
 '''
 
-import json
-import logging
+
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.storage.dell import \
-    dellemc_ansible_unity_utils as utils
-from storops.unity.enums import HostTypeEnum
-from storops.unity.resource import host
-from storops.connection.exceptions import HttpError
-from storops.exception import UnityResourceNotFoundError
+from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
+    import dellemc_ansible_unity_utils as utils
 
 LOG = utils.get_logger('dellemc_unity_host', log_devel=utils.logging.INFO)
 HAS_UNITY_SDK = utils.get_unity_sdk()
@@ -262,7 +258,8 @@ class UnityHost(object):
 
         hosts = []
         host_count = 0
-        hosts = host.UnityHostList.get(cli=self.unity._cli, name=host_name)
+        hosts = utils.host.UnityHostList.get(cli=self.unity._cli,
+                                             name=host_name)
         host_count = len(hosts)
         return host_count
 
@@ -293,7 +290,7 @@ class UnityHost(object):
                     host_details = self.unity.get_host(name=host_name)
 
             return host_details
-        except HttpError as e:
+        except utils.HttpError as e:
             if e.http_status == 401:
                 msg = 'Incorrect username or password provided.'
                 LOG.error(msg)
@@ -303,7 +300,7 @@ class UnityHost(object):
                       "details %s : Error %s " % (host_id_or_name, str(e))
                 LOG.error(msg)
                 self.module.fail_json(msg=msg)
-        except UnityResourceNotFoundError as e:
+        except utils.UnityResourceNotFoundError as e:
             error_message = "Failed to get details of host " \
                             "{0} with error {1}".format(host_id_or_name,
                                                         str(e))
@@ -321,7 +318,7 @@ class UnityHost(object):
         try:
             description = self.module.params['description']
             host_os = self.module.params['host_os']
-            host_type = HostTypeEnum.HOST_MANUAL
+            host_type = utils.HostTypeEnum.HOST_MANUAL
             initiators = self.module.params['initiators']
             initiator_state = self.module.params['initiator_state']
             emptyInitiatorsFlag = False
@@ -347,10 +344,9 @@ class UnityHost(object):
                     self.module.fail_json(msg=error_message)
 
             LOG.info("Creating empty host %s ", host_name)
-            new_host = host.UnityHost.create(self.unity._cli, name=host_name,
-                                             desc=description,
-                                             os=host_os,
-                                             host_type=host_type)
+            new_host = utils.host.UnityHost.create(
+                self.unity._cli, name=host_name, desc=description,
+                os=host_os, host_type=host_type)
 
             # Add initiators, if given.
             if not emptyInitiatorsFlag:
@@ -420,7 +416,7 @@ class UnityHost(object):
                     host_os=None):
         """  Modify a host """
         try:
-            hosts = host.UnityHostList.get(cli=self.unity._cli)
+            hosts = utils.host.UnityHostList.get(cli=self.unity._cli)
             host_names_list = hosts.name
             for name in host_names_list:
                 if new_host_name == name:
@@ -444,7 +440,7 @@ class UnityHost(object):
 
         unmapped_initiators = []
         for id in initiators:
-            initiator_details = host.UnityHostInitiatorList \
+            initiator_details = utils.host.UnityHostInitiatorList \
                 .get(cli=self.unity._cli, initiator_id=id) \
                 ._get_properties()
 
@@ -520,7 +516,7 @@ class UnityHost(object):
             LOG.info("Removing initiators from host %s", host_details.name)
             for id in initiators:
 
-                initiator_details = host.UnityHostInitiatorList \
+                initiator_details = utils.host.UnityHostInitiatorList \
                     .get(cli=self.unity._cli, initiator_id=id) \
                     ._get_properties()
 
@@ -536,7 +532,7 @@ class UnityHost(object):
                     """ Checking for initiator logged_in state """
                     for path in initiator_details["paths"][0]["UnityHostInitiatorPathList"]:
                         path_id = path["UnityHostInitiatorPath"]["id"]
-                        path_id_details = host.UnityHostInitiatorPathList \
+                        path_id_details = utils.host.UnityHostInitiatorPathList \
                             .get(cli=self.unity._cli, _id=path_id) \
                             ._get_properties()
 
@@ -625,7 +621,7 @@ class UnityHost(object):
             self.module.fail_json(msg=err_msg)
 
         if initiators:
-            initiators_list = host.UnityHostInitiatorList\
+            initiators_list = utils.host.UnityHostInitiatorList\
                 .get(cli=self.unity._cli)
             for id in initiators:
                 if id not in initiators_list.initiator_id:
@@ -749,7 +745,7 @@ def get_unity_host_parameters():
                               'VMware ESXi', 'Windows Client',
                               'Windows Server']),
         new_host_name=dict(required=False, type='str'),
-        initiators=dict(required=False, type='list'),
+        initiators=dict(required=False, type='list', elements='str'),
         initiator_state=dict(required=False, type='str',
                              choices=['present-in-host',
                                       'absent-in-host']),

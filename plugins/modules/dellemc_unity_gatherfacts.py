@@ -14,26 +14,32 @@ DOCUMENTATION = r'''
 ---
 module: dellemc_unity_gatherfacts
 
-version_added: '2.7'
+version_added: '1.1.0'
 
 short_description: Gathering information about DellEMC Unity
 
 description:
-- Gathering information about DellEMC Unity Storage System includes
+- Gathering information about DellEMC Unity storage system includes
   Get the details of Unity array,
   Get list of Hosts in Unity array,
-  Get list of FC Initiators in Unity array,
-  Get list of iSCSI Initiators in Unity array,
-  Get list of Consistency Groups in Unity array,
-  Get list of Storage Pools in Unity array,
+  Get list of FC initiators in Unity array,
+  Get list of iSCSI initiators in Unity array,
+  Get list of Consistency groups in Unity array,
+  Get list of Storage pools in Unity array,
   Get list of Volumes in Unity array,
-  Get list of Snapshot Schedules in Unity array,
-  
+  Get list of Snapshot schedules in Unity array,
+  Get list of NAS servers in Unity array,
+  Get list of File systems in Unity array,
+  Get list of Snapshots in Unity array,
+  Get list of SMB shares in Unity array,
+  Get list of NFS exports in Unity array
+
 extends_documentation_fragment:
-  - dellemc_unity.dellemc_unity
+  - dellemc.unity.dellemc_unity.unity
 
 author:
-- Rajshree Khare (@kharer5) <Rajshree.Khare@dell.com>
+- Rajshree Khare (@kharer5) <ansible.team@dell.com>
+- Akash Shendge (@shenda1) <ansible.team@dell.com>
 
 options:
   gather_subset:
@@ -47,9 +53,16 @@ options:
     - storage_pool
     - vol
     - snapshot_schedule
+    - nas_server
+    - file_system
+    - snapshot
+    - nfs_export
+    - smb_share
     choices: [host, fc_initiator, iscsi_initiator, cg, storage_pool, vol,
-    snapshot_schedule]
+    snapshot_schedule, nas_server, file_system, snapshot, nfs_export,
+    smb_share]
     type: list
+    elements: str
 '''
 
 EXAMPLES = r'''
@@ -60,13 +73,18 @@ EXAMPLES = r'''
      password: "{{password}}"
      verifycert: "{{verifycert}}"
      gather_subset:
-      - host
-      - fc_initiator
-      - iscsi_initiator
-      - cg
-      - storage_pool
-      - vol
-      - snapshot_schedule
+       - host
+       - fc_initiator
+       - iscsi_initiator
+       - cg
+       - storage_pool
+       - vol
+       - snapshot_schedule
+       - nas_server
+       - file_system
+       - snapshot
+       - nfs_export
+       - smb_share
 
  - name: Get information of Unity array.
    dellemc_unity_gatherfacts:
@@ -82,7 +100,7 @@ EXAMPLES = r'''
      password: "{{password}}"
      verifycert: "{{verifycert}}"
      gather_subset:
-      - host
+       - host
 
  - name: Get list of FC initiators on Unity array.
    dellemc_unity_gatherfacts:
@@ -91,7 +109,7 @@ EXAMPLES = r'''
      password: "{{password}}"
      verifycert: "{{verifycert}}"
      gather_subset:
-      - fc_initiator
+       - fc_initiator
 
  - name: Get list of ISCSI initiators on Unity array.
    dellemc_unity_gatherfacts:
@@ -100,7 +118,7 @@ EXAMPLES = r'''
      password: "{{password}}"
      verifycert: "{{verifycert}}"
      gather_subset:
-      - iscsi_initiator
+       - iscsi_initiator
 
  - name: Get list of consistency groups on Unity array.
    dellemc_unity_gatherfacts:
@@ -137,6 +155,51 @@ EXAMPLES = r'''
      verifycert: "{{verifycert}}"
      gather_subset:
        - snapshot_schedule
+
+ - name: Get list of NAS Servers on Unity array.
+   dellemc_unity_gatherfacts:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - nas_server
+
+ - name: Get list of File Systems on Unity array.
+   dellemc_unity_gatherfacts:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - file_system
+
+ - name: Get list of Snapshots on Unity array.
+   dellemc_unity_gatherfacts:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - snapshot
+
+ - name: Get list of NFS exports on Unity array.
+   dellemc_unity_gatherfacts:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - nfs_export
+
+ - name: Get list of SMB shares on Unity array.
+   dellemc_unity_gatherfacts:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - smb_share
 '''
 
 RETURN = r'''
@@ -244,20 +307,73 @@ Snapshot_Schedules:
         name:
             description: The name of the Snapshot Schedule.
             type: str
+
+NAS_Servers:
+    description: Details of the NAS Servers.
+    returned: When NAS Servers exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the NAS Server.
+            type: str
+        name:
+            description: The name of the NAS Server.
+            type: str
+
+File_Systems:
+    description: Details of the File Systems.
+    returned: When File Systems exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the File System.
+            type: str
+        name:
+            description: The name of the File System.
+            type: str
+
+Snapshots:
+    description: Details of the Snapshots.
+    returned: When Snapshots exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the Snapshot.
+            type: str
+        name:
+            description: The name of the Snapshot.
+            type: str
+
+NFS_Exports:
+    description: Details of the NFS Exports.
+    returned: When NFS Exports exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the NFS Export.
+            type: str
+        name:
+            description: The name of the NFS Export.
+            type: str
+
+SMB_Shares:
+    description: Details of the SMB Shares.
+    returned: When SMB Shares exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the SMB Share.
+            type: str
+        name:
+            description: The name of the SMB Share.
+            type: str
 '''
 
-import json
-import logging
-from storops.unity.resource import host, cg, snap_schedule
-from storops.unity.enums import HostInitiatorTypeEnum
-from storops.exception import UnityResourceNotFoundError
-from storops.connection.exceptions import HttpError
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.storage.dell import \
-    dellemc_ansible_unity_utils as utils
+from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
+    import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_gatherfacts',
-                       log_devel=utils.logging.INFO)
+LOG = utils.get_logger('dellemc_unity_gatherfacts')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
@@ -269,7 +385,7 @@ class UnityGatherfacts(object):
         """ Define all parameters required by this module"""
 
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(self.get_unity_gatherfacts_parameters())
+        self.module_params.update(get_unity_gatherfacts_parameters())
 
         """ initialize the ansible module """
         self.module = AnsibleModule(argument_spec=self.module_params,
@@ -291,21 +407,6 @@ class UnityGatherfacts(object):
         self.unity = utils.get_unity_unisphere_connection(self.module.params)
         LOG.info('Got the unity instance for provisioning on Unity')
 
-    def get_unity_gatherfacts_parameters(self):
-        """This method provides parameters required for the ansible
-            gatherfacts module on Unity"""
-        return dict(
-            gather_subset=dict(type='list', required=False,
-                               choices=['host',
-                                        'fc_initiator',
-                                        'iscsi_initiator',
-                                        'cg',
-                                        'storage_pool',
-                                        'vol',
-                                        'snapshot_schedule'
-                                        ]),
-        )
-
     def get_array_details(self):
         """ Get the list of snapshot schedules on a given Unity storage
             system """
@@ -315,7 +416,7 @@ class UnityGatherfacts(object):
             array_details = self.unity.info
             return array_details._get_properties()
 
-        except HttpError as e:
+        except utils.HttpError as e:
             if e.http_status == 401:
                 msg = 'Incorrect username or password provided.'
                 LOG.error(msg)
@@ -336,7 +437,7 @@ class UnityGatherfacts(object):
         try:
             LOG.info('Getting hosts list ')
             hosts = self.unity.get_host()
-            return self.result_list(hosts)
+            return result_list(hosts)
 
         except Exception as e:
             msg = 'Get hosts list from unity array failed with' \
@@ -349,9 +450,9 @@ class UnityGatherfacts(object):
 
         try:
             LOG.info('Getting FC initiators list ')
-            fc_initiator = host.UnityHostInitiatorList\
-                .get(cli=self.unity._cli, type=HostInitiatorTypeEnum.FC)
-            return self.fc_initiators_result_list(fc_initiator)
+            fc_initiator = utils.host.UnityHostInitiatorList\
+                .get(cli=self.unity._cli, type=utils.HostInitiatorTypeEnum.FC)
+            return fc_initiators_result_list(fc_initiator)
 
         except Exception as e:
             msg = 'Get FC initiators list from unity array failed with' \
@@ -365,9 +466,10 @@ class UnityGatherfacts(object):
 
         try:
             LOG.info('Getting ISCSI initiators list ')
-            iscsi_initiator = host.UnityHostInitiatorList\
-                .get(cli=self.unity._cli, type=HostInitiatorTypeEnum.ISCSI)
-            return self.iscsi_initiators_result_list(iscsi_initiator)
+            iscsi_initiator = utils.host.UnityHostInitiatorList\
+                .get(cli=self.unity._cli, type=utils.HostInitiatorTypeEnum.
+                     ISCSI)
+            return iscsi_initiators_result_list(iscsi_initiator)
 
         except Exception as e:
             msg = 'Get ISCSI initiators list from unity array failed with' \
@@ -381,9 +483,9 @@ class UnityGatherfacts(object):
 
         try:
             LOG.info('Getting consistency groups list ')
-            consistency_groups = cg.UnityConsistencyGroupList\
+            consistency_groups = utils.cg.UnityConsistencyGroupList\
                 .get(self.unity._cli)
-            return self.result_list(consistency_groups)
+            return result_list(consistency_groups)
 
         except Exception as e:
             msg = 'Get consistency groups list from unity array failed with' \
@@ -398,7 +500,7 @@ class UnityGatherfacts(object):
         try:
             LOG.info('Getting storage pools list ')
             storage_pools = self.unity.get_pool()
-            return self.result_list(storage_pools)
+            return result_list(storage_pools)
 
         except Exception as e:
             msg = 'Get storage pools list from unity array failed with' \
@@ -413,7 +515,7 @@ class UnityGatherfacts(object):
         try:
             LOG.info('Getting volumes list ')
             volumes = self.unity.get_lun()
-            return self.result_list(volumes)
+            return result_list(volumes)
 
         except Exception as e:
             msg = 'Get volumes list from unity array failed with' \
@@ -427,9 +529,9 @@ class UnityGatherfacts(object):
 
         try:
             LOG.info('Getting snapshot schedules list ')
-            snapshot_schedules = snap_schedule.UnitySnapScheduleList\
+            snapshot_schedules = utils.snap_schedule.UnitySnapScheduleList\
                 .get(cli=self.unity._cli)
-            return self.result_list(snapshot_schedules)
+            return result_list(snapshot_schedules)
 
         except Exception as e:
             msg = 'Get snapshot schedules list from unity array failed with' \
@@ -437,65 +539,83 @@ class UnityGatherfacts(object):
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
-    def result_list(self, entity):
-        """ Get the name and id associated with the Unity entities """
-        result = []
+    def get_nas_servers_list(self):
+        """Get the list of NAS servers on a given Unity storage system"""
 
-        if entity:
-            LOG.info('Successfully listed.')
-            for item in entity:
-                result.append(
-                    {
-                        "name": item.name,
-                        "id": item.id
-                    }
-                )
-            return result
-        else:
-            return None
+        try:
+            LOG.info("Getting NAS servers list")
+            nas_servers = self.unity.get_nas_server()
+            return result_list(nas_servers)
 
-    def fc_initiators_result_list(self, entity):
-        """ Get the WWN and id associated with the Unity FC initiators """
-        result = []
+        except Exception as e:
+            msg = 'Get NAS servers list from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
 
-        if entity:
-            LOG.info('Successfully listed.')
-            for item in entity:
-                result.append(
-                    {
-                        "WWN": item.initiator_id,
-                        "id": item.id
-                    }
-                )
-            return result
-        else:
-            return None
+    def get_file_systems_list(self):
+        """Get the list of file systems on a given Unity storage system"""
 
-    def iscsi_initiators_result_list(self, entity):
-        """ Get the IQN and id associated with the Unity ISCSI initiators """
-        result = []
+        try:
+            LOG.info("Getting file systems list")
+            file_systems = self.unity.get_filesystem()
+            return result_list(file_systems)
 
-        if entity:
-            LOG.info('Successfully listed.')
-            for item in entity:
-                result.append(
-                    {
-                        "IQN": item.initiator_id,
-                        "id": item.id
-                    }
-                )
-            return result
-        else:
-            return None
+        except Exception as e:
+            msg = 'Get file systems list from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
+    def get_snapshots_list(self):
+        """Get the list of snapshots on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting snapshots list")
+            snapshots = self.unity.get_snap()
+            return result_list(snapshots)
+
+        except Exception as e:
+            msg = 'Get snapshots from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
+    def get_nfs_exports_list(self):
+        """Get the list of NFS exports on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting NFS exports list")
+            nfs_exports = self.unity.get_nfs_share()
+            return result_list(nfs_exports)
+
+        except Exception as e:
+            msg = 'Get NFS exports from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
+    def get_smb_shares_list(self):
+        """Get the list of SMB shares on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting SMB shares list")
+            smb_shares = self.unity.get_cifs_share()
+            return result_list(smb_shares)
+
+        except Exception as e:
+            msg = 'Get SMB shares from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
 
     def perform_module_operation(self):
         """ Perform different actions on Gatherfacts based on user parameter
             chosen in playbook """
 
         """ Get the array details a given Unity storage system """
-        array_details = []
-        array_details = self.get_array_details()
 
+        array_details = self.get_array_details()
         host = []
         fc_initiator = []
         iscsi_initiator = []
@@ -503,6 +623,11 @@ class UnityGatherfacts(object):
         storage_pool = []
         vol = []
         snapshot_schedule = []
+        nas_server = []
+        file_system = []
+        snapshot = []
+        nfs_export = []
+        smb_share = []
 
         subset = self.module.params['gather_subset']
         if subset is not None:
@@ -520,6 +645,16 @@ class UnityGatherfacts(object):
                 vol = self.get_volumes_list()
             if 'snapshot_schedule' in subset:
                 snapshot_schedule = self.get_snapshot_schedules_list()
+            if 'nas_server' in subset:
+                nas_server = self.get_nas_servers_list()
+            if 'file_system' in subset:
+                file_system = self.get_file_systems_list()
+            if 'snapshot' in subset:
+                snapshot = self.get_snapshots_list()
+            if 'nfs_export' in subset:
+                nfs_export = self.get_nfs_exports_list()
+            if 'smb_share' in subset:
+                smb_share = self.get_smb_shares_list()
 
         self.module.exit_json(
             Array_Details=array_details,
@@ -529,8 +664,80 @@ class UnityGatherfacts(object):
             Consistency_Groups=cg,
             Storage_Pools=storage_pool,
             Volumes=vol,
-            Snapshot_Schedules=snapshot_schedule
+            Snapshot_Schedules=snapshot_schedule,
+            NAS_Servers=nas_server,
+            File_Systems=file_system,
+            Snapshots=snapshot,
+            NFS_Exports=nfs_export,
+            SMB_Shares=smb_share
         )
+
+
+def result_list(entity):
+    """ Get the name and id associated with the Unity entities """
+    result = []
+
+    if entity:
+        LOG.info('Successfully listed.')
+        for item in entity:
+            result.append(
+                {
+                    "name": item.name,
+                    "id": item.id
+                }
+            )
+        return result
+    else:
+        return None
+
+
+def fc_initiators_result_list(entity):
+    """ Get the WWN and id associated with the Unity FC initiators """
+    result = []
+
+    if entity:
+        LOG.info('Successfully listed.')
+        for item in entity:
+            result.append(
+                {
+                    "WWN": item.initiator_id,
+                    "id": item.id
+                }
+            )
+        return result
+    else:
+        return None
+
+
+def iscsi_initiators_result_list(entity):
+    """ Get the IQN and id associated with the Unity ISCSI initiators """
+    result = []
+
+    if entity:
+        LOG.info('Successfully listed.')
+        for item in entity:
+            result.append(
+                {
+                    "IQN": item.initiator_id,
+                    "id": item.id
+                }
+            )
+        return result
+    else:
+        return None
+
+
+def get_unity_gatherfacts_parameters():
+    """This method provides parameters required for the ansible
+    gatherfacts module on Unity"""
+    return dict(gather_subset=dict(type='list', required=False,
+                                   elements='str',
+                                   choices=['host', 'fc_initiator',
+                                            'iscsi_initiator', 'cg',
+                                            'storage_pool', 'vol',
+                                            'snapshot_schedule', 'nas_server',
+                                            'file_system', 'snapshot',
+                                            'nfs_export', 'smb_share']))
 
 
 def main():

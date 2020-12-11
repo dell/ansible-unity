@@ -13,19 +13,19 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = r"""
 module: dellemc_unity_consistencygroup
-version_added: '2.7'
-short_description: Manage consistency groups on Unity Storage System
+version_added: '1.1.0'
+short_description: Manage consistency groups on Unity storage system
 description:
-- Managing consistency group on Unity Storage System includes
+- Managing the consistency group on the Unity storage system includes
   creating new consistency group, adding volumes to consistency
   group, removing volumes from consistency group, renaming consistency group,
   modifying attributes of consistency group and deleting consistency group.
 
 extends_documentation_fragment:
-  - dellemc_unity.dellemc_unity
+  - dellemc.unity.dellemc_unity.unity
 
 author:
-- Akash Shendge (@shenda1) <akash.shendge@dell.com>
+- Akash Shendge (@shenda1) <ansible.team@dell.com>
 
 options:
   cg_name:
@@ -37,9 +37,9 @@ options:
     type: str
   cg_id:
     description:
-    - The id of the consistency group.
+    - The ID of the consistency group.
     - It can be used only for get, modify, add/remove volumes or delete
-      operation.
+      operations.
     required: False
     type: str
   volumes:
@@ -51,11 +51,12 @@ options:
     - Volumes cannot be added/removed from consistency group, if the
       consistency group or the volume has snapshots.
     type: list
+    elements: dict
   vol_state:
     description:
     - String variable, describes the state of volumes inside consistency
       group.
-    - If volume are given, then vol_state should also be specified.
+    - If volumes are given, then vol_state should also be specified.
     choices: [present-in-group , absent-in-group]
     type: str
   new_cg_name:
@@ -64,7 +65,7 @@ options:
     type: str
   description:
     description:
-    - Description about the consistency group.
+    - Description of the consistency group.
     type: str
   snap_schedule:
     description:
@@ -231,11 +232,11 @@ consistency_group_details:
                 creation_time:
                     description:
                         - Date and time on which the snapshot was taken
-                    type: DateTime
+                    type: str
                 expirationTime:
                     description:
                         - Date and time after which the snapshot will expire
-                    type: DateTime
+                    type: str
                 storageResource:
                     description: Storage resource for which the snapshot was
                      taken
@@ -252,14 +253,9 @@ consistency_group_details:
 '''
 
 import logging
-from storops.unity.resource import cg
-from storops.exception import UnityResourceNotFoundError
-from storops.connection.exceptions import HttpError
-from storops.unity.enums import TieringPolicyEnum
-from storops.unity.resource.lun import UnityLun
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.storage.dell import \
-    dellemc_ansible_unity_utils as utils
+from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
+    import dellemc_ansible_unity_utils as utils
 
 LOG = utils.get_logger('dellemc_unity_consistencygroup',
                        log_devel=logging.INFO)
@@ -315,7 +311,8 @@ class UnityConsistencyGroup(object):
         try:
             cg_details = self.unity_conn.get_cg(name=cg_name)
             cg_id = cg_details.get_id()
-            cg_obj = cg.UnityConsistencyGroup.get(self.unity_conn._cli, cg_id)
+            cg_obj = utils.cg.UnityConsistencyGroup.get(self.unity_conn._cli,
+                                                        cg_id)
             return cg_obj
 
         except Exception as e:
@@ -366,7 +363,7 @@ class UnityConsistencyGroup(object):
                          id_or_name)
                 return None
 
-        except HttpError as e:
+        except utils.HttpError as e:
             if e.http_status == 401:
                 auth_err = "Incorrect username or password, {0}".format(
                     e.message)
@@ -378,7 +375,7 @@ class UnityConsistencyGroup(object):
                 LOG.error(msg)
                 self.module.fail_json(msg=msg)
 
-        except UnityResourceNotFoundError as e:
+        except utils.UnityResourceNotFoundError as e:
             msg = errormsg.format(id_or_name, str(e))
             LOG.error(msg)
             return None
@@ -403,7 +400,7 @@ class UnityConsistencyGroup(object):
             cg = None
             if lun.existed:
                 lunid = lun.get_id()
-                unitylun = UnityLun.get(self.unity_conn._cli, lunid)
+                unitylun = utils.UnityLun.get(self.unity_conn._cli, lunid)
                 if unitylun.cg is not None:
                     cg = unitylun.cg
             else:
@@ -574,8 +571,8 @@ class UnityConsistencyGroup(object):
 
         policy_enum = None
         if tiering_policy:
-            if TieringPolicyEnum[tiering_policy]:
-                policy_enum = TieringPolicyEnum[tiering_policy]
+            if utils.TieringPolicyEnum[tiering_policy]:
+                policy_enum = utils.TieringPolicyEnum[tiering_policy]
             else:
                 errormsg = "Invalid choice {0} for tiering policy".format(
                     tiering_policy)
@@ -657,7 +654,7 @@ class UnityConsistencyGroup(object):
             if snap_schedule is not None:
                 snap_schedule = {"name": snap_schedule}
 
-            cg_obj = cg.UnityConsistencyGroup.create(
+            cg_obj = utils.cg.UnityConsistencyGroup.create(
                 self.unity_conn._cli, name=cg_name, description=description,
                 snap_schedule=snap_schedule)
             return True, cg_obj
@@ -691,8 +688,8 @@ class UnityConsistencyGroup(object):
 
         policy_enum = None
         if tiering_policy:
-            if TieringPolicyEnum[tiering_policy]:
-                policy_enum = TieringPolicyEnum[tiering_policy]
+            if utils.TieringPolicyEnum[tiering_policy]:
+                policy_enum = utils.TieringPolicyEnum[tiering_policy]
             else:
                 errormsg = "Invalid choice {0} for tiering policy".format(
                     tiering_policy)
@@ -741,17 +738,17 @@ class UnityConsistencyGroup(object):
                            " name or id.".format(vol)
                 LOG.error(errormsg)
                 self.module.fail_json(msg=errormsg)
-            elif ('vol_id' in vol and (len(vol['vol_id'].strip()) == 0)):
+            elif 'vol_id' in vol and (len(vol['vol_id'].strip()) == 0):
                 errormsg = "vol_id is blank. Please specify valid vol_id."
                 LOG.error(errormsg)
                 self.module.fail_json(msg=errormsg)
-            elif ('vol_name' in vol and (len(vol['vol_name'].strip()) == 0)):
+            elif 'vol_name' in vol and (len(vol.get('vol_name').strip()) == 0):
                 errormsg = "vol_name is blank. Please specify valid vol_name."
                 LOG.error(errormsg)
                 self.module.fail_json(msg=errormsg)
-            elif ('vol_name' in vol):
+            elif 'vol_name' in vol:
                 self.get_volume_details(vol_name=vol['vol_name'])
-            elif ('vol_id' in vol):
+            elif 'vol_id' in vol:
                 self.get_volume_details(vol_id=vol['vol_id'])
             else:
                 errormsg = "Expected either vol_name or vol_id, found" \
@@ -871,7 +868,7 @@ def get_unity_consistencygroup_parameters():
         cg_name=dict(required=False, type='str'),
         cg_id=dict(required=False, type='str'),
         description=dict(required=False, type='str'),
-        volumes=dict(required=False, type='list'),
+        volumes=dict(required=False, type='list', elements='dict'),
         snap_schedule=dict(required=False, type='str'),
         new_cg_name=dict(required=False, type='str'),
         tiering_policy=dict(required=False, type='str', choices=[
