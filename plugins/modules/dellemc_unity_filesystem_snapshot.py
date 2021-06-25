@@ -209,69 +209,54 @@ filesystem_snapshot_details:
     type: complex
     contains:
         access_type:
-            description:
-                - Access type of filesystem snapshot.
+            description: Access type of filesystem snapshot.
             type: str
         attached_wwn:
-            description:
-                - Attached WWN details.
+            description: Attached WWN details.
             type: str
         creation_time:
-            description:
-                - Creation time of filesystem snapshot.
+            description: Creation time of filesystem snapshot.
             type: str
         creator_schedule:
-            description:
-                - Creator schedule of filesystem snapshot.
+            description: Creator schedule of filesystem snapshot.
             type: str
         creator_type:
-            description:
-                - Creator type for filesystem snapshot.
+            description: Creator type for filesystem snapshot.
             type: str
         creator_user:
-            description:
-                - Creator user for filesystem snapshot.
+            description: Creator user for filesystem snapshot.
             type: str
         description:
-            description:
-                - Description of the filesystem snapshot.
+            description: Description of the filesystem snapshot.
             type: str
         expiration_time:
-            description:
-                - Date and time after which the filesystem snapshot will
-                  expire.
+            description: Date and time after which the filesystem snapshot
+                         will expire.
             type: str
         is_auto_delete:
-            description:
-                -  Is the filesystem snapshot is auto deleted or not.
+            description: Is the filesystem snapshot is auto deleted or not.
             type: bool
         id:
-            description:
-                -  Unique identifier of the filesystem snapshot instance.
+            description: Unique identifier of the filesystem snapshot
+                         instance.
             type: str
         name:
-            description:
-                - The name of the filesystem snapshot.
+            description: The name of the filesystem snapshot.
             type: str
         size:
-            description:
-                - Size of the filesystem snapshot.
+            description: Size of the filesystem snapshot.
             type: int
         filesystem_name:
-            description:
-                - Name of the filesystem for which the snapshot exists.
+            description: Name of the filesystem for which the snapshot exists.
             type: str
         filesystem_id:
-            description:
-                - Id of the filesystem for which the snapshot exists.
+            description: Id of the filesystem for which the snapshot exists.
             type: str
         nas_server_name:
-            description:
-                - Name of the NAS server on which filesystem exists.
+            description: Name of the NAS server on which filesystem exists.
             type: str
         nas_server_id:
-            description:
-                - Id of the NAS server on which filesystem exists.
+            description: Id of the NAS server on which filesystem exists.
             type: str
 
 '''
@@ -285,6 +270,8 @@ LOG = utils.get_logger('dellemc_unity_filesystem_snapshot')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
+
+application_type = "Ansible/1.2.0"
 
 
 class UnityFilesystemSnapshot(object):
@@ -325,7 +312,7 @@ class UnityFilesystemSnapshot(object):
             self.module.fail_json(msg=err_msg)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
-            self.module.params)
+            self.module.params, application_type)
         self.snap_obj = utils.snap.UnitySnap(self.unity_conn)
         LOG.info('Connection established with the Unity Array')
 

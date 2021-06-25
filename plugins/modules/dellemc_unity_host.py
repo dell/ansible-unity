@@ -19,12 +19,13 @@ version_added: '1.1.0'
 short_description: Manage Host operations on Unity.
 
 description:
-- Creation of a Host.
-- Addition of initiators to Host.
-- Removal of initiators from Host.
-- Modification of host attributes.
-- Get details of a Host.
-- Deletion of a Host.
+- The Host module contains the following operations
+  Creation of a Host.
+  Addition of initiators to Host.
+  Removal of initiators from Host.
+  Modification of host attributes.
+  Get details of a Host.
+  Deletion of a Host.
 
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -218,6 +219,8 @@ LOG = utils.get_logger('dellemc_unity_host', log_devel=utils.logging.INFO)
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
+application_type = "Ansible/1.2.0"
+
 
 class UnityHost(object):
     """Class with Host operations"""
@@ -250,7 +253,7 @@ class UnityHost(object):
             LOG.error(err_msg)
             self.module.fail_json(msg=err_msg)
 
-        self.unity = utils.get_unity_unisphere_connection(self.module.params)
+        self.unity = utils.get_unity_unisphere_connection(self.module.params, application_type)
         LOG.info('Got the unity instance for provisioning on Unity')
 
     def get_host_count(self, host_name):

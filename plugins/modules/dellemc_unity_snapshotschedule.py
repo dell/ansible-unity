@@ -18,7 +18,7 @@ short_description: Manage snapshot schedules on Unity storage system
 description:
 - Managing snapshot schedules on Unity storage system includes
   creating new snapshot schedule, getting details of snapshot schedule,
-  modifying attributes of snapshot schedule and deleting snapshot schedule.
+  modifying attributes of snapshot schedule, and deleting snapshot schedule.
 
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -30,7 +30,7 @@ options:
   name:
     description:
     - The name of the snapshot schedule.
-    - Name is mandatory for create operation.
+    - Name is mandatory for a create operation.
     - Specify either name or id (but not both) for any operation.
     type: str
   id:
@@ -87,7 +87,7 @@ options:
     description:
     - Minute offset from the hour when the snapshot will be taken.
     - Applicable for all rule types.
-    - For create operation, if 'minute' parameter is not specified, value will
+    - For a create operation, if 'minute' parameter is not specified, value will
      be taken as 0.
     - Value should be [0, 59].
     type: int
@@ -261,12 +261,10 @@ snapshot_schedule_details:
     type: complex
     contains:
         id:
-            description:
-                - The system ID given to the snapshot schedule.
+            description: The system ID given to the snapshot schedule.
             type: str
         name:
-            description:
-                - The name of the snapshot schedule.
+            description: The name of the snapshot schedule.
             type: str
         luns:
             description: Details of volumes for which snapshot schedule
@@ -283,29 +281,26 @@ snapshot_schedule_details:
                             type: complex
                             contains:
                                 id:
-                                    description:
-                                        - The system ID given to volume.
+                                    description: The system ID given to volume.
                                     type: str
         rules:
             description: Details of rules that apply to snapshot schedule.
             type: complex
             contains:
                 id:
-                    description:
-                        - The system ID of the rule.
+                    description: The system ID of the rule.
                     type: str
                 interval:
-                    description:
-                        - Number of days or hours between snaps, depending on
-                          the rule type.
+                    description: Number of days or hours between snaps,
+                                 depending on the rule type.
                     type: int
                 hours:
-                    description:
-                        - Hourly frequency for the snapshot schedule rule.
+                    description: Hourly frequency for the snapshot
+                                 schedule rule.
                     type: list
                 minute:
-                    description:
-                        - Minute frequency for the snapshot schedule rule.
+                    description: Minute frequency for the snapshot
+                                 schedule rule.
                     type: int
                 days_of_week:
                     description: Days of the week for which the snapshot
@@ -313,33 +308,27 @@ snapshot_schedule_details:
                     type: complex
                     contains:
                         DayOfWeekEnumList:
-                            description:
-                                - Enumeration of days of the week.
+                            description: Enumeration of days of the week.
                             type: list
                 days_of_month:
-                    description:
-                        - Days of the month for which the snapshot schedule
-                          rule applies.
+                    description: Days of the month for which the snapshot
+                                 schedule rule applies.
                     type: list
                 retention_time:
-                    description:
-                        - Period of time in seconds for which to keep the
-                          snapshot.
+                    description: Period of time in seconds for which to keep
+                                 the snapshot.
                     type: int
                 retention_time_in_hours:
-                    description:
-                        - Period of time in hours for which to keep the
-                          snapshot.
+                    description: Period of time in hours for which to keep the
+                                 snapshot.
                     type: int
                 rule_type:
-                    description:
-                        - Type of the rule applied to snapshot schedule.
+                    description: Type of the rule applied to snapshot schedule.
                     type: str
                 is_auto_delete:
-                    description:
-                        - Indicates whether the system can automatically
-                          delete the snapshot based on pool automatic-deletion
-                          thresholds.
+                    description: Indicates whether the system can automatically
+                                 delete the snapshot based on pool automatic-deletion
+                                 thresholds.
                     type: bool
         storage_resources:
             description: Details of storage resources for which snapshot
@@ -356,9 +345,8 @@ snapshot_schedule_details:
                             type: complex
                             contains:
                                 id:
-                                    description:
-                                        - The system ID given to storage
-                                         resource.
+                                    description: The system ID given to storage
+                                                 resource.
                                     type: str
 """
 
@@ -373,6 +361,8 @@ LOG = utils.get_logger('dellemc_unity_snapshotschedule',
 HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
+
+application_type = "Ansible/1.2.0"
 
 
 class UnitySnapshotSchedule(object):
@@ -411,7 +401,7 @@ class UnitySnapshotSchedule(object):
             self.module.fail_json(msg=err_msg)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
-            self.module.params)
+            self.module.params, application_type)
 
     def schedule_modify_required(self, schedule_details):
         """Check if the desired snapshot schedule state is different from

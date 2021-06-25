@@ -12,14 +12,14 @@ DOCUMENTATION = r'''
 ---
 module: dellemc_unity_smbshare
 version_added: '1.1.0'
-short_description:  Manage SMB shares on Unity storage system
+short_description:  Manage SMB shares on Unity storage system.
 extends_documentation_fragment:
 - dellemc.unity.dellemc_unity.unity
 author:
 - P Srinivas Rao (@srinivas-rao5) <ansible.team@dell.com>
 description:
 - Managing SMB Shares on Unity storage system includes create, get,
-  modify and delete the smb shares.
+  modify, and delete the smb shares.
 options:
   share_name:
     description:
@@ -236,56 +236,44 @@ smb_share_details:
     returned: When share exists.
     contains:
         id:
-            description:
-                - The ID of the SMB share.
+            description: The ID of the SMB share.
             type: str
         name:
-            description:
-                - Name of the SMB share.
+            description: Name of the SMB share.
             type: str
             sample: "sample_smb_share"
         filesystem_id:
-            description:
-                - The ID of the Filesystem.
+            description: The ID of the Filesystem.
             type: str
         filesystem_name:
-            description:
-                - The Name of the filesystem
+            description: The Name of the filesystem
             type: str
         snapshot_id:
-            description:
-                - The ID of the Snapshot.
+            description: The ID of the Snapshot.
             type: str
         snapshot_name:
-            description:
-                - The Name of the Snapshot.
+            description: The Name of the Snapshot.
             type: str
         nas_server_id:
-            description:
-                - The ID of the nas_server.
+            description: The ID of the nas_server.
             type: str
         nas_server_name:
-            description:
-                - The Name of the nas_server.
+            description: The Name of the nas_server.
             type: str
         description:
-            description:
-                - Additional information about the share.
+            description: Additional information about the share.
             type: str
             sample: "This share is created for demo purpose only."
         is_abe_enabled:
-            description:
-                - Whether Access Based enumeration is enforced or not
+            description: Whether Access Based enumeration is enforced or not
             type: bool
             sample: false
         is_branch_cache_enabled:
-            description:
-                - Whether branch cache is enabled or not.
+            description: Whether branch cache is enabled or not.
             type: bool
             sample: false
         is_continuous_availability_enabled:
-            description:
-                - Whether the share will be available continuously or not
+            description: Whether the share will be available continuously or not
             type: bool
             sample: false
         is_encryption_enabled:
@@ -304,6 +292,8 @@ LOG = utils.get_logger('dellemc_unity_smbshare')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
+
+application_type = "Ansible/1.2.0"
 
 
 class UnitySMBShare(object):
@@ -353,7 +343,7 @@ class UnitySMBShare(object):
             self.module.fail_json(msg=err_msg)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
-            self.module.params)
+            self.module.params, application_type)
         self.smb_share_conn_obj = utils.cifs_share.UnityCifsShare(
             self.unity_conn)
         LOG.info('Connection established with the Unity Array')

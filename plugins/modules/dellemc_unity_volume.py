@@ -40,7 +40,7 @@ options:
   vol_id:
     description:
     - The id of the volume.
-    - It can be used only for get, modify, map/unmap host or delete operation.
+    - It can be used only for get, modify, map/unmap host, or delete operation.
     required: False
     type: str
   pool_name:
@@ -90,19 +90,19 @@ options:
   io_limit_policy:
     description:
     - IO limit policy associated with this volume.
-      Once it's set cannot be removed through ansible module but it can
+      Once it's set, it cannot be removed through ansible module but it can
       be changed.
     type: str
   host_name:
     description:
     - Name of the host to be mapped/unmapped with this volume.
-    - Either host_name,host_id can be specified in one task along with
+    - Either host_name or host_id can be specified in one task along with
       mapping_state.
     type: str
   host_id:
     description:
     - ID of the host to be mapped/unmapped with this volume.
-    - Either host_name,host_id can be specified in one task along with
+    - Either host_name or host_id can be specified in one task along with
       mapping_state.
     type: str
   hlu:
@@ -134,6 +134,28 @@ options:
     choices: ['absent', 'present']
     required: true
     type: str
+  hosts:
+    description:
+    - Name of hosts for mapping to a volume
+    type: list
+    elements: dict
+    suboptions:
+      host_name:
+        description:
+        - Name of the host.
+        type: str
+      host_id:
+        description:
+        - ID of the host.
+        type: str
+      hlu:
+        description:
+        - Host Lun Unit to be mapped/unmapped with this volume.
+        - It's an optional parameter, hlu can be specified along
+          with host_name or host_id and mapping_state.
+        - If hlu is not specified, unity will choose it automatically.
+          The maximum value supported is 255.
+        type: str
 """
 
 EXAMPLES = r"""
@@ -184,6 +206,21 @@ EXAMPLES = r"""
     mapping_state: "{{state_unmapped}}"
     state: "{{state_present}}"
 
+- name: Map multiple hosts to a Volume
+  dellemc_unity_volume:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    vol_id: "{{vol_id}}"
+    hosts:
+        - host_name: "10.226.198.248"
+          hlu: 1
+        - host_id: "Host_929"
+          hlu: 2
+    mapping_state: "mapped"
+    state: "present"
+
 - name: Modify Volume attributes
   dellemc_unity_volume:
     unispherehost: "{{unispherehost}}"
@@ -228,57 +265,44 @@ volume_details:
     type: complex
     contains:
         id:
-            description:
-                - The system generated ID given to the volume
+            description: The system generated ID given to the volume
             type: str
         name:
-            description:
-                - Name of the volume
+            description: Name of the volume
             type: str
         description:
-            description:
-                - description about the volume
+            description: Description about the volume
             type: str
         is_data_reduction_enabled:
-            description:
-                - Whether or not compression enabled on this volume
+            description: Whether or not compression enabled on this volume
             type: bool
         size_total_with_unit:
-            description:
-                - Size of the volume with actual unit.
+            description: Size of the volume with actual unit.
             type: str
         snap_schedule:
-            description:
-                - Snapshot schedule applied to this volume
+            description: Snapshot schedule applied to this volume
             type: dict
         tiering_policy:
-            description:
-                - Tiering policy applied to this volume
+            description: Tiering policy applied to this volume
             type: str
         current_sp:
-            description:
-                - Current storage processor for this volume
+            description: Current storage processor for this volume
             type: str
         pool:
-            description:
-                - The pool in which this volume is allocated.
+            description: The pool in which this volume is allocated.
             type: dict
         host_access:
-            description:
-                - Host mapped to this volume
+            description: Host mapped to this volume
             type: list
         io_limit_policy:
-            description:
-                - IO limit policy associated with this volume
+            description: IO limit policy associated with this volume
             type: dict
         wwn:
-            description:
-                - The world wide name of this volume
+            description: The world wide name of this volume
             type: str
         is_thin_enabled:
-            description:
-                - Indicates whether thin provisioning is enabled for this
-                  volume
+            description: Indicates whether thin provisioning is enabled for this
+                         volume
             type: bool
 '''
 
@@ -287,12 +311,20 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 import logging
 
-
-LOG = utils.get_logger('dellemc_unity_volume', log_devel=logging.INFO)
+LOG = utils.get_logger('dellemc_unity_volume')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
+
+application_type = "Ansible/1.2.0"
+
+
+def is_none_or_empty_string(param):
+
+    """ validates the input string for None or empty values
+    """
+    return not param or len(str(param)) <= 0
 
 
 class UnityVolume(object):
@@ -334,7 +366,7 @@ class UnityVolume(object):
             self.module.fail_json(msg=err_msg)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
-            self.module.params)
+            self.module.params, application_type)
 
     def get_volume(self, vol_name=None, vol_id=None):
         """Get the details of a volume.
@@ -594,27 +626,37 @@ class UnityVolume(object):
 
             host_id_list = []
             hlu_list = []
-            for host_access in host_access_list.host:
-                host_id_list.append(host_access.id)
-                host = self.get_host(host_id=host_access.id).update()
-                host_dict = host.host_luns._get_properties()
-                LOG.debug("check if hlu present : %s", host_dict)
-                if "hlu" in host_dict.keys():
-                    hlu_list.append(host_dict['hlu'])
+            new_list = []
+            if not host_access_list and self.new_host_list and\
+                    mapping_state == 'unmapped':
+                return to_modify
 
-            LOG.debug("Host Dictionaries:- host_id: %s, hlu: %s",
-                      host_id_list, hlu_list)
+            elif host_access_list:
+                for host_access in host_access_list.host:
+                    host_id_list.append(host_access.id)
+                    host = self.get_host(host_id=host_access.id).update()
+                    host_dict = host.host_luns._get_properties()
+                    LOG.debug("check if hlu present : %s", host_dict)
+
+                    if "hlu" in host_dict.keys():
+                        hlu_list.append(host_dict['hlu'])
 
             if mapping_state == 'mapped':
                 if (self.param_host_id not in host_id_list):
-                    # <hlu list not available in API response> or (hlu not in hlu_list):
+                    for item in self.new_host_list:
+                        new_list.append(item.get("host_id"))
+                    if not list(set(new_list) - set(host_id_list)):
+                        return False
                     to_modify = True
 
             if mapping_state == 'unmapped':
-                if (self.param_host_id in host_id_list):
-                    # <hlu list not available in API response> or (hlu in hlu_list):
+                if self.new_host_list:
+                    for item in self.new_host_list:
+                        new_list.append(item.get("host_id"))
+                    if list(set(new_list) - set(host_id_list)):
+                        return False
+                    self.overlapping_list = list(set(host_id_list) - set(new_list))
                     to_modify = True
-
             LOG.debug("host_access_modify_required : %s ", str(to_modify))
             return to_modify
 
@@ -707,35 +749,43 @@ class UnityVolume(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
-    def attach_to(self, host, obj_vol, hlu=None):
-        """Attach/map a host/hlu to a volume
-        :param host: host to map the volume
-        :param obj_vol: volume instance
-        :param hlu: hlu to map the volume
-        :return: None on successful modification
-        """
-        try:
-            resp = obj_vol.attach_to(host, hlu=hlu)
-            return resp
-        except Exception as e:
-            errormsg = "Failed to attach host {0} with volume {1} ,  " \
-                       "with error {2} ".format(host, obj_vol.name, str(e))
-            LOG.error(errormsg)
-            self.module.fail_json(msg=errormsg)
-
-    def detach_from(self, host, obj_vol):
-        """Detach/unmap a host from a volume
-        :param host: host to map the volume
+    def multiple_host_map(self, host_dic_list, obj_vol):
+        """Attach multiple hosts to a volume
+        :param host_dic_list: hosts to map the volume
         :param obj_vol: volume instance
         :return: response from API call
         """
 
         try:
-            resp = obj_vol.detach_from(host)
+            host_access = []
+            for item in host_dic_list:
+                host_access.append(
+                    {'accessMask': utils.HostLUNAccessEnum.PRODUCTION,
+                     'host':
+                         {'id': item['host_id']}, 'hlu': item['hlu']})
+            resp = obj_vol.modify(host_access=host_access)
             return resp
         except Exception as e:
-            errormsg = "Detach host {0} from volume {1} operation failed " \
-                       "with error {2}".format(host, obj_vol.name, str(e))
+            errormsg = "Failed to attach hosts {0} with volume {1} with error {2} ".format(host_dic_list, obj_vol.name, str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def multiple_detach(self, host_list_detach, obj_vol):
+        """Detach multiple hosts from a volume
+        :param host_list_detach: hosts to unmap the volume
+        :param obj_vol: volume instance
+        :return: response from API call
+        """
+
+        try:
+            host_access = []
+            for item in host_list_detach:
+                host_access.append({'accessMask': utils.HostLUNAccessEnum.PRODUCTION,
+                                    'host': {'id': item}})
+            resp = obj_vol.modify(host_access=host_access)
+            return resp
+        except Exception as e:
+            errormsg = "Failed to detach hosts {0} from volume {1} with error {2} ".format(host_list_detach, obj_vol.name, str(e))
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
@@ -844,7 +894,9 @@ class UnityVolume(object):
             self.module.fail_json(msg=errormsg)
 
     def validate_input_string(self):
-        """ validates the input string checks if it's empty string """
+        """ validates the input string checks if it's empty string
+
+        """
         invalid_string = ""
         try:
             no_chk_list = ['snap_schedule', 'description']
@@ -862,11 +914,65 @@ class UnityVolume(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
+    def validate_host_list(self, host_list_input):
+        """ validates the host_list_input value for None and empty
+
+        """
+        try:
+            for host_list in host_list_input:
+                if ("host_name" and "host_id" in host_list.keys()):
+                    if host_list["host_name"] and host_list["host_id"]:
+                        errmsg = 'parameters are mutually exclusive: host_name|host_id'
+                        self.module.fail_json(msg=errmsg)
+                is_host_details_missing = True
+                for key, value in host_list.items():
+                    if key == "host_name" and not is_none_or_empty_string(value):
+                        is_host_details_missing = False
+                    elif key == "host_id" and not is_none_or_empty_string(value):
+                        is_host_details_missing = False
+
+                if is_host_details_missing:
+                    errmsg = 'Invalid input parameter for {0}'.format(key)
+                    self.module.fail_json(msg=errmsg)
+
+        except Exception as e:
+            errormsg = "Failed to validate the module param with " \
+                       "error {0}".format(str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def resolve_host_mappings(self, hosts):
+        """ This method creates a dictionary of hosts and hlu parameter values
+            :param hosts: host and hlu value passed from input file
+            :return: list of host and hlu dictionary
+        """
+        host_list_new = []
+
+        if hosts:
+            for item in hosts:
+                host_dict = dict()
+                host_id = None
+                hlu = None
+                if item['host_name']:
+                    host = self.get_host(host_name=item['host_name'])
+                    if host:
+                        host_id = host.id
+                if item['host_id']:
+                    host_id = item['host_id']
+                if item['hlu']:
+                    hlu = item['hlu']
+                host_dict['host_id'] = host_id
+                host_dict['hlu'] = hlu
+                host_list_new.append(host_dict)
+        return host_list_new
+
     def perform_module_operation(self):
         """
         Perform different actions on volume module based on parameters
         passed in the playbook
         """
+        self.new_host_list = []
+        self.overlapping_list = []
         vol_name = self.module.params['vol_name']
         vol_id = self.module.params['vol_id']
         pool_name = self.module.params['pool_name']
@@ -881,6 +987,7 @@ class UnityVolume(object):
         mapping_state = self.module.params['mapping_state']
         new_vol_name = self.module.params['new_vol_name']
         state = self.module.params['state']
+        hosts = self.module.params['hosts']
 
         # result is a dictionary to contain end state and volume details
         changed = False
@@ -895,6 +1002,9 @@ class UnityVolume(object):
 
         self.validate_input_string()
 
+        if hosts:
+            self.validate_host_list(hosts)
+
         if size is not None and size == 0:
             self.module.fail_json(msg="Size can not be 0 (Zero)")
 
@@ -905,22 +1015,29 @@ class UnityVolume(object):
             self.module.fail_json(msg="cap_unit can be specified along "
                                       "with size")
 
-        if hlu and (not host_name and not host_id):
+        if hlu and (not host_name and not host_id and not hosts):
             self.module.fail_json(msg="hlu can be specified with "
                                       "host_id or host_name")
-        if mapping_state and (not host_name and not host_id):
+        if mapping_state and (not host_name and not host_id and not hosts):
             self.module.fail_json(msg="mapping_state can be specified"
-                                      " with host_id or host_name")
+                                      " with host_id or host_name or hosts")
 
         obj_vol = self.get_volume(vol_id=vol_id, vol_name=vol_name)
 
         if host_name or host_id:
             if not mapping_state:
                 errmsg = "'mapping_state' is required along with " \
-                         "'host_name' or 'host_id'"
+                         "'host_name' or 'host_id' or 'hosts'"
                 self.module.fail_json(msg=errmsg)
-            host = self.get_host(host_id=host_id, host_name=host_name)
-            self.param_host_id = host.id if host else None
+            host = [{'host_name': host_name, 'host_id': host_id, 'hlu': hlu}]
+            self.new_host_list = self.resolve_host_mappings(host)
+
+        if hosts:
+            if not mapping_state:
+                errmsg = "'mapping_state' is required along with " \
+                         "'host_name' or 'host_id' or 'hosts'"
+                self.module.fail_json(msg=errmsg)
+            self.new_host_list += self.resolve_host_mappings(hosts)
 
         if io_limit_policy:
             io_limit_policy = self.get_io_limit_policy(name=io_limit_policy)
@@ -942,9 +1059,10 @@ class UnityVolume(object):
             if obj_vol.host_access:
                 to_modify_host = self.host_access_modify_required(
                     host_access_list=obj_vol.host_access)
-                LOG.debug("Host Modify Required: %s", to_modify_host)
-            elif self.param_host_id:
-                to_modify_host = True
+                LOG.debug("Host Modify Required in access: %s", to_modify_host)
+            elif self.new_host_list:
+                to_modify_host = self.host_access_modify_required(
+                    host_access_list=obj_vol.host_access)
                 LOG.debug("Host Modify Required: %s", to_modify_host)
 
         if state == 'present' and not volume_details:
@@ -967,17 +1085,16 @@ class UnityVolume(object):
                 self.module.fail_json(msg="Size is required to create"
                                           " a volume")
             host_access = None
-            if self.param_host_id:
-                host = self.get_host(host_id=self.param_host_id)
-                if hlu:
-                    host_access = [
-                        {'host': host,
-                         'accessMask': utils.HostLUNAccessEnum.PRODUCTION,
-                         'hlu': hlu}]
-                else:
-                    host_access = [
-                        {'host': host,
-                         'accessMask': utils.HostLUNAccessEnum.PRODUCTION}]
+            if self.new_host_list:
+                host_access = []
+                for item in self.new_host_list:
+                    if item['hlu']:
+                        host_access.append(
+                            {'accessMask': utils.HostLUNAccessEnum.PRODUCTION, 'host': {'id': item['host_id']},
+                             'hlu': item['hlu']})
+                    else:
+                        host_access.append(
+                            {'accessMask': utils.HostLUNAccessEnum.PRODUCTION, 'host': {'id': item['host_id']}})
 
             size = utils.get_size_in_gb(size, cap_unit)
 
@@ -997,15 +1114,16 @@ class UnityVolume(object):
 
         if (state == 'present' and volume_details
                 and mapping_state == 'mapped' and to_modify_host):
-            host = self.get_host(host_id=self.param_host_id)
-            resp = self.attach_to(host=host, hlu=hlu, obj_vol=obj_vol)
-            changed = True if resp else False
+            if self.new_host_list:
+                resp = self.multiple_host_map(host_dic_list=self.new_host_list, obj_vol=obj_vol)
+                changed = True if resp else False
 
         if (state == 'present' and volume_details
                 and mapping_state == 'unmapped' and to_modify_host):
-            host = self.get_host(host_id=self.param_host_id)
-            resp = self.detach_from(host=host, obj_vol=obj_vol)
-            changed = True if resp else False
+            if self.new_host_list:
+                resp = self.multiple_detach(host_list_detach=self.overlapping_list, obj_vol=obj_vol)
+                LOG.info(resp)
+                changed = True if resp else False
 
         if state == 'absent' and volume_details:
             changed = self.delete_volume(vol_id)
@@ -1038,6 +1156,12 @@ def get_unity_volume_parameters():
         snap_schedule=dict(required=False, type='str'),
         host_name=dict(required=False, type='str'),
         host_id=dict(required=False, type='str'),
+        hosts=dict(required=False, type='list', elements='dict',
+                   options=dict(
+                       host_id=dict(required=False, type='str'),
+                       host_name=dict(required=False, type='str'),
+                       hlu=dict(required=False, type='str')
+                   )),
         hlu=dict(required=False, type='int'),
         mapping_state=dict(required=False, type='str',
                            choices=['mapped', 'unmapped']),
