@@ -25,33 +25,33 @@ options:
     description:
     - The ID of the NAS server.
     - nas_server_name and nas_server_id are mutually exclusive parameters.
-    - Any one of both is required to perform the task.
+    - Either one is required to perform the task.
     type: str
   nas_server_name:
     description:
     - The Name of the NAS server.
     - nas_server_name and nas_server_id are mutually exclusive parameters.
-    - Any one of both is required to perform the task.
+    - Either one  is required to perform the task.
     type: str
   nas_server_new_name:
     description:
     - The new name of the NAS server.
-    - It can be mentioned during modification of NAS server.
+    - It can be mentioned during modification of the NAS server.
     type: str
   is_replication_destination:
     description:
     - It specifies whether the NAS server is a replication destination.
-    - It can be mentioned during modification of NAS server.
+    - It can be mentioned during modification of the NAS server.
     type: bool
   is_backup_only:
     description:
     - It specifies whether the NAS server is used as backup only.
-    - It can be mentioned during modification of NAS server.
+    - It can be mentioned during modification of the NAS server.
     type: bool
   is_multiprotocol_enabled:
     description:
     - This parameter indicates whether multiprotocol sharing mode is enabled.
-    - It can be mentioned during modification of NAS server.
+    - It can be mentioned during modification of the NAS server.
     type: bool
   allow_unmapped_user:
     description:
@@ -59,37 +59,37 @@ options:
       mapping failure.
     - If true, then enable access in case of any user mapping failure.
     - If false, then disable access in case of any user mapping failure.
-    - It can be mentioned during modification of NAS server.
+    - It can be mentioned during modification of the NAS server.
     type: bool
   default_windows_user:
     description:
     - Default windows user name used for granting access in the case of Unix
-      to Windows user mapping failure
-    - It can be mentioned during modification of NAS server.
+      to Windows user mapping failure.
+    - It can be mentioned during modification of the NAS server.
     type: str
   default_unix_user:
     description:
     - Default Unix user name used for granting access in the case of Windows
      to Unix user mapping failure.
-    - It can be mentioned during modification of NAS server.
+    - It can be mentioned during modification of the NAS server.
     type: str
   enable_windows_to_unix_username_mapping:
     description:
     - This parameter indicates whether a Unix to/from Windows user name
       mapping is enabled.
-    - It can be mentioned during modification of NAS server.
+    - It can be mentioned during modification of the NAS server.
     type: bool
   is_packet_reflect_enabled:
     description:
     - If the packet has to be reflected, then this parameter
       has to be set to True.
-    - It can be mentioned during modification of NAS server.
+    - It can be mentioned during modification of the NAS server.
     type: bool
   current_unix_directory_service:
     description:
     - This is the directory service used for querying identity information
       for UNIX (such as UIDs, GIDs, net groups).
-    - It can be mentioned during modification of NAS server.
+    - It can be mentioned during modification of the NAS server.
     type: str
     choices: ["NONE", "NIS", "LOCAL", "LDAP", "LOCAL_THEN_NIS", "LOCAL_THEN_LDAP"]
   state:
@@ -98,8 +98,8 @@ options:
     - present indicates that NAS server should exist on the system after
       the task is executed.
     - Right now deletion of NAS server is not supported. Hence, if state is
-      set to absent for any existing nas server then error will be thrown.
-    - For any non existing NAS server if state is set to absent then it will return None.
+      set to absent for any existing NAS server then error will be thrown.
+    - For any non-existing NAS server, if state is set to absent then it will return None.
     type: str
     required: true
     choices: ['present', 'absent']
@@ -147,53 +147,45 @@ nas_server_details:
     returned: When NAS server exists.
     contains:
         name:
-            description:
-                - Name of the NAS server
+            description: Name of the NAS server
             type: str
         id:
-            description:
-                - ID of the NAS server
+            description: ID of the NAS server
             type: str
         allow_unmapped_user:
-            description:
-                - enable/disable access status in case of any user mapping
-                  failure
+            description: enable/disable access status in case of any user
+                         mapping failure
             type: bool
         current_unix_directory_service:
-            description:
-                - Directory service used for querying identity information
-                  for UNIX (such as UIDs, GIDs, net groups).
+            description: Directory service used for querying identity
+                         information for UNIX (such as UIDs, GIDs, net groups).
             type: str
         default_unix_user:
-            description:
-                - Default Unix user name used for granting access in the case
-                  of Windows to Unix user mapping failure.
+            description: Default Unix user name used for granting access
+                         in the case of Windows to Unix user mapping failure.
             type: str
         default_windows_user:
-            description:
-                - Default windows user name used for granting access in the
-                  case of Unix to Windows user mapping failure
+            description: Default windows user name used for granting
+                         access in the case of Unix to Windows user mapping
+                         failure
             type: str
         is_backup_only:
-            description:
-                - whether the NAS server is used as backup only.
+            description: Whether the NAS server is used as backup only.
             type: bool
         is_multi_protocol_enabled:
-            description:
-                - Indicates whether multiprotocol sharing mode is enabled
+            description: Indicates whether multiprotocol sharing mode is
+                         enabled
             type: bool
         is_packet_reflect_enabled:
-            description:
-                - If the packet reflect has to be enabled
+            description: If the packet reflect has to be enabled
             type: bool
         is_replication_destination:
-            description:
-                - If the NAS server is a replication destination then True.
+            description: If the NAS server is a replication destination
+                         then True.
             type: bool
         is_windows_to_unix_username_mapping_enabled:
-            description:
-                -  Indicates whether a Unix to/from Windows user name
-                   mapping is enabled.
+            description: Indicates whether a Unix to/from Windows user name
+                         mapping is enabled.
             type: bool
 '''
 from ansible.module_utils.basic import AnsibleModule
@@ -205,6 +197,8 @@ LOG = utils.get_logger('dellemc_unity_nasserver')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
+
+application_type = "Ansible/1.2.0"
 
 
 class UnityNASServer(object):
@@ -244,7 +238,7 @@ class UnityNASServer(object):
             self.module.fail_json(msg=err_msg)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
-            self.module.params)
+            self.module.params, application_type)
         self.nas_server_conn_obj = utils.nas_server.UnityNasServer(
             self.unity_conn)
         LOG.info('Connection established with the Unity Array')

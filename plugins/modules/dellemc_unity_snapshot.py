@@ -12,7 +12,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 module: dellemc_unity_snapshot
-short_description: Manage snapshots on the Unity storage system
+short_description: Manage snapshots on the Unity storage system.
 description:
 - Managing snapshots on the Unity storage system includes create snapshot,
   delete snapshot, update snapshot, get snapshot, map host and unmap host.
@@ -34,13 +34,13 @@ options:
   vol_name:
     description:
     - The name of the volume for which snapshot is created.
-    - For creation of snapshot either vol_name or cg_name is required.
+    - For creation of a snapshot either vol_name or cg_name is required.
     - Not required for other operations.
     type: str
   cg_name:
     description:
     - The name of the Consistency Group for which snapshot is created.
-    - For creation of snapshot either vol_name or cg_name is required.
+    - For creation of a snapshot either vol_name or cg_name is required.
     - Not required for other operations.
     type: str
   snapshot_id:
@@ -89,7 +89,7 @@ options:
     description:
     - The name of the host.
     - Either host_name or host_id is required to map or unmap a snapshot from
-      a host
+      a host.
     - Snapshot can be attached to multiple hosts.
     type: str
   host_id:
@@ -195,32 +195,29 @@ snapshot_details:
     type: complex
     contains:
         is_auto_delete:
-            description:
-                - Additional information mentioned for snapshot.
+            description: Additional information mentioned for snapshot.
             type: str
         expiration_time:
-            description:
-                - Date and time after which the snapshot will expire.
+            description: Date and time after which the snapshot
+                         will expire.
             type: str
         hosts_list:
-            description:
-                - Contains the name and id of the associated hosts.
+            description: Contains the name and id of the associated
+                         hosts.
             type: dict
         id:
-            description:
-                -  Unique identifier of the snapshot instance.
+            description: Unique identifier of the snapshot instance.
             type: str
         name:
-            description:
-                - The name of the snapshot.
+            description: The name of the snapshot.
             type: str
         storage_resource_name:
-            description:
-                - Name of the storage resource for which the snapshot exists.
+            description: Name of the storage resource for which the
+                         snapshot exists.
             type: str
         storage_resource_id:
-            description:
-                - Id of the storage resource for which the snapshot exists.
+            description: Id of the storage resource for which the snapshot
+                         exists.
             type: str
 
 '''
@@ -236,6 +233,8 @@ LOG = utils.get_logger('dellemc_unity_snapshot',
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
+
+application_type = "Ansible/1.2.0"
 
 
 class UnitySnapshot(object):
@@ -276,7 +275,7 @@ class UnitySnapshot(object):
             self.module.fail_json(msg=err_msg)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
-            self.module.params)
+            self.module.params, application_type)
         self.snap_obj = utils.snap.UnitySnap(self.unity_conn)
         LOG.info('Connection established with the Unity Array')
 

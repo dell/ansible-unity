@@ -41,7 +41,13 @@ try:
     from storops.exception import UnityResourceNotFoundError, \
         StoropsConnectTimeoutError, UnityNfsShareNameExistedError
     from storops.connection.exceptions import HttpError, HTTPClientError
-
+    from storops.unity.resource.user_quota import UnityUserQuota, \
+        UnityUserQuotaList
+    from storops.unity.resource.tree_quota import UnityTreeQuota, \
+        UnityTreeQuotaList
+    from storops.unity.resource.quota_config import UnityQuotaConfig, \
+        UnityQuotaConfigList
+    from storops.unity.enums import QuotaPolicyEnum
     HAS_UNITY_SDK = True
 except ImportError:
     HAS_UNITY_SDK = False
@@ -54,6 +60,7 @@ try:
     PKG_RSRC_IMPORTED = True
 except ImportError:
     PKG_RSRC_IMPORTED = False
+
 
 '''Check required libraries'''
 
@@ -105,23 +112,26 @@ This method is to establish connection with Unity array using storops SDK.
 parameters:
   module_params - Ansible module parameters which contain below unity
                   unisphere details to establish connection.
-                - management_host: IP/FQDN of unity unisphere host.
-                - port:port at which Unity unisphere api is hosted.
+                - unispherehost: IP/FQDN of unity unisphere host.
+                - port: port at which Unity unisphere api is hosted.
                 - verifycert: Boolean value to inform system whether to
                   verify client certificate or not.
                 - username:  User name to access on to unity management host
                 - password: Password to access unity management host
+  application_type - Specifies details of the calling application
 returns connection object to access Unity Unisphere using storops SDK
 '''
 
 
-def get_unity_unisphere_connection(module_params):
+def get_unity_unisphere_connection(module_params, application_type=None):
+
     if HAS_UNITY_SDK:
         conn = UnitySystem(host=module_params['unispherehost'],
                            port=module_params['port'],
                            verify=module_params['verifycert'],
                            username=module_params['username'],
-                           password=module_params['password'])
+                           password=module_params['password'],
+                           application_type=application_type)
         return conn
 
 
@@ -142,7 +152,7 @@ def storops_version_check():
                                           "'pkg_resources', please install" \
                                           " the required package"
         else:
-            min_ver = '1.2.8'
+            min_ver = '1.2.10'
             curr_version = pkg_resources.require("storops")[0].version
             unsupported_version_message = "Storops {0} is not supported " \
                                           "by this module. Minimum " \
@@ -239,3 +249,27 @@ def get_size_in_gb(size, cap_units):
     size = Decimal(size_in_bytes / GB_IN_BYTES)
     size_in_gb = round(size)
     return size_in_gb
+
+
+'''
+Check whether input string is empty
+'''
+
+
+def is_input_empty(item):
+    if item == "" or item.isspace():
+        return True
+    else:
+        return False
+
+
+'''
+Check whether size is negative
+'''
+
+
+def is_size_negative(size):
+    if size and size < 0:
+        return True
+    else:
+        return False

@@ -32,7 +32,9 @@ description:
   Get list of File systems in Unity array,
   Get list of Snapshots in Unity array,
   Get list of SMB shares in Unity array,
-  Get list of NFS exports in Unity array
+  Get list of NFS exports in Unity array,
+  Get list of User quotas in Unity array,
+  Get list of Quota tree in Unity array
 
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -58,9 +60,11 @@ options:
     - snapshot
     - nfs_export
     - smb_share
+    - user_quota
+    - tree_quota
     choices: [host, fc_initiator, iscsi_initiator, cg, storage_pool, vol,
     snapshot_schedule, nas_server, file_system, snapshot, nfs_export,
-    smb_share]
+    smb_share, user_quota, tree_quota]
     type: list
     elements: str
 '''
@@ -85,6 +89,8 @@ EXAMPLES = r'''
        - snapshot
        - nfs_export
        - smb_share
+       - user_quota
+       - tree_quota
 
  - name: Get information of Unity array.
    dellemc_unity_gatherfacts:
@@ -200,6 +206,24 @@ EXAMPLES = r'''
      verifycert: "{{verifycert}}"
      gather_subset:
        - smb_share
+
+ - name: Get list of user quotas on Unity array.
+   dellemc_unity_gatherfacts:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - user_quota
+
+ - name: Get list of quota trees on Unity array.
+   dellemc_unity_gatherfacts:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - tree_quota
 '''
 
 RETURN = r'''
@@ -367,6 +391,30 @@ SMB_Shares:
         name:
             description: The name of the SMB Share.
             type: str
+
+User_Quotas:
+    description: Details of the user quotas.
+    returned: When user quotas exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the user quota.
+            type: str
+        uid:
+            description: The UID of the user quota.
+            type: str
+
+Tree_Quotas:
+    description: Details of the quota trees.
+    returned: When quota trees exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the quota tree.
+            type: str
+        path:
+            description: The path of the quota tree.
+            type: str
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -376,6 +424,8 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 LOG = utils.get_logger('dellemc_unity_gatherfacts')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
+
+application_type = "Ansible/1.2.0"
 
 
 class UnityGatherfacts(object):
@@ -404,7 +454,8 @@ class UnityGatherfacts(object):
             LOG.error(err_msg)
             self.module.fail_json(msg=err_msg)
 
-        self.unity = utils.get_unity_unisphere_connection(self.module.params)
+        self.unity = utils.get_unity_unisphere_connection(self.module.params,
+                                                          application_type)
         LOG.info('Got the unity instance for provisioning on Unity')
 
     def get_array_details(self):
@@ -450,7 +501,7 @@ class UnityGatherfacts(object):
 
         try:
             LOG.info('Getting FC initiators list ')
-            fc_initiator = utils.host.UnityHostInitiatorList\
+            fc_initiator = utils.host.UnityHostInitiatorList \
                 .get(cli=self.unity._cli, type=utils.HostInitiatorTypeEnum.FC)
             return fc_initiators_result_list(fc_initiator)
 
@@ -466,7 +517,7 @@ class UnityGatherfacts(object):
 
         try:
             LOG.info('Getting ISCSI initiators list ')
-            iscsi_initiator = utils.host.UnityHostInitiatorList\
+            iscsi_initiator = utils.host.UnityHostInitiatorList \
                 .get(cli=self.unity._cli, type=utils.HostInitiatorTypeEnum.
                      ISCSI)
             return iscsi_initiators_result_list(iscsi_initiator)
@@ -483,7 +534,7 @@ class UnityGatherfacts(object):
 
         try:
             LOG.info('Getting consistency groups list ')
-            consistency_groups = utils.cg.UnityConsistencyGroupList\
+            consistency_groups = utils.cg.UnityConsistencyGroupList \
                 .get(self.unity._cli)
             return result_list(consistency_groups)
 
@@ -529,7 +580,7 @@ class UnityGatherfacts(object):
 
         try:
             LOG.info('Getting snapshot schedules list ')
-            snapshot_schedules = utils.snap_schedule.UnitySnapScheduleList\
+            snapshot_schedules = utils.snap_schedule.UnitySnapScheduleList \
                 .get(cli=self.unity._cli)
             return result_list(snapshot_schedules)
 
@@ -609,6 +660,34 @@ class UnityGatherfacts(object):
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
+    def get_user_quota_list(self):
+        """Get the list of user quotas on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting user quota list")
+            user_quotas = self.unity.get_user_quota()
+            return user_quota_result_list(user_quotas)
+
+        except Exception as e:
+            msg = 'Get user quotas from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
+    def get_tree_quota_list(self):
+        """Get the list of quota trees on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting quota tree list")
+            tree_quotas = self.unity.get_tree_quota()
+            return tree_quota_result_list(tree_quotas)
+
+        except Exception as e:
+            msg = 'Get quota trees from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
     def perform_module_operation(self):
         """ Perform different actions on Gatherfacts based on user parameter
             chosen in playbook """
@@ -628,6 +707,8 @@ class UnityGatherfacts(object):
         snapshot = []
         nfs_export = []
         smb_share = []
+        user_quota = []
+        tree_quota = []
 
         subset = self.module.params['gather_subset']
         if subset is not None:
@@ -655,6 +736,10 @@ class UnityGatherfacts(object):
                 nfs_export = self.get_nfs_exports_list()
             if 'smb_share' in subset:
                 smb_share = self.get_smb_shares_list()
+            if 'user_quota' in subset:
+                user_quota = self.get_user_quota_list()
+            if 'tree_quota' in subset:
+                tree_quota = self.get_tree_quota_list()
 
         self.module.exit_json(
             Array_Details=array_details,
@@ -669,7 +754,9 @@ class UnityGatherfacts(object):
             File_Systems=file_system,
             Snapshots=snapshot,
             NFS_Exports=nfs_export,
-            SMB_Shares=smb_share
+            SMB_Shares=smb_share,
+            User_Quotas=user_quota,
+            Tree_Quotas=tree_quota
         )
 
 
@@ -727,6 +814,42 @@ def iscsi_initiators_result_list(entity):
         return None
 
 
+def user_quota_result_list(entity):
+    """ Get the id and uid associated with the Unity user quotas """
+    result = []
+
+    if entity:
+        LOG.info('Successfully listed.')
+        for item in entity:
+            result.append(
+                {
+                    "uid": item.uid,
+                    "id": item.id
+                }
+            )
+        return result
+    else:
+        return None
+
+
+def tree_quota_result_list(entity):
+    """ Get the id and path associated with the Unity quota trees """
+    result = []
+
+    if entity:
+        LOG.info('Successfully listed.')
+        for item in entity:
+            result.append(
+                {
+                    "path": item.path,
+                    "id": item.id
+                }
+            )
+        return result
+    else:
+        return None
+
+
 def get_unity_gatherfacts_parameters():
     """This method provides parameters required for the ansible
     gatherfacts module on Unity"""
@@ -737,7 +860,8 @@ def get_unity_gatherfacts_parameters():
                                             'storage_pool', 'vol',
                                             'snapshot_schedule', 'nas_server',
                                             'file_system', 'snapshot',
-                                            'nfs_export', 'smb_share']))
+                                            'nfs_export', 'smb_share',
+                                            'user_quota', 'tree_quota']))
 
 
 def main():

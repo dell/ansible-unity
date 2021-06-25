@@ -18,8 +18,10 @@ short_description: Manage consistency groups on Unity storage system
 description:
 - Managing the consistency group on the Unity storage system includes
   creating new consistency group, adding volumes to consistency
-  group, removing volumes from consistency group, renaming consistency group,
-  modifying attributes of consistency group and deleting consistency group.
+  group, removing volumes from consistency group, mapping hosts to
+  consistency group, unmapping hosts from consistency group,
+  renaming consistency group, modifying attributes of consistency group
+  and deleting consistency group.
 
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -31,14 +33,14 @@ options:
   cg_name:
     description:
     - The name of the consistency group.
-    - It is mandatory for create operation.
+    - It is mandatory for the create operation.
     - Specify either cg_name or cg_id (but not both) for any operation.
     required: False
     type: str
   cg_id:
     description:
     - The ID of the consistency group.
-    - It can be used only for get, modify, add/remove volumes or delete
+    - It can be used only for get, modify, add/remove volumes, or delete
       operations.
     required: False
     type: str
@@ -52,6 +54,15 @@ options:
       consistency group or the volume has snapshots.
     type: list
     elements: dict
+    suboptions:
+      vol_id:
+        description:
+        - The ID of the volume.
+        type: str
+      vol_name:
+        description:
+        - The name of the volume.
+        type: str
   vol_state:
     description:
     - String variable, describes the state of volumes inside consistency
@@ -71,13 +82,42 @@ options:
     description:
     - Snapshot schedule assigned to the consistency group.
     - Specifying an empty string "" removes the existing snapshot schedule
-      from Consistency Group.
+      from consistency group.
     type: str
   tiering_policy:
     description:
     - Tiering policy choices for how the storage resource data will be
       distributed among the tiers available in the pool.
     choices: ['AUTOTIER_HIGH', 'AUTOTIER', 'HIGHEST', 'LOWEST']
+    type: str
+  hosts:
+    description:
+    - This is a list of hosts.
+    - Either the host ID or name must be provided for mapping/unmapping
+      hosts for a consistency group.
+    - If hosts are given, then mapping_state should also be specified.
+    - Hosts cannot be mapped to a consistency group, if the
+      consistency group has no volumes.
+    - When a consistency group is being mapped to the host,
+      users should not use the volume module to map the volumes
+      in the consistency group to hosts.
+    type: list
+    elements: dict
+    suboptions:
+      host_id:
+        description:
+        - The ID of the host.
+        type: str
+      host_name:
+        description:
+        - The name of the host.
+        type: str
+  mapping_state:
+    description:
+    - String variable, describes the state of hosts inside the consistency
+      group.
+    - If hosts are given, then mapping_state should also be specified.
+    choices: [mapped , unmapped]
     type: str
   state:
     description:
@@ -142,6 +182,32 @@ EXAMPLES = r"""
       tiering_policy: "{{tiering_policy1}}"
       state: "present"
 
+- name: Map hosts to a consistency group
+  dellemc_unity_consistencygroup:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      cg_id: "{{cg_id}}"
+      hosts:
+        - host_name: "10.226.198.248"
+        - host_id: "Host_511"
+      mapping_state: "mapped"
+      state: "present"
+
+- name: Unmap hosts from a consistency group
+  dellemc_unity_consistencygroup:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      cg_id: "{{cg_id}}"
+      hosts:
+        - host_id: "Host_511"
+        - host_name: "10.226.198.248"
+      mapping_state: "unmapped"
+      state: "present"
+
 - name: Remove volumes from consistency group
   dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
@@ -177,12 +243,10 @@ consistency_group_details:
     type: complex
     contains:
         id:
-            description:
-                - The system ID given to the consistency group
+            description: The system ID given to the consistency group
             type: str
         relocation_policy:
-            description:
-                - FAST VP tiering policy for the consistency group
+            description: FAST VP tiering policy for the consistency group
             type: str
         snap_schedule:
             description: Snapshot schedule applied to consistency group
@@ -194,12 +258,11 @@ consistency_group_details:
                     type: complex
                     contains:
                         id:
-                            description:
-                                - The system ID given to the snapshot schedule
+                            description: The system ID given to the
+                                         snapshot schedule
                             type: str
                         name:
-                            description:
-                                - The name of the snapshot schedule
+                            description: The name of the snapshot schedule
                             type: str
         luns:
             description: Details of volumes part of consistency group
@@ -214,28 +277,23 @@ consistency_group_details:
                             type: complex
                             contains:
                                 id:
-                                    description:
-                                        - The system ID given to volume
+                                    description: The system ID given to volume
                                     type: str
                                 name:
-                                    description:
-                                        - The name of the volume
+                                    description: The name of the volume
                                     type: str
         snapshots:
             description: List of snapshots of consistency group
             type: complex
             contains:
                 name:
-                    description:
-                        - Name of the snapshot
+                    description: Name of the snapshot
                     type: str
                 creation_time:
-                    description:
-                        - Date and time on which the snapshot was taken
+                    description: Date and time on which the snapshot was taken
                     type: str
                 expirationTime:
-                    description:
-                        - Date and time after which the snapshot will expire
+                    description: Date and time after which the snapshot will expire
                     type: str
                 storageResource:
                     description: Storage resource for which the snapshot was
@@ -247,8 +305,26 @@ consistency_group_details:
                             type: complex
                             contains:
                                 id:
-                                    description:
-                                        - The id of the storage resource
+                                    description: The id of the storage
+                                                 resource
+                                    type: str
+        block_host_access:
+            description: Details of hosts mapped to the consistency group
+            type: complex
+            contains:
+                UnityBlockHostAccessList:
+                    description: List of hosts mapped to consistency group
+                    type: complex
+                    contains:
+                        UnityBlockHostAccess:
+                            description: Details of host
+                            type: complex
+                            contains:
+                                id:
+                                    description: The ID of the host
+                                    type: str
+                                name:
+                                    description: The name of the host
                                     type: str
 '''
 
@@ -264,9 +340,10 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
+application_type = "Ansible/1.2.0"
+
 
 class UnityConsistencyGroup(object):
-
     """Class with consistency group operations"""
 
     def __init__(self):
@@ -276,7 +353,7 @@ class UnityConsistencyGroup(object):
 
         mutually_exclusive = [['cg_name', 'cg_id']]
         required_one_of = [['cg_name', 'cg_id']]
-        required_together = [['volumes', 'vol_state']]
+        required_together = [['volumes', 'vol_state'], ['hosts', 'mapping_state']]
 
         # initialize the Ansible module
         self.module = AnsibleModule(
@@ -300,10 +377,10 @@ class UnityConsistencyGroup(object):
             self.module.fail_json(msg=err_msg)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
-            self.module.params)
+            self.module.params, application_type)
 
     def return_cg_instance(self, cg_name):
-        """Return the Consistency Group instance.
+        """Return the consistency group instance.
             :param cg_name: The name of the consistency group
             :return: Instance of the consistency group
         """
@@ -344,6 +421,15 @@ class UnityConsistencyGroup(object):
                 snapshot_list = [snap._get_properties() for snap in snapshots]
 
                 cg_ret_details = cg_details._get_properties()
+
+                # Append details of host mapped to the consistency group
+                # in return response
+                if cg_ret_details['block_host_access']:
+                    for i in range(len(cg_details.block_host_access)):
+                        cg_ret_details['block_host_access']['UnityBlockHostAccessList'][i]['UnityBlockHostAccess'][
+                            'id'] = cg_details.block_host_access[i].host.id
+                        cg_ret_details['block_host_access']['UnityBlockHostAccessList'][i]['UnityBlockHostAccess'][
+                            'name'] = cg_details.block_host_access[i].host.name
                 cg_ret_details['snapshots'] = snapshot_list
 
                 # Add volume name to the dict
@@ -382,6 +468,26 @@ class UnityConsistencyGroup(object):
 
         except Exception as e:
             msg = errormsg.format(id_or_name, str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
+    def get_host_id_by_name(self, host_name):
+        """ Get host ID by host name
+        :param host_name: str
+        :return: unity host ID
+        :rtype: str
+        """
+        try:
+            host_obj = self.unity_conn.get_host(name=host_name)
+            if host_obj and host_obj.existed:
+                return host_obj.id
+            else:
+                msg = "Host name: %s does not exists" % host_name
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
+        except Exception as e:
+            msg = "Failed to get host ID by name: %s error: %s" % (
+                host_name, str(e))
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
@@ -463,25 +569,10 @@ class UnityConsistencyGroup(object):
 
         """remove volume by name"""
         for vol in vol_name_list:
-            id = self.get_volume_details(vol_name=vol)
-            if id and (id in existing_vol_ids):
-                if id not in ids_to_remove:
-                    ids_to_remove.append(id)
-            else:
-                msg = "Unable to remove volume {0} since it is not " \
-                      "present in consistency group {1}".format(vol, cg_name)
-                LOG.info(msg)
+            ids_to_remove.append(self.get_volume_details(vol_name=vol))
 
-        """remove volume by id"""
-        for vol in vol_id_list:
-            """verifying if volume id exists in array"""
-
-            if vol in existing_vol_ids and vol not in ids_to_remove:
-                ids_to_remove.append(vol)
-            else:
-                msg = "Unable to remove volume {0} since it is not " \
-                      "present in consistency group {1}".format(vol, cg_name)
-                LOG.info(msg)
+        vol_id_list = list(set(vol_id_list + ids_to_remove))
+        ids_to_remove = list(set(existing_vol_ids).intersection(set(vol_id_list)))
 
         LOG.info("Volume IDs to remove %s", ids_to_remove)
 
@@ -526,36 +617,25 @@ class UnityConsistencyGroup(object):
         ids_to_add = []
         vol_name_list = []
         vol_id_list = []
+        all_vol_ids = []
 
         for vol in volumes:
             if 'vol_id' in vol and not (vol['vol_id'] in vol_id_list):
                 vol_id_list.append(vol['vol_id'])
-            elif 'vol_name' in vol and not(vol['vol_name'] in vol_name_list):
+            elif 'vol_name' in vol and not (vol['vol_name'] in vol_name_list):
                 vol_name_list.append(vol['vol_name'])
 
         """add volume by name"""
         for vol in vol_name_list:
-            id = self.get_volume_details(vol_name=vol)
-            if id and (id not in existing_vol_ids):
-                if id not in ids_to_add:
-                    ids_to_add.append(id)
-            else:
-                msg = "Unable to add volume name {0}, either it doesn't" \
-                      " exist or already in volume group ".format(vol)
-                LOG.info(msg)
+            ids_to_add.append(self.get_volume_details(vol_name=vol))
 
         """add volume by id"""
         for vol in vol_id_list:
             """verifying if volume id exists in array"""
-            vol_by_id = self.get_volume_details(vol_id=vol)
+            ids_to_add.append(self.get_volume_details(vol_id=vol))
 
-            if vol_by_id not in existing_vol_ids:
-                if vol_by_id not in ids_to_add:
-                    ids_to_add.append(vol_by_id)
-            else:
-                msg = "Unable to add volume id {0}, either it doesn't" \
-                      " exist or already in volume group ".format(vol)
-                LOG.info(msg)
+        all_vol_ids = ids_to_add + existing_vol_ids
+        ids_to_add = list(set(all_vol_ids) - set(existing_vol_ids))
 
         LOG.info("Volume IDs to add %s", ids_to_add)
 
@@ -588,6 +668,112 @@ class UnityConsistencyGroup(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
+    def map_hosts_to_cg(self, cg_name, add_hosts):
+        """Map hosts to consistency group.
+            :param cg_name: The name of the consistency group
+            :param add_hosts: List of hosts that are to be mapped to cg
+            :return: Boolean value to indicate if hosts were mapped to cg
+        """
+        cg_details = self.unity_conn.get_cg(name=cg_name)
+        existing_volumes_in_cg = cg_details.luns
+
+        existing_hosts_in_cg = cg_details.block_host_access
+        existing_host_ids = []
+
+        """Get list of existing hosts in consistency group"""
+        if existing_hosts_in_cg:
+            for i in range(len(existing_hosts_in_cg)):
+                existing_host_ids.append(existing_hosts_in_cg[i].host.id)
+
+        host_id_list = []
+        host_name_list = []
+        add_hosts_id = []
+        host_add_list = []
+        all_hosts = []
+
+        for host in add_hosts:
+            if 'host_id' in host and not (host['host_id'] in host_id_list):
+                host_id_list.append(host['host_id'])
+            elif 'host_name' in host and not (host['host_name'] in host_name_list):
+                host_name_list.append(host['host_name'])
+
+        """add hosts by name"""
+        for host_name in host_name_list:
+            add_hosts_id.append(self.get_host_id_by_name(host_name))
+
+        all_hosts = host_id_list + existing_host_ids + add_hosts_id
+        add_hosts_id = list(set(all_hosts) - set(existing_host_ids))
+
+        if len(add_hosts_id) == 0:
+            return False
+
+        if existing_volumes_in_cg:
+
+            for host_id in add_hosts_id:
+                host_dict = {"id": host_id}
+                host_add_list.append(host_dict)
+
+            LOG.info("List of hosts to be added to consistency group "
+                     "%s ", host_add_list)
+            cg_obj = self.return_cg_instance(cg_name)
+            try:
+                cg_obj.modify(name=cg_name, host_add=host_add_list)
+                return True
+            except Exception as e:
+                errormsg = "Adding host to consistency group {0} " \
+                           "failed with error {1}".format(cg_name, str(e))
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
+    def unmap_hosts_to_cg(self, cg_name, remove_hosts):
+        """Unmap hosts to consistency group.
+            :param cg_name: The name of the consistency group
+            :param remove_hosts: List of hosts that are to be unmapped from cg
+            :return: Boolean value to indicate if hosts were mapped to cg
+        """
+        cg_details = self.unity_conn.get_cg(name=cg_name)
+        existing_hosts_in_cg = cg_details.block_host_access
+        existing_host_ids = []
+
+        """Get host ids existing in consistency group"""
+        if existing_hosts_in_cg:
+            for i in range(len(existing_hosts_in_cg)):
+                existing_host_ids.append(existing_hosts_in_cg[i].host.id)
+
+        host_remove_list = []
+        host_id_list = []
+        host_name_list = []
+        remove_hosts_id = []
+
+        for host in remove_hosts:
+            if 'host_id' in host and not (host['host_id'] in host_id_list):
+                host_id_list.append(host['host_id'])
+            elif 'host_name' in host and not (host['host_name'] in host_name_list):
+                host_name_list.append(host['host_name'])
+
+        """remove hosts by name"""
+        for host in host_name_list:
+            remove_hosts_id.append(self.get_host_id_by_name(host))
+
+        host_id_list = list(set(host_id_list + remove_hosts_id))
+        remove_hosts_id = list(set(existing_host_ids).intersection(set(host_id_list)))
+
+        if len(remove_hosts_id) == 0:
+            return False
+
+        for host in remove_hosts_id:
+            host_dict = {"id": host}
+            host_remove_list.append(host_dict)
+        cg_obj = self.return_cg_instance(cg_name)
+        try:
+            cg_obj.modify(name=cg_name, host_remove=host_remove_list)
+            return True
+        except Exception as e:
+            errormsg = "Removing host from consistency group {0} " \
+                       "failed with error {1}".format(cg_name, str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
     def rename_cg(self, cg_name, new_cg_name):
         """Rename consistency group.
             :param cg_name: The name of the consistency group
@@ -613,11 +799,16 @@ class UnityConsistencyGroup(object):
         """
         modified = False
 
-        if self.module.params['tiering_policy'] and cg_details['luns'] is\
+        if self.module.params['tiering_policy'] and cg_details['luns'] is \
                 None and self.module.params['volumes'] is None:
             self.module.fail_json(msg="The system cannot assign a tiering"
-                                      " policy to an empty Consistency group."
+                                      " policy to an empty consistency group."
                                   )
+
+        if self.module.params['hosts'] and cg_details['luns'] is \
+                None and self.module.params['volumes'] is None:
+            self.module.fail_json(msg="The system cannot assign hosts"
+                                      " to an empty consistency group.")
 
         if ((cg_details['description'] is not None and
              self.module.params['description'] is not None and
@@ -635,7 +826,7 @@ class UnityConsistencyGroup(object):
 
         if cg_details['relocation_policy']:
             tier_policy = cg_details['relocation_policy'].split('.')
-            if self.module.params['tiering_policy'] is not None and\
+            if self.module.params['tiering_policy'] is not None and \
                     tier_policy[1] != self.module.params['tiering_policy']:
                 modified = True
 
@@ -665,7 +856,7 @@ class UnityConsistencyGroup(object):
             self.module.fail_json(msg=errormsg)
 
     def modify_cg(self, cg_name, description, snap_schedule, tiering_policy):
-        """Modify Consistency Group.
+        """Modify consistency group.
             :param cg_name: The name of the consistency group
             :param description: The description of the consistency group
             :param snap_schedule: The name of the snapshot schedule
@@ -726,6 +917,32 @@ class UnityConsistencyGroup(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
+    def refine_volumes(self, volumes):
+        """Refine volumes.
+            :param volumes: Volumes that is to be added/removed
+            :return: List of volumes with each volume being identified with either
+            vol_id or vol_name
+        """
+        for vol in volumes:
+            if vol['vol_id'] is not None and vol['vol_name'] is None:
+                del vol['vol_name']
+            elif vol['vol_name'] is not None and vol['vol_id'] is None:
+                del vol['vol_id']
+        return volumes
+
+    def refine_hosts(self, hosts):
+        """Refine hosts.
+            :param hosts: Hosts that is to be mapped/unmapped
+            :return: List of hosts with each host being identified with either
+            host_id or host_name
+        """
+        for host in hosts:
+            if host['host_id'] is not None and host['host_name'] is None:
+                del host['host_name']
+            elif host['host_name'] is not None and host['host_id'] is None:
+                del host['host_id']
+        return hosts
+
     def validate_volumes(self, volumes):
         """Validate the volumes.
             :param volumes: List of volumes
@@ -756,6 +973,41 @@ class UnityConsistencyGroup(object):
                 LOG.error(errormsg)
                 self.module.fail_json(msg=errormsg)
 
+    def validate_hosts(self, hosts):
+        """Validate hosts.
+            :param hosts: List of hosts
+        """
+
+        for host in hosts:
+            if ('host_id' in host) and ('host_name' in host):
+                errormsg = "Both name and id are found for host {0}. No" \
+                           " action would be taken. Please specify either" \
+                           " name or id.".format(host)
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+            elif 'host_id' in host and (len(host['host_id'].strip()) == 0):
+                errormsg = "host_id is blank. Please specify valid host_id."
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+            elif 'host_name' in host and (len(host.get('host_name').strip()) == 0):
+                errormsg = "host_name is blank. Please specify valid host_name."
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+            elif 'host_name' in host:
+                self.get_host_id_by_name(host_name=host['host_name'])
+            elif 'host_id' in host:
+                host_obj = self.unity_conn.get_host(_id=host['host_id'])
+                if host_obj is None or host_obj.existed is False:
+                    msg = "Host id: %s does not exists" % host['host_id']
+                    LOG.error(msg)
+                    self.module.fail_json(msg=msg)
+
+            else:
+                errormsg = "Expected either host_name or host_id, found" \
+                           " neither for host {0}".format(host)
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
     def perform_module_operation(self):
         """
         Perform different actions on consistency group module based on
@@ -769,6 +1021,8 @@ class UnityConsistencyGroup(object):
         new_cg_name = self.module.params['new_cg_name']
         tiering_policy = self.module.params['tiering_policy']
         vol_state = self.module.params['vol_state']
+        hosts = self.module.params['hosts']
+        mapping_state = self.module.params['mapping_state']
         state = self.module.params['state']
 
         # result is a dictionary that contains changed status and consistency
@@ -781,17 +1035,21 @@ class UnityConsistencyGroup(object):
             add_vols_to_cg='',
             remove_vols_from_cg='',
             delete_cg='',
+            add_hosts_to_cg='',
+            remove_hosts_from_cg='',
             consistency_group_details=''
         )
-
         cg_details = self.get_details(cg_id=cg_id, cg_name=cg_name)
 
         if cg_name is None and cg_details:
             cg_id = None
             cg_name = cg_details['name']
-
         if volumes:
+            volumes = self.refine_volumes(volumes)
             self.validate_volumes(volumes)
+        if hosts:
+            hosts = self.refine_hosts(hosts)
+            self.validate_hosts(hosts)
 
         modified = False
 
@@ -801,11 +1059,18 @@ class UnityConsistencyGroup(object):
         if vol_state and not volumes:
             self.module.fail_json(msg="Specify volumes along with vol_state")
 
+        if mapping_state and not hosts:
+            self.module.fail_json(msg="Specify hosts along with mapping_state")
+
         if state == 'present' and not cg_details:
             if not volumes and tiering_policy:
                 self.module.fail_json(msg="The system cannot assign a"
                                           " tiering policy to an empty"
-                                          " Consistency group")
+                                          " consistency group")
+            if not volumes and hosts:
+                self.module.fail_json(msg="The system cannot assign"
+                                          " hosts to an empty"
+                                          " consistency group")
 
             if not cg_name:
                 msg = "The parameter cg_name length is 0. It is too short." \
@@ -835,6 +1100,14 @@ class UnityConsistencyGroup(object):
             result['remove_vols_from_cg'] = self.remove_volumes_from_cg(
                 cg_name, volumes)
 
+        if hosts and mapping_state == 'mapped' and \
+                cg_details:
+            result['add_hosts_to_cg'] = self.map_hosts_to_cg(cg_name, hosts)
+
+        if hosts and mapping_state == 'unmapped' and \
+                cg_details:
+            result['remove_hosts_from_cg'] = self.unmap_hosts_to_cg(cg_name, hosts)
+
         if state == 'present' and new_cg_name is not None:
             if not new_cg_name:
                 msg = "The parameter new_cg_name length is 0. It is too" \
@@ -852,7 +1125,8 @@ class UnityConsistencyGroup(object):
 
         if result['create_cg'] or result['modify_cg'] or result[
             'add_vols_to_cg'] or result['remove_vols_from_cg'] or result[
-                'delete_cg'] or result['rename_cg']:
+            'delete_cg'] or result['rename_cg'] or result[
+                'add_hosts_to_cg'] or result['remove_hosts_from_cg']:
             result['changed'] = True
 
         result['consistency_group_details'] = self.get_details(cg_id=cg_id,
@@ -868,13 +1142,25 @@ def get_unity_consistencygroup_parameters():
         cg_name=dict(required=False, type='str'),
         cg_id=dict(required=False, type='str'),
         description=dict(required=False, type='str'),
-        volumes=dict(required=False, type='list', elements='dict'),
+        volumes=dict(required=False, type='list', elements='dict',
+                     options=dict(
+                         vol_name=dict(type='str'),
+                         vol_id=dict(type='str')
+                     )
+                     ),
         snap_schedule=dict(required=False, type='str'),
         new_cg_name=dict(required=False, type='str'),
         tiering_policy=dict(required=False, type='str', choices=[
             'AUTOTIER_HIGH', 'AUTOTIER', 'HIGHEST', 'LOWEST']),
         vol_state=dict(required=False, type='str',
                        choices=['present-in-group', 'absent-in-group']),
+        hosts=dict(required=False, type='list', elements='dict',
+                   options=dict(
+                       host_name=dict(type='str'),
+                       host_id=dict(type='str')
+                   )),
+        mapping_state=dict(required=False, type='str',
+                           choices=['mapped', 'unmapped']),
         state=dict(required=True, type='str', choices=['present', 'absent'])
     )
 

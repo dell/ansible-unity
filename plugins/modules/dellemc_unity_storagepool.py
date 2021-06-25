@@ -20,7 +20,7 @@ version_added: '1.1.0'
 short_description: Manage storage pool on Unity
 
 description:
-- Managing storage pool on Unity storage system
+- Managing storage pool on Unity storage system contains the following operations
 - Get details of storage pool
 - Modify storage pool
 
@@ -145,48 +145,40 @@ RETURN = r'''
             description: Pool name, unique in the storage system.
             type: str
         is_fast_cache_enabled:
-            description:
-            - Indicates whether the fast cache is enabled for the storage
-              pool.
-            - true - FAST Cache is enabled for the pool.
-            - false - FAST Cache is disabled for the pool.
+            description: Indicates whether the fast cache is enabled for the storage
+                         pool.
+                         true - FAST Cache is enabled for the pool.
+                         false - FAST Cache is disabled for the pool.
             type: bool
         is_fast_vp_enabled:
-            description:
-            - Indicates whether to enable scheduled data relocations for the
-              storage pool.
-            - true - Enabled scheduled data relocations for the pool.
-            - false - Disabled scheduled data relocations for the pool.
+            description: Indicates whether to enable scheduled data relocations
+                         for the storage pool.
+                         true - Enabled scheduled data relocations for the pool.
+                         false - Disabled scheduled data relocations for the pool.
             type: bool
         size_free_with_unit:
-            description:
-            - Indicates size_free with its appropriate unit in human readable
-              form.
+            description: Indicates size_free with its appropriate unit
+                         in human readable form.
             type: str
         size_subscribed_with_unit:
-            description:
-            - Indicates size_subscribed with its appropriate unit in human
-              readable form.
+            description: Indicates size_subscribed with its appropriate unit in
+                         human readable form.
             type: str
         size_total_with_unit:
-            description:
-            - Indicates size_total with its appropriate unit in human readable
-              form.
+            description: Indicates size_total with its appropriate unit in human
+                         readable form.
             type: str
         size_used_with_unit:
-            description:
-            - Indicates size_used with its appropriate unit in human readable
-              form.
+            description: Indicates size_used with its appropriate unit in human
+                         readable form.
             type: str
         snap_size_subscribed_with_unit:
-            description:
-            - Indicates snap_size_subscribed with its appropriate unit in
-              human readable form.
+            description: Indicates snap_size_subscribed with its
+                         appropriate unit in human readable form.
             type: str
         snap_size_used_with_unit:
-            description:
-            - Indicates snap_size_used with its appropriate unit in human
-              readable form.
+            description: Indicates snap_size_used with its
+                         appropriate unit in human readable form.
             type: str
  '''
 
@@ -201,6 +193,8 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION = utils.storops_version_check()
 UNITY_SDK_VERSION_CHECK = UNITY_SDK_VERSION['supported_version']
 UNITY_SDK_VERSION_ERROR = UNITY_SDK_VERSION['unsupported_version_message']
+
+application_type = "Ansible/1.2.0"
 
 
 class UnityStoragePool(object):
@@ -231,7 +225,7 @@ class UnityStoragePool(object):
             self.module.fail_json(msg=UNITY_SDK_VERSION_ERROR)
 
         self.conn = utils.\
-            get_unity_unisphere_connection(self.module.params)
+            get_unity_unisphere_connection(self.module.params, application_type)
 
     def get_details(self, pool_id, pool_name):
         """ Get storage pool details"""

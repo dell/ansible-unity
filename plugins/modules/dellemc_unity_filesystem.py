@@ -4,6 +4,7 @@
 """Ansible module for managing FileSystem on Unity"""
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
@@ -18,21 +19,27 @@ short_description: Manage filesystem on Unity storage system
 description:
 - Managing filesystem on Unity storage system includes-
   Create new filesystem,
+  Modify snapschedule attribute of filesystem
   Modify filesystem attributes,
   Display filesystem details,
   Display filesystem snapshots,
-  Delete filesystem
+  Display filesystem snapschedule,
+  Delete snapschedule associated with the filesystem,
+  Delete filesystem,
+  Create new filesystem with quota configuration
 
 extends_documentation_fragment:
   -  dellemc.unity.dellemc_unity.unity
 
 author:
 - Arindam Datta (@dattaarindam) <ansible.team@dell.com>
+- Meenakshi Dembi (@dembim) <ansible.team@dell.com>
+- Spandita Panigrahi (@panigs7) <ansible.team@dell.com>
 
 options:
   filesystem_name:
     description:
-    - The name of the filesystem. Mandatory only for create operation.
+    - The name of the filesystem. Mandatory only for the create operation.
       All the operations are supported through 'filesystem_name'
     - It's mutually exclusive with 'filesystem_id'.
     required: False
@@ -40,7 +47,7 @@ options:
   filesystem_id:
     description:
     - The id of the filesystem.It's mutually exclusive with 'filesystem_name'
-    - It can be used only for get, modify or delete operations.
+    - It can be used only for get, modify, or delete operations.
     required: False
     type: str
   pool_name:
@@ -140,16 +147,85 @@ options:
       distributed among the tiers available in the pool.
     choices: ['AUTOTIER_HIGH', 'AUTOTIER', 'HIGHEST', 'LOWEST']
     type: str
+  quota_config:
+    description:
+    - Configuration for quota management. It contains optional parameters.
+    type: dict
+    suboptions:
+        grace_period:
+            description:
+            - Grace period set in quota configuration after soft limit is reached.
+            - If grace_period is not set during creation of filesystem,
+              it will be set to '7 days' by default.
+            type: int
+        grace_period_unit:
+            description:
+            - Unit of grace period.
+            - Default unit is 'days'.
+            type: str
+            choices: ['minutes', 'hours', 'days']
+        default_hard_limit:
+            description:
+            - Default hard limit for user quotas and tree quotas.
+            - If default_hard_limit is not set while creation of filesystem,
+              it will be set to 0B by default.
+            type: int
+        default_soft_limit:
+            description:
+            - Default soft limit for user quotas and tree quotas.
+            - If default_soft_limit is not set while creation of filesystem,
+              it will be set to 0B by default.
+            type: int
+        is_user_quota_enabled:
+            description:
+            - Indicates whether the user quota is enabled.
+            - Parameters 'is_user_quota_enabled' and 'quota_policy' are
+              mutually exclusive.
+            - If is_user_quota_enabled is not set while creation of filesystem,
+              it will be set to false by default.
+            type: bool
+        quota_policy:
+            description:
+            - Quota policy set in quota configuration.
+            - Parameters 'is_user_quota_enabled' and 'quota_policy' are
+              mutually exclusive.
+            - If quota_policy is not set while creation of filesystem, it will
+              be set to "FILE_SIZE" by default.
+            choices: ['FILE_SIZE','BLOCKS']
+            type: str
+        cap_unit:
+            description:
+            - Unit of default_soft_limit and default_hard_limit size.
+            - Default unit is 'GB'.
+            choices: ['MB', 'GB', 'TB']
+            type: str
   state:
     description:
     - State variable to determine whether filesystem will exist or not.
     choices: ['absent', 'present']
     required: true
     type: str
+  snap_schedule_name:
+    description:
+    - This is the name of an existing snapshot schedule which is to be associated with the filesystem.
+      This is mutually exclusive with snapshot schedule id.
+    required: false
+    type: str
+  snap_schedule_id:
+    description:
+    - This is the id of an existing snapshot schedule which is to be associated with the filesystem.
+      This is mutually exclusive with snapshot schedule name.
+      filesystem.
+    required: false
+    type: str
 
 notes:
-- SMB shares, NFS exports and snapshots associated with filesystem needs
+- SMB shares, NFS exports, and snapshots associated with filesystem need
   to be deleted prior to deleting a filesystem.
+- quota_config parameter can be used to update default hard limit
+  and soft limit values to limit the maximum space that can be used.
+  By default they both are set to 0 during filesystem
+  creation which means unlimited.
 """
 
 EXAMPLES = r"""
@@ -163,6 +239,23 @@ EXAMPLES = r"""
     nas_server_name: "lglap761"
     pool_name: "pool_1"
     size: 5
+    state: "present"
+
+- name: Create FileSystem with quota configuration
+  dellemc_unity_filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_name: "ansible_test_fs"
+    nas_server_name: "lglap761"
+    pool_name: "pool_1"
+    size: 5
+    quota_config:
+        grace_period: 8
+        grace_period_unit: "days"
+        default_soft_limit: 10
+        is_user_quota_enabled: False
     state: "present"
 
 - name: Expand FileSystem size
@@ -201,6 +294,16 @@ EXAMPLES = r"""
       is_smb_notify_on_access_enabled: True
     state: "present"
 
+- name: Modify FileSystem Snap Schedule
+  dellemc_unity_filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_id: "fs_141"
+    snap_schedule_id: "{{snap_schedule_id}}"
+    state: "{{state_present}}"
+
 - name: Get details of FileSystem using id
   dellemc_unity_filesystem:
     unispherehost: "{{unispherehost}}"
@@ -232,53 +335,43 @@ filesystem_details:
     type: complex
     contains:
         id:
-            description:
-                - The system generated ID given to the filesystem
+            description: The system generated ID given to the filesystem
             type: str
         name:
-            description:
-                - Name of the filesystem
+            description: Name of the filesystem
             type: str
         description:
-            description:
-                - description about the filesystem
+            description: Description about the filesystem
             type: str
         is_data_reduction_enabled:
-            description:
-                - Whether or not compression enabled on this filesystem
+            description: Whether or not compression enabled on this
+                         filesystem
             type: bool
         size_total_with_unit:
-            description:
-                - Size of the filesystem with actual unit.
+            description: Size of the filesystem with actual unit.
             type: str
         tiering_policy:
-            description:
-                - Tiering policy applied to this filesystem
+            description: Tiering policy applied to this filesystem
             type: str
         is_cifs_notify_on_access_enabled:
-            description:
-                - Indicates whether the system generates a notification when
-                  a user accesses the file system.
+            description: Indicates whether the system generates a
+                         notification when a user accesses the file system.
             type: bool
         is_cifs_notify_on_write_enabled:
-            description:
-                - Indicates whether the system generates a notification when
-                  the file system is written to.
+            description: Indicates whether the system generates a notification
+                         when the file system is written to.
             type: bool
         is_cifs_op_locks_enabled:
-            description:
-                - Indicates whether opportunistic file locks are enabled for
-                  the file system.
+            description: Indicates whether opportunistic file locks are enabled
+                         for the file system.
             type: bool
         is_cifs_sync_writes_enabled:
-            description:
-                - Indicates whether the CIFS synchronous writes option is
-                  enabled for the file system.
+            description: Indicates whether the CIFS synchronous writes option
+                         is enabled for the file system.
             type: bool
         cifs_notify_on_change_dir_depth:
-            description:
-                - Indicates the lowest directory level to which the enabled
-                  notifications apply, if any.
+            description: Indicates the lowest directory level to which the
+                         enabled notifications apply, if any.
             type: int
         pool:
             description: The pool in which this filesystem is allocated
@@ -290,12 +383,10 @@ filesystem_details:
                     type: complex
                     contains:
                         id:
-                            description:
-                                - The system ID given to the pool
+                            description: The system ID given to the pool
                             type: str
                         name:
-                            description:
-                                - The name of the storage pool
+                            description: The name of the storage pool
                             type: str
         nas_server:
             description: The NAS Server details on which this filesystem is hosted.
@@ -306,12 +397,10 @@ filesystem_details:
                     type: complex
                     contains:
                         id:
-                            description:
-                                - The system ID given to the NAS Server
+                            description: The system ID given to the NAS Server
                             type: str
                         name:
-                            description:
-                                - The name of the NAS Server
+                            description: The name of the NAS Server
                             type: str
         snap_list:
             description: The list of snapshots of this filesystem.
@@ -322,22 +411,52 @@ filesystem_details:
                     type: complex
                     contains:
                         id:
-                            description:
-                                - The system ID given to the filesystem snapshot
+                            description: The system ID given to the filesystem
+                                         snapshot
                             type: str
                         name:
-                            description:
-                                - The name of the filesystem snapshot
+                            description: The name of the filesystem snapshot
                             type: str
         is_thin_enabled:
-            description:
-                - Indicates whether thin provisioning is enabled for this
-                  filesystem
+            description: Indicates whether thin provisioning is enabled for
+                         this filesystem
             type: bool
+        snap_schedule_id:
+            description: Indicates the id of the snap schedule associated
+                         with the filesystem
+            type: str
+        snap_schedule_name:
+            description: Indicates the name of the snap schedule associated
+                         with the filesystem
+            type: str
+        quota_config:
+            description: Details of quota configuration of the filesystem
+                         created.
+            type: complex
+            contains:
+                grace_period:
+                    description: Grace period set in quota configuration
+                                 after soft limit is reached.
+                    type: str
+                default_hard_limit:
+                    description: Default hard limit for user quotas
+                                 and tree quotas.
+                    type: int
+                default_soft_limit:
+                    description: Default soft limit for user quotas
+                                 and tree quotas.
+                    type: int
+                is_user_quota_enabled:
+                    description: Indicates whether the user quota is enabled.
+                    type: bool
+                quota_policy:
+                    description: Quota policy set in quota configuration.
+                    type: str
 
 '''
+
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell\
+from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
 LOG = utils.get_logger('dellemc_unity_filesystem')
@@ -346,9 +465,10 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
+application_type = "Ansible/1.2.0"
+
 
 class UnityFilesystem(object):
-
     """Class with FileSystem operations"""
 
     def __init__(self):
@@ -358,7 +478,8 @@ class UnityFilesystem(object):
 
         mutually_exclusive = [['filesystem_name', 'filesystem_id'],
                               ['pool_name', 'pool_id'],
-                              ['nas_server_name', 'nas_server_id']]
+                              ['nas_server_name', 'nas_server_id'],
+                              ['snap_schedule_name', 'snap_schedule_id']]
 
         required_one_of = [['filesystem_name', 'filesystem_id']]
 
@@ -376,13 +497,13 @@ class UnityFilesystem(object):
                                       "before using these modules.")
 
         if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-                'supported_version']:
+           'supported_version']:
             err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
             LOG.error(err_msg)
             self.module.fail_json(msg=err_msg)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
-            self.module.params)
+            self.module.params, application_type)
 
     def get_filesystem(self, name=None, id=None, obj_nas_server=None):
         """Get the details of a FileSystem.
@@ -643,7 +764,6 @@ class UnityFilesystem(object):
 
             if description is not None and description != obj_fs.description:
                 to_update.update({'description': description})
-            LOG.info("desc 1st check: %s", to_update)
 
             size = self.module.params['size']
             if size and cap_unit:
@@ -682,6 +802,15 @@ class UnityFilesystem(object):
                 to_update.update({'locking_policy':
                                   self.get_locking_policy_enum(
                                       locking_policy)})
+
+            snap_sch = obj_fs.storage_resource.snap_schedule
+
+            if self.snap_sch_id is not None:
+                if self.snap_sch_id == "":
+                    if snap_sch and snap_sch.id != self.snap_sch_id:
+                        to_update.update({'is_snap_schedule_paused': False})
+                elif snap_sch is None or snap_sch.id != self.snap_sch_id:
+                    to_update.update({'snap_sch_id': self.snap_sch_id})
 
             smb_properties = self.module.params['smb_properties']
             if smb_properties:
@@ -757,7 +886,7 @@ class UnityFilesystem(object):
                 if smb_param in update_dict.keys():
                     cifs_fs_payload.update({smb_param: update_dict[smb_param]})
 
-            LOG.info("CIFS Modify Payload: %s", cifs_fs_payload)
+            LOG.debug("CIFS Modify Payload: %s", cifs_fs_payload)
 
             cifs_fs_parameters = obj_fs.prepare_cifs_fs_parameters(
                 **cifs_fs_payload)
@@ -780,12 +909,21 @@ class UnityFilesystem(object):
                 fs_update_payload.update(
                     {'cifs_fs_parameters': cifs_fs_parameters})
 
-            LOG.info("Modify Payload: %s", fs_update_payload)
+            if "snap_sch_id" in update_dict.keys():
+                fs_update_payload.update(
+                    {'snap_schedule_parameters': {'snapSchedule':
+                     {'id': update_dict.get('snap_sch_id')}
+                    }}
+                )
+            elif "is_snap_schedule_paused" in update_dict.keys():
+                fs_update_payload.update(
+                    {'snap_schedule_parameters': {'isSnapSchedulePaused': False}
+                     })
+
             obj_fs = obj_fs.update()
             resp = obj_fs.modify(**fs_update_payload)
             LOG.info("Successfully modified the FS with response %s", resp)
-            if resp:
-                return True
+            changed = True if resp else False
 
         except Exception as e:
             errormsg = "Failed to modify FileSystem instance id: {0}" \
@@ -818,6 +956,31 @@ class UnityFilesystem(object):
                     snap_list.append(d)
             filesystem_details['snapshots'] = snap_list
 
+            if obj_fs.storage_resource.snap_schedule:
+                filesystem_details['snap_schedule_id'] = obj_fs.storage_resource.snap_schedule.id
+                filesystem_details['snap_schedule_name'] = obj_fs.storage_resource.snap_schedule.name
+
+            quota_config_obj = self.get_quota_config_details(obj_fs)
+
+            if quota_config_obj:
+
+                hard_limit = utils.convert_size_with_unit(
+                    quota_config_obj.default_hard_limit)
+                soft_limit = utils.convert_size_with_unit(
+                    quota_config_obj.default_soft_limit)
+                grace_period = get_time_with_unit(
+                    quota_config_obj.grace_period)
+
+                filesystem_details.update({'quota_config':
+                                          {'id': quota_config_obj.id,
+                                           'default_hard_limit': hard_limit,
+                                           'default_soft_limit': soft_limit,
+                                           'is_user_quota_enabled':
+                                               quota_config_obj.is_user_quota_enabled,
+                                           'quota_policy': quota_config_obj._get_properties()[
+                                               'quota_policy'],
+                                           'grace_period': grace_period}
+                                           })
             return filesystem_details
 
         except Exception as e:
@@ -832,7 +995,8 @@ class UnityFilesystem(object):
         try:
             for key in self.module.params:
                 val = self.module.params[key]
-                if key == "description":
+                if key == "description" or key == "snap_schedule_name" \
+                          or key == "snap_schedule_id":
                     continue
                 if isinstance(val, str) \
                         and val == invalid_string:
@@ -843,6 +1007,143 @@ class UnityFilesystem(object):
         except Exception as e:
             errormsg = "Failed to validate the module param with " \
                        "error {0}".format(str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def resolve_to_snapschedule_id(self, params):
+        """ Get snapshot id for a give snap schedule name
+        :param params: snap schedule name or id
+        :return: snap schedule id after validation
+        """
+
+        try:
+            snap_sch_id = None
+            snapshot_schedule = {}
+            if params["name"]:
+                snapshot_schedule = utils.UnitySnapScheduleList.get(self.unity_conn._cli, name=params["name"])
+            elif params["id"]:
+                snapshot_schedule = utils.UnitySnapScheduleList.get(self.unity_conn._cli, id=params["id"])
+
+            if snapshot_schedule:
+                snap_sch_id = snapshot_schedule.id[0]
+
+            if not snap_sch_id:
+                errormsg = "Failed to find the snapshot schedule id against given name " \
+                           "or id: {0}".format(params["name"]), (params["id"])
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
+            return snap_sch_id
+
+        except Exception as e:
+            errormsg = "Failed to find the snapshot schedules with " \
+                       "error {0}".format(str(e))
+
+    def get_quota_config_details(self, obj_fs):
+        """
+        Get the quota config ID mapped to the filesystem
+        :param obj_fs: Filesystem instance
+        :return: Quota config object if exists else None
+        """
+        try:
+            all_quota_config = self.unity_conn.get_quota_config(filesystem=obj_fs)
+            fs_id = obj_fs.id
+
+            if len(all_quota_config) == 0:
+                LOG.error("The quota_config object for new filesystem "
+                          "is not updated yet.")
+                return None
+
+            for quota_config in range(len(all_quota_config)):
+                if fs_id and all_quota_config[quota_config].filesystem.id == fs_id and \
+                        not all_quota_config[quota_config].tree_quota:
+                    msg = "Quota config id for filesystem %s is %s" \
+                          % (fs_id, all_quota_config[quota_config].id)
+                    LOG.info(msg)
+                    return all_quota_config[quota_config]
+
+        except Exception as e:
+            errormsg = "Failed to fetch quota config for filesystem {0} " \
+                       " with error {1}".format(fs_id, str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def modify_quota_config(self, quota_config_obj, quota_config_params):
+        """
+        Modify default quota config settings of newly created filesystem.
+        The default setting of quota config after filesystem creation is:
+        default_soft_limit and default_hard_limit are 0,
+        is_user_quota_enabled is false,
+        grace_period is 7 days and,
+        quota_policy is FILE_SIZE.
+        :param quota_config_obj: Quota config instance
+        :param quota_config_params: Quota config parameters to be modified
+        :return: Boolean whether quota config is modified
+        """
+
+        if quota_config_params:
+            soft_limit = quota_config_params['default_soft_limit']
+            hard_limit = quota_config_params['default_hard_limit']
+            is_user_quota_enabled = quota_config_params['is_user_quota_enabled']
+            quota_policy = quota_config_params['quota_policy']
+            grace_period = quota_config_params['grace_period']
+            cap_unit = quota_config_params['cap_unit']
+            gp_unit = quota_config_params['grace_period_unit']
+
+        if soft_limit:
+            soft_limit_in_bytes = utils.get_size_bytes(soft_limit, cap_unit)
+        else:
+            soft_limit_in_bytes = quota_config_obj.default_soft_limit
+
+        if hard_limit:
+            hard_limit_in_bytes = utils.get_size_bytes(hard_limit, cap_unit)
+        else:
+            hard_limit_in_bytes = quota_config_obj.default_hard_limit
+
+        if grace_period:
+            grace_period_in_sec = get_time_in_seconds(grace_period, gp_unit)
+        else:
+            grace_period_in_sec = quota_config_obj.grace_period
+
+        policy_enum = None
+        policy_enum_val = None
+        if quota_policy:
+            if utils.QuotaPolicyEnum[quota_policy]:
+                policy_enum = utils.QuotaPolicyEnum[quota_policy]
+                policy_enum_val = \
+                    utils.QuotaPolicyEnum[quota_policy]._get_properties()['value']
+            else:
+                errormsg = "Invalid choice {0} for quota policy".format(
+                    quota_policy)
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
+        # Verify if modify is required. If not required, return False
+        if quota_config_obj.default_hard_limit == hard_limit_in_bytes and \
+                quota_config_obj.default_soft_limit == soft_limit_in_bytes and \
+                quota_config_obj.grace_period == grace_period_in_sec and \
+                ((quota_policy is not None and
+                  quota_config_obj.quota_policy == policy_enum) or
+                 quota_policy is None) and \
+                (is_user_quota_enabled is None or
+                 (is_user_quota_enabled is not None and
+                  is_user_quota_enabled == quota_config_obj.is_user_quota_enabled)):
+            return False
+
+        try:
+            resp = self.unity_conn.modify_quota_config(
+                quota_config_id=quota_config_obj.id,
+                grace_period=grace_period_in_sec,
+                default_hard_limit=hard_limit_in_bytes,
+                default_soft_limit=soft_limit_in_bytes,
+                is_user_quota_enabled=is_user_quota_enabled,
+                quota_policy=policy_enum_val)
+            LOG.info("Successfully modified the quota config with response %s", resp)
+            return True
+
+        except Exception as e:
+            errormsg = "Failed to modify quota config for filesystem {0} " \
+                       " with error {1}".format(quota_config_obj.filesystem.id, str(e))
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
@@ -859,7 +1160,10 @@ class UnityFilesystem(object):
         pool_id = self.module.params['pool_id']
         size = self.module.params['size']
         cap_unit = self.module.params['cap_unit']
+        quota_config = self.module.params['quota_config']
         state = self.module.params['state']
+        snap_schedule_name = self.module.params['snap_schedule_name']
+        snap_schedule_id = self.module.params['snap_schedule_id']
 
         # result is a dictionary to contain end state and FileSystem details
         changed = False
@@ -870,6 +1174,7 @@ class UnityFilesystem(object):
 
         to_modify_dict = None
         filesystem_details = None
+        quota_config_obj = None
 
         self.validate_input_string()
 
@@ -878,6 +1183,31 @@ class UnityFilesystem(object):
 
         if size and not cap_unit:
             cap_unit = 'GB'
+
+        if quota_config:
+            if (quota_config['default_hard_limit'] is not None
+                or quota_config['default_soft_limit'] is not None) and \
+                    not quota_config['cap_unit']:
+                quota_config['cap_unit'] = 'GB'
+
+            if quota_config['grace_period'] is not None \
+                    and quota_config['grace_period_unit'] is None:
+                quota_config['grace_period_unit'] = 'days'
+
+            if quota_config['grace_period'] is not None \
+                    and quota_config['grace_period'] <= 0:
+                self.module.fail_json(msg="Invalid grace_period provided. "
+                                          "Must be greater than 0.")
+
+            if quota_config['default_soft_limit'] is not None \
+                    and utils.is_size_negative(quota_config['default_soft_limit']):
+                self.module.fail_json(msg="Invalid default_soft_limit provided. "
+                                          "Must be greater than or equal to 0.")
+
+            if quota_config['default_hard_limit'] is not None \
+                    and utils.is_size_negative(quota_config['default_hard_limit']):
+                self.module.fail_json(msg="Invalid default_hard_limit provided. "
+                                          "Must be greater than or equal to 0.")
 
         if (cap_unit is not None) and not size:
             self.module.fail_json(msg="cap_unit can be specified along "
@@ -896,6 +1226,16 @@ class UnityFilesystem(object):
         obj_fs = self.get_filesystem(name=filesystem_name,
                                      id=filesystem_id,
                                      obj_nas_server=nas_server)
+
+        self.snap_sch_id = None
+        if snap_schedule_name or snap_schedule_id:
+            snap_schedule_params = {
+                "name": snap_schedule_name,
+                "id": snap_schedule_id
+            }
+            self.snap_sch_id = self.resolve_to_snapschedule_id(snap_schedule_params)
+        elif snap_schedule_name == "" or snap_schedule_id == "":
+            self.snap_sch_id = ""
 
         if obj_fs:
             filesystem_details = obj_fs._get_properties()
@@ -934,6 +1274,25 @@ class UnityFilesystem(object):
             self.modify_filesystem(update_dict=to_modify_dict, obj_fs=obj_fs)
             changed = True
 
+        """
+        Set quota configuration
+        """
+        if state == "present" and filesystem_details and quota_config:
+            quota_config_obj = self.get_quota_config_details(obj_fs)
+
+            if quota_config_obj is not None:
+                is_quota_config_modified = self.modify_quota_config(
+                    quota_config_obj=quota_config_obj,
+                    quota_config_params=quota_config)
+
+                if is_quota_config_modified:
+                    changed = True
+            else:
+                self.module.fail_json(msg="One or more operations related"
+                                          " to this task failed because the"
+                                          " new object created could not be fetched."
+                                          " Please rerun the task for expected result.")
+
         if state == 'absent' and filesystem_details:
             changed = self.delete_filesystem(filesystem_id)
             filesystem_details = None
@@ -945,6 +1304,44 @@ class UnityFilesystem(object):
         result['changed'] = changed
         result['filesystem_details'] = filesystem_details
         self.module.exit_json(**result)
+
+
+def get_time_in_seconds(time, time_units):
+    """This method get time is seconds"""
+    min_in_sec = 60
+    hour_in_sec = 60 * 60
+    day_in_sec = 24 * 60 * 60
+    if time is not None and time > 0:
+        if time_units in 'minutes':
+            return time * min_in_sec
+        elif time_units in 'hours':
+            return time * hour_in_sec
+        elif time_units in 'days':
+            return time * day_in_sec
+        else:
+            return time
+    else:
+        return 0
+
+
+def get_time_with_unit(time):
+    """This method sets seconds in minutes, hours or days."""
+    sec_in_min = 60
+    sec_in_hour = 60 * 60
+    sec_in_day = 24 * 60 * 60
+
+    if time % sec_in_day == 0:
+        time = time / sec_in_day
+        unit = 'days'
+
+    elif time % sec_in_hour == 0:
+        time = time / sec_in_hour
+        unit = 'hours'
+
+    else:
+        time = time / sec_in_min
+        unit = 'minutes'
+    return "%s %s" % (time, unit)
 
 
 def get_unity_filesystem_parameters():
@@ -977,6 +1374,17 @@ def get_unity_filesystem_parameters():
                             choices=['ADVISORY', 'MANDATORY']),
         tiering_policy=dict(required=False, type='str', choices=[
             'AUTOTIER_HIGH', 'AUTOTIER', 'HIGHEST', 'LOWEST']),
+        snap_schedule_name=dict(required=False, type='str'),
+        snap_schedule_id=dict(required=False, type='str'),
+        quota_config=dict(required=False, type='dict', options=dict(
+            grace_period=dict(required=False, type='int'),
+            grace_period_unit=dict(required=False, type='str', choices=['minutes', 'hours', 'days']),
+            default_hard_limit=dict(required=False, type='int'),
+            default_soft_limit=dict(required=False, type='int'),
+            is_user_quota_enabled=dict(required=False, type='bool'),
+            quota_policy=dict(required=False, type='str', choices=['FILE_SIZE', 'BLOCKS']),
+            cap_unit=dict(required=False, type='str', choices=['MB', 'GB', 'TB']),
+        ), mutually_exclusive=[['is_user_quota_enabled', 'quota_policy']]),
         state=dict(required=True, type='str', choices=['present', 'absent'])
     )
 
