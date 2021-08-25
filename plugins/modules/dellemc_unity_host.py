@@ -77,6 +77,12 @@ options:
     choices: [present-in-host , absent-in-host]
     type: str
 
+  host_ips:
+    description:
+    - Host IPs list
+    type: list
+    elements: str
+
   state:
     description:
     - State of the host.
@@ -94,6 +100,19 @@ EXAMPLES = r'''
     verifycert: "{{verifycert}}"
     host_name: "ansible-test-host"
     host_os: "Linux"
+    description: "ansible-test-host"
+    state: "present"
+
+- name: Create Host with Ips.
+  dellemc_unity_host:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    host_name: "ansible-test-host"
+    host_os: "Linux"
+    host_ips:
+    - 192.168.0.128
     description: "ansible-test-host"
     state: "present"
 
@@ -321,6 +340,7 @@ class UnityHost(object):
         try:
             description = self.module.params['description']
             host_os = self.module.params['host_os']
+            host_ips = self.module.params["host_ips"]
             host_type = utils.HostTypeEnum.HOST_MANUAL
             initiators = self.module.params['initiators']
             initiator_state = self.module.params['initiator_state']
@@ -357,6 +377,13 @@ class UnityHost(object):
                 LOG.info("Adding initiators to %s host", host_name)
                 result, new_host \
                     = self.add_initiator_to_host(host_details, initiators)
+
+            # Add ips, if given
+            if host_ips and len(host_ips) > 0:
+                host_details = self.unity.get_host(name=host_name)
+                for ip in host_ips:
+                    host_details.add_ip_port(ip)
+                new_host = self.unity.get_host(name=host_details.name)
 
             return True, new_host
 
@@ -409,7 +436,9 @@ class UnityHost(object):
                         'new_host_name'] != host_details.name) \
                 or (self.module.params['initiators'] is not None
                     and self.module.params['initiators']
-                    != self.get_host_initiators_list(host_details)):
+                    != self.get_host_initiators_list(host_details)) \
+                or (self.module.params['host_ips'] is not None 
+                    and self.module.params['host_ips'] != host_details.ip_list):
             LOG.info("Modification required.")
             modified_flag = True
 
@@ -594,6 +623,7 @@ class UnityHost(object):
         new_host_name = self.module.params['new_host_name']
         initiator_state = self.module.params['initiator_state']
         initiators = self.module.params['initiators']
+        host_ips = self.module.params['host_ips']
         state = self.module.params['state']
 
         if host_name and len(host_name) > 255:
@@ -696,6 +726,12 @@ class UnityHost(object):
                         = self.add_initiator_to_host(host_details, initiators)
                     result['host_details'] = host_details._get_properties()
 
+                # Add ips, if given
+                if host_ips and len(host_ips) > 0:
+                    host_details = self.unity.get_host(name=host_name)
+                    for ip in host_ips:
+                        host_details.add_ip_port(ip)
+
             else:
                 LOG.info('Host modification is not applicable, '
                          'as none of the attributes has changed.')
@@ -752,6 +788,7 @@ def get_unity_host_parameters():
         initiator_state=dict(required=False, type='str',
                              choices=['present-in-host',
                                       'absent-in-host']),
+        host_ips=dict(Required=False, type='list', elements='str'),
         state=dict(required=True, type='str',
                    choices=['present', 'absent'])
     )
