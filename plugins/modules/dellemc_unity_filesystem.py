@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
 
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """Ansible module for managing FileSystem on Unity"""
 
 from __future__ import absolute_import, division, print_function
@@ -40,13 +42,13 @@ options:
   filesystem_name:
     description:
     - The name of the filesystem. Mandatory only for the create operation.
-      All the operations are supported through 'filesystem_name'
-    - It's mutually exclusive with 'filesystem_id'.
+      All the operations are supported through 'filesystem_name'.
+    - It is mutually exclusive with 'filesystem_id'.
     required: False
     type: str
   filesystem_id:
     description:
-    - The id of the filesystem.It's mutually exclusive with 'filesystem_name'
+    - The id of the filesystem.It is mutually exclusive with 'filesystem_name'.
     - It can be used only for get, modify, or delete operations.
     required: False
     type: str
@@ -82,7 +84,7 @@ options:
   supported_protocols:
     description:
     - Protocols supported by the file system.
-    - It will be overridden by NAS server configuration if NAS Server is Multiprotocol
+    - It will be overridden by NAS server configuration if NAS Server is Multiprotocol.
     type: str
     choices: ['NFS', 'CIFS', 'MULTIPROTOCOL']
   description:
@@ -92,7 +94,7 @@ options:
     type: str
   smb_properties:
     description:
-    - Advance settings for SMB. It contains optional candidate variables
+    - Advance settings for SMB. It contains optional candidate variables.
     type: dict
     suboptions:
       is_smb_sync_writes_enabled:
@@ -124,11 +126,11 @@ options:
   data_reduction:
     description:
     - Boolean variable, specifies whether or not to enable compression.
-      Compression is supported only for thin filesystem
+      Compression is supported only for thin filesystem.
     type: bool
   is_thin:
     description:
-    - Boolean variable, specifies whether or not it's a thin filesystem.
+    - Boolean variable, specifies whether or not it is a thin filesystem.
     type: bool
   access_policy:
     description:
@@ -230,7 +232,7 @@ notes:
 
 EXAMPLES = r"""
 - name: Create FileSystem
-  dellemc_unity_filesystem:
+  dellemc.unity.dellemc_unity_filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -242,7 +244,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Create FileSystem with quota configuration
-  dellemc_unity_filesystem:
+  dellemc.unity.dellemc_unity_filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -259,7 +261,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Expand FileSystem size
-  dellemc_unity_filesystem:
+  dellemc.unity.dellemc_unity_filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -270,7 +272,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Expand FileSystem size
-  dellemc_unity_filesystem:
+  dellemc.unity.dellemc_unity_filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -281,7 +283,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify FileSystem smb_properties
-  dellemc_unity_filesystem:
+  dellemc.unity.dellemc_unity_filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -295,7 +297,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify FileSystem Snap Schedule
-  dellemc_unity_filesystem:
+  dellemc.unity.dellemc_unity_filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -305,7 +307,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Get details of FileSystem using id
-  dellemc_unity_filesystem:
+  dellemc.unity.dellemc_unity_filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -314,7 +316,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Delete a FileSystem using id
-  dellemc_unity_filesystem:
+  dellemc.unity.dellemc_unity_filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -325,33 +327,33 @@ EXAMPLES = r"""
 
 RETURN = r'''
 changed:
-    description: Whether or not the resource has changed
+    description: Whether or not the resource has changed.
     returned: always
     type: bool
 
 filesystem_details:
-    description: Details of the filesystem
+    description: Details of the filesystem.
     returned: When filesystem exists
     type: complex
     contains:
         id:
-            description: The system generated ID given to the filesystem
+            description: The system generated ID given to the filesystem.
             type: str
         name:
-            description: Name of the filesystem
+            description: Name of the filesystem.
             type: str
         description:
-            description: Description about the filesystem
+            description: Description about the filesystem.
             type: str
         is_data_reduction_enabled:
             description: Whether or not compression enabled on this
-                         filesystem
+                         filesystem.
             type: bool
         size_total_with_unit:
             description: Size of the filesystem with actual unit.
             type: str
         tiering_policy:
-            description: Tiering policy applied to this filesystem
+            description: Tiering policy applied to this filesystem.
             type: str
         is_cifs_notify_on_access_enabled:
             description: Indicates whether the system generates a
@@ -374,19 +376,19 @@ filesystem_details:
                          enabled notifications apply, if any.
             type: int
         pool:
-            description: The pool in which this filesystem is allocated
+            description: The pool in which this filesystem is allocated.
             type: complex
             contains:
                 UnityPool:
                     description: Unity pool in which this filesystem is
-                                 allocated
+                                 allocated.
                     type: complex
                     contains:
                         id:
-                            description: The system ID given to the pool
+                            description: The system ID given to the pool.
                             type: str
                         name:
-                            description: The name of the storage pool
+                            description: The name of the storage pool.
                             type: str
         nas_server:
             description: The NAS Server details on which this filesystem is hosted.
@@ -397,10 +399,10 @@ filesystem_details:
                     type: complex
                     contains:
                         id:
-                            description: The system ID given to the NAS Server
+                            description: The system ID given to the NAS Server.
                             type: str
                         name:
-                            description: The name of the NAS Server
+                            description: The name of the NAS Server.
                             type: str
         snap_list:
             description: The list of snapshots of this filesystem.
@@ -412,22 +414,22 @@ filesystem_details:
                     contains:
                         id:
                             description: The system ID given to the filesystem
-                                         snapshot
+                                         snapshot.
                             type: str
                         name:
-                            description: The name of the filesystem snapshot
+                            description: The name of the filesystem snapshot.
                             type: str
         is_thin_enabled:
             description: Indicates whether thin provisioning is enabled for
-                         this filesystem
+                         this filesystem.
             type: bool
         snap_schedule_id:
             description: Indicates the id of the snap schedule associated
-                         with the filesystem
+                         with the filesystem.
             type: str
         snap_schedule_name:
             description: Indicates the name of the snap schedule associated
-                         with the filesystem
+                         with the filesystem.
             type: str
         quota_config:
             description: Details of quota configuration of the filesystem
@@ -465,7 +467,7 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnityFilesystem(object):
@@ -990,7 +992,7 @@ class UnityFilesystem(object):
             self.module.fail_json(msg=errormsg)
 
     def validate_input_string(self):
-        """ validates the input string checks if it's empty string """
+        """ validates the input string checks if it is empty string """
         invalid_string = ""
         try:
             for key in self.module.params:

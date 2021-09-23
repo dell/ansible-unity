@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2021, DellEMC
 
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """Ansible module for managing User Quota on Unity"""
 
 from __future__ import absolute_import, division, print_function
@@ -123,7 +125,7 @@ options:
 
 EXAMPLES = r'''
   - name: Get user quota details by user quota id
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -132,7 +134,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Get user quota details by user quota uid/user name
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -143,7 +145,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Create user quota for a filesystem with filesystem id
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -152,12 +154,11 @@ EXAMPLES = r'''
       hard_limit: 6
       cap_unit: "TB"
       soft_limit: 5
-      user_type: "UID"
       uid: "111"
       state: "present"
 
   - name: Create user quota for a filesystem with filesystem name
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -167,12 +168,11 @@ EXAMPLES = r'''
       hard_limit: 6
       cap_unit: "TB"
       soft_limit:  5
-      user_type: "UID"
       uid: "111"
       state: "present"
 
   - name: Modify user quota limit usage by user quota id
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -184,7 +184,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Modify user quota by filesystem id and user quota uid/user_name
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -199,7 +199,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Delete user quota
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -210,7 +210,7 @@ EXAMPLES = r'''
       state: "absent"
 
   - name: Create user quota of a quota tree
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -224,7 +224,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Create user quota of a quota tree by quota tree path
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -238,7 +238,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Modify user quota of a quota tree
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -252,7 +252,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Modify user quota of a quota tree by quota tree path
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -267,7 +267,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Delete user quota of a quota tree by quota tree path
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -279,7 +279,7 @@ EXAMPLES = r'''
       state: "absent"
 
   - name: Delete user quota of a quota tree by quota tree id
-    dellemc_unity_user_quota:
+    dellemc.unity.dellemc_unity_user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -292,7 +292,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 changed:
-    description: Whether or not the resource has changed
+    description: Whether or not the resource has changed.
     returned: always
     type: bool
 get_user_quota_details:
@@ -403,7 +403,7 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnityUserQuota(object):
@@ -985,7 +985,7 @@ def get_unity_user_quota_parameters():
         nas_server_name=dict(required=False, type='str'),
         nas_server_id=dict(required=False, type='str'),
         tree_quota_id=dict(required=False, type='str'),
-        path=dict(required=False, type='str')
+        path=dict(required=False, type='str', no_log=True)
     )
 
 

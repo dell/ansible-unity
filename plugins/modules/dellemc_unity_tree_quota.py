@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2021, DellEMC
 
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """Ansible module for managing quota tree on Unity"""
 
 from __future__ import absolute_import, division, print_function
@@ -20,7 +22,7 @@ description:
   Create quota tree,
   Get quota tree,
   Modify quota tree and
-  Delete quota tree
+  Delete quota tree.
 version_added: "1.2.0"
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -101,7 +103,7 @@ options:
 
 EXAMPLES = r'''
   - name: Get quota tree details by quota tree id
-    dellemc_unity_tree_quota:
+    dellemc.unity.dellemc_unity_tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -110,7 +112,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Get quota tree details by quota tree path
-    dellemc_unity_tree_quota:
+    dellemc.unity.dellemc_unity_tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -121,7 +123,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Create quota tree for a filesystem with filesystem id
-    dellemc_unity_tree_quota:
+    dellemc.unity.dellemc_unity_tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -134,7 +136,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Create quota tree for a filesystem with filesystem name
-    dellemc_unity_tree_quota:
+    dellemc.unity.dellemc_unity_tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -148,7 +150,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Modify quota tree limit usage by quota tree path
-    dellemc_unity_tree_quota:
+    dellemc.unity.dellemc_unity_tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -160,7 +162,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Modify quota tree by quota tree id
-    dellemc_unity_tree_quota:
+    dellemc.unity.dellemc_unity_tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -173,7 +175,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Delete quota tree by quota tree id
-    dellemc_unity_tree_quota:
+    dellemc.unity.dellemc_unity_tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -183,7 +185,7 @@ EXAMPLES = r'''
       state: "absent"
 
   - name: Delete quota tree by path
-    dellemc_unity_tree_quota:
+    dellemc.unity.dellemc_unity_tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -195,7 +197,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 changed:
-    description: Whether or not the resource has changed
+    description: Whether or not the resource has changed.
     returned: always
     type: bool
 get_quota_tree_details:
@@ -261,6 +263,8 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
+application_type = "Ansible/1.2.1"
+
 
 class UnityQuotaTree(object):
     """Class with Quota Tree operations"""
@@ -292,7 +296,7 @@ class UnityQuotaTree(object):
             self.module.fail_json(msg=err_msg)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
-            self.module.params)
+            self.module.params, application_type)
 
     def check_quota_tree_is_present(self, fs_id, path, tree_quota_id):
         """
@@ -679,7 +683,7 @@ def get_unity_quota_tree_parameters():
         tree_quota_id=dict(required=False, type='str'),
         nas_server_name=dict(required=False, type='str'),
         nas_server_id=dict(required=False, type='str'),
-        path=dict(required=False, type='str'),
+        path=dict(required=False, type='str', no_log=True),
         description=dict(required=False, type='str')
     )
 

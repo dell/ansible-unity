@@ -1,5 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
+
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
@@ -107,7 +110,7 @@ options:
 EXAMPLES = r'''
 
     - name: Get Details of NAS Server
-      dellemc_unity_nasserver:
+      dellemc.unity.dellemc_unity_nasserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -116,7 +119,7 @@ EXAMPLES = r'''
         state: "present"
 
     - name: Modify Details of NAS Server
-      dellemc_unity_nasserver:
+      dellemc.unity.dellemc_unity_nasserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -198,7 +201,7 @@ LOG = utils.get_logger('dellemc_unity_nasserver')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnityNASServer(object):

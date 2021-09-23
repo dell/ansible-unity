@@ -1,5 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
+
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """ Ansible module for managing Snapshots on Unity"""
 
 from __future__ import (absolute_import, division, print_function)
@@ -12,7 +15,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 module: dellemc_unity_snapshot
-short_description: Manage snapshots on the Unity storage system.
+short_description: Manage snapshots on the Unity storage system
 description:
 - Managing snapshots on the Unity storage system includes create snapshot,
   delete snapshot, update snapshot, get snapshot, map host and unmap host.
@@ -96,7 +99,7 @@ options:
     description:
     - The id of the host.
     - Either host_name or host_id is required to map or unmap a snapshot from
-      a host
+      a host.
     - Snapshot can be attached to multiple hosts.
     type: str
   host_state:
@@ -110,7 +113,7 @@ options:
 
 EXAMPLES = r'''
   - name: Create a Snapshot for a CG
-    dellemc_unity_snapshot:
+    dellemc.unity.dellemc_unity_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -122,8 +125,8 @@ EXAMPLES = r'''
       auto_delete: False
       state: "present"
 
-  - name: Create a Snapshot for a volume with Host attached.
-    dellemc_unity_snapshot:
+  - name: Create a Snapshot for a volume with Host attached
+    dellemc.unity.dellemc_unity_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -138,7 +141,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Unmap a host for a Snapshot
-    dellemc_unity_snapshot:
+    dellemc.unity.dellemc_unity_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -150,7 +153,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Map snapshot to a host
-    dellemc_unity_snapshot:
+    dellemc.unity.dellemc_unity_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -162,7 +165,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Update attributes of a Snapshot for a volume
-    dellemc_unity_snapshot:
+    dellemc.unity.dellemc_unity_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -174,8 +177,8 @@ EXAMPLES = r'''
       host_state: "unmapped"
       state: "present"
 
-  - name: Delete Snapshot of CG.
-    dellemc_unity_snapshot:
+  - name: Delete Snapshot of CG
+    dellemc.unity.dellemc_unity_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -186,7 +189,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 changed:
-    description: Whether or not the resource has changed
+    description: Whether or not the resource has changed.
     returned: always
     type: bool
 snapshot_details:
@@ -228,8 +231,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 from datetime import datetime
 
-LOG = utils.get_logger('dellemc_unity_snapshot',
-                       log_devel=logging.INFO)
+LOG = utils.get_logger('dellemc_unity_snapshot')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
@@ -550,7 +552,7 @@ class UnitySnapshot(object):
 
             if new_snapshot_name:
                 self.module.fail_json(
-                    msg="new_snapshot_name can't be assigned"
+                    msg="new_snapshot_name can not be assigned"
                         " during creation of a snapshot")
 
             snapshot = self.create_snapshot(snapshot_name,

@@ -1,5 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
+
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """ Ansible module for managing Filesystem Snapshots on Unity"""
 
 from __future__ import (absolute_import, division, print_function)
@@ -112,7 +115,7 @@ notes:
 
 EXAMPLES = r'''
   - name: Create Filesystem Snapshot
-    dellemc_unity_filesystem_snapshot:
+    dellemc.unity.dellemc_unity_filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -125,8 +128,8 @@ EXAMPLES = r'''
       fs_access_type: "Protocol"
       state: "present"
 
-  - name: Create Filesystem Snapshot with expiry time.
-    dellemc_unity_filesystem_snapshot:
+  - name: Create Filesystem Snapshot with expiry time
+    dellemc.unity.dellemc_unity_filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -140,7 +143,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Get Filesystem Snapshot Details using Name
-    dellemc_unity_filesystem_snapshot:
+    dellemc.unity.dellemc_unity_filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -149,7 +152,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Get Filesystem Snapshot Details using ID
-    dellemc_unity_filesystem_snapshot:
+    dellemc.unity.dellemc_unity_filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -158,7 +161,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Update Filesystem Snapshot attributes
-    dellemc_unity_filesystem_snapshot:
+    dellemc.unity.dellemc_unity_filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -170,7 +173,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Update Filesystem Snapshot attributes using ID
-    dellemc_unity_filesystem_snapshot:
+    dellemc.unity.dellemc_unity_filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -180,7 +183,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Delete Filesystem Snapshot using Name
-    dellemc_unity_filesystem_snapshot:
+    dellemc.unity.dellemc_unity_filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -189,7 +192,7 @@ EXAMPLES = r'''
       state: "absent"
 
   - name: Delete Filesystem Snapshot using ID
-    dellemc_unity_filesystem_snapshot:
+    dellemc.unity.dellemc_unity_filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -200,7 +203,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 changed:
-    description: Whether or not the resource has changed
+    description: Whether or not the resource has changed.
     returned: always
     type: bool
 filesystem_snapshot_details:
@@ -271,7 +274,7 @@ LOG = utils.get_logger('dellemc_unity_filesystem_snapshot')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnityFilesystemSnapshot(object):

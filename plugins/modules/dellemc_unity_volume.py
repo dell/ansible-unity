@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
 
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """Ansible module for managing volumes on Unity"""
 
 from __future__ import absolute_import, division, print_function
@@ -23,7 +25,7 @@ description:
   Map Volume to host,
   Unmap volume to host,
   Display volume details,
-  Delete volume
+  Delete volume.
 
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -75,11 +77,11 @@ options:
   compression:
     description:
     - Boolean variable , specifies whether or not to enable compression.
-      Compression is supported only for thin volumes
+      Compression is supported only for thin volumes.
     type: bool
   is_thin:
     description:
-    - Boolean variable , specifies whether or not it's a thin volume.
+    - Boolean variable , specifies whether or not it is a thin volume.
     default: True
     type: bool
   sp:
@@ -90,7 +92,7 @@ options:
   io_limit_policy:
     description:
     - IO limit policy associated with this volume.
-      Once it's set, it cannot be removed through ansible module but it can
+      Once it is set, it cannot be removed through ansible module but it can
       be changed.
     type: str
   host_name:
@@ -108,7 +110,7 @@ options:
   hlu:
     description:
     - Host Lun Unit to be mapped/unmapped with this volume.
-    - It's an optional parameter, hlu can be specified along
+    - It is an optional parameter, hlu can be specified along
       with host_name or host_id and mapping_state.
     - If hlu is not specified, unity will choose it automatically.
       The maximum value supported is 255.
@@ -136,7 +138,7 @@ options:
     type: str
   hosts:
     description:
-    - Name of hosts for mapping to a volume
+    - Name of hosts for mapping to a volume.
     type: list
     elements: dict
     suboptions:
@@ -151,7 +153,7 @@ options:
       hlu:
         description:
         - Host Lun Unit to be mapped/unmapped with this volume.
-        - It's an optional parameter, hlu can be specified along
+        - It is an optional parameter, hlu can be specified along
           with host_name or host_id and mapping_state.
         - If hlu is not specified, unity will choose it automatically.
           The maximum value supported is 255.
@@ -160,7 +162,7 @@ options:
 
 EXAMPLES = r"""
 - name: Create Volume
-  dellemc_unity_volume:
+  dellemc.unity.dellemc_unity_volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -173,7 +175,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Expand Volume by volume id
-  dellemc_unity_volume:
+  dellemc.unity.dellemc_unity_volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -184,7 +186,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Modify Volume, map host by host_name
-  dellemc_unity_volume:
+  dellemc.unity.dellemc_unity_volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -196,7 +198,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Modify Volume, unmap host mapping by host_name
-  dellemc_unity_volume:
+  dellemc.unity.dellemc_unity_volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -207,7 +209,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Map multiple hosts to a Volume
-  dellemc_unity_volume:
+  dellemc.unity.dellemc_unity_volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -222,7 +224,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify Volume attributes
-  dellemc_unity_volume:
+  dellemc.unity.dellemc_unity_volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -234,7 +236,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Delete Volume by vol name
-  dellemc_unity_volume:
+  dellemc.unity.dellemc_unity_volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -243,7 +245,7 @@ EXAMPLES = r"""
     state: "{{state_absent}}"
 
 - name: Delete Volume by vol id
-  dellemc_unity_volume:
+  dellemc.unity.dellemc_unity_volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -255,12 +257,12 @@ EXAMPLES = r"""
 RETURN = r'''
 
 changed:
-    description: Whether or not the resource has changed
+    description: Whether or not the resource has changed.
     returned: always
     type: bool
 
 volume_details:
-    description: Details of the volume
+    description: Details of the volume.
     returned: When volume exists
     type: complex
     contains:
@@ -317,7 +319,7 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 def is_none_or_empty_string(param):
@@ -894,7 +896,7 @@ class UnityVolume(object):
             self.module.fail_json(msg=errormsg)
 
     def validate_input_string(self):
-        """ validates the input string checks if it's empty string
+        """ validates the input string checks if it is empty string
 
         """
         invalid_string = ""

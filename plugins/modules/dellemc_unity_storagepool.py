@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
 
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """Ansible module for managing storage pool on Unity"""
 
 from __future__ import absolute_import, division, print_function
@@ -12,17 +14,13 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
                     }
 
 DOCUMENTATION = r'''
----
 module: dellemc_unity_storagepool
-
 version_added: '1.1.0'
-
 short_description: Manage storage pool on Unity
-
 description:
-- Managing storage pool on Unity storage system contains the following operations
-- Get details of storage pool
-- Modify storage pool
+- Managing storage pool on Unity storage system contains the following operations.
+- Get details of storage pool.
+- Modify storage pool.
 
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -82,7 +80,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Get Storage pool details using pool_name
-  dellemc_unity_storagepool:
+  dellemc.unity.dellemc_unity_storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -91,7 +89,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get Storage pool details using pool_id
-  dellemc_unity_storagepool:
+  dellemc.unity.dellemc_unity_storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -100,7 +98,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Modify Storage pool attributes using pool_name
-  dellemc_unity_storagepool:
+  dellemc.unity.dellemc_unity_storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -113,7 +111,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Modify Storage pool attributes using pool_id
-  dellemc_unity_storagepool:
+  dellemc.unity.dellemc_unity_storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -187,14 +185,14 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 import logging
 
-LOG = utils.get_logger('dellemc_unity_storagepool', log_devel=logging.INFO)
+LOG = utils.get_logger('dellemc_unity_storagepool')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION = utils.storops_version_check()
 UNITY_SDK_VERSION_CHECK = UNITY_SDK_VERSION['supported_version']
 UNITY_SDK_VERSION_ERROR = UNITY_SDK_VERSION['unsupported_version_message']
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnityStoragePool(object):

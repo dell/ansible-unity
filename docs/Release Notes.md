@@ -1,6 +1,6 @@
 **Ansible Modules for Dell EMC Unity** 
 =========================================
-### Release Notes 1.2.0
+### Release Notes 1.2.1
 
 >   © 2021 Dell Inc. or its subsidiaries. All rights reserved. Dell,
 >   EMC, and other trademarks are trademarks of Dell Inc. or its
@@ -28,7 +28,7 @@ Table 1. Revision history
 
 | Revision | Date      | Description                                               |
 |----------|-----------|-----------------------------------------------------------|
-| 01       | June 2021  | Current release of Ansible Modules for Dell EMC Unity 1.2.0 |
+| 01       | Sept 2021  | Current release of Ansible Modules for Dell EMC Unity 1.2.1 |
 
 Product Description
 -------------------
@@ -36,42 +36,13 @@ The Ansible modules for Dell EMC Unity are used to automate and orchestrate the 
 
 New features & enhancements
 ---------------------------
-This release supports the following features -
+This release has the following changes -
 
 
-- Application Tagging:
-    - A new HTTP header (Application-Type) is added in Unity REST API in Goshawk release which is used to set REST client name and its version and this information is recorded in Unity logs
-    - Ansible modules support application tagging which is used to identify the REST application that makes the request to Unisphere
-    - The value of application type parameter from Ansible module is set to Ansible/1.2.0
-
--   User quota module supports the following functionalities:
-    -   Create User quota for a Filesystem/Quota tree 
-    -   Get User quota details    
-    -   Modify attributes of User quota
-    -   Delete User quota
-
--   Quota tree module supports the following functionalities:
-    -   Create Quota tree for a Filesystem 
-    -   Get Quota tree details    
-    -   Modify attributes of Quota tree
-    -   Delete Quota tree
-
--   Consistency group module has the following enhancements:
-    -   Map hosts to a new or an existing Consistency group    
-    -   Unmap hosts from a Consistency group 
-
--   Filesystem module has the following enhancements:
-    -   Set the attributes of Quota config while Filesystem creation
-    -   Associate an existing snapshot schedule to existing or new Filesystem
-    -   Remove snapshot schedule from a Filesystem
-
--   Volume module has the following enhancements:
-    -   Map multiple hosts to a new or existing volume
-    -   Unmap multiple hosts from a volume
-    
--   Gather Facts Module has the following enhancements:
-    -  List of User quota 
-    -  List of Quota tree
+- Fixed typo in galaxy.yml
+- Updated few samples in modules
+- Added dual licensing
+- Documentation updates
 
 Known issues
 ------------
@@ -94,7 +65,7 @@ for Unity GitHub](https://github.com/dell/ansible-unity/) page.
 
 Documentation
 -------------
-The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/1.2.0/docs)
+The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/1.2.1/docs)
 page. It includes the following:
 - README
 - Release Notes (this document)

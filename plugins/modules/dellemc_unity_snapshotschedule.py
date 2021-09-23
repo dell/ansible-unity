@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
 
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """Ansible module for managing snapshot schedules on Unity"""
 
 from __future__ import absolute_import, division, print_function
@@ -77,7 +79,7 @@ options:
     type: int
   hour:
     description:
-    - the hour when the snapshot will be taken.
+    - The hour when the snapshot will be taken.
     - Applicable for 'every_n_days', 'every_week', 'every_month' rule types.
     - For create operation, if 'hour' parameter is not specified, value will
      be taken as 0.
@@ -114,7 +116,7 @@ options:
     required: true
     choices: [absent, present]
 notes:
-- Snapshot schedule created via Ansible will have only one rule.
+- Snapshot schedule created through Ansible will have only one rule.
 - Modification of rule type is not allowed. Within the same type, other
   parameters can be modified.
 - If an existing snapshot schedule has more than 1 rule in it, only get and
@@ -123,7 +125,7 @@ notes:
 
 EXAMPLES = r"""
 - name: Create snapshot schedule (Rule Type - every_n_hours)
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -135,7 +137,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_day)
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -149,7 +151,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_n_days)
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -162,7 +164,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_week)
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -178,7 +180,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_month)
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -190,7 +192,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Get snapshot schedule details using name
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -199,7 +201,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Get snapshot schedule details using id
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -208,7 +210,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Modify snapshot schedule details id
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -219,7 +221,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Modify snapshot schedule using name
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -231,7 +233,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Delete snapshot schedule using id
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -240,7 +242,7 @@ EXAMPLES = r"""
       state: "{{state_absent}}"
 
 - name: Delete snapshot schedule using name
-  dellemc_unity_snapshotschedule:
+  dellemc.unity.dellemc_unity_snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -362,7 +364,7 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnitySnapshotSchedule(object):

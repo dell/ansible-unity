@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
 
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """Ansible module for managing consistency group on Unity"""
 
 from __future__ import absolute_import, division, print_function
@@ -129,7 +131,7 @@ options:
 
 EXAMPLES = r"""
 - name: Create consistency group
-  dellemc_unity_consistencygroup:
+  dellemc.unity.dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -140,7 +142,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Get details of consistency group using id
-  dellemc_unity_consistencygroup:
+  dellemc.unity.dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -149,7 +151,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Add volumes to consistency group
-  dellemc_unity_consistencygroup:
+  dellemc.unity.dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -162,7 +164,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Rename consistency group
-  dellemc_unity_consistencygroup:
+  dellemc.unity.dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -172,7 +174,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Modify consistency group details
-  dellemc_unity_consistencygroup:
+  dellemc.unity.dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -183,7 +185,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Map hosts to a consistency group
-  dellemc_unity_consistencygroup:
+  dellemc.unity.dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -196,7 +198,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Unmap hosts from a consistency group
-  dellemc_unity_consistencygroup:
+  dellemc.unity.dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -209,7 +211,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Remove volumes from consistency group
-  dellemc_unity_consistencygroup:
+  dellemc.unity.dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -222,7 +224,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Delete consistency group
-  dellemc_unity_consistencygroup:
+  dellemc.unity.dellemc_unity_consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -233,12 +235,13 @@ EXAMPLES = r"""
 
 RETURN = r'''
 changed:
-    description: Whether or not the resource has changed
+    description: Whether or not the resource has changed.
     returned: always
     type: bool
+    sample: true
 
 consistency_group_details:
-    description: Details of the consistency group
+    description: Details of the consistency group.
     returned: When consistency group exists
     type: complex
     contains:
@@ -340,7 +343,7 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnityConsistencyGroup(object):

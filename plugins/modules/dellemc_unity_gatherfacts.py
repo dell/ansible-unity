@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
 
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """Ansible module for Gathering information about DellEMC Unity"""
 
 from __future__ import absolute_import, division, print_function
@@ -70,8 +72,8 @@ options:
 '''
 
 EXAMPLES = r'''
- - name: Get detailed list of Unity entities.
-   dellemc_unity_gatherfacts:
+ - name: Get detailed list of Unity entities
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -92,15 +94,15 @@ EXAMPLES = r'''
        - user_quota
        - tree_quota
 
- - name: Get information of Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get information of Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
      verifycert: "{{verifycert}}"
 
- - name: Get list of hosts on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of hosts on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -108,8 +110,8 @@ EXAMPLES = r'''
      gather_subset:
        - host
 
- - name: Get list of FC initiators on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of FC initiators on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -117,8 +119,8 @@ EXAMPLES = r'''
      gather_subset:
        - fc_initiator
 
- - name: Get list of ISCSI initiators on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of ISCSI initiators on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -126,8 +128,8 @@ EXAMPLES = r'''
      gather_subset:
        - iscsi_initiator
 
- - name: Get list of consistency groups on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of consistency groups on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -135,8 +137,8 @@ EXAMPLES = r'''
      gather_subset:
        - cg
 
- - name: Get list of storage pools on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of storage pools on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -144,8 +146,8 @@ EXAMPLES = r'''
      gather_subset:
        - storage_pool
 
- - name: Get list of volumes on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of volumes on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -153,8 +155,8 @@ EXAMPLES = r'''
      gather_subset:
        - vol
 
- - name: Get list of snapshot schedules on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of snapshot schedules on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -162,8 +164,8 @@ EXAMPLES = r'''
      gather_subset:
        - snapshot_schedule
 
- - name: Get list of NAS Servers on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of NAS Servers on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -171,8 +173,8 @@ EXAMPLES = r'''
      gather_subset:
        - nas_server
 
- - name: Get list of File Systems on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of File Systems on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -180,8 +182,8 @@ EXAMPLES = r'''
      gather_subset:
        - file_system
 
- - name: Get list of Snapshots on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of Snapshots on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -189,8 +191,8 @@ EXAMPLES = r'''
      gather_subset:
        - snapshot
 
- - name: Get list of NFS exports on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of NFS exports on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -198,8 +200,8 @@ EXAMPLES = r'''
      gather_subset:
        - nfs_export
 
- - name: Get list of SMB shares on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of SMB shares on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -207,8 +209,8 @@ EXAMPLES = r'''
      gather_subset:
        - smb_share
 
- - name: Get list of user quotas on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of user quotas on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -216,8 +218,8 @@ EXAMPLES = r'''
      gather_subset:
        - user_quota
 
- - name: Get list of quota trees on Unity array.
-   dellemc_unity_gatherfacts:
+ - name: Get list of quota trees on Unity array
+   dellemc.unity.dellemc_unity_gatherfacts:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -425,7 +427,7 @@ LOG = utils.get_logger('dellemc_unity_gatherfacts')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnityGatherfacts(object):

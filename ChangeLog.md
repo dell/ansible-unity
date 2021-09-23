@@ -1,4 +1,10 @@
 # ansible-unity Change Log
+## Version 1.2.1 - released on 28/09/21
+- Fixed typo in galaxy.yml
+- Updated few samples in modules
+- Added dual licensing
+- Documentation updates
+
 ## Version 1.2.0 - released on 25/06/21
 - Added support for Application tagging.
 - Added CRUD operations support for User Quota on Filesystem/Quota tree.
