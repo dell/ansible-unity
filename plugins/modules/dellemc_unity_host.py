@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
 
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 """Ansible module for managing host on Unity"""
 
 from __future__ import absolute_import, division, print_function
@@ -16,7 +18,7 @@ module: dellemc_unity_host
 
 version_added: '1.1.0'
 
-short_description: Manage Host operations on Unity.
+short_description: Manage Host operations on Unity
 
 description:
 - The Host module contains the following operations
@@ -86,8 +88,8 @@ options:
 '''
 
 EXAMPLES = r'''
-- name: Create empty Host.
-  dellemc_unity_host:
+- name: Create empty Host
+  dellemc.unity.dellemc_unity_host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -97,8 +99,8 @@ EXAMPLES = r'''
     description: "ansible-test-host"
     state: "present"
 
-- name: Create Host with Initiators.
-  dellemc_unity_host:
+- name: Create Host with Initiators
+  dellemc.unity.dellemc_unity_host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -112,8 +114,8 @@ EXAMPLES = r'''
     initiator_state: "present-in-host"
     state: "present"
 
-- name: Modify Host using host_id.
-  dellemc_unity_host:
+- name: Modify Host using host_id
+  dellemc.unity.dellemc_unity_host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -124,8 +126,8 @@ EXAMPLES = r'''
     description: "Ansible tesing purpose"
     state: "present"
 
-- name: Add Initiators to Host.
-  dellemc_unity_host:
+- name: Add Initiators to Host
+  dellemc.unity.dellemc_unity_host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -136,8 +138,8 @@ EXAMPLES = r'''
     initiator_state: "present-in-host"
     state: "present"
 
-- name: Get Host details using host_name.
-  dellemc_unity_host:
+- name: Get Host details using host_name
+  dellemc.unity.dellemc_unity_host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -145,8 +147,8 @@ EXAMPLES = r'''
     host_name: "ansible-test-host-2"
     state: "present"
 
-- name: Get Host details using host_id.
-  dellemc_unity_host:
+- name: Get Host details using host_id
+  dellemc.unity.dellemc_unity_host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -154,8 +156,8 @@ EXAMPLES = r'''
     host_id: "Host_253"
     state: "present"
 
-- name: Delete Host.
-  dellemc_unity_host:
+- name: Delete Host
+  dellemc.unity.dellemc_unity_host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -215,11 +217,11 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_host', log_devel=utils.logging.INFO)
+LOG = utils.get_logger('dellemc_unity_host')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnityHost(object):

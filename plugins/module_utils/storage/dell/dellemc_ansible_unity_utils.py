@@ -1,4 +1,7 @@
 # Copyright: (c) 2020, DellEMC
+
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
@@ -98,12 +101,12 @@ options:
 
 def get_unity_management_host_parameters():
     return dict(
-        unispherehost=dict(type='str', required=True),
+        unispherehost=dict(type='str', required=True, no_log=True),
         username=dict(type='str', required=True),
         password=dict(type='str', required=True, no_log=True),
         verifycert=dict(choices=[True, False], type='bool', required=False,
                         default=True),
-        port=dict(type='int', required=False, default=443)
+        port=dict(type='int', required=False, default=443, no_log=True)
     )
 
 

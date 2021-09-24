@@ -1,5 +1,8 @@
 #!/usr/bin/python
 # Copyright: (c) 2020, DellEMC
+
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
+
 from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
@@ -12,7 +15,7 @@ DOCUMENTATION = r'''
 ---
 module: dellemc_unity_smbshare
 version_added: '1.1.0'
-short_description:  Manage SMB shares on Unity storage system.
+short_description:  Manage SMB shares on Unity storage system
 extends_documentation_fragment:
 - dellemc.unity.dellemc_unity.unity
 author:
@@ -140,7 +143,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Create SMB share for a filesystem
-  dellemc_unity_smbshare:
+  dellemc.unity.dellemc_unity_smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -158,7 +161,7 @@ EXAMPLES = r'''
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a filesystem
-  dellemc_unity_smbshare:
+  dellemc.unity.dellemc_unity_smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -174,7 +177,7 @@ EXAMPLES = r'''
     umask: "022"
     state: "present"
 - name: Create SMB share for a snapshot
-  dellemc_unity_smbshare:
+  dellemc.unity.dellemc_unity_smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -191,7 +194,7 @@ EXAMPLES = r'''
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a snapshot
-  dellemc_unity_smbshare:
+  dellemc.unity.dellemc_unity_smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -207,7 +210,7 @@ EXAMPLES = r'''
     umask: "022"
     state: "present"
 - name: Get details of SMB share
-  dellemc_unity_smbshare:
+  dellemc.unity.dellemc_unity_smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -215,7 +218,7 @@ EXAMPLES = r'''
     share_id: "{{smb_share_id}}"
     state: "present"
 - name: Delete SMB share
-  dellemc_unity_smbshare:
+  dellemc.unity.dellemc_unity_smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -226,7 +229,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 changed:
-    description: Whether or not the resource has changed
+    description: Whether or not the resource has changed.
     returned: always
     type: bool
     sample: True
@@ -293,7 +296,7 @@ LOG = utils.get_logger('dellemc_unity_smbshare')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.0"
+application_type = "Ansible/1.2.1"
 
 
 class UnitySMBShare(object):
@@ -834,7 +837,7 @@ def get_unity_smb_share_parameters():
         filesystem_name=dict(), filesystem_id=dict(),
         snapshot_name=dict(), snapshot_id=dict(),
         nas_server_name=dict(), nas_server_id=dict(),
-        path=dict(), umask=dict(), description=dict(),
+        path=dict(no_log=True), umask=dict(), description=dict(),
         offline_availability=dict(
             choices=["MANUAL", "DOCUMENTS", "PROGRAMS", "NONE"]),
         is_abe_enabled=dict(type='bool'),
