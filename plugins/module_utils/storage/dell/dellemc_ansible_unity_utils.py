@@ -104,7 +104,7 @@ def get_unity_management_host_parameters():
         unispherehost=dict(type='str', required=True, no_log=True),
         username=dict(type='str', required=True),
         password=dict(type='str', required=True, no_log=True),
-        verifycert=dict(choices=[True, False], type='bool', required=False,
+        verifycert=dict(type='bool', required=False,
                         default=True),
         port=dict(type='int', required=False, default=443, no_log=True)
     )

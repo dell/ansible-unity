@@ -1,2 +1,9 @@
 ---
 requires_ansible: ">=2.9"
+plugin_routing:
+    modules:
+        dellemc_unity_gatherfacts:
+            redirect: dellemc_unity_info
+            deprecation:
+                removal_date: "2022-03-31"
+                warning_text: Use dellemc.unity.dellemc_unity_info instead.

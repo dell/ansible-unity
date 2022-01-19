@@ -14,3 +14,5 @@ plugins/modules/dellemc_unity_storagepool.py validate-modules:missing-gplv3-lice
 plugins/modules/dellemc_unity_tree_quota.py validate-modules:missing-gplv3-license
 plugins/modules/dellemc_unity_user_quota.py validate-modules:missing-gplv3-license
 plugins/modules/dellemc_unity_volume.py validate-modules:missing-gplv3-license
+plugins/modules/dellemc_unity_host.py import-2.6
+plugins/modules/dellemc_unity_host.py import-2.7
