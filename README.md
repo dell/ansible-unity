@@ -14,7 +14,7 @@ Ansible collection for Unity are supported by Dell EMC and are provided under th
   * Dell EMC Unity Arrays version 5.0, 5.1.0
 
 ## Prerequisites
-This table provides information about the software prerequisites for the Ansible Modules for Dell EMC PowerMax.
+This table provides information about the software prerequisites for the Ansible Modules for Dell EMC Unity.
 
 | **Ansible Modules** | **Red Hat Enterprise Linux** | **Python version** | **Python library version** | **Ansible** |
 |---------------------|------------------------------|--------------------|----------------------------|-------------|
@@ -82,7 +82,7 @@ Install python sdk named 'storops'. It can be installed using pip, based on appr
 
   3. For generating Ansible documentation for a specific module, embed the FQCN  before the module name. Refer to the following example:
 
-	ansible-doc dellemc.unity.dellemc_unity_gatherfacts
+	ansible-doc dellemc.unity.dellemc_unity_info
 
 ## Running Ansible Modules
 The Ansible server must be configured with Python library for Unity to run the Ansible playbooks. The [Documents]( https://github.com/dell/ansible-unity/tree/1.2.1/docs ) provide information on different Ansible modules along with their functions and syntax. The parameters table in the Product Guide provides information on various parameters which need to be configured before running the modules.

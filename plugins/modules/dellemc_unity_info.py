@@ -8,13 +8,10 @@
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'community'}
 
 DOCUMENTATION = r'''
 ---
-module: dellemc_unity_gatherfacts
+module: dellemc_unity_info
 
 version_added: '1.1.0'
 
@@ -73,7 +70,7 @@ options:
 
 EXAMPLES = r'''
  - name: Get detailed list of Unity entities
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -95,14 +92,14 @@ EXAMPLES = r'''
        - tree_quota
 
  - name: Get information of Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
      verifycert: "{{verifycert}}"
 
  - name: Get list of hosts on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -111,7 +108,7 @@ EXAMPLES = r'''
        - host
 
  - name: Get list of FC initiators on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -120,7 +117,7 @@ EXAMPLES = r'''
        - fc_initiator
 
  - name: Get list of ISCSI initiators on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -129,7 +126,7 @@ EXAMPLES = r'''
        - iscsi_initiator
 
  - name: Get list of consistency groups on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -138,7 +135,7 @@ EXAMPLES = r'''
        - cg
 
  - name: Get list of storage pools on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -147,7 +144,7 @@ EXAMPLES = r'''
        - storage_pool
 
  - name: Get list of volumes on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -156,7 +153,7 @@ EXAMPLES = r'''
        - vol
 
  - name: Get list of snapshot schedules on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -165,7 +162,7 @@ EXAMPLES = r'''
        - snapshot_schedule
 
  - name: Get list of NAS Servers on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -174,7 +171,7 @@ EXAMPLES = r'''
        - nas_server
 
  - name: Get list of File Systems on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -183,7 +180,7 @@ EXAMPLES = r'''
        - file_system
 
  - name: Get list of Snapshots on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -192,7 +189,7 @@ EXAMPLES = r'''
        - snapshot
 
  - name: Get list of NFS exports on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -201,7 +198,7 @@ EXAMPLES = r'''
        - nfs_export
 
  - name: Get list of SMB shares on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -210,7 +207,7 @@ EXAMPLES = r'''
        - smb_share
 
  - name: Get list of user quotas on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -219,7 +216,7 @@ EXAMPLES = r'''
        - user_quota
 
  - name: Get list of quota trees on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.dellemc_unity_info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -423,25 +420,25 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_gatherfacts')
+LOG = utils.get_logger('dellemc_unity_info')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.2.1"
 
 
-class UnityGatherfacts(object):
-    """Class with Gatherfacts operations"""
+class UnityInfo(object):
+    """Class with Info operations"""
 
     def __init__(self):
         """ Define all parameters required by this module"""
 
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_gatherfacts_parameters())
+        self.module_params.update(get_unity_info_parameters())
 
         """ initialize the ansible module """
         self.module = AnsibleModule(argument_spec=self.module_params,
-                                    supports_check_mode=False)
+                                    supports_check_mode=True)
 
         if not HAS_UNITY_SDK:
             err_msg = "Ansible modules for Unity require the Unity " \
@@ -691,7 +688,7 @@ class UnityGatherfacts(object):
             self.module.fail_json(msg=msg)
 
     def perform_module_operation(self):
-        """ Perform different actions on Gatherfacts based on user parameter
+        """ Perform different actions on Info based on user parameter
             chosen in playbook """
 
         """ Get the array details a given Unity storage system """
@@ -852,9 +849,9 @@ def tree_quota_result_list(entity):
         return None
 
 
-def get_unity_gatherfacts_parameters():
+def get_unity_info_parameters():
     """This method provides parameters required for the ansible
-    gatherfacts module on Unity"""
+    info module on Unity"""
     return dict(gather_subset=dict(type='list', required=False,
                                    elements='str',
                                    choices=['host', 'fc_initiator',
@@ -867,9 +864,9 @@ def get_unity_gatherfacts_parameters():
 
 
 def main():
-    """ Create Unity Gatherfacts object and perform action on it
+    """ Create Unity Info object and perform action on it
         based on user input from playbook"""
-    obj = UnityGatherfacts()
+    obj = UnityInfo()
     obj.perform_module_operation()
 
 

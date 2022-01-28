@@ -3,7 +3,7 @@ plugins/modules/dellemc_unity_nfs.py import-2.6
 plugins/modules/dellemc_unity_consistencygroup.py validate-modules:missing-gplv3-license
 plugins/modules/dellemc_unity_filesystem.py validate-modules:missing-gplv3-license
 plugins/modules/dellemc_unity_filesystem_snapshot.py validate-modules:missing-gplv3-license
-plugins/modules/dellemc_unity_gatherfacts.py validate-modules:missing-gplv3-license
+plugins/modules/dellemc_unity_info.py validate-modules:missing-gplv3-license
 plugins/modules/dellemc_unity_host.py validate-modules:missing-gplv3-license
 plugins/modules/dellemc_unity_nasserver.py validate-modules:missing-gplv3-license
 plugins/modules/dellemc_unity_nfs.py validate-modules:missing-gplv3-license

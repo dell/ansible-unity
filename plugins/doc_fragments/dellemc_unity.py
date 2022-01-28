@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright: (c) 2020, DellEMC.
+# Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
@@ -44,7 +45,6 @@ notes:
             - True - Indicates that the SSL certificate should be verified.
             - False - Indicates that the SSL certificate should not be
               verified.
-            choices: [True, False]
         port:
             description:
             - Port number through which communication happens with Unity
