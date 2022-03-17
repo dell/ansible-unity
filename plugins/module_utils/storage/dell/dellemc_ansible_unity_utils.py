@@ -7,10 +7,12 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import logging
+from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell.dellemc_unity_logging_handler \
+    import CustomRotatingFileHandler
 import math
 from decimal import Decimal
+import re
 
-"""import urllib3"""
 try:
     import urllib3
 
@@ -26,7 +28,7 @@ try:
     from storops.unity.resource import host, cg, snap_schedule, snap, \
         cifs_share, nas_server
     from storops.unity.resource.lun import UnityLun
-    from storops.unity.resource.pool import UnityPool, UnityPoolList
+    from storops.unity.resource.pool import UnityPool, UnityPoolList, RaidGroupParameter
     from storops.unity.resource.filesystem import UnityFileSystem, \
         UnityFileSystemList
     from storops.unity.resource.nas_server import UnityNasServer
@@ -50,12 +52,15 @@ try:
         UnityTreeQuotaList
     from storops.unity.resource.quota_config import UnityQuotaConfig, \
         UnityQuotaConfigList
-    from storops.unity.enums import QuotaPolicyEnum
+    from storops.unity.resource.storage_resource import UnityStorageResource
+    from storops.unity.enums import QuotaPolicyEnum, RaidTypeEnum, \
+        RaidStripeWidthEnum, StoragePoolTypeEnum
+    from storops.unity.resource.disk import UnityDisk, \
+        UnityDiskList, UnityDiskGroup, UnityDiskGroupList
     HAS_UNITY_SDK = True
 except ImportError:
     HAS_UNITY_SDK = False
 
-'''import pkg_resources'''
 try:
     from pkg_resources import parse_version
     import pkg_resources
@@ -191,12 +196,20 @@ returns logger object
 '''
 
 
-def get_logger(module_name, log_file_name='dellemc_ansible_provisioning.log',
+def get_logger(module_name, log_file_name='ansible_unity.log',
                log_devel=logging.INFO):
     FORMAT = '%(asctime)-15s %(filename)s %(levelname)s : %(message)s'
+    max_bytes = 5 * 1024 * 1024
     logging.basicConfig(filename=log_file_name, format=FORMAT)
     LOG = logging.getLogger(module_name)
     LOG.setLevel(log_devel)
+    handler = CustomRotatingFileHandler(log_file_name,
+                                        maxBytes=max_bytes,
+                                        backupCount=5)
+    formatter = logging.Formatter(FORMAT)
+    handler.setFormatter(formatter)
+    LOG.addHandler(handler)
+    LOG.propagate = False
     return LOG
 
 
@@ -273,6 +286,32 @@ Check whether size is negative
 
 def is_size_negative(size):
     if size and size < 0:
+        return True
+    else:
+        return False
+
+
+'''
+Check whether the string has any special character
+It allows '_' character
+'''
+
+
+def has_special_char(value):
+    regex = re.compile(r'[@!#$%^&*()<>?/\|}{~:]')
+    if regex.search(value) is None:
+        return False
+    else:
+        return True
+
+
+'''
+Validate format of the FC or iSCSI initiator
+'''
+
+
+def is_initiator_valid(value):
+    if value.startswith('iqn') or re.match(r"([A-Fa-f0-9]{2}:){15}[A-Fa-f0-9]{2}", value, re.I) is not None:
         return True
     else:
         return False

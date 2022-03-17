@@ -1,4 +1,17 @@
 # ansible-unity Change Log
+## Version 1.3.0 - released on 25/03/22
+- Enhanced host module to support listing of network addresses, FC initiators, ISCSI initiators and allocated volumes of a host
+- Enhance host module to support add/remove network address to/from a host.
+- Enhanced host module to support both mapping and un-mapping of non-logged-in initiators to host.
+- Enhanced consistency group module to support enable/disable replication in consistency group
+- Enhanced Storage pool module to support creation of storage pool
+- Enhanced Storage Pool module to support listing of drive details of a pool
+- Renamed gatherfacts module to info module
+- Enhanced Info module to list disk groups.
+- Removed dellemc.unity prefix from module names.
+- Added rotating file handler for logging.
+- Bugfix in volume module to retrieve details of non-thin volumes.
+
 ## Version 1.2.1 - released on 28/09/21
 - Fixed typo in galaxy.yml
 - Updated few samples in modules

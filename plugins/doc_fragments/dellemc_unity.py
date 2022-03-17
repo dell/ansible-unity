@@ -53,9 +53,9 @@ notes:
             required: False
             default: 443
     requirements:
-      - A DellEMC Unity Storage device.
-      - Ansible 2.9 or higher.
+      - A Dell EMC Unity Storage device.
+      - Ansible 2.10, 2.11 or 2.12.
     notes:
-      - The modules prefixed with dellemc_unity are built to support the
-        DellEMC Unity storage platform.
+      - The modules present in this collection named as 'dellemc.unity'
+        are built to support the Dell EMC Unity storage platform.
 '''
