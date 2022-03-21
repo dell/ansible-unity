@@ -11,7 +11,7 @@ The Ansible collection for Unity is released and licensed under the GPL-3.0 lice
 The Ansible collection for Unity are supported by Dell and are provided under the terms of the license attached to the collection. Please see the [LICENSE](#license) section for the full terms. Dell does not provide any support for the source code modifications. For any Ansible modules issues, questions or feedback, join the [Dell Automation Community](https://www.dell.com/community/Automation/bd-p/Automation).
 
 ## Supported Platforms
-  * Dell Unity Arrays version 5.0, 5.1 ,5.2
+  * Dell Unity Arrays version 5.0, 5.1.2
 
 ## Prerequisites
 This table provides information about the software prerequisites for the Ansible Modules for Dell Unity.
