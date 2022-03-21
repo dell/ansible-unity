@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = r"""
-module: dellemc_unity_snapshotschedule
+module: snapshotschedule
 version_added: '1.1.0'
 short_description: Manage snapshot schedules on Unity storage system
 description:
@@ -121,7 +121,7 @@ notes:
 
 EXAMPLES = r"""
 - name: Create snapshot schedule (Rule Type - every_n_hours)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -133,7 +133,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_day)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -147,7 +147,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_n_days)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -160,7 +160,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_week)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -176,7 +176,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_month)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -188,7 +188,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Get snapshot schedule details using name
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -197,7 +197,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Get snapshot schedule details using id
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -206,7 +206,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Modify snapshot schedule details id
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -217,7 +217,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Modify snapshot schedule using name
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -229,7 +229,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Delete snapshot schedule using id
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -238,7 +238,7 @@ EXAMPLES = r"""
       state: "{{state_absent}}"
 
 - name: Delete snapshot schedule using name
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -353,24 +353,23 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_snapshotschedule',
-                       log_devel=logging.INFO)
+LOG = utils.get_logger('snapshotschedule')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnitySnapshotSchedule(object):
+class SnapshotSchedule(object):
     """Class with snapshot schedule operations"""
 
     def __init__(self):
         """Define all parameters required by this module"""
 
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_snapshotschedule_parameters())
+        self.module_params.update(get_snapshotschedule_parameters())
 
         mutually_exclusive = [['name', 'id'], ['interval', 'hour'],
                               ['hours_of_day', 'hour'],
@@ -943,7 +942,7 @@ def convert_retention_to_seconds(desired_retention, retention_unit):
     return duration_in_sec
 
 
-def get_unity_snapshotschedule_parameters():
+def get_snapshotschedule_parameters():
     """This method provide parameters required for the ansible snapshot
     schedule module on Unity"""
 
@@ -973,7 +972,7 @@ def get_unity_snapshotschedule_parameters():
 def main():
     """ Create Unity snapshot schedule object and perform action on it
         based on user input from playbook"""
-    obj = UnitySnapshotSchedule()
+    obj = SnapshotSchedule()
     obj.perform_module_operation()
 
 

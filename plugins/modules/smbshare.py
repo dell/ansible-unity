@@ -9,7 +9,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: dellemc_unity_smbshare
+module: smbshare
 version_added: '1.1.0'
 short_description:  Manage SMB shares on Unity storage system
 extends_documentation_fragment:
@@ -139,7 +139,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Create SMB share for a filesystem
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -157,7 +157,7 @@ EXAMPLES = r'''
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a filesystem
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -173,7 +173,7 @@ EXAMPLES = r'''
     umask: "022"
     state: "present"
 - name: Create SMB share for a snapshot
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -190,7 +190,7 @@ EXAMPLES = r'''
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a snapshot
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -206,7 +206,7 @@ EXAMPLES = r'''
     umask: "022"
     state: "present"
 - name: Get details of SMB share
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -214,7 +214,7 @@ EXAMPLES = r'''
     share_id: "{{smb_share_id}}"
     state: "present"
 - name: Delete SMB share
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -287,21 +287,21 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_smbshare')
+LOG = utils.get_logger('smbshare')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnitySMBShare(object):
+class SMBShare(object):
     """Class with SMB Share operations"""
 
     def __init__(self):
         """ Define all parameters required by this module"""
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_smb_share_parameters())
+        self.module_params.update(get_smb_share_parameters())
 
         # initialize the ansible module
         mut_ex_args = [['share_name', 'share_id'],
@@ -822,7 +822,7 @@ class UnitySMBShare(object):
         return smb_share_details
 
 
-def get_unity_smb_share_parameters():
+def get_smb_share_parameters():
     """
     This method provides parameters required for the ansible smb share
     modules on Unity
@@ -847,7 +847,7 @@ def get_unity_smb_share_parameters():
 def main():
     """ Create Unity SMB share object and perform action on it
         based on user input from playbook"""
-    obj = UnitySMBShare()
+    obj = SMBShare()
     obj.perform_module_operation()
 
 

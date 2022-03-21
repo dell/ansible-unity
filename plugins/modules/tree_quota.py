@@ -11,7 +11,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: dellemc_unity_tree_quota
+module: tree_quota
 short_description: Manage quota tree on the Unity storage system
 description:
 - Managing Quota tree on the Unity storage system includes
@@ -99,7 +99,7 @@ options:
 
 EXAMPLES = r'''
   - name: Get quota tree details by quota tree id
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -108,7 +108,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Get quota tree details by quota tree path
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -119,7 +119,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Create quota tree for a filesystem with filesystem id
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -132,7 +132,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Create quota tree for a filesystem with filesystem name
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -146,7 +146,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Modify quota tree limit usage by quota tree path
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -158,7 +158,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Modify quota tree by quota tree id
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -171,7 +171,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Delete quota tree by quota tree id
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -181,7 +181,7 @@ EXAMPLES = r'''
       state: "absent"
 
   - name: Delete quota tree by path
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -253,22 +253,22 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_tree_quota')
+LOG = utils.get_logger('tree_quota')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnityQuotaTree(object):
+class QuotaTree(object):
     """Class with Quota Tree operations"""
 
     def __init__(self):
         """Define all parameters required by this module"""
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_quota_tree_parameters())
+        self.module_params.update(get_quota_tree_parameters())
 
         mutually_exclusive = [['filesystem_name', 'filesystem_id'],
                               ['nas_server_name', 'nas_server_id']]
@@ -666,7 +666,7 @@ class UnityQuotaTree(object):
         self.module.exit_json(**result)
 
 
-def get_unity_quota_tree_parameters():
+def get_quota_tree_parameters():
     """This method provide parameters required for the ansible
        quota tree module on Unity"""
     return dict(
@@ -687,7 +687,7 @@ def get_unity_quota_tree_parameters():
 def main():
     """ Create Unity quota tree object and perform action on it
         based on user input from playbook"""
-    obj = UnityQuotaTree()
+    obj = QuotaTree()
     obj.perform_module_operation()
 
 

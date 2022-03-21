@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = r"""
-module: dellemc_unity_consistencygroup
+module: consistencygroup
 version_added: '1.1.0'
 short_description: Manage consistency groups on Unity storage system
 description:
@@ -18,8 +18,9 @@ description:
   creating new consistency group, adding volumes to consistency
   group, removing volumes from consistency group, mapping hosts to
   consistency group, unmapping hosts from consistency group,
-  renaming consistency group, modifying attributes of consistency group
-  and deleting consistency group.
+  renaming consistency group, modifying attributes of consistency group,
+  enabling replication in consistency group, disabling replication in
+  consistency group and deleting consistency group.
 
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -117,6 +118,86 @@ options:
     - If hosts are given, then mapping_state should also be specified.
     choices: [mapped , unmapped]
     type: str
+  replication_params:
+    description:
+    - Settings required for enabling replication.
+    type: dict
+    suboptions:
+      destination_cg_name:
+        description:
+        - Name of the destination consistency group.
+        - Default value will be source consistency group name prefixed by 'DR_'.
+        type: str
+      replication_mode:
+        description:
+        - The replication mode.
+        type: str
+        required: True
+        choices: ['asynchronous', 'manual']
+      rpo:
+        description:
+        - Maximum time to wait before the system syncs the source and destination LUNs.
+        - rpo should be specified if the replication_mode is asynchronous.
+        - The value should be in range of 5 to 1440.
+        type: int
+      replication_type:
+        description:
+        - Type of replication.
+        choices: ['local', 'remote']
+        default: local
+        type: str
+      remote_system:
+        description:
+        - Details of remote system to which the replication is being configured.
+        - remote_system should be specified if the replication_type is remote.
+        type: dict
+        suboptions:
+          remote_system_host:
+            required: True
+            description:
+            - IP or FQDN for remote Unity unisphere Host.
+            type: str
+          remote_system_username:
+            type: str
+            required: True
+            description:
+            - User name of remote Unity unisphere Host.
+          remote_system_password:
+            type: str
+            required: True
+            description:
+            - Password of remote Unity unisphere Host.
+          remote_system_verifycert:
+            type: bool
+            default: True
+            required: False
+            description:
+            - Boolean variable to specify whether or not to validate SSL
+              certificate of remote Unity unisphere Host.
+            - True - Indicates that the SSL certificate should be verified.
+            - False - Indicates that the SSL certificate should not be
+              verified.
+          remote_system_port:
+            description:
+            - Port at which remote Unity unisphere is hosted.
+            type: int
+            required: False
+            default: 443
+      destination_pool_name:
+        description:
+        - Name of pool to allocate destination Luns.
+        - Mutually exclusive with destination_pool_id.
+        type: str
+      destination_pool_id:
+        description:
+        - Id of pool to allocate destination Luns.
+        - Mutually exclusive with destination_pool_name.
+        type: str
+  replication_state:
+    description:
+    - State of the replication.
+    choices: ['enable', 'disable']
+    type: str
   state:
     description:
     - Define whether the consistency group should exist or not.
@@ -127,7 +208,7 @@ options:
 
 EXAMPLES = r"""
 - name: Create consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -138,7 +219,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Get details of consistency group using id
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -147,7 +228,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Add volumes to consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -160,7 +241,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Rename consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -170,7 +251,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Modify consistency group details
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -181,7 +262,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Map hosts to a consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -194,7 +275,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Unmap hosts from a consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -207,7 +288,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Remove volumes from consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -220,13 +301,44 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Delete consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
       verifycert: "{{verifycert}}"
       cg_name: "{{new_cg_name}}"
       state: "absent"
+
+- name: Enable replication for consistency group
+  dellemc.unity.consistencygroup:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      cg_id: "cg_id_1"
+      replication_params:
+        destination_cg_name: "destination_cg_1"
+        replication_mode: "asynchronous"
+        rpo: 60
+        replication_type: "remote"
+        remote_system:
+          remote_system_host: '10.1.2.3'
+          remote_system_verifycert: False
+          remote_system_username: 'username'
+          remote_system_password: 'password'
+        destination_pool_name: "pool_test_1"
+      replication_state: "enable"
+      state: "present"
+
+- name: Disable replication for consistency group
+  dellemc.unity.consistencygroup:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      cg_name: "dis_repl_ans_source"
+      replication_state: "disable"
+      state: "present"
 """
 
 RETURN = r'''
@@ -247,6 +359,9 @@ consistency_group_details:
         relocation_policy:
             description: FAST VP tiering policy for the consistency group
             type: str
+        cg_replication_enabled:
+            description: Whether or not the replication is enabled.
+            type: bool
         snap_schedule:
             description: Snapshot schedule applied to consistency group
             type: complex
@@ -332,23 +447,23 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_consistencygroup',
+LOG = utils.get_logger('consistencygroup',
                        log_devel=logging.INFO)
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnityConsistencyGroup(object):
+class ConsistencyGroup(object):
     """Class with consistency group operations"""
 
     def __init__(self):
         """Define all parameters required by this module"""
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_consistencygroup_parameters())
+        self.module_params.update(get_consistencygroup_parameters())
 
         mutually_exclusive = [['cg_name', 'cg_id']]
         required_one_of = [['cg_name', 'cg_id']]
@@ -441,6 +556,9 @@ class UnityConsistencyGroup(object):
                 if cg_ret_details['snap_schedule'] is not None:
                     cg_ret_details['snap_schedule']['UnitySnapSchedule'][
                         'name'] = cg_details.snap_schedule.name
+
+                # Status of cg replication
+                cg_ret_details['cg_replication_enabled'] = True if cg_details.check_cg_is_replicated() else False
 
                 return cg_ret_details
             else:
@@ -813,14 +931,13 @@ class UnityConsistencyGroup(object):
              self.module.params['description'] is not None and
              cg_details['description'] != self.module.params['description'])
                 or (cg_details['description'] is None and
-                    self.module.params['description'] is not None)):
-            modified = True
-        elif ((cg_details['snap_schedule'] is not None and
-               self.module.params['snap_schedule'] is not None and
-               cg_details['snap_schedule']['UnitySnapSchedule']['name'] !=
-               self.module.params['snap_schedule']) or
-              (cg_details['snap_schedule'] is None and
-               self.module.params['snap_schedule'])):
+                    self.module.params['description'] is not None)) or \
+            ((cg_details['snap_schedule'] is not None and
+              self.module.params['snap_schedule'] is not None and
+              cg_details['snap_schedule']['UnitySnapSchedule']['name'] !=
+              self.module.params['snap_schedule']) or
+             (cg_details['snap_schedule'] is None and
+              self.module.params['snap_schedule'])):
             modified = True
 
         if cg_details['relocation_policy']:
@@ -1007,6 +1124,122 @@ class UnityConsistencyGroup(object):
                 LOG.error(errormsg)
                 self.module.fail_json(msg=errormsg)
 
+    def update_replication_params(self, replication):
+        ''' Update replication params '''
+
+        if 'replication_type' in replication and replication['replication_type'] == 'remote':
+            connection_params = {
+                'unispherehost': replication['remote_system']['remote_system_host'],
+                'username': replication['remote_system']['remote_system_username'],
+                'password': replication['remote_system']['remote_system_password'],
+                'verifycert': replication['remote_system']['remote_system_verifycert'],
+                'port': replication['remote_system']['remote_system_port']
+            }
+            remote_system_conn = utils.get_unity_unisphere_connection(
+                connection_params, application_type)
+            replication['remote_system_name'] = remote_system_conn.name
+            if replication['destination_pool_name'] is not None:
+                pool_object = remote_system_conn.get_pool(name=replication['destination_pool_name'])
+                replication['destination_pool_id'] = pool_object.id
+        else:
+            if replication['destination_pool_name'] is not None:
+                pool_object = self.unity_conn.get_pool(name=replication['destination_pool_name'])
+                replication['destination_pool_id'] = pool_object.id
+
+    def get_destination_cg_luns(self, source_lun_list):
+        ''' Form destination cg lun list '''
+        destination_cg_lun_list = []
+        if source_lun_list is not None:
+            for source_lun in source_lun_list:
+                destination_cg_lun_info = utils.UnityStorageResource()
+                destination_cg_lun_info.name = "DR_" + source_lun.name
+                destination_cg_lun_info.is_thin_enabled = source_lun.is_thin_enabled
+                destination_cg_lun_info.size_total = source_lun.size_total
+                destination_cg_lun_info.id = source_lun.id
+                destination_cg_lun_info.is_data_reduction_enabled = source_lun.is_data_reduction_enabled
+                destination_cg_lun_list.append(destination_cg_lun_info)
+        return destination_cg_lun_list
+
+    def enable_cg_replication(self, cg_name, replication):
+        ''' Add replication to the consistency group '''
+        try:
+            # Validate replication params
+            self.validate_cg_replication_params(replication)
+
+            # Get cg instance
+            cg_object = self.return_cg_instance(cg_name)
+
+            # Check if replication is enabled for cg
+            if cg_object.check_cg_is_replicated():
+                return False
+
+            # Update replication params
+            self.update_replication_params(replication)
+
+            # Get destination pool id
+            replication_args_list = {
+                'dst_pool_id': replication['destination_pool_id']
+            }
+
+            # Get replication mode
+            if 'replication_mode' in replication and replication['replication_mode'] == 'asynchronous':
+                replication_args_list['max_time_out_of_sync'] = replication['rpo']
+            else:
+                replication_args_list['max_time_out_of_sync'] = -1
+
+            # Get remote system
+            if 'replication_type' in replication and replication['replication_type'] == 'remote':
+                remote_system_name = replication['remote_system_name']
+                remote_system_list = self.unity_conn.get_remote_system()
+                for remote_system in remote_system_list:
+                    if remote_system.name == remote_system_name:
+                        replication_args_list['remote_system'] = remote_system
+                        break
+                if 'remote_system' not in replication_args_list.keys():
+                    errormsg = "Remote system %s is not found" % (remote_system_name)
+                    LOG.error(errormsg)
+                    self.module.fail_json(msg=errormsg)
+
+            # Form destination LUNs list
+            source_lun_list = cg_object.luns
+            replication_args_list['source_luns'] = self.get_destination_cg_luns(source_lun_list)
+
+            # Form destination cg name
+            if 'destination_cg_name' in replication and replication['destination_cg_name'] is not None:
+                replication_args_list['dst_cg_name'] = replication['destination_cg_name']
+            else:
+                replication_args_list['dst_cg_name'] = "DR_" + cg_object.name
+
+            LOG.info(("Enabling replication to the consistency group %s", cg_object.name))
+            cg_object.replicate_cg_with_dst_resource_provisioning(**replication_args_list)
+            return True
+        except Exception as e:
+            errormsg = "Enabling replication to the consistency group %s failed " \
+                       "with error %s" % (cg_object.name, str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def disable_cg_replication(self, cg_name):
+        ''' Remove replication from the consistency group '''
+        try:
+            # Get cg instance
+            cg_object = self.return_cg_instance(cg_name)
+
+            # Check if replication is enabled for cg
+            if not cg_object.check_cg_is_replicated():
+                return False
+
+            LOG.info(("Disabling replication from the consistency group %s", cg_object.name))
+            curr_cg_repl_session = self.unity_conn.get_replication_session(src_resource_id=cg_object.id)
+            for repl_session in curr_cg_repl_session:
+                repl_session.delete()
+            return True
+        except Exception as e:
+            errormsg = "Disabling replication to the consistency group %s failed " \
+                       "with error %s" % (cg_object.name, str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
     def perform_module_operation(self):
         """
         Perform different actions on consistency group module based on
@@ -1022,6 +1255,8 @@ class UnityConsistencyGroup(object):
         vol_state = self.module.params['vol_state']
         hosts = self.module.params['hosts']
         mapping_state = self.module.params['mapping_state']
+        replication = self.module.params['replication_params']
+        replication_state = self.module.params['replication_state']
         state = self.module.params['state']
 
         # result is a dictionary that contains changed status and consistency
@@ -1056,10 +1291,13 @@ class UnityConsistencyGroup(object):
             modified = self.is_cg_modified(cg_details)
 
         if vol_state and not volumes:
-            self.module.fail_json(msg="Specify volumes along with vol_state")
+            self.module.fail_json(msg="Please specify volumes along with vol_state")
 
         if mapping_state and not hosts:
-            self.module.fail_json(msg="Specify hosts along with mapping_state")
+            self.module.fail_json(msg="Please specify hosts along with mapping_state")
+
+        if replication and replication_state is None:
+            self.module.fail_json(msg="Please specify replication_state along with replication_params")
 
         if state == 'present' and not cg_details:
             if not volumes and tiering_policy:
@@ -1083,6 +1321,10 @@ class UnityConsistencyGroup(object):
             result['create_cg'], cg_details = self.create_cg(
                 cg_name, description, snap_schedule)
         elif state == 'absent' and cg_details:
+            if cg_details['cg_replication_enabled']:
+                self.module.fail_json(msg="Consistency group cannot be deleted"
+                                          " because it is participating"
+                                          " in a replication session.")
             if cg_details['luns']:
                 self.module.fail_json(msg="Please remove all volumes which"
                                           " are part of consistency group"
@@ -1122,6 +1364,12 @@ class UnityConsistencyGroup(object):
                                                  snap_schedule, tiering_policy
                                                  )
 
+        if state == 'present' and cg_details and replication_state is not None:
+            if replication_state == 'enable':
+                result['changed'] = self.enable_cg_replication(cg_name, replication)
+            else:
+                result['changed'] = self.disable_cg_replication(cg_name)
+
         if result['create_cg'] or result['modify_cg'] or result[
             'add_vols_to_cg'] or result['remove_vols_from_cg'] or result[
             'delete_cg'] or result['rename_cg'] or result[
@@ -1131,10 +1379,56 @@ class UnityConsistencyGroup(object):
         result['consistency_group_details'] = self.get_details(cg_id=cg_id,
                                                                cg_name=cg_name
                                                                )
+
         self.module.exit_json(**result)
 
+    def validate_cg_replication_params(self, replication):
+        ''' Validate cg replication params '''
 
-def get_unity_consistencygroup_parameters():
+        # Valdiate replication
+        if replication is None:
+            errormsg = "Please specify replication_params to enable replication."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        # validate destination pool info
+        if replication['destination_pool_id'] is not None and replication['destination_pool_name'] is not None:
+            errormsg = "'destination_pool_id' and 'destination_pool_name' is mutually exclusive."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        if replication['destination_pool_id'] is None and replication['destination_pool_name'] is None:
+            errormsg = "Either 'destination_pool_id' or 'destination_pool_name' is required."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        # Validate replication mode
+        if 'replication_mode' in replication and replication['replication_mode'] == 'asynchronous':
+            if replication['rpo'] is None:
+                errormsg = "rpo is required together with 'asynchronous' replication_mode."
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+            if replication['rpo'] < 5 or replication['rpo'] > 1440:
+                errormsg = "rpo value should be in range of 5 to 1440"
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
+        # Validate replication type
+        if replication['replication_type'] == 'remote' and replication['remote_system'] is None:
+            errormsg = "remote_system is required together with 'remote' replication_type"
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        # Validate destination cg name
+        if 'destination_cg_name' in replication and replication['destination_cg_name'] is not None:
+            dst_cg_name_length = len(replication['destination_cg_name'])
+            if dst_cg_name_length == 0 or dst_cg_name_length > 95:
+                errormsg = "destination_cg_name value should be in range of 1 to 95"
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
+
+def get_consistencygroup_parameters():
     """This method provide parameters required for the ansible consistency
         group module on Unity"""
     return dict(
@@ -1160,6 +1454,24 @@ def get_unity_consistencygroup_parameters():
                    )),
         mapping_state=dict(required=False, type='str',
                            choices=['mapped', 'unmapped']),
+        replication_params=dict(type='dict', options=dict(
+            destination_cg_name=dict(type='str'),
+            replication_mode=dict(type='str', choices=['asynchronous', 'manual'], required=True),
+            rpo=dict(type='int'),
+            replication_type=dict(type='str', choices=['local', 'remote'], default='local'),
+            remote_system=dict(type='dict',
+                               options=dict(
+                                    remote_system_host=dict(type='str', required=True, no_log=True),
+                                    remote_system_verifycert=dict(type='bool', required=False,
+                                                                  default=True),
+                                    remote_system_username=dict(type='str', required=True),
+                                    remote_system_password=dict(type='str', required=True, no_log=True),
+                                    remote_system_port=dict(type='int', required=False, default=443, no_log=True)
+                               )),
+            destination_pool_name=dict(type='str'),
+            destination_pool_id=dict(type='str')
+        )),
+        replication_state=dict(type='str', choices=['enable', 'disable']),
         state=dict(required=True, type='str', choices=['present', 'absent'])
     )
 
@@ -1167,7 +1479,7 @@ def get_unity_consistencygroup_parameters():
 def main():
     """ Create Unity consistency group object and perform action on it
         based on user input from playbook"""
-    obj = UnityConsistencyGroup()
+    obj = ConsistencyGroup()
     obj.perform_module_operation()
 
 

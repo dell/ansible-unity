@@ -9,7 +9,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: dellemc_unity_nasserver
+module: nasserver
 version_added: '1.1.0'
 short_description:  Manage NAS servers on Unity storage system
 extends_documentation_fragment:
@@ -106,7 +106,7 @@ options:
 EXAMPLES = r'''
 
     - name: Get Details of NAS Server
-      dellemc.unity.dellemc_unity_nasserver:
+      dellemc.unity.nasserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -115,7 +115,7 @@ EXAMPLES = r'''
         state: "present"
 
     - name: Modify Details of NAS Server
-      dellemc.unity.dellemc_unity_nasserver:
+      dellemc.unity.nasserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -136,7 +136,7 @@ EXAMPLES = r'''
 '''
 RETURN = r'''
 changed:
-    description: Whether or not the resource has changed
+    description: Whether or not the resource has changed.
     returned: always
     type: bool
     sample: True
@@ -192,21 +192,21 @@ from ansible.module_utils.basic import AnsibleModule
 #     import dellemc_ansible_unity_utils as utils
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
-LOG = utils.get_logger('dellemc_unity_nasserver')
+LOG = utils.get_logger('nasserver')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnityNASServer(object):
+class NASServer(object):
     """Class with NAS Server operations"""
 
     def __init__(self):
         """ Define all parameters required by this module"""
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_nasserver_parameters())
+        self.module_params.update(get_nasserver_parameters())
 
         # initialize the ansible module
         mut_ex_args = [['nas_server_name', 'nas_server_id']]
@@ -496,7 +496,7 @@ class UnityNASServer(object):
         self.module.exit_json(**self.result)
 
 
-def get_unity_nasserver_parameters():
+def get_nasserver_parameters():
     """
     This method provides parameters required for the ansible NAS Server
     modules on Unity
@@ -523,7 +523,7 @@ def get_unity_nasserver_parameters():
 def main():
     """ Create Unity NAS Server object and perform action on it
         based on user input from playbook"""
-    obj = UnityNASServer()
+    obj = NASServer()
     obj.perform_module_operation()
 
 

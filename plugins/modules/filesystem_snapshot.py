@@ -11,7 +11,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: dellemc_unity_filesystem_snapshot
+module: filesystem_snapshot
 short_description: Manage filesystem snapshot on the Unity storage system
 description:
 - Managing Filesystem Snapshot on the Unity storage system includes
@@ -112,7 +112,7 @@ notes:
 
 EXAMPLES = r'''
   - name: Create Filesystem Snapshot
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -126,7 +126,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Create Filesystem Snapshot with expiry time
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -140,7 +140,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Get Filesystem Snapshot Details using Name
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -149,7 +149,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Get Filesystem Snapshot Details using ID
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -158,7 +158,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Update Filesystem Snapshot attributes
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -170,7 +170,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Update Filesystem Snapshot attributes using ID
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -180,7 +180,7 @@ EXAMPLES = r'''
       state: "present"
 
   - name: Delete Filesystem Snapshot using Name
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -189,7 +189,7 @@ EXAMPLES = r'''
       state: "absent"
 
   - name: Delete Filesystem Snapshot using ID
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -266,22 +266,22 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 from datetime import datetime
 
-LOG = utils.get_logger('dellemc_unity_filesystem_snapshot')
+LOG = utils.get_logger('filesystem_snapshot')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnityFilesystemSnapshot(object):
+class FilesystemSnapshot(object):
     """Class with Filesystem Snapshot operations"""
 
     def __init__(self):
         """ Define all parameters required by this module"""
 
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_snapshot_parameters())
+        self.module_params.update(get_snapshot_parameters())
 
         mutually_exclusive = [['snapshot_name', 'snapshot_id'],
                               ['filesystem_name', 'filesystem_id'],
@@ -720,7 +720,7 @@ def convert_timestamp_to_sec(expiry_time, snap_time):
     return int((expiry_timestamp - snap_timestamp).total_seconds())
 
 
-def get_unity_snapshot_parameters():
+def get_snapshot_parameters():
     """This method provide parameter required for the ansible filesystem
     snapshot module on Unity"""
     return dict(
@@ -742,7 +742,7 @@ def get_unity_snapshot_parameters():
 def main():
     """ Create Unity Filesystem Snapshot object and perform actions on it
         based on user input from playbook"""
-    obj = UnityFilesystemSnapshot()
+    obj = FilesystemSnapshot()
     obj.perform_module_operation()
 
 

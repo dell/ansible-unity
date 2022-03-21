@@ -11,7 +11,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: dellemc_unity_info
+module: info
 
 version_added: '1.1.0'
 
@@ -33,7 +33,7 @@ description:
   Get list of SMB shares in Unity array,
   Get list of NFS exports in Unity array,
   Get list of User quotas in Unity array,
-  Get list of Quota tree in Unity array
+  Get list of Quota tree in Unity array.
 
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -61,16 +61,17 @@ options:
     - smb_share
     - user_quota
     - tree_quota
+    - disk_group
     choices: [host, fc_initiator, iscsi_initiator, cg, storage_pool, vol,
     snapshot_schedule, nas_server, file_system, snapshot, nfs_export,
-    smb_share, user_quota, tree_quota]
+    smb_share, user_quota, tree_quota, disk_group]
     type: list
     elements: str
 '''
 
 EXAMPLES = r'''
  - name: Get detailed list of Unity entities
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -90,16 +91,17 @@ EXAMPLES = r'''
        - smb_share
        - user_quota
        - tree_quota
+       - disk_group
 
  - name: Get information of Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
      verifycert: "{{verifycert}}"
 
  - name: Get list of hosts on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -108,7 +110,7 @@ EXAMPLES = r'''
        - host
 
  - name: Get list of FC initiators on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -117,7 +119,7 @@ EXAMPLES = r'''
        - fc_initiator
 
  - name: Get list of ISCSI initiators on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -126,7 +128,7 @@ EXAMPLES = r'''
        - iscsi_initiator
 
  - name: Get list of consistency groups on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -135,7 +137,7 @@ EXAMPLES = r'''
        - cg
 
  - name: Get list of storage pools on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -144,7 +146,7 @@ EXAMPLES = r'''
        - storage_pool
 
  - name: Get list of volumes on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -153,7 +155,7 @@ EXAMPLES = r'''
        - vol
 
  - name: Get list of snapshot schedules on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -162,7 +164,7 @@ EXAMPLES = r'''
        - snapshot_schedule
 
  - name: Get list of NAS Servers on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -171,7 +173,7 @@ EXAMPLES = r'''
        - nas_server
 
  - name: Get list of File Systems on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -180,7 +182,7 @@ EXAMPLES = r'''
        - file_system
 
  - name: Get list of Snapshots on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -189,7 +191,7 @@ EXAMPLES = r'''
        - snapshot
 
  - name: Get list of NFS exports on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -198,7 +200,7 @@ EXAMPLES = r'''
        - nfs_export
 
  - name: Get list of SMB shares on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -207,7 +209,7 @@ EXAMPLES = r'''
        - smb_share
 
  - name: Get list of user quotas on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -216,13 +218,22 @@ EXAMPLES = r'''
        - user_quota
 
  - name: Get list of quota trees on Unity array
-   dellemc.unity.dellemc_unity_info:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
      verifycert: "{{verifycert}}"
      gather_subset:
        - tree_quota
+
+ - name: Get list of disk groups on Unity array
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - disk_group
 '''
 
 RETURN = r'''
@@ -414,27 +425,42 @@ Tree_Quotas:
         path:
             description: The path of the quota tree.
             type: str
+Disk_Groups:
+    description: Details of the disk groups.
+    returned: When disk groups exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the disk group.
+            type: str
+        name:
+            description: The name of the disk group.
+            type: str
+        tier_type:
+            description: The tier type of the disk group.
+            type: str
 '''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_info')
+LOG = utils.get_logger('info')
+SUCCESSFULL_LISTED_MSG = 'Successfully listed.'
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnityInfo(object):
+class Info(object):
     """Class with Info operations"""
 
     def __init__(self):
         """ Define all parameters required by this module"""
 
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_info_parameters())
+        self.module_params.update(get_info_parameters())
 
         """ initialize the ansible module """
         self.module = AnsibleModule(argument_spec=self.module_params,
@@ -687,6 +713,25 @@ class UnityInfo(object):
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
+    def get_disk_groups_list(self):
+        """Get the list of disk group details on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting disk group list")
+            pool_disk_list = []
+            disk_instances = utils.UnityDiskGroupList(cli=self.unity._cli)
+            if disk_instances:
+                for disk in disk_instances:
+                    pool_disk = {"id": disk.id, "name": disk.name,
+                                 "tier_type": disk.tier_type.name}
+                    pool_disk_list.append(pool_disk)
+            return pool_disk_list
+        except Exception as e:
+            msg = 'Get disk group from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
     def perform_module_operation(self):
         """ Perform different actions on Info based on user parameter
             chosen in playbook """
@@ -708,6 +753,7 @@ class UnityInfo(object):
         smb_share = []
         user_quota = []
         tree_quota = []
+        disk_group = []
 
         subset = self.module.params['gather_subset']
         if subset is not None:
@@ -739,6 +785,8 @@ class UnityInfo(object):
                 user_quota = self.get_user_quota_list()
             if 'tree_quota' in subset:
                 tree_quota = self.get_tree_quota_list()
+            if 'disk_group' in subset:
+                disk_group = self.get_disk_groups_list()
 
         self.module.exit_json(
             Array_Details=array_details,
@@ -755,7 +803,8 @@ class UnityInfo(object):
             NFS_Exports=nfs_export,
             SMB_Shares=smb_share,
             User_Quotas=user_quota,
-            Tree_Quotas=tree_quota
+            Tree_Quotas=tree_quota,
+            Disk_Groups=disk_group
         )
 
 
@@ -764,7 +813,7 @@ def result_list(entity):
     result = []
 
     if entity:
-        LOG.info('Successfully listed.')
+        LOG.info(SUCCESSFULL_LISTED_MSG)
         for item in entity:
             result.append(
                 {
@@ -782,7 +831,7 @@ def fc_initiators_result_list(entity):
     result = []
 
     if entity:
-        LOG.info('Successfully listed.')
+        LOG.info(SUCCESSFULL_LISTED_MSG)
         for item in entity:
             result.append(
                 {
@@ -800,7 +849,7 @@ def iscsi_initiators_result_list(entity):
     result = []
 
     if entity:
-        LOG.info('Successfully listed.')
+        LOG.info(SUCCESSFULL_LISTED_MSG)
         for item in entity:
             result.append(
                 {
@@ -818,7 +867,7 @@ def user_quota_result_list(entity):
     result = []
 
     if entity:
-        LOG.info('Successfully listed.')
+        LOG.info(SUCCESSFULL_LISTED_MSG)
         for item in entity:
             result.append(
                 {
@@ -836,7 +885,7 @@ def tree_quota_result_list(entity):
     result = []
 
     if entity:
-        LOG.info('Successfully listed.')
+        LOG.info(SUCCESSFULL_LISTED_MSG)
         for item in entity:
             result.append(
                 {
@@ -849,7 +898,7 @@ def tree_quota_result_list(entity):
         return None
 
 
-def get_unity_info_parameters():
+def get_info_parameters():
     """This method provides parameters required for the ansible
     info module on Unity"""
     return dict(gather_subset=dict(type='list', required=False,
@@ -860,13 +909,13 @@ def get_unity_info_parameters():
                                             'snapshot_schedule', 'nas_server',
                                             'file_system', 'snapshot',
                                             'nfs_export', 'smb_share',
-                                            'user_quota', 'tree_quota']))
+                                            'user_quota', 'tree_quota', 'disk_group']))
 
 
 def main():
     """ Create Unity Info object and perform action on it
         based on user input from playbook"""
-    obj = UnityInfo()
+    obj = Info()
     obj.perform_module_operation()
 
 

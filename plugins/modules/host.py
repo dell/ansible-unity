@@ -11,20 +11,22 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: dellemc_unity_host
+module: host
 
 version_added: '1.1.0'
 
 short_description: Manage Host operations on Unity
 
 description:
-- The Host module contains the following operations
-  Creation of a Host.
-  Addition of initiators to Host.
-  Removal of initiators from Host.
-  Modification of host attributes.
-  Get details of a Host.
-  Deletion of a Host.
+- The Host module contains the operations
+  Creation of a Host,
+  Addition of initiators to Host,
+  Removal of initiators from Host,
+  Modification of host attributes,
+  Get details of a Host,
+  Deletion of a Host,
+  Addition of network address to Host,
+  Removal of network address from Host.
 
 extends_documentation_fragment:
   - dellemc.unity.dellemc_unity.unity
@@ -76,6 +78,18 @@ options:
     choices: [present-in-host , absent-in-host]
     type: str
 
+  network_address:
+    description:
+    - Network address to be added/removed to/from the host.
+    - Enter valid IPV4 or host name.
+    type: str
+
+  network_address_state:
+    description:
+    - State of the Network address.
+    choices: [present-in-host , absent-in-host]
+    type: str
+
   state:
     description:
     - State of the host.
@@ -86,7 +100,7 @@ options:
 
 EXAMPLES = r'''
 - name: Create empty Host
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -97,7 +111,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Create Host with Initiators
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -112,7 +126,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Modify Host using host_id
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -124,7 +138,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Add Initiators to Host
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -136,7 +150,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get Host details using host_name
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -145,7 +159,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get Host details using host_id
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -154,13 +168,35 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete Host
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
     verifycert: "{{verifycert}}"
     host_name: "ansible-test-host-2"
     state: "absent"
+
+- name: Add network address to Host
+  dellemc.unity.host:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    host_name: "{{host_name}}"
+    network_address: "192.168.1.2"
+    network_address_state: "present-in-host"
+    state: "present"
+
+- name: Delete network address from Host
+  dellemc.unity.host:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    host_name: "{{host_name}}"
+    network_address: "192.168.1.2"
+    network_address_state: "absent-in-host"
+    state: "present"
 '''
 
 RETURN = r'''
@@ -188,55 +224,88 @@ host_details:
                          the host.
             type: complex
             contains:
-                UnityHostInitiatorList:
-                    description: FC initiators with system generated
-                                 unique hash value.
+                id:
+                    description: Unique identifier of the FC initiator path.
+                    type: str
+                name:
+                    description: FC Qualified Name (WWN) of the initiator.
+                    type: str
+                paths:
+                    description: Details of the paths associated with the FC initiator.
                     type: complex
+                    contains:
+                        id:
+                            description: Unique identifier of the path.
+                            type: str
+                        is_logged_in:
+                            description: Indicates whether the host initiator is logged into the storage system.
+                            type: bool
         iscsi_host_initiators:
             description: Details of the ISCSI initiators associated
                          with the host.
             type: complex
             contains:
-                UnityHostInitiatorList:
-                    description: ISCSI initiators with sytem genrated unique
-                                 hash value.
+                id:
+                    description: Unique identifier of the ISCSI initiator path.
+                    type: str
+                name:
+                    description: ISCSI Qualified Name (IQN) of the initiator.
+                    type: str
+                paths:
+                    description: Details of the paths associated with the ISCSI initiator.
                     type: complex
+                    contains:
+                        id:
+                            description: Unique identifier of the path.
+                            type: str
+                        is_logged_in:
+                            description: Indicates whether the host initiator is logged into the storage system.
+                            type: bool
+        network_addresses:
+            description: List of network addresses mapped to the host.
+            type: list
         os_type:
             description: Operating system running on the host.
             type: str
         type:
             description: HostTypeEnum of the host.
             type: str
+        host_luns:
+            description: Details of luns attached to host.
+            type: list
 '''
 
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
+import ipaddress
 
-LOG = utils.get_logger('dellemc_unity_host')
+LOG = utils.get_logger('host')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnityHost(object):
+class Host(object):
     """Class with Host operations"""
 
     def __init__(self):
         """ Define all parameters required by this module"""
 
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_host_parameters())
+        self.module_params.update(get_host_parameters())
 
         mutually_exclusive = [['host_name', 'host_id']]
         required_one_of = [['host_name', 'host_id']]
+        required_together = [['network_address', 'network_address_state']]
 
         """ initialize the ansible module """
         self.module = AnsibleModule(argument_spec=self.module_params,
                                     supports_check_mode=False,
                                     mutually_exclusive=mutually_exclusive,
+                                    required_together=required_together,
                                     required_one_of=required_one_of)
 
         if not HAS_UNITY_SDK:
@@ -316,14 +385,13 @@ class UnityHost(object):
 
     def create_host(self, host_name):
         """ Create a new host """
-
         try:
             description = self.module.params['description']
             host_os = self.module.params['host_os']
             host_type = utils.HostTypeEnum.HOST_MANUAL
             initiators = self.module.params['initiators']
             initiator_state = self.module.params['initiator_state']
-            emptyInitiatorsFlag = False
+            empty_initiators_flag = False
 
             if (initiators and initiator_state == 'absent-in-host'):
                 error_message = "Incorrect 'initiator_state' given."
@@ -333,7 +401,7 @@ class UnityHost(object):
             if (initiators is None or len(initiators) == 0
                     or not initiator_state
                     or initiator_state == 'absent-in-host'):
-                emptyInitiatorsFlag = True
+                empty_initiators_flag = True
 
             """ if any of the Initiators is invalid or already mapped """
             if (initiators and initiator_state == 'present-in-host'):
@@ -344,24 +412,29 @@ class UnityHost(object):
                     error_message = "Provide valid initiators."
                     LOG.error(error_message)
                     self.module.fail_json(msg=error_message)
-
+            if not empty_initiators_flag:
+                self.validate_initiators(initiators)
             LOG.info("Creating empty host %s ", host_name)
-            new_host = utils.host.UnityHost.create(
-                self.unity._cli, name=host_name, desc=description,
-                os=host_os, host_type=host_type)
-
-            # Add initiators, if given.
-            if not emptyInitiatorsFlag:
+            new_host = utils.host.UnityHost.create(self.unity._cli, name=host_name, desc=description,
+                                                   os=host_os, host_type=host_type)
+            if not empty_initiators_flag:
                 host_details = self.unity.get_host(name=host_name)
                 LOG.info("Adding initiators to %s host", host_name)
                 result, new_host \
                     = self.add_initiator_to_host(host_details, initiators)
-
             return True, new_host
-
         except Exception as e:
             error_message = "Got error %s while creation of host %s" \
                             % (str(e), host_name)
+            LOG.error(error_message)
+            self.module.fail_json(msg=error_message)
+
+    def validate_initiators(self, initiators):
+        results = []
+        for item in initiators:
+            results.append(utils.is_initiator_valid(item))
+        if False in results:
+            error_message = "One or more initiator provided is not valid, please provide valid initiators"
             LOG.error(error_message)
             self.module.fail_json(msg=error_message)
 
@@ -448,12 +521,11 @@ class UnityHost(object):
 
             """ if an already existing initiator is passed along with an
                 unmapped initiator"""
-            if None in initiator_details["parent_host"] \
-                    or (host_id and host_id
-                        in initiator_details["parent_host"][0]
-                                            ["UnityHost"]["id"]):
+            if None in initiator_details["parent_host"]:
                 unmapped_initiators.append(initiator_details
                                            ["initiator_id"][0])
+            elif not initiator_details["parent_host"]:
+                unmapped_initiators.append(id)
             else:
                 error_message = "Initiator " + id + " mapped to another Host."
                 LOG.error(error_message)
@@ -516,15 +588,17 @@ class UnityHost(object):
                 return False, host_details
 
             LOG.info("Removing initiators from host %s", host_details.name)
-            for id in initiators:
 
+            if len(initiators) > 1:
+                self.check_if_initiators_logged_in(initiators)
+
+            for id in initiators:
                 initiator_details = utils.host.UnityHostInitiatorList \
                     .get(cli=self.unity._cli, initiator_id=id) \
                     ._get_properties()
 
                 """ if initiator has no active paths, then remove it """
-                if "UnityHostInitiatorPathList" \
-                        not in initiator_details["paths"]:
+                if initiator_details["paths"][0] is None:
                     LOG.info("Initiator Path does not exist.")
                     host_details.delete_initiator(uid=id)
                     updated_host \
@@ -570,6 +644,18 @@ class UnityHost(object):
             LOG.error(error_message)
             self.module.fail_json(msg=error_message)
 
+    def check_if_initiators_logged_in(self, initiators):
+        """ Checks if any of the initiators is of type logged-in"""
+
+        for item in initiators:
+            initiator_details = (utils.host.UnityHostInitiatorList
+                                 .get(cli=self.unity._cli, initiator_id=item)
+                                 ._get_properties())
+            if initiator_details["paths"][0] is not None and "UnityHostInitiatorPathList" in initiator_details["paths"][0]:
+                error_message = "Removal operation cannot be done since host has logged in initiator(s)"
+                LOG.error(error_message)
+                self.module.fail_json(msg=error_message)
+
     def delete_host(self, host_details):
         """ Delete an existing host """
 
@@ -582,6 +668,91 @@ class UnityHost(object):
             LOG.error(error_message)
             self.module.fail_json(msg=error_message)
 
+    def get_iscsi_host_initiators_details(self, iscsi_host_initiators):
+        """ Get the details of existing ISCSI initiators in host"""
+
+        iscsi_initiator_list = []
+        for iscsi in iscsi_host_initiators:
+            iscsi_initiator_details = self.unity.get_initiator(_id=iscsi.id)
+            iscsi_path_list = []
+            if iscsi_initiator_details.paths is not None:
+                for path in iscsi_initiator_details.paths:
+                    iscsi_path_list.append({
+                        'id': path.id,
+                        'is_logged_in': path.is_logged_in
+                    })
+            iscsi_initiator_list.append({
+                'id': iscsi_initiator_details.id,
+                'name': iscsi_initiator_details.initiator_id,
+                'paths': iscsi_path_list
+            })
+        return iscsi_initiator_list
+
+    def get_host_network_address_list(self, host_details):
+        network_address_list = []
+        if host_details and host_details.host_ip_ports is not None:
+            for port in host_details.host_ip_ports:
+                network_address_list.append(port.address)
+        return network_address_list
+
+    def manage_network_address(self, host_details, network_address_list, network_address, network_address_state):
+        try:
+            is_mapped = False
+            changed = False
+            for addr in network_address_list:
+                if addr.lower() == network_address.lower():
+                    is_mapped = True
+                    break
+            if not is_mapped and network_address_state == 'present-in-host':
+                LOG.info("Adding network address %s to Host %s", network_address,
+                         host_details.name)
+                host_details.add_ip_port(network_address)
+                changed = True
+            elif is_mapped and network_address_state == 'absent-in-host':
+                LOG.info("Deleting network address %s from Host %s", network_address,
+                         host_details.name)
+                host_details.delete_ip_port(network_address)
+                changed = True
+
+            if changed:
+                updated_host = self.unity.get_host(name=host_details.name)
+                network_address_list = self.get_host_network_address_list(updated_host)
+            return network_address_list, changed
+        except Exception as e:
+            error_message = "Got error %s while modifying network address %s of host %s" \
+                            % (str(e), network_address, host_details.name)
+            LOG.error(error_message)
+            self.module.fail_json(msg=error_message)
+
+    def get_host_lun_list(self, host_details):
+        """ Get luns attached to host"""
+        host_luns_list = []
+        if host_details and host_details.host_luns is not None:
+            for lun in host_details.host_luns.lun:
+                host_lun = {"name": lun.name, "id": lun.id}
+                host_luns_list.append(host_lun)
+        return host_luns_list
+
+    def get_fc_host_initiators_details(self, fc_host_initiators):
+        """ Get the details of existing FC initiators in host"""
+
+        fc_initiator_list = []
+        for fc in fc_host_initiators:
+            fc_initiator_details = self.unity.get_initiator(_id=fc.id)
+            fc_path_list = []
+            if fc_initiator_details.paths is not None:
+                for path in fc_initiator_details.paths:
+                    fc_path_list.append({
+                        'id': path.id,
+                        'is_logged_in': path.is_logged_in
+                    })
+            fc_initiator_list.append({
+                'id': fc_initiator_details.id,
+                'name': fc_initiator_details.initiator_id,
+                'paths': fc_path_list
+            })
+        return fc_initiator_list
+
     def perform_module_operation(self):
         """ Perform different actions on host based on user parameter
             chosen in playbook """
@@ -593,6 +764,8 @@ class UnityHost(object):
         new_host_name = self.module.params['new_host_name']
         initiator_state = self.module.params['initiator_state']
         initiators = self.module.params['initiators']
+        network_address = self.module.params['network_address']
+        network_address_state = self.module.params['network_address_state']
         state = self.module.params['state']
 
         if host_name and len(host_name) > 255:
@@ -622,15 +795,6 @@ class UnityHost(object):
             LOG.error(err_msg)
             self.module.fail_json(msg=err_msg)
 
-        if initiators:
-            initiators_list = utils.host.UnityHostInitiatorList\
-                .get(cli=self.unity._cli)
-            for id in initiators:
-                if id not in initiators_list.initiator_id:
-                    err_msg = id + " - Invalid initiator passed."
-                    LOG.error(err_msg)
-                    self.module.fail_json(msg=err_msg)
-
         # result is a dictionary that contains changed status and
         # host details
         result = dict(
@@ -640,7 +804,6 @@ class UnityHost(object):
 
         ''' Get host details based on host_name/host_id'''
         host_details = self.get_host_details(host_id, host_name)
-
         if not host_details and state == 'present':
             if host_id:
                 err_msg = "Invalid argument 'host_id' while " \
@@ -674,7 +837,6 @@ class UnityHost(object):
             if modified_flag:
 
                 # Modify host
-                host_id_or_name = host_id if host_id else host_name
                 result['changed'] = self.modify_host(host_details,
                                                      new_host_name,
                                                      description,
@@ -714,13 +876,29 @@ class UnityHost(object):
         """ display WWN/IQN w.r.t. initiators mapped to host,
             if host exists """
         if host_details and host_details.fc_host_initiators is not None:
-            host_details.fc_host_initiators \
-                = host_details.fc_host_initiators.initiator_id
+            host_details.fc_host_initiators = self.get_fc_host_initiators_details(host_details.fc_host_initiators)
             result['host_details'] = host_details._get_properties()
         if host_details and host_details.iscsi_host_initiators is not None:
-            host_details.iscsi_host_initiators \
-                = host_details.iscsi_host_initiators.initiator_id
+            host_details.iscsi_host_initiators = self.get_iscsi_host_initiators_details(host_details.iscsi_host_initiators)
             result['host_details'] = host_details._get_properties()
+
+        ''' Get host luns details and network addresses'''
+        if result['host_details']:
+            result['host_details']['host_luns'] = self.get_host_lun_list(host_details)
+            result['host_details']['network_addresses'] = self.get_host_network_address_list(host_details)
+            if 'host_ip_ports' in result['host_details']:
+                del result['host_details']['host_ip_ports']
+
+        # manage network address
+        if host_details is not None and network_address_state is not None:
+            self.validate_network_address_params(network_address)
+            network_address_list, changed = self.manage_network_address(
+                host_details,
+                result['host_details']['network_addresses'],
+                network_address,
+                network_address_state)
+            result['host_details']['network_addresses'] = network_address_list
+            result['changed'] = changed
 
         # Delete a host
         if state == 'absent':
@@ -733,8 +911,32 @@ class UnityHost(object):
 
         self.module.exit_json(**result)
 
+    def validate_network_address_params(self, network_address):
+        if '.' in network_address and not is_valid_ip(network_address):
+            err_msg = 'Please enter valid IPV4 address for network address'
+            LOG.error(err_msg)
+            self.module.fail_json(msg=err_msg)
 
-def get_unity_host_parameters():
+        if len(network_address) < 1 or len(network_address) > 63:
+            err_msg = "'network_address' should be in range of 1 to 63 characters."
+            LOG.error(err_msg)
+            self.module.fail_json(msg=err_msg)
+
+        if utils.has_special_char(network_address) or ' ' in network_address:
+            err_msg = 'Please enter valid IPV4 address or host name for network address'
+            LOG.error(err_msg)
+            self.module.fail_json(msg=err_msg)
+
+
+def is_valid_ip(address):
+    try:
+        ipaddress.ip_address(address)
+        return True
+    except ValueError:
+        return False
+
+
+def get_host_parameters():
     """This method provides parameters required for the ansible host
     module on Unity"""
     return dict(
@@ -751,6 +953,10 @@ def get_unity_host_parameters():
         initiator_state=dict(required=False, type='str',
                              choices=['present-in-host',
                                       'absent-in-host']),
+        network_address=dict(required=False, type='str'),
+        network_address_state=dict(required=False, type='str',
+                                   choices=['present-in-host',
+                                            'absent-in-host']),
         state=dict(required=True, type='str',
                    choices=['present', 'absent'])
     )
@@ -759,7 +965,7 @@ def get_unity_host_parameters():
 def main():
     """ Create Unity host object and perform action on it
         based on user input from playbook"""
-    obj = UnityHost()
+    obj = Host()
     obj.perform_module_operation()
 
 

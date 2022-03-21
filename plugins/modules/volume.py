@@ -11,7 +11,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 
-module: dellemc_unity_volume
+module: volume
 version_added: '1.1.0'
 short_description: Manage volume on Unity storage system
 description:
@@ -78,7 +78,7 @@ options:
   is_thin:
     description:
     - Boolean variable , specifies whether or not it is a thin volume.
-    default: True
+    - The value is set as True by default if not specified.
     type: bool
   sp:
     description:
@@ -158,7 +158,7 @@ options:
 
 EXAMPLES = r"""
 - name: Create Volume
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -171,7 +171,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Expand Volume by volume id
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -182,7 +182,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Modify Volume, map host by host_name
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -194,7 +194,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Modify Volume, unmap host mapping by host_name
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -205,7 +205,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Map multiple hosts to a Volume
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -220,7 +220,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify Volume attributes
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -232,7 +232,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Delete Volume by vol name
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -241,7 +241,7 @@ EXAMPLES = r"""
     state: "{{state_absent}}"
 
 - name: Delete Volume by vol id
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -309,13 +309,13 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 import logging
 
-LOG = utils.get_logger('dellemc_unity_volume')
+LOG = utils.get_logger('volume')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
 def is_none_or_empty_string(param):
@@ -325,7 +325,7 @@ def is_none_or_empty_string(param):
     return not param or len(str(param)) <= 0
 
 
-class UnityVolume(object):
+class Volume(object):
 
     """Class with volume operations"""
 
@@ -336,7 +336,7 @@ class UnityVolume(object):
     def __init__(self):
         """Define all parameters required by this module"""
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_volume_parameters())
+        self.module_params.update(get_volume_parameters())
 
         mutually_exclusive = [['vol_name', 'vol_id'],
                               ['pool_name', 'pool_id'],
@@ -401,8 +401,8 @@ class UnityVolume(object):
                 self.module.fail_json(msg=msg)
 
         except utils.UnityResourceNotFoundError as e:
-            errormsg.format(id_or_name, str(e))
-            LOG.error(errormsg)
+            msg = errormsg.format(id_or_name, str(e))
+            LOG.error(msg)
             return None
 
         except Exception as e:
@@ -918,7 +918,7 @@ class UnityVolume(object):
         """
         try:
             for host_list in host_list_input:
-                if ("host_name" and "host_id" in host_list.keys()):
+                if ("host_name" in host_list.keys() and "host_id" in host_list.keys()):
                     if host_list["host_name"] and host_list["host_id"]:
                         errmsg = 'parameters are mutually exclusive: host_name|host_id'
                         self.module.fail_json(msg=errmsg)
@@ -1136,7 +1136,7 @@ class UnityVolume(object):
         self.module.exit_json(**result)
 
 
-def get_unity_volume_parameters():
+def get_volume_parameters():
     """This method provide parameters required for the ansible volume
        module on Unity"""
     return dict(
@@ -1147,7 +1147,7 @@ def get_unity_volume_parameters():
         pool_id=dict(required=False, type='str'),
         size=dict(required=False, type='int'),
         cap_unit=dict(required=False, type='str', choices=['GB', 'TB']),
-        is_thin=dict(required=False, type='bool', default=True),
+        is_thin=dict(required=False, type='bool'),
         compression=dict(required=False, type='bool'),
         sp=dict(required=False, type='str', choices=['SPA', 'SPB']),
         io_limit_policy=dict(required=False, type='str'),
@@ -1173,7 +1173,7 @@ def get_unity_volume_parameters():
 def main():
     """ Create Unity volume object and perform action on it
         based on user input from playbook"""
-    obj = UnityVolume()
+    obj = Volume()
     obj.perform_module_operation()
 
 

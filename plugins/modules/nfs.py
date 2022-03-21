@@ -10,7 +10,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: dellemc_unity_nfs
+module: nfs
 version_added: '1.1.0'
 short_description: Manage NFS export on Unity storage system
 description:
@@ -264,7 +264,7 @@ options:
 
 EXAMPLES = r"""
 - name: Create nfs export from filesystem
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -275,7 +275,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Create nfs export from snapshot
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -286,7 +286,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify nfs export
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -300,7 +300,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Add host in nfs export
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -321,7 +321,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Remove host in nfs export
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -342,7 +342,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Get nfs details
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -351,7 +351,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Delete nfs export by nfs name
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -453,7 +453,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_nfs')
+LOG = utils.get_logger('nfs')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
@@ -468,17 +468,17 @@ HOST_DICT = dict(type='list', required=False, elements='dict',
 HOST_STATE_LIST = ['present-in-export', 'absent-in-export']
 STATE_LIST = ['present', 'absent']
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnityNFS(object):
+class NFS(object):
     """Class with nfs export operations"""
 
     def __init__(self):
         """ Define all parameters required by this module"""
 
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_nfs_parameters())
+        self.module_params.update(get_nfs_parameters())
 
         mutually_exclusive = [['nfs_export_id', 'nas_server_id'],
                               ['nfs_export_id', 'nas_server_name'],
@@ -797,9 +797,10 @@ class UnityNFS(object):
         except utils.HTTPClientError as e:
             if e.http_status == 401:
                 msg = "Failed to get filesystem due to incorrect " \
-                      "username/password error" % str(e)
+                      "username/password error: %s" % str(e)
             else:
                 msg = "Failed to get filesystem error: %s" % str(e)
+            LOG.error(msg)
         except Exception as e:
             msg = "Failed to get filesystem: %s error: %s" % (
                 id_or_name, str(e))
@@ -848,9 +849,10 @@ class UnityNFS(object):
         except utils.HTTPClientError as e:
             if e.http_status == 401:
                 msg = "Failed to get snapshot due to incorrect " \
-                      "username/password error" % str(e)
+                      "username/password error: %s" % str(e)
             else:
                 msg = "Failed to get snapshot error: %s" % str(e)
+            LOG.error(msg)
         except Exception as e:
             msg = "Failed to get snapshot: %s error: %s" % (id_or_name,
                                                             str(e))
@@ -1464,7 +1466,7 @@ def is_nfs_obj_for_snap(nfs_obj):
     return False
 
 
-def get_unity_nfs_parameters():
+def get_nfs_parameters():
     """ Provides parameters required for the NFS share module on Unity """
 
     return dict(
@@ -1497,7 +1499,7 @@ def get_unity_nfs_parameters():
 def main():
     """ Create UnityNFS object and perform action on it
         based on user input from playbook"""
-    obj = UnityNFS()
+    obj = NFS()
     obj.perform_module_operation()
 
 

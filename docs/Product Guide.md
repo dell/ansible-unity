@@ -1,6 +1,6 @@
-# Ansible Modules for Dell EMC Unity
-## Product Guide 1.2.1
-© 2021 Dell Inc. or its subsidiaries. All rights reserved. Dell, EMC, and other trademarks are trademarks of Dell Inc. or its subsidiaries. Other trademarks may be trademarks of their respective owners.
+# Ansible Modules for Dell Technologies Unity
+## Product Guide 1.3.0
+© 2022 Dell Inc. or its subsidiaries. All rights reserved. Dell and other trademarks are trademarks of Dell Inc. or its subsidiaries. Other trademarks may be trademarks of their respective owners.
 
 --------------
 ## Contents
@@ -42,7 +42,7 @@
     *   [Examples](#examples-5)
     *   [Return Values](#return-values-5)
     *   [Authors](#authors-5)
-*   [Gatherfacts Module](#gatherfacts-module)
+*   [Info Module](#info-module)
     *   [Synopsis](#synopsis-6)
     *   [Parameters](#parameters-6)
     *   [Examples](#examples-6)
@@ -446,7 +446,7 @@ Manage NFS export on Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -463,7 +463,7 @@ Manage NFS export on Unity storage system
 ### Examples
 ```
 - name: Create nfs export from filesystem
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -474,7 +474,7 @@ Manage NFS export on Unity storage system
     state: "present"
 
 - name: Create nfs export from snapshot
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -485,7 +485,7 @@ Manage NFS export on Unity storage system
     state: "present"
 
 - name: Modify nfs export
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -499,7 +499,7 @@ Manage NFS export on Unity storage system
     state: "present"
 
 - name: Add host in nfs export
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -520,7 +520,7 @@ Manage NFS export on Unity storage system
     state: "present"
 
 - name: Remove host in nfs export
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -541,7 +541,7 @@ Manage NFS export on Unity storage system
     state: "present"
 
 - name: Get nfs details
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -550,7 +550,7 @@ Manage NFS export on Unity storage system
     state: "present"
 
 - name: Delete nfs export by nfs name
-  dellemc.unity.dellemc_unity_nfs:
+  dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -845,9 +845,9 @@ Manage volume on Unity storage system
             <td colspan=2 > is_thin</td>
             <td> bool  </td>
             <td></td>
-            <td> True </td>
             <td></td>
-            <td> <br> Boolean variable , specifies whether or not it is a thin volume. </td>
+            <td></td>
+            <td> <br> Boolean variable , specifies whether or not it is a thin volume.  <br> The value is set as True by default if not specified. </td>
         </tr>
                     <tr>
             <td colspan=2 > sp</td>
@@ -985,7 +985,7 @@ Manage volume on Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -1002,7 +1002,7 @@ Manage volume on Unity storage system
 ### Examples
 ```
 - name: Create Volume
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -1015,7 +1015,7 @@ Manage volume on Unity storage system
     state: "{{state_present}}"
 
 - name: Expand Volume by volume id
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -1026,7 +1026,7 @@ Manage volume on Unity storage system
     state: "{{state_present}}"
 
 - name: Modify Volume, map host by host_name
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -1038,7 +1038,7 @@ Manage volume on Unity storage system
     state: "{{state_present}}"
 
 - name: Modify Volume, unmap host mapping by host_name
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -1049,7 +1049,7 @@ Manage volume on Unity storage system
     state: "{{state_present}}"
 
 - name: Map multiple hosts to a Volume
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -1064,7 +1064,7 @@ Manage volume on Unity storage system
     state: "present"
 
 - name: Modify Volume attributes
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -1076,7 +1076,7 @@ Manage volume on Unity storage system
     state: "{{state_present}}"
 
 - name: Delete Volume by vol name
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -1085,7 +1085,7 @@ Manage volume on Unity storage system
     state: "{{state_absent}}"
 
 - name: Delete Volume by vol id
-  dellemc.unity.dellemc_unity_volume:
+  dellemc.unity.volume:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -1363,7 +1363,7 @@ Manage NAS servers on Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -1380,7 +1380,7 @@ Manage NAS servers on Unity storage system
 ### Examples
 ```
     - name: Get Details of NAS Server
-      dellemc.unity.dellemc_unity_nasserver:
+      dellemc.unity.nasserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -1389,7 +1389,7 @@ Manage NAS servers on Unity storage system
         state: "present"
 
     - name: Modify Details of NAS Server
-      dellemc.unity.dellemc_unity_nasserver:
+      dellemc.unity.nasserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -1421,7 +1421,7 @@ Manage NAS servers on Unity storage system
             <td colspan=2 > changed </td>
             <td>  bool </td>
             <td> always </td>
-            <td> Whether or not the resource has changed </td>
+            <td> Whether or not the resource has changed. </td>
         </tr>
                     <tr>
             <td colspan=2 > nas_server_details </td>
@@ -1647,7 +1647,7 @@ Manage quota tree on the Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -1664,7 +1664,7 @@ Manage quota tree on the Unity storage system
 ### Examples
 ```
   - name: Get quota tree details by quota tree id
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -1673,7 +1673,7 @@ Manage quota tree on the Unity storage system
       state: "present"
 
   - name: Get quota tree details by quota tree path
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -1684,7 +1684,7 @@ Manage quota tree on the Unity storage system
       state: "present"
 
   - name: Create quota tree for a filesystem with filesystem id
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -1697,7 +1697,7 @@ Manage quota tree on the Unity storage system
       state: "present"
 
   - name: Create quota tree for a filesystem with filesystem name
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -1711,7 +1711,7 @@ Manage quota tree on the Unity storage system
       state: "present"
 
   - name: Modify quota tree limit usage by quota tree path
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -1723,7 +1723,7 @@ Manage quota tree on the Unity storage system
       state: "present"
 
   - name: Modify quota tree by quota tree id
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -1736,7 +1736,7 @@ Manage quota tree on the Unity storage system
       state: "present"
 
   - name: Delete quota tree by quota tree id
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -1746,7 +1746,7 @@ Manage quota tree on the Unity storage system
       state: "absent"
 
   - name: Delete quota tree by path
-    dellemc.unity.dellemc_unity_tree_quota:
+    dellemc.unity.tree_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -2178,7 +2178,7 @@ Manage filesystem on Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -2198,7 +2198,7 @@ Manage filesystem on Unity storage system
 ### Examples
 ```
 - name: Create FileSystem
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2210,7 +2210,7 @@ Manage filesystem on Unity storage system
     state: "present"
 
 - name: Create FileSystem with quota configuration
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2227,7 +2227,7 @@ Manage filesystem on Unity storage system
     state: "present"
 
 - name: Expand FileSystem size
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2238,7 +2238,7 @@ Manage filesystem on Unity storage system
     state: "present"
 
 - name: Expand FileSystem size
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2249,7 +2249,7 @@ Manage filesystem on Unity storage system
     state: "present"
 
 - name: Modify FileSystem smb_properties
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2263,7 +2263,7 @@ Manage filesystem on Unity storage system
     state: "present"
 
 - name: Modify FileSystem Snap Schedule
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2273,7 +2273,7 @@ Manage filesystem on Unity storage system
     state: "{{state_present}}"
 
 - name: Get details of FileSystem using id
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2282,7 +2282,7 @@ Manage filesystem on Unity storage system
     state: "present"
 
 - name: Delete a FileSystem using id
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2437,15 +2437,16 @@ Manage filesystem on Unity storage system
 Manage storage pool on Unity
 
 ### Synopsis
- Managing storage pool on Unity storage system contains the following operations.
- Get details of storage pool.
- Modify storage pool.
+ Managing storage pool on Unity storage system contains the operations:
+ * Get details of storage pool
+ * Create a storage pool
+ * Modify storage pool.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 <table>
     <tr>
-        <th colspan=1>Parameter</th>
+        <th colspan=2>Parameter</th>
         <th width="20%">Type</th>
         <th>Required</th>
         <th>Default</th>
@@ -2453,7 +2454,7 @@ Manage storage pool on Unity
         <th width="80%">Description</th>
     </tr>
                                                             <tr>
-            <td colspan=1 > pool_name</td>
+            <td colspan=2 > pool_name</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -2461,7 +2462,7 @@ Manage storage pool on Unity
             <td> <br> Name of the storage pool, unique in the storage system. </td>
         </tr>
                     <tr>
-            <td colspan=1 > pool_id</td>
+            <td colspan=2 > pool_id</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -2469,7 +2470,7 @@ Manage storage pool on Unity
             <td> <br> Unique identifier of the pool instance. </td>
         </tr>
                     <tr>
-            <td colspan=1 > new_pool_name</td>
+            <td colspan=2 > new_pool_name</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -2477,7 +2478,7 @@ Manage storage pool on Unity
             <td> <br> New name of the storage pool, unique in the storage system. </td>
         </tr>
                     <tr>
-            <td colspan=1 > pool_description</td>
+            <td colspan=2 > pool_description</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -2485,7 +2486,7 @@ Manage storage pool on Unity
             <td> <br> The description of the storage pool. </td>
         </tr>
                     <tr>
-            <td colspan=1 > fast_cache</td>
+            <td colspan=2 > fast_cache</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -2493,7 +2494,7 @@ Manage storage pool on Unity
             <td> <br> Indicates whether the fast cache is enabled for the storage pool.  <br> enabled - FAST Cache is enabled for the pool.  <br> disabled - FAST Cache is disabled for the pool. </td>
         </tr>
                     <tr>
-            <td colspan=1 > fast_vp</td>
+            <td colspan=2 > fast_vp</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -2501,7 +2502,115 @@ Manage storage pool on Unity
             <td> <br> Indicates whether to enable scheduled data relocations for the pool.  <br> enabled - Enabled scheduled data relocations for the pool.  <br> disabled - Disabled scheduled data relocations for the pool. </td>
         </tr>
                     <tr>
-            <td colspan=1 > state</td>
+            <td colspan=2 > raid_groups</td>
+            <td> dict  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Parameters to create RAID group from the disks and add it to the pool. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > disk_group_id </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Id of the disk group  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > disk_num </td>
+                <td> int  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Number of disks  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > raid_type </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td> <ul> <li>None</li>  <li>RAID5</li>  <li>RAID0</li>  <li>RAID1</li>  <li>RAID3</li>  <li>RAID10</li>  <li>RAID6</li>  <li>Mixed</li>  <li>Automatic</li> </ul></td>
+                <td>  <br> RAID group types or RAID levels  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > stripe_width </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td> <ul> <li>BEST_FIT</li>  <li>2</li>  <li>4</li>  <li>5</li>  <li>6</li>  <li>8</li>  <li>9</li>  <li>10</li>  <li>12</li>  <li>13</li>  <li>14</li>  <li>16</li> </ul></td>
+                <td>  <br> RAID group stripe widths, including parity or mirror disks  </td>
+            </tr>
+                            <tr>
+            <td colspan=2 > alert_threshold</td>
+            <td> int  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Threshold at which the system will generate alerts about the free space in the pool, specified as a percentage  <br> minimum threshold limit is 50  <br> maximum threshold limit is 84 </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > is_harvest_enabled</td>
+            <td> bool  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Enable/Disable automatic deletion of snapshots based on pool space usage. </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > pool_harvest_high_threshold</td>
+            <td> float  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Max threshold for space used in pool beyond which the system automatically starts deleting snapshots in the pool.  <br> applies when the automatic deletion of snapshots based on pool space usage is enabled for the system and pool.  <br> minimum pool harvest high threshold value is 1  <br> maximum pool harvest high threshold value is 99 </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > pool_harvest_low_threshold</td>
+            <td> float  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Min threshold for space used in pool below which the system automatically stops deletion of snapshots in the pool.  <br> applies when the automatic deletion of snapshots based on pool space usage is enabled for the system and pool.  <br> minimum pool harvest low threshold value is 0  <br> maximum pool harvest low threshold value is 98 </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > is_snap_harvest_enabled</td>
+            <td> bool  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Enable/Disable automatic deletion of snapshots based on pool space usage. </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > snap_harvest_high_threshold</td>
+            <td> float  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Max threshold for space used in snapshot beyond which the system automatically starts deleting snapshots in the pool.  <br> applies when the automatic deletion of snapshots based on pool space usage is enabled for the pool.  <br> minimum snap harvest high threshold value is 1  <br> maximum snap harvest high threshold value is 99 </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > snap_harvest_low_threshold</td>
+            <td> float  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Min threshold for space used in snapshot below which the system will stop automatically deleting snapshots in the pool.  <br> applies when the automatic deletion of snapshots based on pool space usage is enabled for the pool.  <br> minimum snap harvest low threshold value is 0  <br> maximum snap harvest low threshold value is 98 </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > pool_type</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td> <ul> <li>TRADITIONAL</li>  <li>DYNAMIC</li> </ul></td>
+            <td> <br> Indicates storage pool type. </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > state</td>
             <td> str  </td>
             <td> True </td>
             <td></td>
@@ -2509,7 +2618,7 @@ Manage storage pool on Unity
             <td> <br> Define whether the storage pool should exist or not.  <br> present - indicates that the storage pool should exist on the system.  <br> absent - indicates that the storage pool should not exist on the system. </td>
         </tr>
                     <tr>
-            <td colspan=1 > unispherehost</td>
+            <td colspan=2 > unispherehost</td>
             <td> str  </td>
             <td> True </td>
             <td></td>
@@ -2517,7 +2626,7 @@ Manage storage pool on Unity
             <td> <br> IP or FQDN of the Unity management server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > username</td>
+            <td colspan=2 > username</td>
             <td> str  </td>
             <td> True </td>
             <td></td>
@@ -2525,7 +2634,7 @@ Manage storage pool on Unity
             <td> <br> The username of the Unity management server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > password</td>
+            <td colspan=2 > password</td>
             <td> str  </td>
             <td> True </td>
             <td></td>
@@ -2533,15 +2642,15 @@ Manage storage pool on Unity
             <td> <br> The password of the Unity management server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > verifycert</td>
+            <td colspan=2 > verifycert</td>
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
-            <td colspan=1 > port</td>
+            <td colspan=2 > port</td>
             <td> int  </td>
             <td></td>
             <td> 443 </td>
@@ -2551,12 +2660,12 @@ Manage storage pool on Unity
                                                     </table>
 
 ### Notes
-* Creation/Deletion of storage pool is not allowed through Ansible module.
+* Deletion of storage pool is not allowed through Ansible module.
 
 ### Examples
 ```
 - name: Get Storage pool details using pool_name
-  dellemc.unity.dellemc_unity_storagepool:
+  dellemc.unity.storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2565,7 +2674,7 @@ Manage storage pool on Unity
     state: "present"
 
 - name: Get Storage pool details using pool_id
-  dellemc.unity.dellemc_unity_storagepool:
+  dellemc.unity.storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2574,7 +2683,7 @@ Manage storage pool on Unity
     state: "present"
 
 - name: Modify Storage pool attributes using pool_name
-  dellemc.unity.dellemc_unity_storagepool:
+  dellemc.unity.storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2587,7 +2696,7 @@ Manage storage pool on Unity
     state: "present"
 
 - name: Modify Storage pool attributes using pool_id
-  dellemc.unity.dellemc_unity_storagepool:
+  dellemc.unity.storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -2598,95 +2707,167 @@ Manage storage pool on Unity
     fast_cache: "{{fast_cache_enabled}}"
     fast_vp: "{{fast_vp_enabled}}"
     state: "present"
+
+- name: Create a StoragePool
+  dellemc.unity.storagepool:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    pool_name: "Test"
+    pool_description: "test pool"
+    raid_groups:
+      disk_group_id : "dg_16"
+      disk_num : 2
+      raid_type : "RAID10"
+      stripe_width : "BEST_FIT"
+    alert_threshold : 50
+    is_harvest_enabled : True
+    pool_harvest_high_threshold : 60
+    pool_harvest_low_threshold : 40
+    is_snap_harvest_enabled : True
+    snap_harvest_high_threshold : 70
+    snap_harvest_low_threshold : 50
+    fast_vp: "enabled"
+    fast_cache: "enabled"
+    pool_type : "DYNAMIC"
+    state: "present"
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 <table>
     <tr>
-        <th colspan=2>Key</th>
+        <th colspan=3>Key</th>
         <th>Type</th>
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
                                                                                             <tr>
-            <td colspan=2 > changed </td>
+            <td colspan=3 > changed </td>
             <td>  bool </td>
             <td> always </td>
             <td> Whether or not the storage pool has changed. </td>
         </tr>
                     <tr>
-            <td colspan=2 > storage_pool_details </td>
+            <td colspan=3 > storage_pool_details </td>
             <td>  complex </td>
             <td> When storage pool exists. </td>
             <td> The storage pool details. </td>
         </tr>
                             <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > id </td>
+                <td colspan=2 > drives </td>
+                <td> complex </td>
+                <td>success</td>
+                <td> Indicates information about the drives associated with the storage pool. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=1 > disk_technology </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Indicates disk technology of the drive. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=1 > id </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Unique identifier of the drive. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=1 > name </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Indicates name of the drive. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=1 > size </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Indicates size of the drive. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=1 > tier_type </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Indicates tier type of the drive. </td>
+                </tr>
+                                                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=2 > id </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Pool id, unique identifier of the pool. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > is_fast_cache_enabled </td>
+                <td colspan=2 > is_fast_cache_enabled </td>
                 <td> bool </td>
                 <td>success</td>
                 <td> Indicates whether the fast cache is enabled for the storage pool. true - FAST Cache is enabled for the pool. false - FAST Cache is disabled for the pool. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > is_fast_vp_enabled </td>
+                <td colspan=2 > is_fast_vp_enabled </td>
                 <td> bool </td>
                 <td>success</td>
                 <td> Indicates whether to enable scheduled data relocations for the storage pool. true - Enabled scheduled data relocations for the pool. false - Disabled scheduled data relocations for the pool. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > name </td>
+                <td colspan=2 > name </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Pool name, unique in the storage system. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > size_free_with_unit </td>
+                <td colspan=2 > size_free_with_unit </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Indicates size_free with its appropriate unit in human readable form. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > size_subscribed_with_unit </td>
+                <td colspan=2 > size_subscribed_with_unit </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Indicates size_subscribed with its appropriate unit in human readable form. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > size_total_with_unit </td>
+                <td colspan=2 > size_total_with_unit </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Indicates size_total with its appropriate unit in human readable form. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > size_used_with_unit </td>
+                <td colspan=2 > size_used_with_unit </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Indicates size_used with its appropriate unit in human readable form. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > snap_size_subscribed_with_unit </td>
+                <td colspan=2 > snap_size_subscribed_with_unit </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Indicates snap_size_subscribed with its appropriate unit in human readable form. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > snap_size_used_with_unit </td>
+                <td colspan=2 > snap_size_used_with_unit </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Indicates snap_size_used with its appropriate unit in human readable form. </td>
@@ -2697,12 +2878,12 @@ Manage storage pool on Unity
 * Ambuj Dubey (@AmbujDube) <ansible.team@dell.com>
 
 --------------------------------
-# Gatherfacts Module
+# Info Module
 
-Gathering information about DellEMC Unity
+Gathering information about Dell EMC Unity
 
 ### Synopsis
- Gathering information about DellEMC Unity storage system includes Get the details of Unity array, Get list of Hosts in Unity array, Get list of FC initiators in Unity array, Get list of iSCSI initiators in Unity array, Get list of Consistency groups in Unity array, Get list of Storage pools in Unity array, Get list of Volumes in Unity array, Get list of Snapshot schedules in Unity array, Get list of NAS servers in Unity array, Get list of File systems in Unity array, Get list of Snapshots in Unity array, Get list of SMB shares in Unity array, Get list of NFS exports in Unity array, Get list of User quotas in Unity array, Get list of Quota tree in Unity array
+ Gathering information about Dell EMC Unity storage system includes Get the details of Unity array, Get list of Hosts in Unity array, Get list of FC initiators in Unity array, Get list of iSCSI initiators in Unity array, Get list of Consistency groups in Unity array, Get list of Storage pools in Unity array, Get list of Volumes in Unity array, Get list of Snapshot schedules in Unity array, Get list of NAS servers in Unity array, Get list of File systems in Unity array, Get list of Snapshots in Unity array, Get list of SMB shares in Unity array, Get list of NFS exports in Unity array, Get list of User quotas in Unity array, Get list of Quota tree in Unity array.
 
 ### Parameters
                                                                                                                                                                     
@@ -2720,8 +2901,8 @@ Gathering information about DellEMC Unity
             <td> list   <br> elements: str </td>
             <td></td>
             <td></td>
-            <td> <ul> <li>host</li>  <li>fc_initiator</li>  <li>iscsi_initiator</li>  <li>cg</li>  <li>storage_pool</li>  <li>vol</li>  <li>snapshot_schedule</li>  <li>nas_server</li>  <li>file_system</li>  <li>snapshot</li>  <li>nfs_export</li>  <li>smb_share</li>  <li>user_quota</li>  <li>tree_quota</li> </ul></td>
-            <td> <br> List of string variables to specify the Unity storage system entities for which information is required.  <br> host  <br> fc_initiator  <br> iscsi_initiator  <br> cg  <br> storage_pool  <br> vol  <br> snapshot_schedule  <br> nas_server  <br> file_system  <br> snapshot  <br> nfs_export  <br> smb_share  <br> user_quota  <br> tree_quota </td>
+            <td> <ul> <li>host</li>  <li>fc_initiator</li>  <li>iscsi_initiator</li>  <li>cg</li>  <li>storage_pool</li>  <li>vol</li>  <li>snapshot_schedule</li>  <li>nas_server</li>  <li>file_system</li>  <li>snapshot</li>  <li>nfs_export</li>  <li>smb_share</li>  <li>user_quota</li>  <li>tree_quota</li>  <li>disk_group</li> </ul></td>
+            <td> <br> List of string variables to specify the Unity storage system entities for which information is required.  <br> host  <br> fc_initiator  <br> iscsi_initiator  <br> cg  <br> storage_pool  <br> vol  <br> snapshot_schedule  <br> nas_server  <br> file_system  <br> snapshot  <br> nfs_export  <br> smb_share  <br> user_quota  <br> tree_quota  <br> disk_group </td>
         </tr>
                     <tr>
             <td colspan=1 > unispherehost</td>
@@ -2752,7 +2933,7 @@ Gathering information about DellEMC Unity
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -2769,7 +2950,7 @@ Gathering information about DellEMC Unity
 ### Examples
 ```
  - name: Get detailed list of Unity entities
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2789,16 +2970,17 @@ Gathering information about DellEMC Unity
        - smb_share
        - user_quota
        - tree_quota
+       - disk_group
 
  - name: Get information of Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
      verifycert: "{{verifycert}}"
 
  - name: Get list of hosts on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2807,7 +2989,7 @@ Gathering information about DellEMC Unity
        - host
 
  - name: Get list of FC initiators on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2816,7 +2998,7 @@ Gathering information about DellEMC Unity
        - fc_initiator
 
  - name: Get list of ISCSI initiators on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2825,7 +3007,7 @@ Gathering information about DellEMC Unity
        - iscsi_initiator
 
  - name: Get list of consistency groups on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2834,7 +3016,7 @@ Gathering information about DellEMC Unity
        - cg
 
  - name: Get list of storage pools on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2843,7 +3025,7 @@ Gathering information about DellEMC Unity
        - storage_pool
 
  - name: Get list of volumes on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2852,7 +3034,7 @@ Gathering information about DellEMC Unity
        - vol
 
  - name: Get list of snapshot schedules on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2861,7 +3043,7 @@ Gathering information about DellEMC Unity
        - snapshot_schedule
 
  - name: Get list of NAS Servers on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2870,7 +3052,7 @@ Gathering information about DellEMC Unity
        - nas_server
 
  - name: Get list of File Systems on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2879,7 +3061,7 @@ Gathering information about DellEMC Unity
        - file_system
 
  - name: Get list of Snapshots on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2888,7 +3070,7 @@ Gathering information about DellEMC Unity
        - snapshot
 
  - name: Get list of NFS exports on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2897,7 +3079,7 @@ Gathering information about DellEMC Unity
        - nfs_export
 
  - name: Get list of SMB shares on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2906,7 +3088,7 @@ Gathering information about DellEMC Unity
        - smb_share
 
  - name: Get list of user quotas on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
@@ -2915,17 +3097,26 @@ Gathering information about DellEMC Unity
        - user_quota
 
  - name: Get list of quota trees on Unity array
-   dellemc.unity.dellemc_unity_gatherfacts:
+   dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
      verifycert: "{{verifycert}}"
      gather_subset:
        - tree_quota
+
+ - name: Get list of disk groups on Unity array
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - disk_group
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 <table>
     <tr>
         <th colspan=2>Key</th>
@@ -2993,6 +3184,33 @@ Gathering information about DellEMC Unity
                 <td> str </td>
                 <td>success</td>
                 <td> The name of the Consistency Group. </td>
+            </tr>
+                                        <tr>
+            <td colspan=2 > Disk_Groups </td>
+            <td>  complex </td>
+            <td> When disk groups exist. </td>
+            <td> Details of the disk groups. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The ID of the disk group. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The name of the disk group. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > tier_type </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The tier type of the disk group. </td>
             </tr>
                                         <tr>
             <td colspan=2 > FC_initiators </td>
@@ -3428,7 +3646,7 @@ Manage user quota on the Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -3445,7 +3663,7 @@ Manage user quota on the Unity storage system
 ### Examples
 ```
   - name: Get user quota details by user quota id
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3454,7 +3672,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Get user quota details by user quota uid/user name
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3465,7 +3683,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Create user quota for a filesystem with filesystem id
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3478,7 +3696,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Create user quota for a filesystem with filesystem name
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3492,7 +3710,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Modify user quota limit usage by user quota id
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3504,7 +3722,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Modify user quota by filesystem id and user quota uid/user_name
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3519,7 +3737,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Delete user quota
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3530,7 +3748,7 @@ Manage user quota on the Unity storage system
       state: "absent"
 
   - name: Create user quota of a quota tree
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3544,7 +3762,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Create user quota of a quota tree by quota tree path
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3558,7 +3776,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Modify user quota of a quota tree
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3572,7 +3790,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Modify user quota of a quota tree by quota tree path
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3587,7 +3805,7 @@ Manage user quota on the Unity storage system
       state: "present"
 
   - name: Delete user quota of a quota tree by quota tree path
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3599,7 +3817,7 @@ Manage user quota on the Unity storage system
       state: "absent"
 
   - name: Delete user quota of a quota tree by quota tree id
-    dellemc.unity.dellemc_unity_user_quota:
+    dellemc.unity.user_quota:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3931,7 +4149,7 @@ Manage filesystem snapshot on the Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -3950,7 +4168,7 @@ Manage filesystem snapshot on the Unity storage system
 ### Examples
 ```
   - name: Create Filesystem Snapshot
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3964,7 +4182,7 @@ Manage filesystem snapshot on the Unity storage system
       state: "present"
 
   - name: Create Filesystem Snapshot with expiry time
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3978,7 +4196,7 @@ Manage filesystem snapshot on the Unity storage system
       state: "present"
 
   - name: Get Filesystem Snapshot Details using Name
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3987,7 +4205,7 @@ Manage filesystem snapshot on the Unity storage system
       state: "present"
 
   - name: Get Filesystem Snapshot Details using ID
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -3996,7 +4214,7 @@ Manage filesystem snapshot on the Unity storage system
       state: "present"
 
   - name: Update Filesystem Snapshot attributes
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4008,7 +4226,7 @@ Manage filesystem snapshot on the Unity storage system
       state: "present"
 
   - name: Update Filesystem Snapshot attributes using ID
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4018,7 +4236,7 @@ Manage filesystem snapshot on the Unity storage system
       state: "present"
 
   - name: Delete Filesystem Snapshot using Name
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4027,7 +4245,7 @@ Manage filesystem snapshot on the Unity storage system
       state: "absent"
 
   - name: Delete Filesystem Snapshot using ID
-    dellemc.unity.dellemc_unity_filesystem_snapshot:
+    dellemc.unity.filesystem_snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4318,7 +4536,7 @@ Manage snapshots on the Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -4335,7 +4553,7 @@ Manage snapshots on the Unity storage system
 ### Examples
 ```
   - name: Create a Snapshot for a CG
-    dellemc.unity.dellemc_unity_snapshot:
+    dellemc.unity.snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4348,7 +4566,7 @@ Manage snapshots on the Unity storage system
       state: "present"
 
   - name: Create a Snapshot for a volume with Host attached
-    dellemc.unity.dellemc_unity_snapshot:
+    dellemc.unity.snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4363,7 +4581,7 @@ Manage snapshots on the Unity storage system
       state: "present"
 
   - name: Unmap a host for a Snapshot
-    dellemc.unity.dellemc_unity_snapshot:
+    dellemc.unity.snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4375,7 +4593,7 @@ Manage snapshots on the Unity storage system
       state: "present"
 
   - name: Map snapshot to a host
-    dellemc.unity.dellemc_unity_snapshot:
+    dellemc.unity.snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4387,7 +4605,7 @@ Manage snapshots on the Unity storage system
       state: "present"
 
   - name: Update attributes of a Snapshot for a volume
-    dellemc.unity.dellemc_unity_snapshot:
+    dellemc.unity.snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4400,7 +4618,7 @@ Manage snapshots on the Unity storage system
       state: "present"
 
   - name: Delete Snapshot of CG
-    dellemc.unity.dellemc_unity_snapshot:
+    dellemc.unity.snapshot:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -4410,7 +4628,7 @@ Manage snapshots on the Unity storage system
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 <table>
     <tr>
         <th colspan=2>Key</th>
@@ -4425,59 +4643,122 @@ Manage snapshots on the Unity storage system
             <td> Whether or not the resource has changed. </td>
         </tr>
                     <tr>
-            <td colspan=2 > snapshot_details </td>
+            <td colspan=2 > filesystem_snapshot_details </td>
             <td>  complex </td>
-            <td> When snapshot exists </td>
-            <td> Details of the snapshot. </td>
+            <td> When filesystem snapshot exists </td>
+            <td> Details of the filesystem snapshot. </td>
         </tr>
                             <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > access_type </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Access type of filesystem snapshot. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > attached_wwn </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Attached WWN details. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > creation_time </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Creation time of filesystem snapshot. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > creator_schedule </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Creator schedule of filesystem snapshot. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > creator_type </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Creator type for filesystem snapshot. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > creator_user </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Creator user for filesystem snapshot. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > description </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Description of the filesystem snapshot. </td>
+            </tr>
+                                <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
                 <td colspan=1 > expiration_time </td>
                 <td> str </td>
                 <td>success</td>
-                <td> Date and time after which the snapshot will expire. </td>
+                <td> Date and time after which the filesystem snapshot will expire. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > hosts_list </td>
-                <td> dict </td>
+                <td colspan=1 > filesystem_id </td>
+                <td> str </td>
                 <td>success</td>
-                <td> Contains the name and id of the associated hosts. </td>
+                <td> Id of the filesystem for which the snapshot exists. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > filesystem_name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Name of the filesystem for which the snapshot exists. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
                 <td colspan=1 > id </td>
                 <td> str </td>
                 <td>success</td>
-                <td> Unique identifier of the snapshot instance. </td>
+                <td> Unique identifier of the filesystem snapshot instance. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
                 <td colspan=1 > is_auto_delete </td>
-                <td> str </td>
+                <td> bool </td>
                 <td>success</td>
-                <td> Additional information mentioned for snapshot. </td>
+                <td> Is the filesystem snapshot is auto deleted or not. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
                 <td colspan=1 > name </td>
                 <td> str </td>
                 <td>success</td>
-                <td> The name of the snapshot. </td>
+                <td> The name of the filesystem snapshot. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > storage_resource_id </td>
+                <td colspan=1 > nas_server_id </td>
                 <td> str </td>
                 <td>success</td>
-                <td> Id of the storage resource for which the snapshot exists. </td>
+                <td> Id of the NAS server on which filesystem exists. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > storage_resource_name </td>
+                <td colspan=1 > nas_server_name </td>
                 <td> str </td>
                 <td>success</td>
-                <td> Name of the storage resource for which the snapshot exists. </td>
+                <td> Name of the NAS server on which filesystem exists. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > size </td>
+                <td> int </td>
+                <td>success</td>
+                <td> Size of the filesystem snapshot. </td>
             </tr>
                                         </table>
 
@@ -4668,7 +4949,7 @@ Manage SMB shares on Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -4687,7 +4968,7 @@ Manage SMB shares on Unity storage system
 ### Examples
 ```
 - name: Create SMB share for a filesystem
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -4705,7 +4986,7 @@ Manage SMB shares on Unity storage system
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a filesystem
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -4721,7 +5002,7 @@ Manage SMB shares on Unity storage system
     umask: "022"
     state: "present"
 - name: Create SMB share for a snapshot
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -4738,7 +5019,7 @@ Manage SMB shares on Unity storage system
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a snapshot
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -4754,7 +5035,7 @@ Manage SMB shares on Unity storage system
     umask: "022"
     state: "present"
 - name: Get details of SMB share
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -4762,7 +5043,7 @@ Manage SMB shares on Unity storage system
     share_id: "{{smb_share_id}}"
     state: "present"
 - name: Delete SMB share
-  dellemc.unity.dellemc_unity_smbshare:
+  dellemc.unity.smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -4901,10 +5182,10 @@ Manage SMB shares on Unity storage system
 Manage Host operations on Unity
 
 ### Synopsis
- The Host module contains the following operations Creation of a Host. Addition of initiators to Host. Removal of initiators from Host. Modification of host attributes. Get details of a Host. Deletion of a Host.
+ The Host module contains the operations Creation of a Host, Addition of initiators to Host, Removal of initiators from Host, Modification of host attributes, Get details of a Host, Deletion of a Host, Addition of network address to Host, Removal of network address from Host.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                        
 <table>
     <tr>
         <th colspan=1>Parameter</th>
@@ -4971,6 +5252,22 @@ Manage Host operations on Unity
             <td> <br> State of the initiator. </td>
         </tr>
                     <tr>
+            <td colspan=1 > network_address</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Network address to be added/removed to/from the host.  <br> Enter valid IPV4 or host name. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > network_address_state</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td> <ul> <li>present-in-host</li>  <li>absent-in-host</li> </ul></td>
+            <td> <br> State of the Network address. </td>
+        </tr>
+                    <tr>
             <td colspan=1 > state</td>
             <td> str  </td>
             <td> True </td>
@@ -5007,7 +5304,7 @@ Manage Host operations on Unity
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -5024,7 +5321,7 @@ Manage Host operations on Unity
 ### Examples
 ```
 - name: Create empty Host
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -5035,7 +5332,7 @@ Manage Host operations on Unity
     state: "present"
 
 - name: Create Host with Initiators
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -5050,7 +5347,7 @@ Manage Host operations on Unity
     state: "present"
 
 - name: Modify Host using host_id
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -5062,7 +5359,7 @@ Manage Host operations on Unity
     state: "present"
 
 - name: Add Initiators to Host
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -5074,7 +5371,7 @@ Manage Host operations on Unity
     state: "present"
 
 - name: Get Host details using host_name
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -5083,7 +5380,7 @@ Manage Host operations on Unity
     state: "present"
 
 - name: Get Host details using host_id
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -5092,46 +5389,68 @@ Manage Host operations on Unity
     state: "present"
 
 - name: Delete Host
-  dellemc.unity.dellemc_unity_host:
+  dellemc.unity.host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
     verifycert: "{{verifycert}}"
     host_name: "ansible-test-host-2"
     state: "absent"
+
+- name: Add network address to Host
+  dellemc.unity.host:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    host_name: "{{host_name}}"
+    network_address: "192.168.1.2"
+    network_address_state: "present-in-host"
+    state: "present"
+
+- name: Delete network address from Host
+  dellemc.unity.host:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    host_name: "{{host_name}}"
+    network_address: "192.168.1.2"
+    network_address_state: "absent-in-host"
+    state: "present"
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 <table>
     <tr>
-        <th colspan=4>Key</th>
+        <th colspan=6>Key</th>
         <th>Type</th>
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
                                                                                     <tr>
-            <td colspan=4 > changed </td>
+            <td colspan=6 > changed </td>
             <td>  bool </td>
             <td> always </td>
             <td> Whether or not the resource has changed. </td>
         </tr>
                     <tr>
-            <td colspan=4 > host_details </td>
+            <td colspan=6 > host_details </td>
             <td>  complex </td>
             <td> When host exists. </td>
             <td> Details of the host. </td>
         </tr>
                             <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=3 > description </td>
+                <td colspan=5 > description </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Description about the host. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=3 > fc_host_initiators </td>
+                <td colspan=5 > fc_host_initiators </td>
                 <td> complex </td>
                 <td>success</td>
                 <td> Details of the FC initiators associated with the host. </td>
@@ -5139,21 +5458,62 @@ Manage Host operations on Unity
                                          <tr>
                     <td class="elbow-placeholder">&nbsp;</td>
                     <td class="elbow-placeholder">&nbsp;</td>
-                    <td colspan=2 > UnityHostInitiatorList </td>
+                    <td colspan=4 > id </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Unique identifier of the FC initiator path. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=4 > name </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> FC Qualified Name (WWN) of the initiator. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=4 > paths </td>
                     <td> complex </td>
                     <td>success</td>
-                    <td> FC initiators with system generated unique hash value. </td>
+                    <td> Details of the paths associated with the FC initiator. </td>
                 </tr>
-                                                            <tr>
+                                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=3 > id </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> Unique identifier of the path. </td>
+                    </tr>
+                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=3 > is_logged_in </td>
+                        <td> bool </td>
+                        <td>success</td>
+                        <td> Indicates whether the host initiator is logged into the storage system. </td>
+                    </tr>
+                                                                            <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=3 > id </td>
+                <td colspan=5 > host_luns </td>
+                <td> list </td>
+                <td>success</td>
+                <td> Details of luns attached to host. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > id </td>
                 <td> str </td>
                 <td>success</td>
                 <td> The system ID given to the host. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=3 > iscsi_host_initiators </td>
+                <td colspan=5 > iscsi_host_initiators </td>
                 <td> complex </td>
                 <td>success</td>
                 <td> Details of the ISCSI initiators associated with the host. </td>
@@ -5161,28 +5521,69 @@ Manage Host operations on Unity
                                          <tr>
                     <td class="elbow-placeholder">&nbsp;</td>
                     <td class="elbow-placeholder">&nbsp;</td>
-                    <td colspan=2 > UnityHostInitiatorList </td>
+                    <td colspan=4 > id </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Unique identifier of the ISCSI initiator path. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=4 > name </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> ISCSI Qualified Name (IQN) of the initiator. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=4 > paths </td>
                     <td> complex </td>
                     <td>success</td>
-                    <td> ISCSI initiators with sytem genrated unique hash value. </td>
+                    <td> Details of the paths associated with the ISCSI initiator. </td>
                 </tr>
-                                                            <tr>
+                                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=3 > id </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> Unique identifier of the path. </td>
+                    </tr>
+                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=3 > is_logged_in </td>
+                        <td> bool </td>
+                        <td>success</td>
+                        <td> Indicates whether the host initiator is logged into the storage system. </td>
+                    </tr>
+                                                                            <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=3 > name </td>
+                <td colspan=5 > name </td>
                 <td> str </td>
                 <td>success</td>
                 <td> The name of the host. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=3 > os_type </td>
+                <td colspan=5 > network_addresses </td>
+                <td> list </td>
+                <td>success</td>
+                <td> List of network addresses mapped to the host. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > os_type </td>
                 <td> str </td>
                 <td>success</td>
                 <td> Operating system running on the host. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=3 > type </td>
+                <td colspan=5 > type </td>
                 <td> str </td>
                 <td>success</td>
                 <td> HostTypeEnum of the host. </td>
@@ -5198,10 +5599,10 @@ Manage Host operations on Unity
 Manage consistency groups on Unity storage system
 
 ### Synopsis
- Managing the consistency group on the Unity storage system includes creating new consistency group, adding volumes to consistency group, removing volumes from consistency group, mapping hosts to consistency group, unmapping hosts from consistency group, renaming consistency group, modifying attributes of consistency group and deleting consistency group.
+ Managing the consistency group on the Unity storage system includes creating new consistency group, adding volumes to consistency group, removing volumes from consistency group, mapping hosts to consistency group, unmapping hosts from consistency group, renaming consistency group, modifying attributes of consistency group, enabling replication in consistency group, disabling replication in consistency group and deleting consistency group.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 <table>
     <tr>
         <th colspan=2>Parameter</th>
@@ -5328,6 +5729,85 @@ Manage consistency groups on Unity storage system
             <td> <br> String variable, describes the state of hosts inside the consistency group.  <br> If hosts are given, then mapping_state should also be specified. </td>
         </tr>
                     <tr>
+            <td colspan=2 > replication_params</td>
+            <td> dict  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Settings required for enabling replication. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > destination_cg_name </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Name of the destination consistency group.  <br> Default value will be source consistency group name prefixed by 'DR_'.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > replication_mode </td>
+                <td> str  </td>
+                <td> True </td>
+                <td></td>
+                <td> <ul> <li>asynchronous</li>  <li>manual</li> </ul></td>
+                <td>  <br> The replication mode.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > rpo </td>
+                <td> int  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Maximum time to wait before the system syncs the source and destination LUNs.  <br> rpo should be specified if the replication_mode is asynchronous.  <br> The value should be in range of 5 to 1440.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > replication_type </td>
+                <td> str  </td>
+                <td></td>
+                <td> local </td>
+                <td> <ul> <li>local</li>  <li>remote</li> </ul></td>
+                <td>  <br> Type of replication.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > remote_system </td>
+                <td> dict  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Details of remote system to which the replication is being configured.  <br> remote_system should be specified if the replication_type is remote.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > destination_pool_name </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Name of pool to allocate destination Luns.  <br> Mutually exclusive with destination_pool_id.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > destination_pool_id </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Id of pool to allocate destination Luns.  <br> Mutually exclusive with destination_pool_name.  </td>
+            </tr>
+                            <tr>
+            <td colspan=2 > replication_state</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td> <ul> <li>enable</li>  <li>disable</li> </ul></td>
+            <td> <br> State of the replication. </td>
+        </tr>
+                    <tr>
             <td colspan=2 > state</td>
             <td> str  </td>
             <td> True </td>
@@ -5364,7 +5844,7 @@ Manage consistency groups on Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -5381,7 +5861,7 @@ Manage consistency groups on Unity storage system
 ### Examples
 ```
 - name: Create consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5392,7 +5872,7 @@ Manage consistency groups on Unity storage system
       state: "present"
 
 - name: Get details of consistency group using id
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -5401,7 +5881,7 @@ Manage consistency groups on Unity storage system
       state: "present"
 
 - name: Add volumes to consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -5414,7 +5894,7 @@ Manage consistency groups on Unity storage system
       state: "present"
 
 - name: Rename consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -5424,7 +5904,7 @@ Manage consistency groups on Unity storage system
       state: "present"
 
 - name: Modify consistency group details
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -5435,7 +5915,7 @@ Manage consistency groups on Unity storage system
       state: "present"
 
 - name: Map hosts to a consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -5448,7 +5928,7 @@ Manage consistency groups on Unity storage system
       state: "present"
 
 - name: Unmap hosts from a consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -5461,7 +5941,7 @@ Manage consistency groups on Unity storage system
       state: "present"
 
 - name: Remove volumes from consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -5474,17 +5954,48 @@ Manage consistency groups on Unity storage system
       state: "present"
 
 - name: Delete consistency group
-  dellemc.unity.dellemc_unity_consistencygroup:
+  dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
       verifycert: "{{verifycert}}"
       cg_name: "{{new_cg_name}}"
       state: "absent"
+
+- name: Enable replication for consistency group
+  dellemc.unity.consistencygroup:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      cg_id: "cg_id_1"
+      replication_params:
+        destination_cg_name: "destination_cg_1"
+        replication_mode: "asynchronous"
+        rpo: 60
+        replication_type: "remote"
+        remote_system:
+          remote_system_host: '10.1.2.3'
+          remote_system_verifycert: False
+          remote_system_username: 'username'
+          remote_system_password: 'password'
+        destination_pool_name: "pool_test_1"
+      replication_state: "enable"
+      state: "present"
+
+- name: Disable replication for consistency group
+  dellemc.unity.consistencygroup:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      cg_name: "dis_repl_ans_source"
+      replication_state: "disable"
+      state: "present"
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 <table>
     <tr>
         <th colspan=10>Key</th>
@@ -5529,6 +6040,13 @@ Manage consistency groups on Unity storage system
                         <td> Details of host </td>
                     </tr>
                                                                             <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=9 > cg_replication_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Whether or not the replication is enabled. </td>
+            </tr>
+                                <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
                 <td colspan=9 > id </td>
                 <td> str </td>
@@ -5812,7 +6330,7 @@ Manage snapshot schedules on Unity storage system
             <td> bool  </td>
             <td></td>
             <td> True </td>
-            <td> <ul> <li>True</li>  <li>False</li> </ul></td>
+            <td></td>
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
@@ -5833,7 +6351,7 @@ Manage snapshot schedules on Unity storage system
 ### Examples
 ```
 - name: Create snapshot schedule (Rule Type - every_n_hours)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5845,7 +6363,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_day)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5859,7 +6377,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_n_days)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5872,7 +6390,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_week)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5888,7 +6406,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_month)
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5900,7 +6418,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_present}}"
 
 - name: Get snapshot schedule details using name
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5909,7 +6427,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_present}}"
 
 - name: Get snapshot schedule details using id
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5918,7 +6436,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_present}}"
 
 - name: Modify snapshot schedule details id
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5929,7 +6447,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_present}}"
 
 - name: Modify snapshot schedule using name
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5941,7 +6459,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_present}}"
 
 - name: Delete snapshot schedule using id
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"
@@ -5950,7 +6468,7 @@ Manage snapshot schedules on Unity storage system
       state: "{{state_absent}}"
 
 - name: Delete snapshot schedule using name
-  dellemc.unity.dellemc_unity_snapshotschedule:
+  dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
       verifycert: "{{verifycert}}"
       username: "{{username}}"

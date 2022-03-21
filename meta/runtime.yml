@@ -1,9 +1,79 @@
 ---
-requires_ansible: ">=2.9"
+requires_ansible: ">2.9"
 plugin_routing:
     modules:
-        dellemc_unity_gatherfacts:
-            redirect: dellemc_unity_info
+        dellemc_unity_info:
+            redirect: info
             deprecation:
-                removal_date: "2022-03-31"
-                warning_text: Use dellemc.unity.dellemc_unity_info instead.
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.info instead.
+        dellemc_unity_gatherfacts:
+            redirect: info
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.info instead.
+        dellemc_unity_consistencygroup:
+            redirect: consistencygroup
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.consistencygroup instead.
+        dellemc_unity_filesystem_snapshot:
+            redirect: filesystem_snapshot
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.filesystem_snapshot instead.
+        dellemc_unity_filesystem:
+            redirect: filesystem
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.filesystem instead.
+        dellemc_unity_host:
+            redirect: host
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.host instead.
+        dellemc_unity_nasserver:
+            redirect: nasserver
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.nasserver instead.
+        dellemc_unity_nfs:
+            redirect: nfs
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.nfs instead.
+        dellemc_unity_smbshare:
+            redirect: smbshare
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.smbshare instead.
+        dellemc_unity_snapshot:
+            redirect: snapshot
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.snapshot instead.
+        dellemc_unity_snapshotschedule:
+            redirect: snapshotschedule
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.snapshotschedule instead.
+        dellemc_unity_storagepool:
+            redirect: storagepool
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.storagepool instead.
+        dellemc_unity_tree_quota:
+            redirect: tree_quota
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.tree_quota instead.
+        dellemc_unity_user_quota:
+            redirect: user_quota
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.user_quota instead.
+        dellemc_unity_volume:
+            redirect: volume
+            deprecation:
+                removal_date: "2024-03-31"
+                warning_text: Use dellemc.unity.volume instead.

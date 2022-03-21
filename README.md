@@ -1,43 +1,43 @@
-# Ansible Modules for Dell EMC Unity
+# Ansible Modules for Dell Technologies Unity
 
-The Ansible Modules for Dell EMC Unity allow Data Center and IT administrators to use RedHat Ansible to automate and orchestrate the configuration and management of Dell EMC Unity arrays.
+The Ansible Modules for Dell Technologies (Dell) Unity allow Data Center and IT administrators to use RedHat Ansible to automate and orchestrate the configuration and management of Dell Unity arrays.
 
 The capabilities of the Ansible modules are managing consistency groups, filesystem, filesystem snapshots, NAS server, NFS export, SMB share, hosts, snapshots, snapshot schedules, storage pools, user quotas, quota trees and volumes; and to gather facts from the array. The options available for each are list, show, create, modify and delete. These tasks can be executed by running simple playbooks written in yaml syntax. The modules are written so that all the operations are idempotent, so making multiple identical requests has the same effect as making a single request.
 
 ## License
-Ansible collection for Unity is released and licensed under the GPL-3.0 license. See [LICENSE](LICENSE) for the full terms. Ansible modules and modules utilities that are part of the Ansible collection for Unity are released and licensed under the Apache 2.0 license. See [MODULE-LICENSE](MODULE-LICENSE) for the full terms.
+The Ansible collection for Unity is released and licensed under the GPL-3.0 license. See [LICENSE](https://github.com/dell/ansible-unity/blob/1.3.0/LICENSE) for the full terms. Ansible modules and modules utilities that are part of the Ansible collection for Unity are released and licensed under the Apache 2.0 license. See [MODULE-LICENSE](https://github.com/dell/ansible-unity/blob/1.3.0/MODULE-LICENSE) for the full terms.
 
 ## Support
-Ansible collection for Unity are supported by Dell EMC and are provided under the terms of the license attached to the collection. Please see the [LICENSE](#license) section for the full terms. Dell EMC does not provide any support for the source code modifications. For any Ansible modules issues, questions or feedback, join the [Dell EMC Automation Community](https://www.dell.com/community/Automation/bd-p/Automation).
+The Ansible collection for Unity are supported by Dell and are provided under the terms of the license attached to the collection. Please see the [LICENSE](#license) section for the full terms. Dell does not provide any support for the source code modifications. For any Ansible modules issues, questions or feedback, join the [Dell Automation Community](https://www.dell.com/community/Automation/bd-p/Automation).
 
 ## Supported Platforms
-  * Dell EMC Unity Arrays version 5.0, 5.1.0
+  * Dell Unity Arrays version 5.0, 5.1.2
 
 ## Prerequisites
-This table provides information about the software prerequisites for the Ansible Modules for Dell EMC Unity.
+This table provides information about the software prerequisites for the Ansible Modules for Dell Unity.
 
 | **Ansible Modules** | **Red Hat Enterprise Linux** | **Python version** | **Python library version** | **Ansible** |
 |---------------------|------------------------------|--------------------|----------------------------|-------------|
-| v1.2.1 |	7.6 <br> 7.7 <br> 7.8 <br> 8.2 | 2.8 <br> 3.5 <br> 3.6 <br> 3.7 <br> 3.8 | 1.2.10 or higher| 2.9 <br> 2.10 | 
+| v1.3.0 | 8.4 <br> 8.5| 3.7 <br> 3.8 <br> 3.9 | 1.2.10 | 2.10 <br> 2.11 <br> 2.12| 
 
 ## Idempotency
 The modules are written in such a way that all requests are idempotent and hence fault-tolerant. It essentially means that the result of a successfully performed request is independent of the number of times it is executed.
 
-## List of Ansible Modules for Dell EMC Unity
-  * Consistency group module
-  * Filesystem module
-  * Filesystem snapshot module
-  * Gather facts module
-  * Host module
-  * NAS server module
-  * NFS export module
-  * SMB share module
-  * Snapshot module
-  * Snapshot schedule module
-  * Storage pool module
-  * User quota module
-  * Quota tree module  
-  * Volume module
+## List of Ansible Modules for Dell Unity
+  * [Consistency group module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#consistency-group-module)
+  * [Filesystem module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#file-system-module)
+  * [Filesystem snapshot module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#filesystem-snapshot-module)
+  * [Info module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#info-module)
+  * [Host module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#host-module)
+  * [NAS server module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#nas-server-module)
+  * [NFS export module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md##nfs-module)
+  * [SMB share module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#smb-share-module)
+  * [Snapshot module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#snapshot-module)
+  * [Snapshot schedule module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#snapshot-schedule-module)
+  * [Storage pool module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#storage-pool-module)
+  * [User quota module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#user-quota-module)
+  * [Quota tree module ](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#quota-tree-module)
+  * [Volume module](https://github.com/dell/ansible-unity/blob/1.3.0/docs/Product%20Guide.md#volume-module)
 
 ## Installation of SDK
 Install python sdk named 'storops'. It can be installed using pip, based on appropriate python version.
@@ -60,7 +60,7 @@ Install python sdk named 'storops'. It can be installed using pip, based on appr
 #### Offline Installation of Collections
   1. Download the latest tar build from any of the available distribution channel [Ansible Galaxy](https://galaxy.ansible.com/dellemc/unity) /[Automation Hub](https://console.redhat.com/ansible/automation-hub/repo/published/dellemc/unity) and use the following command to install the collection anywhere in your system:
 
-	ansible-galaxy collection install dellemc-unity-1.2.1.tar.gz -p <install_path>
+	ansible-galaxy collection install dellemc-unity-1.3.0.tar.gz -p <install_path>
 
   2. Set the environment variable:
 
@@ -78,14 +78,14 @@ Install python sdk named 'storops'. It can be installed using pip, based on appr
 
 	tasks:
     - name: Get Volume details
-	  dellemc.unity.dellemc_unity_volume
+         dellemc.unity.volume
 
   3. For generating Ansible documentation for a specific module, embed the FQCN  before the module name. Refer to the following example:
 
-	ansible-doc dellemc.unity.dellemc_unity_info
+	ansible-doc dellemc.unity.info
 
 ## Running Ansible Modules
-The Ansible server must be configured with Python library for Unity to run the Ansible playbooks. The [Documents]( https://github.com/dell/ansible-unity/tree/1.2.1/docs ) provide information on different Ansible modules along with their functions and syntax. The parameters table in the Product Guide provides information on various parameters which need to be configured before running the modules.
+The Ansible server must be configured with Python library for Unity to run the Ansible playbooks. The [Documents]( https://github.com/dell/ansible-unity/tree/1.3.0/docs ) provide information on different Ansible modules along with their functions and syntax. The parameters table in the Product Guide provides information on various parameters which need to be configured before running the modules.
 
 ## SSL Certificate Validation
 

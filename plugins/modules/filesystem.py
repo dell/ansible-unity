@@ -11,7 +11,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 
-module: dellemc_unity_filesystem
+module: filesystem
 version_added: '1.1.0'
 short_description: Manage filesystem on Unity storage system
 description:
@@ -228,7 +228,7 @@ notes:
 
 EXAMPLES = r"""
 - name: Create FileSystem
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -240,7 +240,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Create FileSystem with quota configuration
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -257,7 +257,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Expand FileSystem size
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -268,7 +268,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Expand FileSystem size
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -279,7 +279,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify FileSystem smb_properties
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -293,7 +293,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify FileSystem Snap Schedule
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -303,7 +303,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Get details of FileSystem using id
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -312,7 +312,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Delete a FileSystem using id
-  dellemc.unity.dellemc_unity_filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -457,22 +457,22 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import dellemc_ansible_unity_utils as utils
 
-LOG = utils.get_logger('dellemc_unity_filesystem')
+LOG = utils.get_logger('filesystem')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.2.1"
+application_type = "Ansible/1.3.0"
 
 
-class UnityFilesystem(object):
+class Filesystem(object):
     """Class with FileSystem operations"""
 
     def __init__(self):
         """Define all parameters required by this module"""
         self.module_params = utils.get_unity_management_host_parameters()
-        self.module_params.update(get_unity_filesystem_parameters())
+        self.module_params.update(get_filesystem_parameters())
 
         mutually_exclusive = [['filesystem_name', 'filesystem_id'],
                               ['pool_name', 'pool_id'],
@@ -556,8 +556,8 @@ class UnityFilesystem(object):
                 self.module.fail_json(msg=msg)
 
         except utils.UnityResourceNotFoundError as e:
-            errormsg.format(id_or_name, str(e))
-            LOG.error(errormsg)
+            msg = errormsg.format(id_or_name, str(e))
+            LOG.error(msg)
             return None
 
         except Exception as e:
@@ -1342,7 +1342,7 @@ def get_time_with_unit(time):
     return "%s %s" % (time, unit)
 
 
-def get_unity_filesystem_parameters():
+def get_filesystem_parameters():
     """This method provide parameters required for the ansible filesystem
        module on Unity"""
     return dict(
@@ -1390,7 +1390,7 @@ def get_unity_filesystem_parameters():
 def main():
     """ Create Unity FileSystem object and perform action on it
         based on user input from playbook"""
-    obj = UnityFilesystem()
+    obj = Filesystem()
     obj.perform_module_operation()
 
 
