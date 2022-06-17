@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright: (c) 2021, DellEMC
+# Copyright: (c) 2021, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -21,7 +21,7 @@ description:
   Delete quota tree.
 version_added: "1.2.0"
 extends_documentation_fragment:
-  - dellemc.unity.dellemc_unity.unity
+  - dellemc.unity.unity
 author:
 - Spandita Panigrahi (@panigs7) <ansible.team@dell.com>
 options:
@@ -196,7 +196,7 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
-get_quota_tree_details:
+get_tree_quota_details:
     description: Details of the quota tree.
     returned: When quota tree exists
     type: complex
@@ -251,7 +251,7 @@ get_quota_tree_details:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
-    import dellemc_ansible_unity_utils as utils
+    import utils
 
 LOG = utils.get_logger('tree_quota')
 
@@ -259,7 +259,7 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.3.0"
+application_type = "Ansible/1.4.0"
 
 
 class QuotaTree(object):

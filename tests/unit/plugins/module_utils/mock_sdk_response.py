@@ -1,4 +1,4 @@
-# Copyright: (c) 2022, DellEMC
+# Copyright: (c) 2022, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -24,3 +24,9 @@ class MockSDKObject:
             if attr not in self.skip_list:
                 data[attr] = value
         return data
+
+    def get_id(self):
+        return "res_0"
+
+    def name(self):
+        return "res_0"

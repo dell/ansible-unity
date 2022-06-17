@@ -1,4 +1,4 @@
-# Copyright: (c) 2022, DellEMC
+# Copyright: (c) 2022, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http: //www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -69,10 +69,11 @@ class MockHostApi:
                                                               MockSDKObject({'address': 'host_name_1', 'host': None, 'id': 'HostNetworkAddress_2',
                                                                              'is_ignored': None, 'name': None, 'netmask': None, 'type': None,
                                                                              'v6_prefix_length': None, 'existed': True})],
-                    'host_luns': [MockSDKObject({'hlu': 1, 'host': None, 'id': 'host_a', 'is_read_only': None,
-                                                 'lun': {'UnityLun': {}}, 'snap': None, 'type': None, 'existed': True}),
-                                  MockSDKObject({'hlu': 0, 'host': None, 'id': 'host_b', 'is_read_only': None,
-                                                 'lun': {'UnityLun': {}}, 'snap': None, 'type': None, 'existed': True})],
+                    'host_luns': MockSDKObject({'lun':
+                                                [MockSDKObject({'hlu': 1, 'host': None, 'id': 'host_a', 'name': 'host_name_a', 'is_read_only': None,
+                                                                'lun': {'UnityLun': {}}, 'snap': None, 'type': None, 'existed': True}),
+                                                 MockSDKObject({'hlu': 0, 'host': None, 'id': 'host_b', 'name': 'host_name_b', 'is_read_only': None,
+                                                               'lun': {'UnityLun': {}}, 'snap': None, 'type': None, 'existed': True})]}),
                     'host_polled_uuid': None, 'host_pushed_uuid': '1-1-1-1-1',
                     'host_uuid': None, 'host_v_vol_datastore': None, 'id': 'Host_id_1',
                     'iscsi_host_initiators': [MockSDKObject({'chap_user_name': None, 'health': {'UnityHealth': {}}, 'id': 'HostInitiator_iscsi_1',
@@ -104,7 +105,7 @@ class MockHostApi:
                                                                         'is_logged_in': True}]}],
                                      'health': {'UnityHealth': {}},
                                      'host_container': None,
-                                     'host_luns': ["host_a", "host_b"],
+                                     'host_luns': [{'id': "host_a", 'name': 'host_name_a'}, {'id': 'host_b', 'name': 'host_name_b'}],
                                      'host_polled_uuid': None, 'host_pushed_uuid': '1-1-1-1-1',
                                      'host_uuid': None, 'host_v_vol_datastore': None, 'id': 'Host_id_1',
                                      'iscsi_host_initiators': [{'id': 'HostInitiator_iscsi_1',

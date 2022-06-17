@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright: (c) 2020, DellEMC
+# Copyright: (c) 2020, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -20,7 +20,7 @@ description:
   Modify storage pool.
 
 extends_documentation_fragment:
-  - dellemc.unity.dellemc_unity.unity
+  - dellemc.unity.unity
 
 author:
 - Ambuj Dubey (@AmbujDube) <ansible.team@dell.com>
@@ -86,7 +86,7 @@ options:
       stripe_width :
         description:
         - RAID group stripe widths, including parity or mirror disks
-        choices: [BEST_FIT, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16]
+        choices: ['BEST_FIT', '2', '4', '5', '6', '8', '9', '10', '12', '13', '14', '16']
         type: str
 
   alert_threshold:
@@ -307,7 +307,7 @@ RETURN = r'''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
-    import dellemc_ansible_unity_utils as utils
+    import utils
 import logging
 
 LOG = utils.get_logger('storagepool')
@@ -317,7 +317,7 @@ UNITY_SDK_VERSION = utils.storops_version_check()
 UNITY_SDK_VERSION_CHECK = UNITY_SDK_VERSION['supported_version']
 UNITY_SDK_VERSION_ERROR = UNITY_SDK_VERSION['unsupported_version_message']
 
-application_type = "Ansible/1.3.0"
+application_type = "Ansible/1.4.0"
 
 
 class StoragePool(object):

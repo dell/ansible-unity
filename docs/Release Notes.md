@@ -1,6 +1,6 @@
 **Ansible Modules for Dell Technologies Unity** 
 =========================================
-### Release Notes 1.3.0
+### Release Notes 1.4.0
 
 >   © 2022 Dell Inc. or its subsidiaries. All rights reserved. Dell
 >   and other trademarks are trademarks of Dell Inc. or its
@@ -28,27 +28,25 @@ Table 1. Revision history
 
 | Revision | Date      | Description                                               |
 |----------|-----------|-----------------------------------------------------------|
-| 01       | March 2022  | Current release of Ansible Modules for Dell Unity 1.3.0 |
+| 01       | June 2022  | Current release of Ansible Modules for Dell Unity 1.4.0 |
 
 Product Description
 -------------------
-The Ansible modules for Dell Unity are used to automate and orchestrate the deployment, configuration, and management of Dell Unity Family systems, including Unity, Unity XT, and the UnityVSA. The capabilities of Ansible modules are managing host, consistency group, filesystem, filesystem snapshots, NAS servers, NFS export, SMB shares, snapshots, snapshot schedules, storage pool, tree quota, user quota, volumes and obtaining Unity system information. The options available for each capability are list, show, create, delete, and modify; except for NAS server for which options available are list & modify.
+The Ansible modules for Dell Unity are used to automate and orchestrate the deployment, configuration, and management of Dell Unity Family systems, including Unity, Unity XT, and the UnityVSA. The capabilities of Ansible modules are managing host, consistency group, filesystem, filesystem snapshots, CIFS server, NAS servers, NFS server, NFS export, SMB shares, interface, snapshots, snapshot schedules, storage pool, tree quota, user quota, volumes and obtaining Unity system information. The options available for each capability are list, show, create, delete, and modify; except for NAS server for which options available are list & modify and for CIFS server, NFS server the options available are create, list & modify.
 
 New features & enhancements
 ---------------------------
 This release has the following changes -
 
-- Enhanced host module to support listing of network addresses, FC initiators, ISCSI initiators and allocated volumes of a host.
-- Enhanced host module to support add/remove network address to/from host.
-- Enhanced host module to support both mapping and un-mapping of non-logged-in initiators to host.
-- Enhanced Storage Pool module to support listing of drive details of a pool.
-- Enhanced consistency group module to support enable/disable replication in consistency group.
-- Enhanced storage pool module to support creation of storage pool.
-- Renamed gatherfacts module to info module.
-- Enhanced info module to list disk groups.
-- Added rotating file handler for logging.
-- Removed dellemc_unity prefix from module names.
-- Bugfixes in volume module to retrieve details of non-thin volumes.
+- Added execution environment manifest file to support building an execution environment with ansible-builder.
+- Added cifsserver module to support create, list and delete CIFS server.
+- Added nfsserver module to support create, list and delete NFS server.
+- Added interface module to support create, list and delete interface.
+- Enhance nfs module to support advanced host management option.
+- Enhanced info module to list cifs server, nfs servers, ethernet port and file interface.
+- Enhanced nas server module to support create, modify and delete of nas server replication.
+- Enhanced filesystem module to support create, modify and delete of filesystem replication.
+- Check mode is supported for Info.
 
 Known issues
 ------------
@@ -61,8 +59,10 @@ Known issues in this release are listed below:
       > **WORKAROUND:** It is recommended to use Ansible Unity modules consistently for all mapping and unmapping of hosts for a consistency group instead of partially/mutually doing it through Unisphere and Ansible modules.
 
 - Unmapping of LUN's from consistency group after disabling replication fails intermittently
-    - Immediate removal/unmapping of LUN's after disabling replication may fail with below error message which indicates that the consistency group has snapshots.
+    - Immediate removal/unmapping of LUN's after disabling replication may fail with this error message which indicates that the consistency group has snapshots.
+
         ``` "The LUN cannot be removed from the Consistency group because there are snapshots of the Consistency group that include the selected LUN. Please remove all snapshots containing the selected LUN and try again. (Error Code:0x6000c16)" ```
+
         > **NOTE:** It is recommended to avoid immediate removal/unmapping of LUN's after disabling replication.
 
 
@@ -77,7 +77,7 @@ for Unity GitHub](https://github.com/dell/ansible-unity/) page.
 
 Documentation
 -------------
-The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/1.3.0/docs)
+The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/1.4.0/docs)
 page. It includes the following:
 - README
 - Release Notes (this document)

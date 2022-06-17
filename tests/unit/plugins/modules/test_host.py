@@ -1,4 +1,4 @@
-# Copyright: (c) 2022, DellEMC
+# Copyright: (c) 2022, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -17,7 +17,7 @@ from ansible_collections.dellemc.unity.tests.unit.plugins.module_utils.mock_sdk_
 from ansible_collections.dellemc.unity.tests.unit.plugins.module_utils.mock_api_exception \
     import HttpError as http_error, MockApiException
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
-    import dellemc_ansible_unity_utils as utils
+    import utils
 
 utils.get_logger = MagicMock()
 utils.get_unity_management_host_parameters = MagicMock()

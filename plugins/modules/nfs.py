@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright: (c) 2020, DellEMC
+# Copyright: (c) 2020, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -18,10 +18,10 @@ description:
   Create new NFS export,
   Modify NFS export attributes,
   Display NFS export details,
-  Delete NFS export
+  Delete NFS export.
 
 extends_documentation_fragment:
-  -  dellemc.unity.dellemc_unity.unity
+  -  dellemc.unity.unity
 
 author:
 - Vivek Soni (@v-soni11) <ansible.team@dell.com>
@@ -31,7 +31,7 @@ options:
     description:
     - Name of the nfs export.
     - Mandatory for create operation.
-    - Specify either nfs_export_name or nfs_export_id(but not both) for any
+    - Specify either nfs_export_name or nfs_export_id (but not both) for any
       operation.
     required: False
     type: str
@@ -140,11 +140,19 @@ options:
     type: str
     choices: ['SYS', 'KERBEROS', 'KERBEROS_WITH_INTEGRITY',
               'KERBEROS_WITH_ENCRYPTION']
+  adv_host_mgmt_enabled:
+    description:
+    - If false allows you to specify hosts without first having to register them.
+    - Mandatory while adding access hosts.
+    required: False
+    type: bool
   no_access_hosts:
     description:
     - Hosts with no access to the NFS export.
     - List of dictionaries. Each dictionary will have any of the keys from
-      host_name, host_id,  and ip_address.
+      host_name, host_id, subnet, netgroup, domain and ip_address.
+    - If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.
+    - If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address.
     required: False
     type: list
     elements: dict
@@ -162,13 +170,30 @@ options:
       ip_address:
         description:
         - IP address of the host.
+        required: False
+        type: str
+      subnet:
+        description:
+        - Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.
+        required: False
+        type: str
+      netgroup:
+        description:
+        - Netgroup that is defined in NIS or the local netgroup file.
+        required: False
+        type: str
+      domain:
+        description:
+        - DNS domain, where all NFS clients in the domain are included in the host list.
         required: False
         type: str
   read_only_hosts:
     description:
     - Hosts with read-only access to the NFS export.
     - List of dictionaries. Each dictionary will have any of the keys from
-      host_name, host_id, and ip_address.
+      host_name, host_id, subnet, netgroup, domain and ip_address.
+    - If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.
+    - If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address.
     required: False
     type: list
     elements: dict
@@ -186,13 +211,30 @@ options:
       ip_address:
         description:
         - IP address of the host.
+        required: False
+        type: str
+      subnet:
+        description:
+        - Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.
+        required: False
+        type: str
+      netgroup:
+        description:
+        - Netgroup that is defined in NIS or the local netgroup file.
+        required: False
+        type: str
+      domain:
+        description:
+        - DNS domain, where all NFS clients in the domain are included in the host list.
         required: False
         type: str
   read_only_root_hosts:
     description:
     - Hosts with read-only for root user access to the NFS export.
     - List of dictionaries. Each dictionary will have any of the keys from
-      host_name, host_id, and ip_address.
+      host_name, host_id, subnet, netgroup, domain and ip_address.
+    - If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.
+    - If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address.
     required: False
     type: list
     elements: dict
@@ -210,13 +252,30 @@ options:
       ip_address:
         description:
         - IP address of the host.
+        required: False
+        type: str
+      subnet:
+        description:
+        - Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.
+        required: False
+        type: str
+      netgroup:
+        description:
+        - Netgroup that is defined in NIS or the local netgroup file.
+        required: False
+        type: str
+      domain:
+        description:
+        - DNS domain, where all NFS clients in the domain are included in the host list.
         required: False
         type: str
   read_write_hosts:
     description:
     - Hosts with read and write access to the NFS export.
     - List of dictionaries. Each dictionary will have any of the keys from
-      host_name, host_id, and ip_address.
+      host_name, host_id, subnet, netgroup, domain and ip_address.
+    - If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.
+    - If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address.
     required: False
     type: list
     elements: dict
@@ -234,13 +293,30 @@ options:
       ip_address:
         description:
         - IP address of the host.
+        required: False
+        type: str
+      subnet:
+        description:
+        - Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.
+        required: False
+        type: str
+      netgroup:
+        description:
+        - Netgroup that is defined in NIS or the local netgroup file.
+        required: False
+        type: str
+      domain:
+        description:
+        - DNS domain, where all NFS clients in the domain are included in the host list.
         required: False
         type: str
   read_write_root_hosts:
     description:
     - Hosts with read and write for root user access to the NFS export.
     - List of dictionaries. Each dictionary will have any of the keys from
-      host_name, host_id, and ip_address.
+      host_name, host_id, subnet, netgroup, domain and ip_address.
+    - If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.
+    - If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address.
     required: False
     type: list
     elements: dict
@@ -260,6 +336,23 @@ options:
         - IP address of the host.
         required: False
         type: str
+      subnet:
+        description:
+        - Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.
+        required: False
+        type: str
+      netgroup:
+        description:
+        - Netgroup that is defined in NIS or the local netgroup file.
+        required: False
+        type: str
+      domain:
+        description:
+        - DNS domain, where all NFS clients in the domain are included in the host list.
+        required: False
+        type: str
+notes:
+- The check_mode is not supported.
 """
 
 EXAMPLES = r"""
@@ -299,7 +392,7 @@ EXAMPLES = r"""
     anonymous_uid: 4294967290
     state: "present"
 
-- name: Add host in nfs export
+- name: Add host in nfs export with adv_host_mgmt_enabled as true
   dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
@@ -307,6 +400,7 @@ EXAMPLES = r"""
     verifycert: "{{verifycert}}"
     nfs_export_name: "ansible_nfs_from_fs"
     filesystem_id: "fs_377"
+    adv_host_mgmt_enabled: true
     no_access_hosts:
       - host_id: "Host_1"
     read_only_hosts:
@@ -320,7 +414,7 @@ EXAMPLES = r"""
     host_state: "present-in-export"
     state: "present"
 
-- name: Remove host in nfs export
+- name: Remove host in nfs export with adv_host_mgmt_enabled as true
   dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
@@ -328,6 +422,7 @@ EXAMPLES = r"""
     verifycert: "{{verifycert}}"
     nfs_export_name: "ansible_nfs_from_fs"
     filesystem_id: "fs_377"
+    adv_host_mgmt_enabled: true
     no_access_hosts:
       - host_id: "Host_1"
     read_only_hosts:
@@ -338,6 +433,50 @@ EXAMPLES = r"""
       - host_name: "host_name2"
     read_write_root_hosts:
       - ip_address: "1.1.1.1"
+    host_state: "absent-in-export"
+    state: "present"
+
+- name: Add host in nfs export with adv_host_mgmt_enabled as false
+  dellemc.unity.nfs:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    nfs_export_name: "ansible_nfs_from_fs"
+    filesystem_id: "fs_377"
+    adv_host_mgmt_enabled: false
+    no_access_hosts:
+    - domain: "google.com"
+    read_only_hosts:
+    - netgroup: "netgroup_admin"
+    read_only_root_hosts:
+    - host_name: "host5"
+    read_write_hosts:
+    - subnet: "168.159.57.4/255.255.255.0"
+    read_write_root_hosts:
+    - ip_address: "10.255.2.4"
+    host_state: "present-in-export"
+    state: "present"
+
+- name: Remove host in nfs export with adv_host_mgmt_enabled as false
+  dellemc.unity.nfs:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    nfs_export_name: "ansible_nfs_from_fs"
+    filesystem_id: "fs_377"
+    adv_host_mgmt_enabled: false
+    no_access_hosts:
+    - domain: "google.com"
+    read_only_hosts:
+    - netgroup: "netgroup_admin"
+    read_only_root_hosts:
+    - host_name: "host5"
+    read_write_hosts:
+    - subnet: "168.159.57.4/255.255.255.0"
+    read_write_root_hosts:
+    - ip_address: "10.255.2.4"
     host_state: "absent-in-export"
     state: "present"
 
@@ -366,6 +505,7 @@ changed:
   description: Whether or not the resource has changed.
   returned: always
   type: bool
+  sample: "false"
 
 nfs_share_details:
   description: Details of the nfs export.
@@ -442,6 +582,54 @@ nfs_share_details:
             name:
               description: Name of the nas server
               type: str
+  sample:
+        {
+        'nfs_share_details': {
+            'anonymous_gid': 4294967294,
+            'anonymous_uid': 4294967294,
+            'creation_time': '2022-03-09 15:05:34.720000+00:00',
+            'default_access': 'NFSShareDefaultAccessEnum.NO_ACCESS',
+            'description': '',
+            'export_option': 1,
+            'export_paths': [
+            '**.***.**.**:/dummy-share-123'
+            ],
+            'filesystem': {
+            'UnityFileSystem': {
+                'id': 'fs_id_1',
+                'name': 'fs_name_1'
+            }
+            },
+            'host_accesses': None,
+            'id': 'NFSShare_14393',
+            'is_read_only': None,
+            'min_security': 'NFSShareSecurityEnum.SYS',
+            'modification_time': '2022-04-25 08:12:28.179000+00:00',
+            'name': 'dummy-share-123',
+            'nfs_owner_username': None,
+            'no_access_hosts': None,
+            'no_access_hosts_string': 'host1,**.***.*.*',
+            'path': '/',
+            'read_only_hosts': None,
+            'read_only_hosts_string': '',
+            'read_only_root_access_hosts': None,
+            'read_only_root_hosts_string': '',
+            'read_write_hosts': None,
+            'read_write_hosts_string': '',
+            'read_write_root_hosts_string': '',
+            'role': 'NFSShareRoleEnum.PRODUCTION',
+            'root_access_hosts': None,
+            'snap': None,
+            'type': 'NFSTypeEnum.NFS_SHARE',
+            'existed': True,
+            'nas_server': {
+            'UnityNasServer': {
+                'id': 'nas_id_1',
+                'name': 'dummy_nas_server'
+            }
+            }
+        }
+        }
 """
 import re
 try:
@@ -451,7 +639,7 @@ except ImportError:
     HAS_IPADDRESS = False
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
-    import dellemc_ansible_unity_utils as utils
+    import utils
 
 LOG = utils.get_logger('nfs')
 HAS_UNITY_SDK = utils.get_unity_sdk()
@@ -464,11 +652,14 @@ MIN_SECURITY_LIST = ['SYS', 'KERBEROS', 'KERBEROS_WITH_INTEGRITY',
 HOST_DICT = dict(type='list', required=False, elements='dict',
                  options=dict(host_name=dict(),
                               host_id=dict(),
-                              ip_address=dict()))
+                              ip_address=dict(),
+                              subnet=dict(),
+                              netgroup=dict(),
+                              domain=dict()))
 HOST_STATE_LIST = ['present-in-export', 'absent-in-export']
 STATE_LIST = ['present', 'absent']
 
-application_type = "Ansible/1.3.0"
+application_type = "Ansible/1.4.0"
 
 
 class NFS(object):
@@ -538,6 +729,93 @@ class NFS(object):
 
         LOG.info('Got the unity instance for provisioning on Unity')
 
+    def validate_host_access_data(self, host_dict):
+        """
+        Validate host access data
+        :param host_dict: Host access data
+        :return None
+        """
+        fqdn_pat = re.compile(r'(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{0,62}'
+                              r'[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$)')
+
+        if host_dict.get('host_name'):
+            version = get_ip_version(host_dict.get('host_name'))
+            if version in (4, 6):
+                msg = "IP4/IP6: %s given in host_name instead " \
+                    "of name" % host_dict.get('host_name')
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
+        if host_dict.get('ip_address'):
+            ip_or_fqdn = host_dict.get('ip_address')
+            version = get_ip_version(ip_or_fqdn)
+            if version == 0:
+                # validate its FQDN or not
+                if not fqdn_pat.match(ip_or_fqdn):
+                    msg = "%s is not a valid FQDN" % ip_or_fqdn
+                    LOG.error(msg)
+                    self.module.fail_json(msg=msg)
+        if host_dict.get('subnet'):
+            subnet = host_dict.get('subnet')
+            subnet_info = subnet.split("/")
+            if len(subnet_info) != 2:
+                msg = "Subnet should be in format 'IP address/netmask' or 'IP address/prefix length'"
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
+
+    def validate_adv_host_mgmt_enabled_check(self, host_dict):
+        """
+        Validate adv_host_mgmt_enabled check
+        :param host_dict: Host access data
+        :return None
+        """
+        host_dict_keys_set = set(host_dict.keys())
+        adv_host_mgmt_enabled_true_set = {'host_name', 'host_id', 'ip_address'}
+        adv_host_mgmt_enabled_false_set = {'host_name', 'subnet', 'domain', 'netgroup', 'ip_address'}
+        adv_host_mgmt_enabled_true_diff = host_dict_keys_set - adv_host_mgmt_enabled_true_set
+        adv_host_mgmt_enabled_false_diff = host_dict_keys_set - adv_host_mgmt_enabled_false_set
+        if self.module.params['adv_host_mgmt_enabled'] and adv_host_mgmt_enabled_true_diff != set():
+            msg = "If 'adv_host_mgmt_enabled' is true then host access should only have  %s" % adv_host_mgmt_enabled_true_set
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+        elif not self.module.params['adv_host_mgmt_enabled'] and adv_host_mgmt_enabled_false_diff != set():
+            msg = "If 'adv_host_mgmt_enabled' is false then host access should only have  %s" % adv_host_mgmt_enabled_false_set
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
+    def validate_host_access_input_params(self):
+        """
+        Validate host access params
+        :return None
+        """
+        for param in list(self.host_param_mapping.keys()):
+            if self.module.params[param] and (not self.module.params[
+                    'host_state'] or self.module.params[
+                    'adv_host_mgmt_enabled'] is None):
+                msg = "'host_state' and 'adv_host_mgmt_enabled' is required along with: %s" % param
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
+            elif self.module.params[param]:
+                for host_dict in self.module.params[param]:
+                    host_dict = {k: v for k, v in host_dict.items() if v}
+                    self.validate_adv_host_mgmt_enabled_check(host_dict)
+                    self.validate_host_access_data(host_dict)
+
+    def validate_module_attributes(self):
+        """
+        Validate module attributes
+        :return None
+        """
+        param_list = ['nfs_export_name', 'nfs_export_id', 'filesystem_name',
+                      'filesystem_id', 'nas_server_id',
+                      'snapshot_name', 'snapshot_id', 'path']
+
+        for param in param_list:
+            if self.module.params[param] and \
+               len(self.module.params[param].strip()) == 0:
+                msg = "Please provide valid value for: %s" % param
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
+
     def validate_input(self):
         """ Validate input parameters """
 
@@ -559,44 +837,8 @@ class NFS(object):
                           "filesystem id"
                     LOG.error(msg)
                     self.module.fail_json(msg=msg)
-
-        param_list = ['nfs_export_name', 'nfs_export_id', 'filesystem_name',
-                      'filesystem_id', 'nas_server_id', 'nas_server_id',
-                      'snapshot_name', 'snapshot_id', 'path']
-
-        for param in param_list:
-            if self.module.params[param] and \
-               len(self.module.params[param].strip()) == 0:
-                msg = "Please provide valid value for: %s" % param
-                LOG.error(msg)
-                self.module.fail_json(msg=msg)
-
-        fqdn_pat = re.compile(r'(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{0,62}'
-                              r'[a-zA-Z0-9]\.)+[a-zA-Z]{2,63}$)')
-        for param in list(self.host_param_mapping.keys()):
-            if self.module.params[param] and not self.module.params[
-                    'host_state']:
-                msg = "Please provide host_state along with: %s" % param
-                LOG.error(msg)
-                self.module.fail_json(msg=msg)
-            elif self.module.params[param]:
-                for host_dict in self.module.params[param]:
-                    if host_dict.get('host_name'):
-                        version = get_ip_version(host_dict.get('host_name'))
-                        if version in (4, 6):
-                            msg = "IP4/IP6: %s given in host_name instead " \
-                                "of name" % host_dict.get('host_name')
-                            LOG.error(msg)
-                            self.module.fail_json(msg=msg)
-                    if host_dict.get('ip_address'):
-                        ip_or_fqdn = host_dict.get('ip_address')
-                        version = get_ip_version(ip_or_fqdn)
-                        if version == 0:
-                            # validate its FQDN or not
-                            if not fqdn_pat.match(ip_or_fqdn):
-                                msg = "%s is not a valid FQDN" % ip_or_fqdn
-                                LOG.error(msg)
-                                self.module.fail_json(msg=msg)
+        self.validate_module_attributes()
+        self.validate_host_access_input_params()
 
     def get_nfs_id_or_name(self):
         """ Provide nfs_export_id or nfs_export_name user given value
@@ -890,6 +1132,31 @@ class NFS(object):
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
+    def get_host_access_string_value(self, host_dict):
+        """
+        Form host access string
+        :host_dict Host access type info
+        :return Host access data in string
+        """
+        if host_dict.get("host_id"):
+            return self.get_host_name_by_id(
+                host_dict.get("host_id")) + ','
+        elif host_dict.get("host_name"):
+            return host_dict.get(
+                "host_name") + ','
+        elif host_dict.get("ip_address"):
+            return host_dict.get(
+                "ip_address") + ','
+        elif host_dict.get("subnet"):
+            return host_dict.get(
+                "subnet") + ','
+        elif host_dict.get("domain"):
+            return "*." + host_dict.get(
+                "domain") + ','
+        elif host_dict.get("netgroup"):
+            return "@" + host_dict.get(
+                "netgroup") + ','
+
     def get_host_dict_from_pb(self):
         """ Traverse all given hosts params and provides with host dict,
             which has respective host str param name with its value
@@ -906,22 +1173,14 @@ class NFS(object):
                 if self.module.params[param]:
                     result_host[param] = ''
                     for host_dict in self.module.params[param]:
-                        if host_dict.get("host_id"):
-                            result_host[param] += self.get_host_name_by_id(
-                                host_dict.get("host_id")) + ','
-                        elif host_dict.get("host_name"):
-                            result_host[param] += host_dict.get(
-                                "host_name") + ','
-                        elif host_dict.get("ip_address"):
-                            result_host[param] += host_dict.get(
-                                "ip_address") + ','
+                        result_host[param] += self.get_host_access_string_value(host_dict)
+
         if result_host:
             # Since we are supporting HOST STRING parameters instead of HOST
             # parameters, so lets change given input HOST parameter name to
             # HOST STRING parameter name and strip trailing ','
             result_host = {self.host_param_mapping[k]: v[:-1]
                            for k, v in result_host.items()}
-        LOG.info("Successfully got host parameters: %s", result_host)
         return result_host
 
     def get_adv_param_from_pb(self):
@@ -979,10 +1238,7 @@ class NFS(object):
         """
         ouput_host_param = self.host_param_mapping.values()
         if set(payload.keys()) & set(ouput_host_param):
-            if not nfs_details:
-                # its a create operation
-                payload['export_option'] = 1
-            elif nfs_details and nfs_details['export_option'] != 1:
+            if not nfs_details or (nfs_details and nfs_details['export_option'] != 1):
                 payload['export_option'] = 1
             if 'read_write_root_hosts_string' in payload:
                 # SDK have param named 'root_access_hosts_string' instead of
@@ -1094,7 +1350,6 @@ class NFS(object):
             return []
 
         host_list = []
-        LOG.info("Converting host_str: %s", host_str)
         try:
             for h in host_str.split(","):
                 version = get_ip_version(h)
@@ -1110,7 +1365,6 @@ class NFS(object):
                 host_str, str(e))
             LOG.error(msg)
             self.module.fail_json(msg=msg)
-        LOG.info("Successfully converted host_str to: %s", host_list)
         return host_list
 
     def add_host(self, existing_host_dict, new_host_dict):
@@ -1132,24 +1386,14 @@ class NFS(object):
             existing_host_str = existing_host_dict[k]
             existing_host_list = self.convert_host_str_to_list(
                 existing_host_str)
-            LOG.info("Existing nfs host: %s", existing_host_list)
 
             new_host_str = new_host_dict[k]
             new_host_list = self.convert_host_str_to_list(
                 new_host_str)
-            LOG.info("New nfs host: %s", new_host_list)
 
             if not new_host_list:
                 LOG.info("Nothing to add as no host given")
                 continue
-
-            """
-            if len(new_host_list) > len(set(new_host_list)):
-                msg = "Duplicate host given: %s in host param: %s" % (
-                    new_host_list, k)
-                LOG.error(msg)
-                self.module.fail_json(msg=msg)
-            """
 
             if new_host_list and not existing_host_list:
                 # Existing nfs host is empty so lets directly add
@@ -1164,11 +1408,8 @@ class NFS(object):
                 LOG.info("All host given to be added is already added")
                 continue
 
-            LOG.info("Actual to be added: %(actual)s in %(" "existing)s", {
-                     'actual': actual_to_add, 'existing': existing_host_list})
             # Lets extends actual_to_add list, which is new with existing
             actual_to_add.extend(existing_host_list)
-            LOG.info("After adding final list will be: %s", actual_to_add)
 
             # Since SDK takes host_str as ',' separated instead of list, so
             # lets convert str to list
@@ -1197,12 +1438,10 @@ class NFS(object):
             existing_host_str = existing_host_dict[k]
             existing_host_list = self.convert_host_str_to_list(
                 existing_host_str)
-            LOG.info("Existing nfs host: %s", existing_host_list)
 
             new_host_str = new_host_dict[k]
             new_host_list = self.convert_host_str_to_list(
                 new_host_str)
-            LOG.info("New nfs host: %s", new_host_list)
 
             if not new_host_list:
                 LOG.info("Nothing to remove as no host given")
@@ -1223,19 +1462,10 @@ class NFS(object):
             actual_to_remove = list(set(new_host_list) & set(
                 existing_host_list))
             if not actual_to_remove:
-                LOG.info("To be removed: %(remove)s is not present in "
-                         "existing nfs host:%(existing)s", {
-                             'remove': new_host_list,
-                             'existing': existing_host_list})
                 continue
 
-            LOG.info("Removing: %(actual_to_remove)s from: %("
-                     "existing_host_list)s", {
-                         'actual_to_remove': actual_to_remove,
-                         'existing_host_list': existing_host_list})
             final_host_list = list(set(existing_host_list) - set(
                 actual_to_remove))
-            LOG.info("After removing, remaining will be %s", final_host_list)
 
             # Since SDK takes host_str as ',' separated instead of list, so
             # lets convert str to list
@@ -1283,11 +1513,8 @@ class NFS(object):
                           "already have host added using host obj"
                     LOG.error(msg)
                     self.module.fail_json(msg=msg)
-                LOG.info("Host param given: %s", new_host_dict)
                 LOG.info("Extracting same given param from nfs")
                 existing_host_dict = {k: nfs_details[k] for k in new_host_dict}
-                LOG.info("Successfully extracted same given param: %s from "
-                         "nfs", existing_host_dict)
             except KeyError as e:
                 msg = "Failed to extract key-value from current nfs: %s" % \
                       str(e)
@@ -1307,7 +1534,6 @@ class NFS(object):
 
             if modify_host_dict:
                 modify_param.update(modify_host_dict)
-                LOG.info("Successfully got hosts params: %s", modify_param)
 
         if not modify_param:
             LOG.info("Existing nfs attribute value is same as given input, "
@@ -1317,11 +1543,9 @@ class NFS(object):
         modify_param = self.correct_payload_as_per_sdk(
             modify_param, nfs_details)
 
-        LOG.info("Modifying nfs with param: %s", modify_param)
         try:
             resp = nfs_obj.modify(**modify_param)
             resp.raise_if_err()
-            LOG.info("Successfully modified nfs with param: %s", modify_param)
         except Exception as e:
             msg = "Failed to modify nfs error: %s" % str(e)
             LOG.error(msg)
@@ -1484,6 +1708,7 @@ def get_nfs_parameters():
                             choices=DEFAULT_ACCESS_LIST),
         min_security=dict(required=False, type='str',
                           choices=MIN_SECURITY_LIST),
+        adv_host_mgmt_enabled=dict(required=False, type='bool', default=None),
         no_access_hosts=HOST_DICT,
         read_only_hosts=HOST_DICT,
         read_only_root_hosts=HOST_DICT,

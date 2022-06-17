@@ -1,9 +1,9 @@
 #!/usr/bin/python
-# Copyright: (c) 2020, DellEMC
+# Copyright: (c) 2020, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
-"""Ansible module for Gathering information about DellEMC Unity"""
+"""Ansible module for Gathering information about Unity"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -15,10 +15,10 @@ module: info
 
 version_added: '1.1.0'
 
-short_description: Gathering information about DellEMC Unity
+short_description: Gathering information about Unity
 
 description:
-- Gathering information about DellEMC Unity storage system includes
+- Gathering information about Unity storage system includes
   Get the details of Unity array,
   Get list of Hosts in Unity array,
   Get list of FC initiators in Unity array,
@@ -33,14 +33,19 @@ description:
   Get list of SMB shares in Unity array,
   Get list of NFS exports in Unity array,
   Get list of User quotas in Unity array,
-  Get list of Quota tree in Unity array.
+  Get list of Quota tree in Unity array,
+  Get list of NFS Servers in Unity array,
+  Get list of CIFS Servers in Unity array.
+  Get list of Ethernet ports in Unity array.
+  Get list of File interfaces used in Unity array.
 
 extends_documentation_fragment:
-  - dellemc.unity.dellemc_unity.unity
+  - dellemc.unity.unity
 
 author:
 - Rajshree Khare (@kharer5) <ansible.team@dell.com>
 - Akash Shendge (@shenda1) <ansible.team@dell.com>
+- Meenakshi Dembi (@dembim) <ansible.team@dell.com>
 
 options:
   gather_subset:
@@ -62,9 +67,13 @@ options:
     - user_quota
     - tree_quota
     - disk_group
+    - nfs_server
+    - cifs_server
+    - ethernet_port
+    - file_interface
     choices: [host, fc_initiator, iscsi_initiator, cg, storage_pool, vol,
     snapshot_schedule, nas_server, file_system, snapshot, nfs_export,
-    smb_share, user_quota, tree_quota, disk_group]
+    smb_share, user_quota, tree_quota, disk_group, nfs_server, cifs_server, ethernet_port, file_interface]
     type: list
     elements: str
 '''
@@ -92,6 +101,10 @@ EXAMPLES = r'''
        - user_quota
        - tree_quota
        - disk_group
+       - nfs_server
+       - cifs_server
+       - ethernet_port
+       - file_interface
 
  - name: Get information of Unity array
    dellemc.unity.info:
@@ -234,6 +247,42 @@ EXAMPLES = r'''
      verifycert: "{{verifycert}}"
      gather_subset:
        - disk_group
+
+ - name: Get list of NFS Servers on Unity array
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - nfs_server
+
+ - name: Get list of CIFS Servers on Unity array
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - cifs_server
+
+ - name: Get list of ethernet ports on Unity array
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - ethernet_port
+
+ - name: Get list of file interfaces on Unity array.
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - file_interface
 '''
 
 RETURN = r'''
@@ -439,18 +488,117 @@ Disk_Groups:
         tier_type:
             description: The tier type of the disk group.
             type: str
+NFS_Servers:
+    description: Details of the NFS Servers.
+    returned: When NFS Servers exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the NFS Servers.
+            type: str
+    sample: [
+            {
+                "id": "nfs_3",
+            },
+            {
+                "id": "nfs_4",
+            },
+            {
+                "id": "nfs_9",
+            }]
+CIFS_Servers:
+    description: Details of the CIFS Servers.
+    returned: When CIFS Servers exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the CIFS Servers.
+            type: str
+        name:
+            description: The name of the CIFS server.
+            type: str
+    sample: [
+            {
+                "id": "cifs_3",
+                "name": "test_cifs_1"
+            },
+            {
+                "id": "cifs_4",
+                "name": "test_cifs_2"
+            },
+            {
+                "id": "cifs_9",
+                "name": "test_cifs_3"
+            }
+    ]
+Ethernet_ports:
+    description: Details of the ethernet ports.
+    returned: When ethernet ports exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the ethernet port.
+            type: str
+        name:
+            description: The name of the ethernet port.
+            type: str
+    sample: [
+            {
+                "id": "spa_mgmt",
+                "name": "SP A Management Port"
+            },
+            {
+                "id": "spa_ocp_0_eth0",
+                "name": "SP A 4-Port Card Ethernet Port 0"
+            },
+            {
+                "id": "spa_ocp_0_eth1",
+                "name": "SP A 4-Port Card Ethernet Port 1"
+            }
+    ]
+File_interfaces:
+    description: Details of the file inetrfaces.
+    returned: When file inetrface exist.
+    type: complex
+    contains:
+        id:
+            description: The ID of the file inetrface.
+            type: str
+        name:
+            description: The name of the file inetrface.
+            type: str
+        ip_address:
+            description: IP address of the file inetrface.
+            type: str
+    sample: [
+            {
+                "id": "if_3",
+                "ip_address": "xx.xx.xx.xx",
+                "name": "1_APMXXXXXXXXXX"
+            },
+            {
+                "id": "if_3",
+                "ip_address": "xx.xx.xx.xx",
+                "name": "2_APMXXXXXXXXXX"
+            },
+            {
+                "id": "if_3",
+                "ip_address": "xx.xx.xx.xx",
+                "name": "3_APMXXXXXXXXXX"
+            }
+    ]
 '''
-
+from re import sub
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
-    import dellemc_ansible_unity_utils as utils
+    import utils
 
 LOG = utils.get_logger('info')
 SUCCESSFULL_LISTED_MSG = 'Successfully listed.'
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.3.0"
+application_type = "Ansible/1.4.0"
 
 
 class Info(object):
@@ -732,6 +880,62 @@ class Info(object):
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
+    def get_nfs_server_list(self):
+        """Get the list of NFS servers on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting NFS servers list")
+            nfs_servers = self.unity.get_nfs_server()
+            return nfs_server_result_list(nfs_servers)
+
+        except Exception as e:
+            msg = 'Get NFS servers list from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
+    def get_cifs_server_list(self):
+        """Get the list of CIFS servers on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting CIFS servers list")
+            cifs_servers = self.unity.get_cifs_server()
+            return result_list(cifs_servers)
+
+        except Exception as e:
+            msg = 'Get CIFS servers list from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
+    def get_ethernet_port_list(self):
+        """Get the list of ethernet ports on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting ethernet ports list")
+            ethernet_port = self.unity.get_ethernet_port()
+            return result_list(ethernet_port)
+
+        except Exception as e:
+            msg = 'Get ethernet port list from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
+    def get_file_interface_list(self):
+        """Get the list of file interfaces on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting file interfaces list")
+            file_interface = self.unity.get_file_interface()
+            return file_interface_result_list(file_interface)
+
+        except Exception as e:
+            msg = 'Get file interface list from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
     def perform_module_operation(self):
         """ Perform different actions on Info based on user parameter
             chosen in playbook """
@@ -754,6 +958,10 @@ class Info(object):
         user_quota = []
         tree_quota = []
         disk_group = []
+        nfs_server = []
+        cifs_server = []
+        ethernet_port = []
+        file_interface = []
 
         subset = self.module.params['gather_subset']
         if subset is not None:
@@ -787,6 +995,14 @@ class Info(object):
                 tree_quota = self.get_tree_quota_list()
             if 'disk_group' in subset:
                 disk_group = self.get_disk_groups_list()
+            if 'nfs_server' in subset:
+                nfs_server = self.get_nfs_server_list()
+            if 'cifs_server' in subset:
+                cifs_server = self.get_cifs_server_list()
+            if 'ethernet_port' in subset:
+                ethernet_port = self.get_ethernet_port_list()
+            if 'file_interface' in subset:
+                file_interface = self.get_file_interface_list()
 
         self.module.exit_json(
             Array_Details=array_details,
@@ -804,7 +1020,11 @@ class Info(object):
             SMB_Shares=smb_share,
             User_Quotas=user_quota,
             Tree_Quotas=tree_quota,
-            Disk_Groups=disk_group
+            Disk_Groups=disk_group,
+            NFS_Servers=nfs_server,
+            CIFS_Servers=cifs_server,
+            Ethernet_ports=ethernet_port,
+            File_interfaces=file_interface
         )
 
 
@@ -816,10 +1036,7 @@ def result_list(entity):
         LOG.info(SUCCESSFULL_LISTED_MSG)
         for item in entity:
             result.append(
-                {
-                    "name": item.name,
-                    "id": item.id
-                }
+                item._get_properties()
             )
         return result
     else:
@@ -898,6 +1115,36 @@ def tree_quota_result_list(entity):
         return None
 
 
+def nfs_server_result_list(entity):
+    """ Get the id of NFS Server """
+    result = []
+
+    if entity:
+        LOG.info(SUCCESSFULL_LISTED_MSG)
+        for item in entity:
+            result.append(
+                item._get_properties()
+            )
+        return result
+    else:
+        return None
+
+
+def file_interface_result_list(entity):
+    """ Get the id, name and IP of File Interfaces """
+    result = []
+
+    if entity:
+        LOG.info(SUCCESSFULL_LISTED_MSG)
+        for item in entity:
+            result.append(
+                item._get_properties()
+            )
+        return result
+    else:
+        return None
+
+
 def get_info_parameters():
     """This method provides parameters required for the ansible
     info module on Unity"""
@@ -909,7 +1156,8 @@ def get_info_parameters():
                                             'snapshot_schedule', 'nas_server',
                                             'file_system', 'snapshot',
                                             'nfs_export', 'smb_share',
-                                            'user_quota', 'tree_quota', 'disk_group']))
+                                            'user_quota', 'tree_quota', 'disk_group', 'nfs_server', 'cifs_server',
+                                            'ethernet_port', 'file_interface']))
 
 
 def main():

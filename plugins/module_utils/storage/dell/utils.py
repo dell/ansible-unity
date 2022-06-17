@@ -1,4 +1,4 @@
-# Copyright: (c) 2020, DellEMC
+# Copyright: (c) 2020, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -7,7 +7,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import logging
-from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell.dellemc_unity_logging_handler \
+from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell.logging_handler \
     import CustomRotatingFileHandler
 import math
 from decimal import Decimal
@@ -36,13 +36,15 @@ try:
         UnityNfsShareList
     from storops.unity.resource.snap_schedule import UnitySnapScheduleList, \
         UnitySnapSchedule
+    from storops.unity.resource.replication_session import UnityReplicationSession
     from storops.unity.enums import HostInitiatorTypeEnum, \
         TieringPolicyEnum, ScheduleTypeEnum, DayOfWeekEnum, NodeEnum, \
         HostLUNAccessEnum, HostTypeEnum, AccessPolicyEnum, \
         FilesystemTypeEnum, FSSupportedProtocolEnum, FSFormatEnum, \
         NFSTypeEnum, NFSShareDefaultAccessEnum, NFSShareSecurityEnum, \
         FilesystemSnapAccessTypeEnum, FSLockingPolicyEnum, \
-        CifsShareOfflineAvailabilityEnum, NasServerUnixDirectoryServiceEnum
+        CifsShareOfflineAvailabilityEnum, NasServerUnixDirectoryServiceEnum, \
+        KdcTypeEnum, NodeEnum, FileInterfaceRoleEnum
     from storops.exception import UnityResourceNotFoundError, \
         StoropsConnectTimeoutError, UnityNfsShareNameExistedError
     from storops.connection.exceptions import HttpError, HTTPClientError
@@ -57,6 +59,9 @@ try:
         RaidStripeWidthEnum, StoragePoolTypeEnum
     from storops.unity.resource.disk import UnityDisk, \
         UnityDiskList, UnityDiskGroup, UnityDiskGroupList
+    from storops.unity.resource.cifs_server import UnityCifsServer
+    from storops.unity.resource.nfs_server import UnityNfsServer
+    from storops.unity.resource.interface import UnityFileInterface
     HAS_UNITY_SDK = True
 except ImportError:
     HAS_UNITY_SDK = False
@@ -315,3 +320,19 @@ def is_initiator_valid(value):
         return True
     else:
         return False
+
+
+'''
+Validates if ip is valid subnet mask
+'''
+
+
+def is_valid_netmask(netmask):
+    if netmask:
+        regexp = re.compile(r'^((128|192|224|240|248|252|254)\.0\.0\.0)|'
+                            r'(255\.(((0|128|192|224|240|248|252|254)\.0\.0)|'
+                            r'(255\.(((0|128|192|224|240|248|252|254)\.0)|'
+                            r'255\.(0|128|192|224|240|248|252|254)))))$')
+        if not regexp.search(netmask):
+            return False
+        return True

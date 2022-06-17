@@ -1,4 +1,15 @@
 # ansible-unity Change Log
+## Version 1.4.0 - released on 28/06/22
+- Added execution environment manifest file to support building an execution environment with ansible-builder.
+- Added cifsserver module to support create, list and delete CIFS server.
+- Added nfsserver module to support create, list and delete NFS server.
+- Added interface module to support create, list and delete interface.
+- Enhance nfs module to support advanced host management option.
+- Enhanced info module to list cifs server, nfs servers, ethernet port and file interface.
+- Enhanced nas server module to support create, modify and delete of nas server replication.
+- Enhanced filesystem module to support create, modify and delete of filesystem replication.
+- Check mode is supported for Info.
+
 ## Version 1.3.0 - released on 25/03/22
 - Enhanced host module to support listing of network addresses, FC initiators, ISCSI initiators and allocated volumes of a host
 - Enhance host module to support add/remove network address to/from a host.
