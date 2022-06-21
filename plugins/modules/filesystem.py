@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright: (c) 2020, DellEMC
+# Copyright: (c) 2020, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -15,19 +15,20 @@ module: filesystem
 version_added: '1.1.0'
 short_description: Manage filesystem on Unity storage system
 description:
-- Managing filesystem on Unity storage system includes-
+- Managing filesystem on Unity storage system includes
   Create new filesystem,
-  Modify snapschedule attribute of filesystem
+  Modify snapschedule attribute of filesystem,
   Modify filesystem attributes,
   Display filesystem details,
   Display filesystem snapshots,
   Display filesystem snapschedule,
   Delete snapschedule associated with the filesystem,
   Delete filesystem,
-  Create new filesystem with quota configuration
+  Create new filesystem with quota configuration,
+  Enable, modify and disable replication.
 
 extends_documentation_fragment:
-  -  dellemc.unity.dellemc_unity.unity
+  -  dellemc.unity.unity
 
 author:
 - Arindam Datta (@dattaarindam) <ansible.team@dell.com>
@@ -216,14 +217,93 @@ options:
       filesystem.
     required: false
     type: str
+  replication_params:
+    description:
+    - Settings required for enabling or modifying replication.
+    type: dict
+    suboptions:
+      replication_name:
+        description:
+        - Name of the replication session.
+        type: str
+      new_replication_name:
+        description:
+        - Replication name to rename the session to.
+        type: str
+      replication_mode:
+        description:
+        - The replication mode.
+        - This is a mandatory field while creating a replication session.
+        type: str
+        choices: ['asynchronous', 'manual']
+      rpo:
+        description:
+        - Maximum time to wait before the system syncs the source and destination LUNs.
+        - rpo should be specified if the replication_mode is asynchronous.
+        - The value should be in range of 5 to 1440.
+        type: int
+      replication_type:
+        description:
+        - Type of replication.
+        choices: ['local', 'remote']
+        type: str
+      remote_system:
+        description:
+        - Details of remote system to which the replication is being configured.
+        - remote_system should be specified if the replication_type is remote.
+        type: dict
+        suboptions:
+          remote_system_host:
+            required: True
+            description:
+            - IP or FQDN for remote Unity unisphere Host.
+            type: str
+          remote_system_username:
+            type: str
+            required: True
+            description:
+            - User name of remote Unity unisphere Host.
+          remote_system_password:
+            type: str
+            required: True
+            description:
+            - Password of remote Unity unisphere Host.
+          remote_system_verifycert:
+            type: bool
+            default: True
+            required: False
+            description:
+            - Boolean variable to specify whether or not to validate SSL
+              certificate of remote Unity unisphere Host.
+            - True - Indicates that the SSL certificate should be verified.
+            - False - Indicates that the SSL certificate should not be
+              verified.
+          remote_system_port:
+            description:
+            - Port at which remote Unity unisphere is hosted.
+            type: int
+            required: False
+            default: 443
+      destination_pool_id:
+        type: str
+        description: ID of pool to allocate destination filesystem.
+      destination_pool_name:
+        type: str
+        description: Name of pool to allocate destination filesystem.
+  replication_state:
+    description:
+    - State of the replication.
+    choices: ['enable', 'disable']
+    type: str
 
 notes:
 - SMB shares, NFS exports, and snapshots associated with filesystem need
   to be deleted prior to deleting a filesystem.
-- quota_config parameter can be used to update default hard limit
+- The quota_config parameter can be used to update default hard limit
   and soft limit values to limit the maximum space that can be used.
   By default they both are set to 0 during filesystem
   creation which means unlimited.
+- Check_mode is not supported.
 """
 
 EXAMPLES = r"""
@@ -319,6 +399,64 @@ EXAMPLES = r"""
     verifycert: "{{verifycert}}"
     filesystem_id: "rs_405"
     state: "absent"
+
+- name: Enable replication on the fs
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_id: "rs_405"
+    replication_params:
+      replication_name: "test_repl"
+      replication_type: "remote"
+      replication_mode: "asynchronous"
+      rpo: 60
+      remote_system:
+        remote_system_host: '0.1.2.3'
+        remote_system_verifycert: False
+        remote_system_username: 'username'
+        remote_system_password: 'password'
+      destination_pool_name: "pool_test_1"
+    replication_state: "enable"
+    state: "present"
+
+- name: Modify replication on the fs
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_id: "rs_405"
+    replication_params:
+      replication_name: "test_repl"
+      new_replication_name: "test_repl_updated"
+      replication_mode: "asynchronous"
+      rpo: 50
+    replication_state: "enable"
+    state: "present"
+
+- name: Disable replication on the fs
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_id: "rs_405"
+    replication_state: "disable"
+    state: "present"
+
+- name: Disable replication by specifying replication_name on the fs
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_id: "rs_405"
+    replication_params:
+        replication_name: "test_replication"
+    replication_state: "disable"
+    state: "present"
 """
 
 RETURN = r'''
@@ -326,6 +464,9 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
+    sample: {
+        changed: True
+    }
 
 filesystem_details:
     description: Details of the filesystem.
@@ -450,12 +591,123 @@ filesystem_details:
                 quota_policy:
                     description: Quota policy set in quota configuration.
                     type: str
+        replication_sessions:
+            description: List of replication sessions if replication is enabled.
+            type: complex
+            contains:
+                id:
+                    description: ID of replication session
+                    type: str
+                name:
+                    description: Name of replication session
+                    type: str
+                remote_system:
+                    description: Remote system
+                    type: complex
+                    contains:
+                        id:
+                            description: ID of remote system
+                            type: str
+    sample: {
+        "changed": True,
+        "filesystem_details": {
+            "access_policy": "AccessPolicyEnum.UNIX",
+            "cifs_notify_on_change_dir_depth": 512,
+            "cifs_share": null,
+            "data_reduction_percent": 0,
+            "data_reduction_ratio": 1.0,
+            "data_reduction_size_saved": 0,
+            "description": "",
+            "existed": true,
+            "folder_rename_policy": "FSRenamePolicyEnum.SMB_RENAME_FORBIDDEN",
+            "format": "FSFormatEnum.UFS64",
+            "hash": 8735427610152,
+            "health": {
+                "UnityHealth": {
+                    "hash": 8735427614928
+                }
+            },
+            "host_io_size": "HostIOSizeEnum.GENERAL_8K",
+            "id": "fs_65916",
+            "is_advanced_dedup_enabled": false,
+            "is_cifs_notify_on_access_enabled": false,
+            "is_cifs_notify_on_write_enabled": false,
+            "is_cifs_op_locks_enabled": false,
+            "is_cifs_sync_writes_enabled": false,
+            "is_data_reduction_enabled": false,
+            "is_read_only": false,
+            "is_smbca": false,
+            "is_thin_enabled": true,
+            "locking_policy": "FSLockingPolicyEnum.MANDATORY",
+            "metadata_size": 11274289152,
+            "metadata_size_allocated": 4294967296,
+            "min_size_allocated": 0,
+            "name": "test_fs",
+            "nas_server": {
+                "id": "nas_18",
+                "name": "test_nas1"
+            },
+            "nfs_share": null,
+            "per_tier_size_used": [
+                6979321856,
+                0,
+                0
+            ],
+            "pool": {
+                "id": "pool_7",
+                "name": "pool 7"
+            },
+            "pool_full_policy": "ResourcePoolFullPolicyEnum.FAIL_WRITES",
+            "quota_config": {
+                "default_hard_limit": "0B",
+                "default_soft_limit": "0B",
+                "grace_period": "7.0 days",
+                "id": "quotaconfig_171798760421_0",
+                "is_user_quota_enabled": false,
+                "quota_policy": "QuotaPolicyEnum.FILE_SIZE"
+            },
+            "replication_sessions": {
+                "current_transfer_est_remain_time": 0,
+                "id": "***",
+                "last_sync_time": "2022-05-12 11:20:38+00:00",
+                "local_role": "ReplicationSessionReplicationRoleEnum.SOURCE",
+                "max_time_out_of_sync": 60,
+                "members": null,
+                "name": "local_repl_new",
+                "network_status": "ReplicationSessionNetworkStatusEnum.OK",
+                "remote_system": {
+                    "UnityRemoteSystem": {
+                        "hash": 8735426929707
+                    }
+                },
+                "replication_resource_type": "ReplicationEndpointResourceTypeEnum.FILESYSTEM",
+                "src_resource_id": "res_66444",
+                "src_status": "ReplicationSessionStatusEnum.OK",
+                "status": "ReplicationOpStatusEnum.AUTO_SYNC_CONFIGURED",
+                "sync_progress": 0,
+                "sync_state": "ReplicationSessionSyncStateEnum.IDLE"
+            },
+            "size_allocated": 283148288,
+            "size_allocated_total": 4578148352,
+            "size_preallocated": 2401173504,
+            "size_total": 10737418240,
+            "size_total_with_unit": "10.0 GB",
+            "size_used": 1620312064,
+            "snap_count": 2,
+            "snaps_size": 21474869248,
+            "snaps_size_allocated": 32768,
+            "snapshots": [],
+            "supported_protocols": "FSSupportedProtocolEnum.NFS",
+            "tiering_policy": "TieringPolicyEnum.AUTOTIER_HIGH",
+            "type": "FilesystemTypeEnum.FILESYSTEM"
+        }
+    }
 
 '''
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
-    import dellemc_ansible_unity_utils as utils
+    import utils
 
 LOG = utils.get_logger('filesystem')
 
@@ -463,7 +715,7 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.3.0"
+application_type = "Ansible/1.4.0"
 
 
 class Filesystem(object):
@@ -979,6 +1231,11 @@ class Filesystem(object):
                                                'quota_policy'],
                                            'grace_period': grace_period}
                                            })
+            filesystem_details['replication_sessions'] = []
+            fs_repl_sessions = self.get_replication_session(obj_fs)
+            if fs_repl_sessions:
+                filesystem_details['replication_sessions'] = \
+                    fs_repl_sessions._get_properties()
             return filesystem_details
 
         except Exception as e:
@@ -1001,7 +1258,8 @@ class Filesystem(object):
                     errmsg = 'Invalid input parameter "" for {0}'.format(
                         key)
                     self.module.fail_json(msg=errmsg)
-
+            if self.module.params['replication_params'] and self.module.params['replication_state'] is None:
+                self.module.fail_json(msg="Please specify replication_state along with replication_params")
         except Exception as e:
             errormsg = "Failed to validate the module param with " \
                        "error {0}".format(str(e))
@@ -1145,6 +1403,233 @@ class Filesystem(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
+    def update_replication_params(self, replication_params):
+        ''' Update replication params '''
+        try:
+            if replication_params['replication_type'] == 'remote' or \
+                    (replication_params['replication_type'] is None and
+                     replication_params['remote_system']):
+                connection_params = {
+                    'unispherehost': replication_params['remote_system']['remote_system_host'],
+                    'username': replication_params['remote_system']['remote_system_username'],
+                    'password': replication_params['remote_system']['remote_system_password'],
+                    'verifycert': replication_params['remote_system']['remote_system_verifycert'],
+                    'port': replication_params['remote_system']['remote_system_port']
+                }
+                remote_system_conn = utils.get_unity_unisphere_connection(
+                    connection_params, application_type)
+                replication_params['remote_system_name'] = remote_system_conn.name
+                if replication_params['destination_pool_name'] is not None:
+                    pool_object = \
+                        remote_system_conn.get_pool(name=replication_params['destination_pool_name'])
+                    replication_params['destination_pool_id'] = pool_object.id
+            else:
+                if replication_params['destination_pool_name'] is not None:
+                    pool_object = \
+                        self.unity_conn.get_pool(name=replication_params['destination_pool_name'])
+                    replication_params['destination_pool_id'] = pool_object.id
+        except Exception as e:
+            errormsg = "Updating replication params failed" \
+                       " with error %s" % str(e)
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def validate_rpo(self, replication_params):
+        ''' Validates rpo based on replication mode '''
+        if replication_params['replication_mode'] == 'asynchronous' and \
+                replication_params['rpo'] is None:
+            errormsg = "rpo is required together with 'asynchronous' replication_mode."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        if (replication_params['rpo'] and (replication_params['rpo'] < 5 or replication_params['rpo'] > 1440)) \
+                and (replication_params['replication_mode'] and replication_params['replication_mode'] != 'manual' or
+                     not replication_params['replication_mode'] and replication_params['rpo'] != -1):
+            errormsg = "rpo value should be in range of 5 to 1440"
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def validate_replication_params(self, replication_params):
+        ''' Validate replication params '''
+        if not replication_params:
+            errormsg = "Please specify replication_params to enable replication."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        if replication_params['destination_pool_id'] is not None and \
+                replication_params['destination_pool_name'] is not None:
+            errormsg = "'destination_pool_id' and 'destination_pool_name' is mutually exclusive."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        self.validate_rpo(replication_params)
+        # Validate replication type
+        if replication_params['replication_type'] == 'remote' and replication_params['remote_system'] is None:
+            errormsg = "Remote_system is required together with 'remote' replication_type"
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def validate_create_replication_params(self, replication_params):
+        ''' Validate replication params '''
+
+        if replication_params['destination_pool_id'] is None and \
+                replication_params['destination_pool_name'] is None:
+            errormsg = "Either 'destination_pool_id' or 'destination_pool_name' is required to enable replication."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        keys = ['replication_mode', 'replication_type']
+        for key in keys:
+            if replication_params[key] is None:
+                errormsg = "Please specify %s to enable replication." % key
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
+    def modify_replication_session(self, obj_fs, repl_session, replication_params):
+        """ Modify the replication session
+            :param: obj_fs: Filesystem object
+            :param: repl_session: Replication session to be modified
+            :param: replication_params: Module input params
+            :return: True if modification is successful
+        """
+        try:
+            LOG.info("Modifying replication session of filesystem %s", obj_fs.name)
+            modify_payload = {}
+            if replication_params['replication_mode'] and \
+                    replication_params['replication_mode'] == 'manual':
+                rpo = -1
+            elif replication_params['rpo']:
+                rpo = replication_params['rpo']
+            name = repl_session.name
+            if replication_params['new_replication_name'] and \
+                    name != replication_params['new_replication_name']:
+                name = replication_params['new_replication_name']
+
+            if repl_session.name != name:
+                modify_payload['name'] = name
+            if ((replication_params['replication_mode'] or replication_params['rpo']) and
+                    repl_session.max_time_out_of_sync != rpo):
+                modify_payload['max_time_out_of_sync'] = rpo
+
+            if modify_payload:
+                repl_session.modify(**modify_payload)
+                return True
+
+            return False
+        except Exception as e:
+            errormsg = "Modifying replication session failed with error %s", e
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def enable_replication(self, obj_fs, replication_params):
+        """ Enable the replication session
+            :param: obj_fs: Filesystem object
+            :param: replication_params: Module input params
+            :return: True if enabling replication is successful
+        """
+        try:
+            self.validate_replication_params(replication_params)
+            self.update_replication_params(replication_params)
+
+            repl_session = \
+                self.get_replication_session_on_filter(obj_fs, replication_params, "modify")
+            if repl_session:
+                return self.modify_replication_session(obj_fs, repl_session, replication_params)
+
+            self.validate_create_replication_params(replication_params)
+            replication_args_list = get_replication_args_list(replication_params)
+            if 'remote_system_name' in replication_params:
+                remote_system_name = replication_params['remote_system_name']
+                remote_system_list = self.unity_conn.get_remote_system()
+                for remote_system in remote_system_list:
+                    if remote_system.name == remote_system_name:
+                        replication_args_list['remote_system'] = remote_system
+                        break
+                if 'remote_system' not in replication_args_list.keys():
+                    errormsg = "Remote system %s is not found" % (remote_system_name)
+                    LOG.error(errormsg)
+                    self.module.fail_json(msg=errormsg)
+
+            LOG.info(("Enabling replication to the filesystem %s", obj_fs.name))
+            obj_fs.replicate_with_dst_resource_provisioning(**replication_args_list)
+            return True
+        except Exception as e:
+            errormsg = "Enabling replication to the filesystem %s failed " \
+                       "with error %s" % (obj_fs.name, str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def disable_replication(self, obj_fs, replication_params):
+        """ Remove replication from the filesystem
+            :param: replication_params: Module input params
+            :return: True if disabling replication is successful
+        """
+        try:
+            LOG.info(("Disabling replication on the filesystem %s", obj_fs.name))
+            if replication_params:
+                self.update_replication_params(replication_params)
+            repl_session = \
+                self.get_replication_session_on_filter(obj_fs, replication_params, "delete")
+            if repl_session:
+                repl_session.delete()
+                return True
+            return False
+        except Exception as e:
+            errormsg = "Disabling replication on the filesystem %s failed " \
+                       "with error %s" % (obj_fs.name, str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def get_replication_session_on_filter(self, obj_fs, replication_params, action):
+        if replication_params and replication_params['remote_system']:
+            repl_session = \
+                self.get_replication_session(obj_fs, filter_key="remote_system_name",
+                                             replication_params=replication_params)
+        elif replication_params and replication_params['replication_name']:
+            repl_session = \
+                self.get_replication_session(obj_fs, filter_key="name",
+                                             name=replication_params['replication_name'])
+        else:
+            repl_session = self.get_replication_session(obj_fs, action=action)
+            if repl_session and action and replication_params and \
+                    replication_params['replication_type'] == 'local' and \
+                    repl_session.remote_system.name != self.unity_conn.name:
+                return None
+
+        return repl_session
+
+    def get_replication_session(self, obj_fs, filter_key=None, replication_params=None, name=None, action=None):
+        """ Retrieves the replication sessions configured for the filesystem
+            :param: obj_fs: Filesystem object
+            :param: filter_key: Key to filter replication sessions
+            :param: replication_params: Module input params
+            :param: name: Replication session name
+            :param: action: Specifies modify or delete action on replication session
+            :return: Replication session details
+        """
+        try:
+            repl_session = self.unity_conn.get_replication_session(src_resource_id=obj_fs.storage_resource.id)
+            if not filter_key and repl_session:
+                if len(repl_session) > 1:
+                    if action:
+                        error_msg = 'There are multiple replication sessions for the filesystem.'\
+                                    ' Please specify replication_name in replication_params to %s.' % action
+                        self.module.fail_json(msg=error_msg)
+                    return repl_session
+                return repl_session[0]
+            for session in repl_session:
+                if filter_key == 'remote_system_name' and \
+                        session.remote_system.name == replication_params['remote_system_name']:
+                    return session
+                if filter_key == 'name' and session.name == name:
+                    return session
+            return None
+        except Exception as e:
+            errormsg = "Retrieving replication session on the filesystem failed " \
+                       "with error %s", str(e)
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
     def perform_module_operation(self):
         """
         Perform different actions on filesystem module based on parameters
@@ -1159,6 +1644,8 @@ class Filesystem(object):
         size = self.module.params['size']
         cap_unit = self.module.params['cap_unit']
         quota_config = self.module.params['quota_config']
+        replication_params = self.module.params['replication_params']
+        replication_state = self.module.params['replication_state']
         state = self.module.params['state']
         snap_schedule_name = self.module.params['snap_schedule_name']
         snap_schedule_id = self.module.params['snap_schedule_id']
@@ -1291,6 +1778,12 @@ class Filesystem(object):
                                           " new object created could not be fetched."
                                           " Please rerun the task for expected result.")
 
+        if state == 'present' and filesystem_details and replication_state is not None:
+            if replication_state == 'enable':
+                changed = self.enable_replication(obj_fs, replication_params)
+            else:
+                changed = self.disable_replication(obj_fs, replication_params)
+
         if state == 'absent' and filesystem_details:
             changed = self.delete_filesystem(filesystem_id)
             filesystem_details = None
@@ -1342,6 +1835,23 @@ def get_time_with_unit(time):
     return "%s %s" % (time, unit)
 
 
+def get_replication_args_list(replication_params):
+    """Returns the replication args for payload"""
+    replication_args_list = {
+        'dst_pool_id': replication_params['destination_pool_id']
+    }
+
+    if replication_params['replication_name']:
+        replication_args_list['replication_name'] = replication_params['replication_name']
+    if 'replication_mode' in replication_params and \
+            replication_params['replication_mode'] == 'asynchronous':
+        replication_args_list['max_time_out_of_sync'] = replication_params['rpo']
+    else:
+        replication_args_list['max_time_out_of_sync'] = -1
+
+    return replication_args_list
+
+
 def get_filesystem_parameters():
     """This method provide parameters required for the ansible filesystem
        module on Unity"""
@@ -1383,6 +1893,25 @@ def get_filesystem_parameters():
             quota_policy=dict(required=False, type='str', choices=['FILE_SIZE', 'BLOCKS']),
             cap_unit=dict(required=False, type='str', choices=['MB', 'GB', 'TB']),
         ), mutually_exclusive=[['is_user_quota_enabled', 'quota_policy']]),
+        replication_params=dict(type='dict', options=dict(
+            replication_name=dict(type='str'),
+            new_replication_name=dict(type='str'),
+            replication_type=dict(type='str', choices=['local', 'remote']),
+            replication_mode=dict(type='str', choices=['asynchronous', 'manual']),
+            rpo=dict(type='int'),
+            remote_system=dict(type='dict',
+                               options=dict(
+                                    remote_system_host=dict(type='str', required=True),
+                                    remote_system_verifycert=dict(type='bool', required=False,
+                                                                  default=True),
+                                    remote_system_username=dict(type='str', required=True),
+                                    remote_system_password=dict(type='str', required=True, no_log=True),
+                                    remote_system_port=dict(type='int', required=False, default=443)
+                               )),
+            destination_pool_name=dict(type='str'),
+            destination_pool_id=dict(type='str')
+        )),
+        replication_state=dict(type='str', choices=['enable', 'disable']),
         state=dict(required=True, type='str', choices=['present', 'absent'])
     )
 

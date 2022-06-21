@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright: (c) 2020, DellEMC
+# Copyright: (c) 2020, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -24,7 +24,7 @@ description:
   Delete volume.
 
 extends_documentation_fragment:
-  - dellemc.unity.dellemc_unity.unity
+  - dellemc.unity.unity
 
 author:
 - Arindam Datta (@arindam-emc) <ansible.team@dell.com>
@@ -306,7 +306,7 @@ volume_details:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
-    import dellemc_ansible_unity_utils as utils
+    import utils
 import logging
 
 LOG = utils.get_logger('volume')
@@ -315,7 +315,7 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.3.0"
+application_type = "Ansible/1.4.0"
 
 
 def is_none_or_empty_string(param):
@@ -756,6 +756,12 @@ class Volume(object):
 
         try:
             host_access = []
+            current_hosts = self.get_volume_host_access_list(obj_vol)
+            for existing_host in current_hosts:
+                host_access.append(
+                    {'accessMask': eval('utils.HostLUNAccessEnum.' + existing_host['accessMask']),
+                     'host':
+                         {'id': existing_host['id']}, 'hlu': existing_host['hlu']})
             for item in host_dic_list:
                 host_access.append(
                     {'accessMask': utils.HostLUNAccessEnum.PRODUCTION,
@@ -852,6 +858,26 @@ class Volume(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
+    def get_volume_host_access_list(self, obj_vol):
+        """
+        Get volume host access list
+        :param obj_vol: volume instance
+        :return: host list
+        """
+        host_list = []
+        if obj_vol.host_access:
+            for host_access in obj_vol.host_access:
+                host = self.get_host(host_id=host_access.host.id).update()
+                hlu = None
+                for host_lun in host.host_luns:
+                    if host_lun.lun.name == obj_vol.name:
+                        hlu = host_lun.hlu
+                host_list.append({'name': host_access.host.name,
+                                  'id': host_access.host.id,
+                                  'accessMask': host_access.access_mask.name,
+                                  'hlu': hlu})
+        return host_list
+
     def get_volume_display_attributes(self, obj_vol):
         """get display volume attributes
         :param obj_vol: volume instance
@@ -862,15 +888,7 @@ class Volume(object):
             volume_details = obj_vol._get_properties()
             volume_details['size_total_with_unit'] = utils. \
                 convert_size_with_unit(int(volume_details['size_total']))
-            host_list = []
-            if obj_vol.host_access:
-                for host_access in obj_vol.host_access:
-                    host = self.get_host(host_id=host_access.host.id).update()
-                    host_dict = host.host_luns._get_properties()
-                    host_list.append({'name': host_access.host.name,
-                                      'id': host_access.host.id,
-                                      'hlu': host_dict['hlu']})
-            volume_details.update({'host_access': host_list})
+            volume_details.update({'host_access': self.get_volume_host_access_list(obj_vol)})
             if obj_vol.snap_schedule:
                 volume_details.update(
                     {'snap_schedule': {'name': obj_vol.snap_schedule.name,

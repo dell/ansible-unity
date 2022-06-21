@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright: (c) 2020, DellEMC
+# Copyright: (c) 2020, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -13,7 +13,7 @@ module: nasserver
 version_added: '1.1.0'
 short_description:  Manage NAS servers on Unity storage system
 extends_documentation_fragment:
-- dellemc.unity.dellemc_unity.unity
+- dellemc.unity.unity
 author:
 - P Srinivas Rao (@srinivas-rao5) <ansible.team@dell.com>
 description:
@@ -23,13 +23,13 @@ options:
   nas_server_id:
     description:
     - The ID of the NAS server.
-    - nas_server_name and nas_server_id are mutually exclusive parameters.
+    - The parameters nas_server_name and nas_server_id are mutually exclusive.
     - Either one is required to perform the task.
     type: str
   nas_server_name:
     description:
     - The Name of the NAS server.
-    - nas_server_name and nas_server_id are mutually exclusive parameters.
+    - The parameters nas_server_name and nas_server_id are mutually exclusive.
     - Either one  is required to perform the task.
     type: str
   nas_server_new_name:
@@ -91,17 +91,120 @@ options:
     - It can be mentioned during modification of the NAS server.
     type: str
     choices: ["NONE", "NIS", "LOCAL", "LDAP", "LOCAL_THEN_NIS", "LOCAL_THEN_LDAP"]
+  replication_params:
+    description:
+    - Settings required for enabling replication.
+    type: dict
+    suboptions:
+      destination_nas_server_name:
+        description:
+        - Name of the destination nas server.
+        - Default value will be source nas server name prefixed by 'DR_'.
+        type: str
+      replication_mode:
+        description:
+        - The replication mode.
+        - This is mandatory to enable replication.
+        type: str
+        choices: ['asynchronous', 'manual']
+      rpo:
+        description:
+        - Maximum time to wait before the system syncs the source and destination LUNs.
+        - rpo should be specified if the replication_mode is asynchronous.
+        - The value should be in range of 5 to 1440.
+        type: int
+      replication_type:
+        description:
+        - Type of replication.
+        choices: ['local', 'remote']
+        type: str
+      remote_system:
+        description:
+        - Details of remote system to which the replication is being configured.
+        - remote_system should be specified if the replication_type is remote.
+        type: dict
+        suboptions:
+          remote_system_host:
+            required: True
+            description:
+            - IP or FQDN for remote Unity unisphere Host.
+            type: str
+          remote_system_username:
+            type: str
+            required: True
+            description:
+            - User name of remote Unity unisphere Host.
+          remote_system_password:
+            type: str
+            required: True
+            description:
+            - Password of remote Unity unisphere Host.
+          remote_system_verifycert:
+            type: bool
+            default: True
+            required: False
+            description:
+            - Boolean variable to specify whether or not to validate SSL
+              certificate of remote Unity unisphere Host.
+            - True - Indicates that the SSL certificate should be verified.
+            - False - Indicates that the SSL certificate should not be
+              verified.
+          remote_system_port:
+            description:
+            - Port at which remote Unity unisphere is hosted.
+            type: int
+            required: False
+            default: 443
+      destination_pool_name:
+        description:
+        - Name of pool to allocate destination Luns.
+        - Mutually exclusive with destination_pool_id.
+        type: str
+      destination_pool_id:
+        description:
+        - Id of pool to allocate destination Luns.
+        - Mutually exclusive with destination_pool_name.
+        type: str
+      destination_sp:
+        description:
+        - Storage process of destination nas server
+        choices: ['SPA', 'SPB']
+        type: str
+      is_backup:
+        description:
+        - Indicates if the destination nas server is backup
+        type: bool
+      replication_name:
+        description:
+        - User defined name for replication session.
+        type: str
+      new_replication_name:
+        description:
+        - Replication name to rename the session to.
+        type: str
+  replication_state:
+    description:
+    - State of the replication.
+    choices: ['enable', 'disable']
+    type: str
+  replication_reuse_resource:
+    description:
+    - This parameter indicates if existing NAS Server is to be used for replication.
+    type: bool
   state:
     description:
     - Define the state of NAS server on the array.
-    - present indicates that NAS server should exist on the system after
+    - The value present indicates that NAS server should exist on the system after
       the task is executed.
-    - Right now deletion of NAS server is not supported. Hence, if state is
+    - In this release deletion of NAS server is not supported. Hence, if state is
       set to absent for any existing NAS server then error will be thrown.
     - For any non-existing NAS server, if state is set to absent then it will return None.
     type: str
     required: true
     choices: ['present', 'absent']
+
+notes:
+- Check_mode is not supported.
 '''
 EXAMPLES = r'''
 
@@ -133,6 +236,110 @@ EXAMPLES = r'''
         is_packet_reflect_enabled: True
         state: "present"
 
+    - name: Enable replication for NAS Server on Local System
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_id: "nas_10"
+        replication_reuse_resource: False
+        replication_params:
+          replication_name: "test_replication"
+          destination_nas_server_name: "destination_nas"
+          replication_mode: "asynchronous"
+          rpo: 60
+          replication_type: "local"
+          destination_pool_name: "Pool_Ansible_Neo_DND"
+          destination_sp: "SPA"
+          is_backup: True
+        replication_state: "enable"
+        state: "present"
+
+    - name: Enable replication for NAS Server on Remote System
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_reuse_resource: False
+        replication_params:
+          replication_name: "test_replication"
+          destination_nas_server_name: "destination_nas"
+          replication_mode: "asynchronous"
+          rpo: 60
+          replication_type: "remote"
+          remote_system:
+            remote_system_host: '10.10.10.10'
+            remote_system_verifycert: False
+            remote_system_username: 'test1'
+            remote_system_password: 'test1!'
+          destination_pool_name: "fastVP_pool"
+          destination_sp: "SPA"
+          is_backup: True
+        replication_state: "enable"
+        state: "present"
+
+    - name: Enable replication for NAS Server on Remote System in existing NAS Server
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_reuse_resource: True
+        replication_params:
+          destination_nas_server_name: "destination_nas"
+          replication_mode: "asynchronous"
+          rpo: 60
+          replication_type: "remote"
+          replication_name: "test_replication"
+          remote_system:
+            remote_system_host: '10.10.10.10'
+            remote_system_verifycert: False
+            remote_system_username: 'test1'
+            remote_system_password: 'test1!'
+          destination_pool_name: "fastVP_pool"
+        replication_state: "enable"
+        state: "present"
+
+    - name: Modify replication on the nasserver
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_params:
+            replication_name: "test_repl"
+            new_replication_name: "test_repl_updated"
+            replication_mode: "asynchronous"
+            rpo: 50
+        replication_state: "enable"
+        state: "present"
+
+    - name: Disable replication on the nasserver
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_state: "disable"
+        state: "present"
+
+    - name: Disable replication by specifying replication_name on the nasserver
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_params:
+            replication_name: "test_replication"
+        replication_state: "disable"
+        state: "present"
 '''
 RETURN = r'''
 changed:
@@ -186,18 +393,97 @@ nas_server_details:
             description: Indicates whether a Unix to/from Windows user name
                          mapping is enabled.
             type: bool
+    sample: {
+        "allow_unmapped_user": null,
+        "cifs_server": {
+            "UnityCifsServerList": [
+                {
+                    "UnityCifsServer": {
+                        "hash": 8761756885270,
+                        "id": "cifs_34"
+                    }
+                }
+            ]
+        },
+        "current_sp": {
+            "UnityStorageProcessor": {
+                "hash": 8761756885273,
+                "id": "spb"
+            }
+        },
+        "current_unix_directory_service": "NasServerUnixDirectoryServiceEnum.NIS",
+        "default_unix_user": null,
+        "default_windows_user": null,
+        "existed": true,
+        "file_dns_server": {
+            "UnityFileDnsServer": {
+                "hash": 8761756885441,
+                "id": "dns_12"
+            }
+        },
+        "file_interface": {
+            "UnityFileInterfaceList": [
+                {
+                    "UnityFileInterface": {
+                        "hash": 8761756889908,
+                        "id": "if_37"
+                    }
+                }
+            ]
+        },
+        "filesystems": null,
+        "hash": 8761757005084,
+        "health": {
+            "UnityHealth": {
+                "hash": 8761756867588
+            }
+        },
+        "home_sp": {
+            "UnityStorageProcessor": {
+                "hash": 8761756867618,
+                "id": "spb"
+            }
+        },
+        "id": "nas_10",
+        "is_backup_only": false,
+        "is_multi_protocol_enabled": false,
+        "is_packet_reflect_enabled": false,
+        "is_replication_destination": false,
+        "is_replication_enabled": true,
+        "is_windows_to_unix_username_mapping_enabled": null,
+        "name": "dummy_nas",
+        "pool": {
+            "UnityPool": {
+                "hash": 8761756885360,
+                "id": "pool_7"
+            }
+        },
+        "preferred_interface_settings": {
+            "UnityPreferredInterfaceSettings": {
+                "hash": 8761756885438,
+                "id": "preferred_if_10"
+            }
+        },
+        "replication_type": "ReplicationTypeEnum.REMOTE",
+        "size_allocated": 3489660928,
+        "tenant": null,
+        "virus_checker": {
+            "UnityVirusChecker": {
+                "hash": 8761756885426,
+                "id": "cava_10"
+            }
+        }
+    }
 '''
 from ansible.module_utils.basic import AnsibleModule
-# from ansible.module_utils.storage.dell \
-#     import dellemc_ansible_unity_utils as utils
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
-    import dellemc_ansible_unity_utils as utils
+    import utils
 LOG = utils.get_logger('nasserver')
 
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.3.0"
+application_type = "Ansible/1.4.0"
 
 
 class NASServer(object):
@@ -414,6 +700,268 @@ class NASServer(object):
             LOG.error(error_msg)
             self.module.fail_json(msg=error_msg)
 
+    def modify_replication_session(self, nas_server_obj, repl_session, replication_params):
+        """ Modify the replication session
+            :param: nas_server_obj: NAS server object
+            :param: repl_session: Replication session to be modified
+            :param: replication_params: Module input params
+            :return: True if modification is successful
+        """
+        try:
+            LOG.info("Modifying replication session of nas server %s", nas_server_obj.name)
+            modify_payload = {}
+            if replication_params['replication_mode'] and \
+                    replication_params['replication_mode'] == 'manual':
+                rpo = -1
+            elif replication_params['rpo']:
+                rpo = replication_params['rpo']
+            name = repl_session.name
+            if replication_params['new_replication_name'] and \
+                    name != replication_params['new_replication_name']:
+                name = replication_params['new_replication_name']
+
+            if repl_session.name != name:
+                modify_payload['name'] = name
+            if ((replication_params['replication_mode'] or replication_params['rpo']) and
+                    repl_session.max_time_out_of_sync != rpo):
+                modify_payload['max_time_out_of_sync'] = rpo
+
+            if modify_payload:
+                repl_session.modify(**modify_payload)
+                return True
+
+            return False
+        except Exception as e:
+            errormsg = "Modifying replication session failed with error %s", e
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def enable_replication(self, nas_server_obj, replication, replication_reuse_resource):
+        """ Enable replication on NAS Server
+            :param: nas_server_obj: NAS Server object.
+            :param: replication: Dict which has all the replication parameter values.
+            :return: True if replication is enabled else False.
+        """
+        try:
+            # Validate replication params
+            self.validate_nas_server_replication_params(replication)
+            self.update_replication_params(replication, replication_reuse_resource)
+
+            repl_session = \
+                self.get_replication_session_on_filter(nas_server_obj, replication, "modify")
+            if repl_session:
+                return self.modify_replication_session(nas_server_obj, repl_session, replication)
+
+            self.validate_create_replication_params(replication)
+            replication_args_list = get_replication_args_list(replication)
+
+            # Get remote system
+            if 'replication_type' in replication and replication['replication_type'] == 'remote':
+                self.get_remote_system(replication, replication_args_list)
+
+                # Form parameters when replication_reuse_resource is False
+                if not replication_reuse_resource:
+                    update_replication_arg_list(replication, replication_args_list, nas_server_obj)
+                    nas_server_obj.replicate_with_dst_resource_provisioning(**replication_args_list)
+                else:
+                    replication_args_list['dst_nas_server_id'] = replication['destination_nas_server_id']
+                    nas_server_obj.replicate(**replication_args_list)
+                return True
+
+            if 'replication_type' in replication and replication['replication_type'] == 'local':
+                update_replication_arg_list(replication, replication_args_list, nas_server_obj)
+                nas_server_obj.replicate_with_dst_resource_provisioning(**replication_args_list)
+                return True
+
+        except Exception as e:
+            errormsg = "Enabling replication to the nas server %s failed " \
+                       "with error %s" % (nas_server_obj.name, str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def disable_replication(self, obj_nas, replication_params):
+        """ Remove replication from the nas server
+            :param: replication_params: Module input params
+            :param: obj_nas: NAS Server object
+            :return: True if disabling replication is successful
+        """
+        try:
+            LOG.info(("Disabling replication on the nas server %s", obj_nas.name))
+            if replication_params:
+                self.update_replication_params(replication_params, False)
+            repl_session = \
+                self.get_replication_session_on_filter(obj_nas, replication_params, "delete")
+            if repl_session:
+                repl_session.delete()
+                return True
+            return False
+        except Exception as e:
+            errormsg = "Disabling replication on the nas server %s failed " \
+                       "with error %s" % (obj_nas.name, str(e))
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def get_replication_session_on_filter(self, obj_nas, replication_params, action):
+        """ Retrieves replication session on nas server
+            :param: obj_nas: NAS server object
+            :param: replication_params: Module input params
+            :param: action: Specifies action as modify or delete
+            :return: Replication session based on filter
+        """
+        if replication_params and replication_params['remote_system']:
+            repl_session = \
+                self.get_replication_session(obj_nas, filter_key="remote_system_name",
+                                             replication_params=replication_params)
+        elif replication_params and replication_params['replication_name']:
+            repl_session = \
+                self.get_replication_session(obj_nas, filter_key="name",
+                                             name=replication_params['replication_name'])
+        else:
+            repl_session = self.get_replication_session(obj_nas, action=action)
+            if repl_session and action and replication_params and \
+                    replication_params['replication_type'] == 'local' and \
+                    repl_session.remote_system.name != self.unity_conn.name:
+                return None
+        return repl_session
+
+    def get_replication_session(self, obj_nas, filter_key=None, replication_params=None, name=None, action=None):
+        """ Retrieves the replication sessions configured for the nas server
+            :param: obj_nas: NAS server object
+            :param: filter_key: Key to filter replication sessions
+            :param: replication_params: Module input params
+            :param: name: Replication session name
+            :param: action: Specifies modify or delete action on replication session
+            :return: Replication session details
+        """
+        try:
+            repl_session = self.unity_conn.get_replication_session(src_resource_id=obj_nas.id)
+            if not filter_key and repl_session:
+                if len(repl_session) > 1:
+                    if action:
+                        error_msg = 'There are multiple replication sessions for the nas server.'\
+                                    ' Please specify replication_name in replication_params to %s.' % action
+                        self.module.fail_json(msg=error_msg)
+                    return repl_session
+                return repl_session[0]
+            for session in repl_session:
+                if filter_key == 'remote_system_name' and \
+                        session.remote_system.name == replication_params['remote_system_name']:
+                    return session
+                if filter_key == 'name' and session.name == name:
+                    return session
+            return None
+        except Exception as e:
+            errormsg = "Retrieving replication session on the nas server failed " \
+                       "with error %s", str(e)
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def get_remote_system(self, replication, replication_args_list):
+        remote_system_name = replication['remote_system_name']
+        remote_system_list = self.unity_conn.get_remote_system()
+        for remote_system in remote_system_list:
+            if remote_system.name == remote_system_name:
+                replication_args_list['remote_system'] = remote_system
+                break
+        if 'remote_system' not in replication_args_list.keys():
+            errormsg = "Remote system %s is not found" % (remote_system_name)
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def update_replication_params(self, replication, replication_reuse_resource):
+        """ Update replication dict with remote system information
+            :param: replication: Dict which has all the replication parameter values
+            :return: Updated replication Dict
+        """
+        try:
+            if 'replication_type' in replication and replication['replication_type'] == 'remote':
+                connection_params = {
+                    'unispherehost': replication['remote_system']['remote_system_host'],
+                    'username': replication['remote_system']['remote_system_username'],
+                    'password': replication['remote_system']['remote_system_password'],
+                    'verifycert': replication['remote_system']['remote_system_verifycert'],
+                    'port': replication['remote_system']['remote_system_port']
+                }
+                remote_system_conn = utils.get_unity_unisphere_connection(
+                    connection_params, application_type)
+                replication['remote_system_name'] = remote_system_conn.name
+                if replication['destination_pool_name'] is not None:
+                    pool_object = remote_system_conn.get_pool(name=replication['destination_pool_name'])
+                    replication['destination_pool_id'] = pool_object.id
+                if replication['destination_nas_server_name'] is not None and replication_reuse_resource:
+                    nas_object = remote_system_conn.get_nas_server(name=replication['destination_nas_server_name'])
+                    replication['destination_nas_server_id'] = nas_object.id
+            else:
+                replication['remote_system_name'] = self.unity_conn.name
+                if replication['destination_pool_name'] is not None:
+                    pool_object = self.unity_conn.get_pool(name=replication['destination_pool_name'])
+                    replication['destination_pool_id'] = pool_object.id
+        except Exception as e:
+            errormsg = "Updating replication params failed with error %s" % str(e)
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def validate_rpo(self, replication):
+        if 'replication_mode' in replication and replication['replication_mode'] == 'asynchronous' \
+                and replication['rpo'] is None:
+            errormsg = "rpo is required together with 'asynchronous' replication_mode."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        if (replication['rpo'] and (replication['rpo'] < 5 or replication['rpo'] > 1440)) \
+                and (replication['replication_mode'] and replication['replication_mode'] != 'manual' or
+                     not replication['replication_mode'] and replication['rpo'] != -1):
+            errormsg = "rpo value should be in range of 5 to 1440"
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+    def validate_nas_server_replication_params(self, replication):
+        """ Validate NAS server replication params
+            :param: replication: Dict which has all the replication parameter values
+        """
+
+        # Valdiate replication
+        if replication is None:
+            errormsg = "Please specify replication_params to enable replication."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        # validate destination pool info
+        if replication['destination_pool_id'] is not None and replication['destination_pool_name'] is not None:
+            errormsg = "'destination_pool_id' and 'destination_pool_name' is mutually exclusive."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        # Validate replication mode
+        self.validate_rpo(replication)
+        # Validate replication type
+        if replication['replication_type'] == 'remote' and replication['remote_system'] is None:
+            errormsg = "Remote_system is required together with 'remote' replication_type"
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        # Validate destination NAS server name
+        if 'destination_nas_name' in replication and replication['destination_nas_name'] is not None:
+            dst_nas_server_name_length = len(replication['destination_nas_name'])
+            if dst_nas_server_name_length == 0 or dst_nas_server_name_length > 95:
+                errormsg = "destination_nas_name value should be in range of 1 to 95"
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
+    def validate_create_replication_params(self, replication):
+        ''' Validate replication params '''
+        if replication['destination_pool_id'] is None and replication['destination_pool_name'] is None:
+            errormsg = "Either 'destination_pool_id' or 'destination_pool_name' is required."
+            LOG.error(errormsg)
+            self.module.fail_json(msg=errormsg)
+
+        keys = ['replication_mode', 'replication_type']
+        for key in keys:
+            if replication[key] is None:
+                errormsg = "Please specify %s to enable replication." % key
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
     def perform_module_operation(self):
         """
         Perform different actions on NAS Server based on user parameters
@@ -439,12 +987,18 @@ class NASServer(object):
             self.module.params['is_packet_reflect_enabled']
 
         current_uds = self.module.params['current_unix_directory_service']
+        replication = self.module.params['replication_params']
+        replication_state = self.module.params['replication_state']
+        replication_reuse_resource = self.module.params['replication_reuse_resource']
         # Get the enum for the corresponding offline_availability
         if current_uds:
             current_uds = \
                 self.get_current_uds_enum(current_uds)
 
         changed = False
+
+        if replication and replication_state is None:
+            self.module.fail_json(msg="Please specify replication_state along with replication_params")
 
         '''
         Get details of NAS Server.
@@ -482,10 +1036,15 @@ class NASServer(object):
             self.module.fail_json(msg="Deletion of NAS Server is "
                                       "currently not supported.")
 
+        if state == 'present' and nas_server_obj and replication_state is not None:
+            if replication_state == 'enable':
+                changed = self.enable_replication(nas_server_obj, replication, replication_reuse_resource)
+            else:
+                changed = self.disable_replication(nas_server_obj, replication)
+
         '''
             Update the changed state and NAS Server details
         '''
-
         nas_server_details = None
         if nas_server_obj:
             nas_server_details = self.get_nas_server(
@@ -516,8 +1075,81 @@ def get_nasserver_parameters():
         allow_unmapped_user=dict(type='bool'),
         enable_windows_to_unix_username_mapping=dict(type='bool'),
         is_packet_reflect_enabled=dict(type='bool'),
+        replication_params=dict(type='dict', options=dict(
+            destination_nas_server_name=dict(type='str'),
+            replication_mode=dict(type='str', choices=['asynchronous', 'manual']),
+            rpo=dict(type='int'),
+            replication_type=dict(type='str', choices=['local', 'remote']),
+            remote_system=dict(type='dict',
+                               options=dict(
+                                    remote_system_host=dict(type='str', required=True, no_log=True),
+                                    remote_system_verifycert=dict(type='bool', required=False,
+                                                                  default=True),
+                                    remote_system_username=dict(type='str', required=True),
+                                    remote_system_password=dict(type='str', required=True, no_log=True),
+                                    remote_system_port=dict(type='int', required=False, default=443, no_log=True)
+                               )),
+            destination_pool_name=dict(type='str'),
+            destination_pool_id=dict(type='str'),
+            destination_sp=dict(type='str', choices=['SPA', 'SPB']),
+            is_backup=dict(type='bool'),
+            replication_name=dict(type='str'),
+            new_replication_name=dict(type='str')
+        )),
+        replication_reuse_resource=dict(type='bool'),
+        replication_state=dict(type='str', choices=['enable', 'disable']),
         state=dict(required=True, choices=['present', 'absent'], type='str')
     )
+
+
+def get_sp_enum(destination_sp):
+    """Getting correct enum values for Storage Processor
+            :param: destination_sp: Storage Processor to be used in Destination NAS Server.
+            :return: enum value for Storage Processor.
+        """
+    if utils.NodeEnum[destination_sp]:
+        destination_sp_enum = utils.NodeEnum[destination_sp]
+        return destination_sp_enum
+
+
+def get_replication_args_list(replication_params):
+    """Returns the replication args for payload"""
+    replication_args_list = {}
+
+    if replication_params['replication_name']:
+        replication_args_list['replication_name'] = replication_params['replication_name']
+    if 'replication_mode' in replication_params and \
+            replication_params['replication_mode'] == 'asynchronous':
+        replication_args_list['max_time_out_of_sync'] = replication_params['rpo']
+    else:
+        replication_args_list['max_time_out_of_sync'] = -1
+
+    return replication_args_list
+
+
+def update_replication_arg_list(replication, replication_args_list, nas_server_obj):
+    """ Update replication arg list
+        :param: replication: Dict which has all the replication parameter values
+        :param: replication_args_list: the existing list which should be updated
+        :param: nas_server_obj: NAS Server object on which replication is to be enabled
+        :return: Updated replication_args_list
+    """
+    if 'destination_sp' in replication and replication['destination_sp']:
+        dst_sp_enum = get_sp_enum(replication['destination_sp'])
+        replication_args_list['dst_sp'] = dst_sp_enum
+
+    replication_args_list['dst_pool_id'] = replication['destination_pool_id']
+
+    if 'is_backup' in replication and replication['is_backup']:
+        replication_args_list['is_backup_only'] = replication['is_backup']
+
+    if replication['replication_type'] == 'local':
+        replication_args_list['dst_nas_server_name'] = "DR_" + nas_server_obj.name
+        if 'destination_nas_server_name' in replication and replication['destination_nas_server_name'] is not None:
+            replication_args_list['dst_nas_server_name'] = replication['destination_nas_server_name']
+    else:
+        if replication['destination_nas_server_name'] is None:
+            replication_args_list['dst_nas_server_name'] = nas_server_obj.name
 
 
 def main():

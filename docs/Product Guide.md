@@ -1,5 +1,5 @@
 # Ansible Modules for Dell Technologies Unity
-## Product Guide 1.3.0
+## Product Guide 1.4.0
 © 2022 Dell Inc. or its subsidiaries. All rights reserved. Dell and other trademarks are trademarks of Dell Inc. or its subsidiaries. Other trademarks may be trademarks of their respective owners.
 
 --------------
@@ -7,92 +7,122 @@
 *   [NFS Module](#nfs-module)
     *   [Synopsis](#synopsis)
     *   [Parameters](#parameters)
+    *   [Notes](#notes)
     *   [Examples](#examples)
     *   [Return Values](#return-values)
     *   [Authors](#authors)
 *   [Volume Module](#volume-module)
     *   [Synopsis](#synopsis-1)
     *   [Parameters](#parameters-1)
+    *   [Notes](#notes-1)
     *   [Examples](#examples-1)
     *   [Return Values](#return-values-1)
     *   [Authors](#authors-1)
 *   [NAS Server Module](#nas-server-module)
     *   [Synopsis](#synopsis-2)
     *   [Parameters](#parameters-2)
+    *   [Notes](#notes-2)
     *   [Examples](#examples-2)
     *   [Return Values](#return-values-2)
     *   [Authors](#authors-2)
 *   [Quota Tree Module](#quota-tree-module)
     *   [Synopsis](#synopsis-3)
     *   [Parameters](#parameters-3)
+    *   [Notes](#notes-3)
     *   [Examples](#examples-3)
     *   [Return Values](#return-values-3)
     *   [Authors](#authors-3)
-*   [File System Module](#file-system-module)
+*   [Filesystem Module](#filesystem-module)
     *   [Synopsis](#synopsis-4)
     *   [Parameters](#parameters-4)
-    *   [Notes](#notes)
+    *   [Notes](#notes-4)
     *   [Examples](#examples-4)
     *   [Return Values](#return-values-4)
     *   [Authors](#authors-4)
 *   [Storage Pool Module](#storage-pool-module)
     *   [Synopsis](#synopsis-5)
     *   [Parameters](#parameters-5)
-    *   [Notes](#notes-1)
+    *   [Notes](#notes-5)
     *   [Examples](#examples-5)
     *   [Return Values](#return-values-5)
     *   [Authors](#authors-5)
 *   [Info Module](#info-module)
     *   [Synopsis](#synopsis-6)
     *   [Parameters](#parameters-6)
+    *   [Notes](#notes-6)
     *   [Examples](#examples-6)
     *   [Return Values](#return-values-6)
     *   [Authors](#authors-6)
 *   [User Quota Module](#user-quota-module)
     *   [Synopsis](#synopsis-7)
     *   [Parameters](#parameters-7)
+    *   [Notes](#notes-7)
     *   [Examples](#examples-7)
     *   [Return Values](#return-values-7)
     *   [Authors](#authors-7)
 *   [Filesystem Snapshot Module](#filesystem-snapshot-module)
     *   [Synopsis](#synopsis-8)
     *   [Parameters](#parameters-8)
-    *   [Notes](#notes-2)
+    *   [Notes](#notes-8)
     *   [Examples](#examples-8)
     *   [Return Values](#return-values-8)
     *   [Authors](#authors-8)
 *   [Snapshot Module](#snapshot-module)
     *   [Synopsis](#synopsis-9)
     *   [Parameters](#parameters-9)
+    *   [Notes](#notes-9)
     *   [Examples](#examples-9)
     *   [Return Values](#return-values-9)
     *   [Authors](#authors-9)
 *   [SMB Share Module](#smb-share-module)
     *   [Synopsis](#synopsis-10)
     *   [Parameters](#parameters-10)
-    *   [Notes](#notes-3)
+    *   [Notes](#notes-10)
     *   [Examples](#examples-10)
     *   [Return Values](#return-values-10)
     *   [Authors](#authors-10)
 *   [Host Module](#host-module)
     *   [Synopsis](#synopsis-11)
     *   [Parameters](#parameters-11)
+    *   [Notes](#notes-11)
     *   [Examples](#examples-11)
     *   [Return Values](#return-values-11)
     *   [Authors](#authors-11)
 *   [Consistency Group Module](#consistency-group-module)
     *   [Synopsis](#synopsis-12)
     *   [Parameters](#parameters-12)
+    *   [Notes](#notes-12)
     *   [Examples](#examples-12)
     *   [Return Values](#return-values-12)
     *   [Authors](#authors-12)
 *   [Snapshot Schedule Module](#snapshot-schedule-module)
     *   [Synopsis](#synopsis-13)
     *   [Parameters](#parameters-13)
-    *   [Notes](#notes-4)
+    *   [Notes](#notes-13)
     *   [Examples](#examples-13)
     *   [Return Values](#return-values-13)
     *   [Authors](#authors-13)
+*   [NFS Server Module](#nfs-server-module)
+    *   [Synopsis](#synopsis-14)
+    *   [Parameters](#parameters-14)
+    *   [Notes](#notes-14)
+    *   [Examples](#examples-14)
+    *   [Return Values](#return-values-14)
+    *   [Authors](#authors-14)
+*   [Interface Module](#interface-module)
+    *   [Synopsis](#synopsis-15)
+    *   [Parameters](#parameters-15)
+    *   [Notes](#notes-15)
+    *   [Examples](#examples-15)
+    *   [Return Values](#return-values-15)
+    *   [Authors](#authors-15)
+*   [CIFS Server Module](#cifs-server-module)
+    *   [Synopsis](#synopsis-16)
+    *   [Parameters](#parameters-16)
+    *   [Notes](#notes-16)
+    *   [Examples](#examples-16)
+    *   [Return Values](#return-values-16)
+    *   [Authors](#authors-16)
 
 --------------
 
@@ -101,10 +131,10 @@
 Manage NFS export on Unity storage system
 
 ### Synopsis
- Managing NFS export on Unity storage system includes- Create new NFS export, Modify NFS export attributes, Display NFS export details, Delete NFS export
+ Managing NFS export on Unity storage system includes- Create new NFS export, Modify NFS export attributes, Display NFS export details, Delete NFS export.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 <table>
     <tr>
         <th colspan=2>Parameter</th>
@@ -120,7 +150,7 @@ Manage NFS export on Unity storage system
             <td></td>
             <td></td>
             <td></td>
-            <td> <br> Name of the nfs export.  <br> Mandatory for create operation.  <br> Specify either nfs_export_name or nfs_export_id(but not both) for any operation. </td>
+            <td> <br> Name of the nfs export.  <br> Mandatory for create operation.  <br> Specify either nfs_export_name or nfs_export_id (but not both) for any operation. </td>
         </tr>
                     <tr>
             <td colspan=2 > nfs_export_id</td>
@@ -243,12 +273,20 @@ Manage NFS export on Unity storage system
             <td> <br> NFS enforced security type for users accessing a NFS export.  <br> If not specified at the time of creation, it will be set to SYS. </td>
         </tr>
                     <tr>
+            <td colspan=2 > adv_host_mgmt_enabled</td>
+            <td> bool  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> If false allows you to specify hosts without first having to register them.  <br> Mandatory while adding access hosts. </td>
+        </tr>
+                    <tr>
             <td colspan=2 > no_access_hosts</td>
             <td> list   <br> elements: dict </td>
             <td></td>
             <td></td>
             <td></td>
-            <td> <br> Hosts with no access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id,  and ip_address. </td>
+            <td> <br> Hosts with no access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id, subnet, netgroup, domain and ip_address.  <br> If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.  <br> If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address. </td>
         </tr>
                             <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
@@ -276,6 +314,33 @@ Manage NFS export on Unity storage system
                 <td></td>
                 <td></td>
                 <td>  <br> IP address of the host.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > subnet </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > netgroup </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Netgroup that is defined in NIS or the local netgroup file.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > domain </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> DNS domain, where all NFS clients in the domain are included in the host list.  </td>
             </tr>
                             <tr>
             <td colspan=2 > read_only_hosts</td>
@@ -283,7 +348,7 @@ Manage NFS export on Unity storage system
             <td></td>
             <td></td>
             <td></td>
-            <td> <br> Hosts with read-only access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id, and ip_address. </td>
+            <td> <br> Hosts with read-only access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id, subnet, netgroup, domain and ip_address.  <br> If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.  <br> If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address. </td>
         </tr>
                             <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
@@ -311,6 +376,33 @@ Manage NFS export on Unity storage system
                 <td></td>
                 <td></td>
                 <td>  <br> IP address of the host.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > subnet </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > netgroup </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Netgroup that is defined in NIS or the local netgroup file.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > domain </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> DNS domain, where all NFS clients in the domain are included in the host list.  </td>
             </tr>
                             <tr>
             <td colspan=2 > read_only_root_hosts</td>
@@ -318,7 +410,7 @@ Manage NFS export on Unity storage system
             <td></td>
             <td></td>
             <td></td>
-            <td> <br> Hosts with read-only for root user access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id, and ip_address. </td>
+            <td> <br> Hosts with read-only for root user access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id, subnet, netgroup, domain and ip_address.  <br> If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.  <br> If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address. </td>
         </tr>
                             <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
@@ -346,6 +438,33 @@ Manage NFS export on Unity storage system
                 <td></td>
                 <td></td>
                 <td>  <br> IP address of the host.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > subnet </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > netgroup </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Netgroup that is defined in NIS or the local netgroup file.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > domain </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> DNS domain, where all NFS clients in the domain are included in the host list.  </td>
             </tr>
                             <tr>
             <td colspan=2 > read_write_hosts</td>
@@ -353,7 +472,7 @@ Manage NFS export on Unity storage system
             <td></td>
             <td></td>
             <td></td>
-            <td> <br> Hosts with read and write access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id, and ip_address. </td>
+            <td> <br> Hosts with read and write access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id, subnet, netgroup, domain and ip_address.  <br> If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.  <br> If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address. </td>
         </tr>
                             <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
@@ -381,6 +500,33 @@ Manage NFS export on Unity storage system
                 <td></td>
                 <td></td>
                 <td>  <br> IP address of the host.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > subnet </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > netgroup </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Netgroup that is defined in NIS or the local netgroup file.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > domain </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> DNS domain, where all NFS clients in the domain are included in the host list.  </td>
             </tr>
                             <tr>
             <td colspan=2 > read_write_root_hosts</td>
@@ -388,7 +534,7 @@ Manage NFS export on Unity storage system
             <td></td>
             <td></td>
             <td></td>
-            <td> <br> Hosts with read and write for root user access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id, and ip_address. </td>
+            <td> <br> Hosts with read and write for root user access to the NFS export.  <br> List of dictionaries. Each dictionary will have any of the keys from host_name, host_id, subnet, netgroup, domain and ip_address.  <br> If adv_host_mgmt_enabled is true then the accepted keys are host_name, host_id and ip_address.  <br> If adv_host_mgmt_enabled is false then the accepted keys are host_name, subnet, netgroup, domain and ip_address. </td>
         </tr>
                             <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
@@ -416,6 +562,33 @@ Manage NFS export on Unity storage system
                 <td></td>
                 <td></td>
                 <td>  <br> IP address of the host.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > subnet </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Subnet can be an 'IP address/netmask' or 'IP address/prefix length'.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > netgroup </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> Netgroup that is defined in NIS or the local netgroup file.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > domain </td>
+                <td> str  </td>
+                <td> False </td>
+                <td></td>
+                <td></td>
+                <td>  <br> DNS domain, where all NFS clients in the domain are included in the host list.  </td>
             </tr>
                             <tr>
             <td colspan=2 > unispherehost</td>
@@ -457,8 +630,11 @@ Manage NFS export on Unity storage system
             <td></td>
             <td> <br> Port number through which communication happens with Unity management server. </td>
         </tr>
-                                            </table>
+                                                    </table>
 
+### Notes
+* The check_mode is not supported.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -498,7 +674,7 @@ Manage NFS export on Unity storage system
     anonymous_uid: 4294967290
     state: "present"
 
-- name: Add host in nfs export
+- name: Add host in nfs export with adv_host_mgmt_enabled as true
   dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
@@ -506,6 +682,7 @@ Manage NFS export on Unity storage system
     verifycert: "{{verifycert}}"
     nfs_export_name: "ansible_nfs_from_fs"
     filesystem_id: "fs_377"
+    adv_host_mgmt_enabled: true
     no_access_hosts:
       - host_id: "Host_1"
     read_only_hosts:
@@ -519,7 +696,7 @@ Manage NFS export on Unity storage system
     host_state: "present-in-export"
     state: "present"
 
-- name: Remove host in nfs export
+- name: Remove host in nfs export with adv_host_mgmt_enabled as true
   dellemc.unity.nfs:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
@@ -527,6 +704,7 @@ Manage NFS export on Unity storage system
     verifycert: "{{verifycert}}"
     nfs_export_name: "ansible_nfs_from_fs"
     filesystem_id: "fs_377"
+    adv_host_mgmt_enabled: true
     no_access_hosts:
       - host_id: "Host_1"
     read_only_hosts:
@@ -537,6 +715,50 @@ Manage NFS export on Unity storage system
       - host_name: "host_name2"
     read_write_root_hosts:
       - ip_address: "1.1.1.1"
+    host_state: "absent-in-export"
+    state: "present"
+
+- name: Add host in nfs export with adv_host_mgmt_enabled as false
+  dellemc.unity.nfs:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    nfs_export_name: "ansible_nfs_from_fs"
+    filesystem_id: "fs_377"
+    adv_host_mgmt_enabled: false
+    no_access_hosts:
+    - domain: "google.com"
+    read_only_hosts:
+    - netgroup: "netgroup_admin"
+    read_only_root_hosts:
+    - host_name: "host5"
+    read_write_hosts:
+    - subnet: "168.159.57.4/255.255.255.0"
+    read_write_root_hosts:
+    - ip_address: "10.255.2.4"
+    host_state: "present-in-export"
+    state: "present"
+
+- name: Remove host in nfs export with adv_host_mgmt_enabled as false
+  dellemc.unity.nfs:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    nfs_export_name: "ansible_nfs_from_fs"
+    filesystem_id: "fs_377"
+    adv_host_mgmt_enabled: false
+    no_access_hosts:
+    - domain: "google.com"
+    read_only_hosts:
+    - netgroup: "netgroup_admin"
+    read_only_root_hosts:
+    - host_name: "host5"
+    read_write_hosts:
+    - subnet: "168.159.57.4/255.255.255.0"
+    read_write_root_hosts:
+    - ip_address: "10.255.2.4"
     host_state: "absent-in-export"
     state: "present"
 
@@ -561,7 +783,7 @@ Manage NFS export on Unity storage system
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 <table>
     <tr>
         <th colspan=6>Key</th>
@@ -569,7 +791,7 @@ Manage NFS export on Unity storage system
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
-                                                                                    <tr>
+                                                                                            <tr>
             <td colspan=6 > changed </td>
             <td>  bool </td>
             <td> always </td>
@@ -759,7 +981,7 @@ Manage volume on Unity storage system
  Managing volume on Unity storage system includes- Create new volume, Modify volume attributes, Map Volume to host, Unmap volume to host, Display volume details, Delete volume.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 <table>
     <tr>
         <th colspan=2>Parameter</th>
@@ -996,8 +1218,10 @@ Manage volume on Unity storage system
             <td></td>
             <td> <br> Port number through which communication happens with Unity management server. </td>
         </tr>
-                                            </table>
+                                                    </table>
 
+### Notes
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -1095,7 +1319,7 @@ Manage volume on Unity storage system
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                                                                            
 <table>
     <tr>
         <th colspan=2>Key</th>
@@ -1103,7 +1327,7 @@ Manage volume on Unity storage system
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
-                                                                                    <tr>
+                                                                                            <tr>
             <td colspan=2 > changed </td>
             <td>  bool </td>
             <td> always </td>
@@ -1220,10 +1444,10 @@ Manage NAS servers on Unity storage system
  Managing NAS servers on Unity storage system includes get, modification to the NAS servers.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 <table>
     <tr>
-        <th colspan=1>Parameter</th>
+        <th colspan=2>Parameter</th>
         <th width="20%">Type</th>
         <th>Required</th>
         <th>Default</th>
@@ -1231,23 +1455,23 @@ Manage NAS servers on Unity storage system
         <th width="80%">Description</th>
     </tr>
                                                             <tr>
-            <td colspan=1 > nas_server_id</td>
+            <td colspan=2 > nas_server_id</td>
             <td> str  </td>
             <td></td>
             <td></td>
             <td></td>
-            <td> <br> The ID of the NAS server.  <br> nas_server_name and nas_server_id are mutually exclusive parameters.  <br> Either one is required to perform the task. </td>
+            <td> <br> The ID of the NAS server.  <br> The parameters nas_server_name and nas_server_id are mutually exclusive.  <br> Either one is required to perform the task. </td>
         </tr>
                     <tr>
-            <td colspan=1 > nas_server_name</td>
+            <td colspan=2 > nas_server_name</td>
             <td> str  </td>
             <td></td>
             <td></td>
             <td></td>
-            <td> <br> The Name of the NAS server.  <br> nas_server_name and nas_server_id are mutually exclusive parameters.  <br> Either one  is required to perform the task. </td>
+            <td> <br> The Name of the NAS server.  <br> The parameters nas_server_name and nas_server_id are mutually exclusive.  <br> Either one  is required to perform the task. </td>
         </tr>
                     <tr>
-            <td colspan=1 > nas_server_new_name</td>
+            <td colspan=2 > nas_server_new_name</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -1255,7 +1479,7 @@ Manage NAS servers on Unity storage system
             <td> <br> The new name of the NAS server.  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > is_replication_destination</td>
+            <td colspan=2 > is_replication_destination</td>
             <td> bool  </td>
             <td></td>
             <td></td>
@@ -1263,7 +1487,7 @@ Manage NAS servers on Unity storage system
             <td> <br> It specifies whether the NAS server is a replication destination.  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > is_backup_only</td>
+            <td colspan=2 > is_backup_only</td>
             <td> bool  </td>
             <td></td>
             <td></td>
@@ -1271,7 +1495,7 @@ Manage NAS servers on Unity storage system
             <td> <br> It specifies whether the NAS server is used as backup only.  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > is_multiprotocol_enabled</td>
+            <td colspan=2 > is_multiprotocol_enabled</td>
             <td> bool  </td>
             <td></td>
             <td></td>
@@ -1279,7 +1503,7 @@ Manage NAS servers on Unity storage system
             <td> <br> This parameter indicates whether multiprotocol sharing mode is enabled.  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > allow_unmapped_user</td>
+            <td colspan=2 > allow_unmapped_user</td>
             <td> bool  </td>
             <td></td>
             <td></td>
@@ -1287,7 +1511,7 @@ Manage NAS servers on Unity storage system
             <td> <br> This flag is used to mandatorily disable access in case of any user mapping failure.  <br> If true, then enable access in case of any user mapping failure.  <br> If false, then disable access in case of any user mapping failure.  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > default_windows_user</td>
+            <td colspan=2 > default_windows_user</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -1295,7 +1519,7 @@ Manage NAS servers on Unity storage system
             <td> <br> Default windows user name used for granting access in the case of Unix to Windows user mapping failure.  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > default_unix_user</td>
+            <td colspan=2 > default_unix_user</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -1303,7 +1527,7 @@ Manage NAS servers on Unity storage system
             <td> <br> Default Unix user name used for granting access in the case of Windows to Unix user mapping failure.  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > enable_windows_to_unix_username_mapping</td>
+            <td colspan=2 > enable_windows_to_unix_username_mapping</td>
             <td> bool  </td>
             <td></td>
             <td></td>
@@ -1311,7 +1535,7 @@ Manage NAS servers on Unity storage system
             <td> <br> This parameter indicates whether a Unix to/from Windows user name mapping is enabled.  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > is_packet_reflect_enabled</td>
+            <td colspan=2 > is_packet_reflect_enabled</td>
             <td> bool  </td>
             <td></td>
             <td></td>
@@ -1319,7 +1543,7 @@ Manage NAS servers on Unity storage system
             <td> <br> If the packet has to be reflected, then this parameter has to be set to True.  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > current_unix_directory_service</td>
+            <td colspan=2 > current_unix_directory_service</td>
             <td> str  </td>
             <td></td>
             <td></td>
@@ -1327,15 +1551,138 @@ Manage NAS servers on Unity storage system
             <td> <br> This is the directory service used for querying identity information for UNIX (such as UIDs, GIDs, net groups).  <br> It can be mentioned during modification of the NAS server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > state</td>
+            <td colspan=2 > replication_params</td>
+            <td> dict  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Settings required for enabling replication. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > destination_nas_server_name </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Name of the destination nas server.  <br> Default value will be source nas server name prefixed by 'DR_'.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > replication_mode </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td> <ul> <li>asynchronous</li>  <li>manual</li> </ul></td>
+                <td>  <br> The replication mode.  <br> This is mandatory to enable replication.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > rpo </td>
+                <td> int  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Maximum time to wait before the system syncs the source and destination LUNs.  <br> rpo should be specified if the replication_mode is asynchronous.  <br> The value should be in range of 5 to 1440.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > replication_type </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td> <ul> <li>local</li>  <li>remote</li> </ul></td>
+                <td>  <br> Type of replication.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > remote_system </td>
+                <td> dict  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Details of remote system to which the replication is being configured.  <br> remote_system should be specified if the replication_type is remote.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > destination_pool_name </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Name of pool to allocate destination Luns.  <br> Mutually exclusive with destination_pool_id.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > destination_pool_id </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Id of pool to allocate destination Luns.  <br> Mutually exclusive with destination_pool_name.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > destination_sp </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td> <ul> <li>SPA</li>  <li>SPB</li> </ul></td>
+                <td>  <br> Storage process of destination nas server  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > is_backup </td>
+                <td> bool  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Indicates if the destination nas server is backup  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > replication_name </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> User defined name for replication session.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > new_replication_name </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Replication name to rename the session to.  </td>
+            </tr>
+                            <tr>
+            <td colspan=2 > replication_state</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td> <ul> <li>enable</li>  <li>disable</li> </ul></td>
+            <td> <br> State of the replication. </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > replication_reuse_resource</td>
+            <td> bool  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> This parameter indicates if existing NAS Server is to be used for replication. </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > state</td>
             <td> str  </td>
             <td> True </td>
             <td></td>
             <td> <ul> <li>present</li>  <li>absent</li> </ul></td>
-            <td> <br> Define the state of NAS server on the array.  <br> present indicates that NAS server should exist on the system after the task is executed.  <br> Right now deletion of NAS server is not supported. Hence, if state is set to absent for any existing NAS server then error will be thrown.  <br> For any non-existing NAS server, if state is set to absent then it will return None. </td>
+            <td> <br> Define the state of NAS server on the array.  <br> The value present indicates that NAS server should exist on the system after the task is executed.  <br> In this release deletion of NAS server is not supported. Hence, if state is set to absent for any existing NAS server then error will be thrown.  <br> For any non-existing NAS server, if state is set to absent then it will return None. </td>
         </tr>
                     <tr>
-            <td colspan=1 > unispherehost</td>
+            <td colspan=2 > unispherehost</td>
             <td> str  </td>
             <td> True </td>
             <td></td>
@@ -1343,7 +1690,7 @@ Manage NAS servers on Unity storage system
             <td> <br> IP or FQDN of the Unity management server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > username</td>
+            <td colspan=2 > username</td>
             <td> str  </td>
             <td> True </td>
             <td></td>
@@ -1351,7 +1698,7 @@ Manage NAS servers on Unity storage system
             <td> <br> The username of the Unity management server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > password</td>
+            <td colspan=2 > password</td>
             <td> str  </td>
             <td> True </td>
             <td></td>
@@ -1359,7 +1706,7 @@ Manage NAS servers on Unity storage system
             <td> <br> The password of the Unity management server. </td>
         </tr>
                     <tr>
-            <td colspan=1 > verifycert</td>
+            <td colspan=2 > verifycert</td>
             <td> bool  </td>
             <td></td>
             <td> True </td>
@@ -1367,15 +1714,18 @@ Manage NAS servers on Unity storage system
             <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
         </tr>
                     <tr>
-            <td colspan=1 > port</td>
+            <td colspan=2 > port</td>
             <td> int  </td>
             <td></td>
             <td> 443 </td>
             <td></td>
             <td> <br> Port number through which communication happens with Unity management server. </td>
         </tr>
-                                            </table>
+                                                    </table>
 
+### Notes
+* Check_mode is not supported.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -1406,10 +1756,115 @@ Manage NAS servers on Unity storage system
         current_unix_directory_service: "LDAP"
         is_packet_reflect_enabled: True
         state: "present"
+
+    - name: Enable replication for NAS Server on Local System
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_id: "nas_10"
+        replication_reuse_resource: False
+        replication_params:
+          replication_name: "test_replication"
+          destination_nas_server_name: "destination_nas"
+          replication_mode: "asynchronous"
+          rpo: 60
+          replication_type: "local"
+          destination_pool_name: "Pool_Ansible_Neo_DND"
+          destination_sp: "SPA"
+          is_backup: True
+        replication_state: "enable"
+        state: "present"
+
+    - name: Enable replication for NAS Server on Remote System
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_reuse_resource: False
+        replication_params:
+          replication_name: "test_replication"
+          destination_nas_server_name: "destination_nas"
+          replication_mode: "asynchronous"
+          rpo: 60
+          replication_type: "remote"
+          remote_system:
+            remote_system_host: '10.10.10.10'
+            remote_system_verifycert: False
+            remote_system_username: 'test1'
+            remote_system_password: 'test1!'
+          destination_pool_name: "fastVP_pool"
+          destination_sp: "SPA"
+          is_backup: True
+        replication_state: "enable"
+        state: "present"
+
+    - name: Enable replication for NAS Server on Remote System in existing NAS Server
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_reuse_resource: True
+        replication_params:
+          destination_nas_server_name: "destination_nas"
+          replication_mode: "asynchronous"
+          rpo: 60
+          replication_type: "remote"
+          replication_name: "test_replication"
+          remote_system:
+            remote_system_host: '10.10.10.10'
+            remote_system_verifycert: False
+            remote_system_username: 'test1'
+            remote_system_password: 'test1!'
+          destination_pool_name: "fastVP_pool"
+        replication_state: "enable"
+        state: "present"
+
+    - name: Modify replication on the nasserver
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_params:
+            replication_name: "test_repl"
+            new_replication_name: "test_repl_updated"
+            replication_mode: "asynchronous"
+            rpo: 50
+        replication_state: "enable"
+        state: "present"
+
+    - name: Disable replication on the nasserver
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_state: "disable"
+        state: "present"
+
+    - name: Disable replication by specifying replication_name on the nasserver
+      dellemc.unity.nasserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        replication_params:
+            replication_name: "test_replication"
+        replication_state: "disable"
+        state: "present"
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                    
 <table>
     <tr>
         <th colspan=2>Key</th>
@@ -1417,7 +1872,7 @@ Manage NAS servers on Unity storage system
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
-                                                                                    <tr>
+                                                                                            <tr>
             <td colspan=2 > changed </td>
             <td>  bool </td>
             <td> always </td>
@@ -1520,7 +1975,7 @@ Manage quota tree on the Unity storage system
  Managing Quota tree on the Unity storage system includes Create quota tree, Get quota tree, Modify quota tree and Delete quota tree.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                
 <table>
     <tr>
         <th colspan=1>Parameter</th>
@@ -1658,8 +2113,10 @@ Manage quota tree on the Unity storage system
             <td></td>
             <td> <br> Port number through which communication happens with Unity management server. </td>
         </tr>
-                                            </table>
+                                                    </table>
 
+### Notes
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -1757,7 +2214,7 @@ Manage quota tree on the Unity storage system
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 <table>
     <tr>
         <th colspan=4>Key</th>
@@ -1765,14 +2222,14 @@ Manage quota tree on the Unity storage system
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
-                                                                                    <tr>
+                                                                                            <tr>
             <td colspan=4 > changed </td>
             <td>  bool </td>
             <td> always </td>
             <td> Whether or not the resource has changed. </td>
         </tr>
                     <tr>
-            <td colspan=4 > get_quota_tree_details </td>
+            <td colspan=4 > get_tree_quota_details </td>
             <td>  complex </td>
             <td> When quota tree exists </td>
             <td> Details of the quota tree. </td>
@@ -1863,15 +2320,15 @@ Manage quota tree on the Unity storage system
 * Spandita Panigrahi (@panigs7) <ansible.team@dell.com>
 
 --------------------------------
-# File System Module
+# Filesystem Module
 
 Manage filesystem on Unity storage system
 
 ### Synopsis
- Managing filesystem on Unity storage system includes- Create new filesystem, Modify snapschedule attribute of filesystem Modify filesystem attributes, Display filesystem details, Display filesystem snapshots, Display filesystem snapschedule, Delete snapschedule associated with the filesystem, Delete filesystem, Create new filesystem with quota configuration
+ Managing filesystem on Unity storage system includes Create new filesystem, Modify snapschedule attribute of filesystem, Modify filesystem attributes, Display filesystem details, Display filesystem snapshots, Display filesystem snapschedule, Delete snapschedule associated with the filesystem, Delete filesystem, Create new filesystem with quota configuration, Enable, modify and disable replication.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 <table>
     <tr>
         <th colspan=2>Parameter</th>
@@ -2150,6 +2607,94 @@ Manage filesystem on Unity storage system
             <td> <br> This is the id of an existing snapshot schedule which is to be associated with the filesystem. This is mutually exclusive with snapshot schedule name. filesystem. </td>
         </tr>
                     <tr>
+            <td colspan=2 > replication_params</td>
+            <td> dict  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Settings required for enabling or modifying replication. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > replication_name </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Name of the replication session.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > new_replication_name </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Replication name to rename the session to.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > replication_mode </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td> <ul> <li>asynchronous</li>  <li>manual</li> </ul></td>
+                <td>  <br> The replication mode.  <br> This is a mandatory field while creating a replication session.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > rpo </td>
+                <td> int  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Maximum time to wait before the system syncs the source and destination LUNs.  <br> rpo should be specified if the replication_mode is asynchronous.  <br> The value should be in range of 5 to 1440.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > replication_type </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td> <ul> <li>local</li>  <li>remote</li> </ul></td>
+                <td>  <br> Type of replication.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > remote_system </td>
+                <td> dict  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  <br> Details of remote system to which the replication is being configured.  <br> remote_system should be specified if the replication_type is remote.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > destination_pool_id </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>  ID of pool to allocate destination filesystem.  </td>
+            </tr>
+                    <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > destination_pool_name </td>
+                <td> str  </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td> Name of pool to allocate destination filesystem </td>
+            </tr>
+                            <tr>
+            <td colspan=2 > replication_state</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td> <ul> <li>enable</li>  <li>disable</li> </ul></td>
+            <td> <br> State of the replication. </td>
+        </tr>
+                    <tr>
             <td colspan=2 > unispherehost</td>
             <td> str  </td>
             <td> True </td>
@@ -2193,7 +2738,9 @@ Manage filesystem on Unity storage system
 
 ### Notes
 * SMB shares, NFS exports, and snapshots associated with filesystem need to be deleted prior to deleting a filesystem.
-* quota_config parameter can be used to update default hard limit and soft limit values to limit the maximum space that can be used. By default they both are set to 0 during filesystem creation which means unlimited.
+* The quota_config parameter can be used to update default hard limit and soft limit values to limit the maximum space that can be used. By default they both are set to 0 during filesystem creation which means unlimited.
+* Check_mode is not supported.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -2289,140 +2836,370 @@ Manage filesystem on Unity storage system
     verifycert: "{{verifycert}}"
     filesystem_id: "rs_405"
     state: "absent"
+
+- name: Enable replication on the fs
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_id: "rs_405"
+    replication_params:
+      replication_name: "test_repl"
+      replication_type: "remote"
+      replication_mode: "asynchronous"
+      rpo: 60
+      remote_system:
+        remote_system_host: '0.1.2.3'
+        remote_system_verifycert: False
+        remote_system_username: 'username'
+        remote_system_password: 'password'
+      destination_pool_name: "pool_test_1"
+    replication_state: "enable"
+    state: "present"
+
+- name: Modify replication on the fs
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_id: "rs_405"
+    replication_params:
+      replication_name: "test_repl"
+      new_replication_name: "test_repl_updated"
+      replication_mode: "asynchronous"
+      rpo: 50
+    replication_state: "enable"
+    state: "present"
+
+- name: Disable replication on the fs
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_id: "rs_405"
+    replication_state: "disable"
+    state: "present"
+
+- name: Disable replication by specifying replication_name on the fs
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    filesystem_id: "rs_405"
+    replication_params:
+        replication_name: "test_replication"
+    replication_state: "disable"
+    state: "present"
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 <table>
     <tr>
-        <th colspan=2>Key</th>
+        <th colspan=11>Key</th>
         <th>Type</th>
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
                                                                                             <tr>
-            <td colspan=2 > changed </td>
+            <td colspan=11 > changed </td>
             <td>  bool </td>
             <td> always </td>
             <td> Whether or not the resource has changed. </td>
         </tr>
                     <tr>
-            <td colspan=2 > filesystem_snapshot_details </td>
+            <td colspan=11 > filesystem_details </td>
             <td>  complex </td>
-            <td> When filesystem snapshot exists </td>
-            <td> Details of the filesystem snapshot. </td>
+            <td> When filesystem exists </td>
+            <td> Details of the filesystem. </td>
         </tr>
                             <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > access_type </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Access type of filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > attached_wwn </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Attached WWN details. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > creation_time </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Creation time of filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > creator_schedule </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Creator schedule of filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > creator_type </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Creator type for filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > creator_user </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Creator user for filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > description </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Description of the filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > expiration_time </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Date and time after which the filesystem snapshot will expire. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > filesystem_id </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Id of the filesystem for which the snapshot exists. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > filesystem_name </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Name of the filesystem for which the snapshot exists. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > id </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Unique identifier of the filesystem snapshot instance. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > is_auto_delete </td>
-                <td> bool </td>
-                <td>success</td>
-                <td> Is the filesystem snapshot is auto deleted or not. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > name </td>
-                <td> str </td>
-                <td>success</td>
-                <td> The name of the filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > nas_server_id </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Id of the NAS server on which filesystem exists. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > nas_server_name </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Name of the NAS server on which filesystem exists. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > size </td>
+                <td colspan=10 > cifs_notify_on_change_dir_depth </td>
                 <td> int </td>
                 <td>success</td>
-                <td> Size of the filesystem snapshot. </td>
+                <td> Indicates the lowest directory level to which the enabled notifications apply, if any. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > description </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Description about the filesystem. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The system generated ID given to the filesystem. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > is_cifs_notify_on_access_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether the system generates a notification when a user accesses the file system. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > is_cifs_notify_on_write_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether the system generates a notification when the file system is written to. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > is_cifs_op_locks_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether opportunistic file locks are enabled for the file system. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > is_cifs_sync_writes_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether the CIFS synchronous writes option is enabled for the file system. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > is_data_reduction_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Whether or not compression enabled on this filesystem. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > is_thin_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether thin provisioning is enabled for this filesystem. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Name of the filesystem. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > nas_server </td>
+                <td> complex </td>
+                <td>success</td>
+                <td> The NAS Server details on which this filesystem is hosted. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > nas_server </td>
+                    <td> complex </td>
+                    <td>success</td>
+                    <td> nas_server details. </td>
+                </tr>
+                                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=8 > id </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> The system ID given to the NAS Server. </td>
+                    </tr>
+                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=8 > name </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> The name of the NAS Server. </td>
+                    </tr>
+                                                                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > pool </td>
+                <td> complex </td>
+                <td>success</td>
+                <td> The pool in which this filesystem is allocated. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > UnityPool </td>
+                    <td> complex </td>
+                    <td>success</td>
+                    <td> Unity pool in which this filesystem is allocated. </td>
+                </tr>
+                                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=8 > id </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> The system ID given to the pool. </td>
+                    </tr>
+                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=8 > name </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> The name of the storage pool. </td>
+                    </tr>
+                                                                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > quota_config </td>
+                <td> complex </td>
+                <td>success</td>
+                <td> Details of quota configuration of the filesystem created. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > default_hard_limit </td>
+                    <td> int </td>
+                    <td>success</td>
+                    <td> Default hard limit for user quotas and tree quotas. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > default_soft_limit </td>
+                    <td> int </td>
+                    <td>success</td>
+                    <td> Default soft limit for user quotas and tree quotas. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > grace_period </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Grace period set in quota configuration after soft limit is reached. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > is_user_quota_enabled </td>
+                    <td> bool </td>
+                    <td>success</td>
+                    <td> Indicates whether the user quota is enabled. </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > quota_policy </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Quota policy set in quota configuration. </td>
+                </tr>
+                                                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > replication_sessions </td>
+                <td> complex </td>
+                <td>success</td>
+                <td> List of replication sessions if replication is enabled. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > id </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> ID of replication session </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > name </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> Name of replication session </td>
+                </tr>
+                                             <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > remote_system </td>
+                    <td> complex </td>
+                    <td>success</td>
+                    <td> Remote system </td>
+                </tr>
+                                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=8 > id </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> ID of remote system </td>
+                    </tr>
+                                                                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > size_total_with_unit </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Size of the filesystem with actual unit. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > snap_list </td>
+                <td> list </td>
+                <td>success</td>
+                <td> The list of snapshots of this filesystem. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=9 > snap_list </td>
+                    <td> complex </td>
+                    <td>success</td>
+                    <td> Filesystem snapshots. </td>
+                </tr>
+                                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=8 > id </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> The system ID given to the filesystem snapshot. </td>
+                    </tr>
+                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=8 > name </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> The name of the filesystem snapshot. </td>
+                    </tr>
+                                                                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > snap_schedule_id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Indicates the id of the snap schedule associated with the filesystem. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > snap_schedule_name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Indicates the name of the snap schedule associated with the filesystem. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=10 > tiering_policy </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Tiering policy applied to this filesystem. </td>
             </tr>
                                         </table>
 
@@ -2437,10 +3214,7 @@ Manage filesystem on Unity storage system
 Manage storage pool on Unity
 
 ### Synopsis
- Managing storage pool on Unity storage system contains the operations:
- * Get details of storage pool
- * Create a storage pool
- * Modify storage pool.
+ Managing storage pool on Unity storage system contains the operations Get details of storage pool, Create a storage pool, Modify storage pool.
 
 ### Parameters
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
@@ -2661,6 +3435,7 @@ Manage storage pool on Unity
 
 ### Notes
 * Deletion of storage pool is not allowed through Ansible module.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -2880,13 +3655,13 @@ Manage storage pool on Unity
 --------------------------------
 # Info Module
 
-Gathering information about Dell EMC Unity
+Gathering information about Unity
 
 ### Synopsis
- Gathering information about Dell EMC Unity storage system includes Get the details of Unity array, Get list of Hosts in Unity array, Get list of FC initiators in Unity array, Get list of iSCSI initiators in Unity array, Get list of Consistency groups in Unity array, Get list of Storage pools in Unity array, Get list of Volumes in Unity array, Get list of Snapshot schedules in Unity array, Get list of NAS servers in Unity array, Get list of File systems in Unity array, Get list of Snapshots in Unity array, Get list of SMB shares in Unity array, Get list of NFS exports in Unity array, Get list of User quotas in Unity array, Get list of Quota tree in Unity array.
+ Gathering information about Unity storage system includes Get the details of Unity array, Get list of Hosts in Unity array, Get list of FC initiators in Unity array, Get list of iSCSI initiators in Unity array, Get list of Consistency groups in Unity array, Get list of Storage pools in Unity array, Get list of Volumes in Unity array, Get list of Snapshot schedules in Unity array, Get list of NAS servers in Unity array, Get list of File systems in Unity array, Get list of Snapshots in Unity array, Get list of SMB shares in Unity array, Get list of NFS exports in Unity array, Get list of User quotas in Unity array, Get list of Quota tree in Unity array, Get list of NFS Servers in Unity array, Get list of CIFS Servers in Unity array. Get list of Ethernet ports in Unity array. Get list of File interfaces used in Unity array.
 
 ### Parameters
-                                                                                                                                                                    
+                                                                                                                                                                        
 <table>
     <tr>
         <th colspan=1>Parameter</th>
@@ -2901,8 +3676,8 @@ Gathering information about Dell EMC Unity
             <td> list   <br> elements: str </td>
             <td></td>
             <td></td>
-            <td> <ul> <li>host</li>  <li>fc_initiator</li>  <li>iscsi_initiator</li>  <li>cg</li>  <li>storage_pool</li>  <li>vol</li>  <li>snapshot_schedule</li>  <li>nas_server</li>  <li>file_system</li>  <li>snapshot</li>  <li>nfs_export</li>  <li>smb_share</li>  <li>user_quota</li>  <li>tree_quota</li>  <li>disk_group</li> </ul></td>
-            <td> <br> List of string variables to specify the Unity storage system entities for which information is required.  <br> host  <br> fc_initiator  <br> iscsi_initiator  <br> cg  <br> storage_pool  <br> vol  <br> snapshot_schedule  <br> nas_server  <br> file_system  <br> snapshot  <br> nfs_export  <br> smb_share  <br> user_quota  <br> tree_quota  <br> disk_group </td>
+            <td> <ul> <li>host</li>  <li>fc_initiator</li>  <li>iscsi_initiator</li>  <li>cg</li>  <li>storage_pool</li>  <li>vol</li>  <li>snapshot_schedule</li>  <li>nas_server</li>  <li>file_system</li>  <li>snapshot</li>  <li>nfs_export</li>  <li>smb_share</li>  <li>user_quota</li>  <li>tree_quota</li>  <li>disk_group</li>  <li>nfs_server</li>  <li>cifs_server</li>  <li>ethernet_port</li>  <li>file_interface</li> </ul></td>
+            <td> <br> List of string variables to specify the Unity storage system entities for which information is required.  <br> host  <br> fc_initiator  <br> iscsi_initiator  <br> cg  <br> storage_pool  <br> vol  <br> snapshot_schedule  <br> nas_server  <br> file_system  <br> snapshot  <br> nfs_export  <br> smb_share  <br> user_quota  <br> tree_quota  <br> disk_group  <br> nfs_server  <br> cifs_server  <br> ethernet_port  <br> file_interface </td>
         </tr>
                     <tr>
             <td colspan=1 > unispherehost</td>
@@ -2944,8 +3719,10 @@ Gathering information about Dell EMC Unity
             <td></td>
             <td> <br> Port number through which communication happens with Unity management server. </td>
         </tr>
-                                            </table>
+                                                    </table>
 
+### Notes
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -2971,6 +3748,10 @@ Gathering information about Dell EMC Unity
        - user_quota
        - tree_quota
        - disk_group
+       - nfs_server
+       - cifs_server
+       - ethernet_port
+       - file_interface
 
  - name: Get information of Unity array
    dellemc.unity.info:
@@ -3113,10 +3894,46 @@ Gathering information about Dell EMC Unity
      verifycert: "{{verifycert}}"
      gather_subset:
        - disk_group
+
+ - name: Get list of NFS Servers on Unity array
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - nfs_server
+
+ - name: Get list of CIFS Servers on Unity array
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - cifs_server
+
+ - name: Get list of ethernet ports on Unity array
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - ethernet_port
+
+ - name: Get list of file interfaces on Unity array.
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     verifycert: "{{verifycert}}"
+     gather_subset:
+       - file_interface
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 <table>
     <tr>
         <th colspan=2>Key</th>
@@ -3124,7 +3941,7 @@ Gathering information about Dell EMC Unity
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
-                                                                                    <tr>
+                                                                                            <tr>
             <td colspan=2 > Array_Details </td>
             <td>  complex </td>
             <td> always </td>
@@ -3164,6 +3981,26 @@ Gathering information about Dell EMC Unity
                 <td> str </td>
                 <td>success</td>
                 <td> The software version of the Unity Array. </td>
+            </tr>
+                                        <tr>
+            <td colspan=2 > CIFS_Servers </td>
+            <td>  complex </td>
+            <td> When CIFS Servers exist. </td>
+            <td> Details of the CIFS Servers. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The ID of the CIFS Servers. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The name of the CIFS server. </td>
             </tr>
                                         <tr>
             <td colspan=2 > Consistency_Groups </td>
@@ -3213,6 +4050,26 @@ Gathering information about Dell EMC Unity
                 <td> The tier type of the disk group. </td>
             </tr>
                                         <tr>
+            <td colspan=2 > Ethernet_ports </td>
+            <td>  complex </td>
+            <td> When ethernet ports exist. </td>
+            <td> Details of the ethernet ports. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The ID of the ethernet port. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The name of the ethernet port. </td>
+            </tr>
+                                        <tr>
             <td colspan=2 > FC_initiators </td>
             <td>  complex </td>
             <td> When FC initiator exist. </td>
@@ -3251,6 +4108,33 @@ Gathering information about Dell EMC Unity
                 <td> str </td>
                 <td>success</td>
                 <td> The name of the File System. </td>
+            </tr>
+                                        <tr>
+            <td colspan=2 > File_interfaces </td>
+            <td>  complex </td>
+            <td> When file inetrface exist. </td>
+            <td> Details of the file inetrfaces. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The ID of the file inetrface. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > ip_address </td>
+                <td> str </td>
+                <td>success</td>
+                <td> IP address of the file inetrface. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The name of the file inetrface. </td>
             </tr>
                                         <tr>
             <td colspan=2 > Hosts </td>
@@ -3331,6 +4215,19 @@ Gathering information about Dell EMC Unity
                 <td> str </td>
                 <td>success</td>
                 <td> The name of the NFS Export. </td>
+            </tr>
+                                        <tr>
+            <td colspan=2 > NFS_Servers </td>
+            <td>  complex </td>
+            <td> When NFS Servers exist. </td>
+            <td> Details of the NFS Servers. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The ID of the NFS Servers. </td>
             </tr>
                                         <tr>
             <td colspan=2 > SMB_Shares </td>
@@ -3477,6 +4374,7 @@ Gathering information about Dell EMC Unity
 ### Authors
 * Rajshree Khare (@kharer5) <ansible.team@dell.com>
 * Akash Shendge (@shenda1) <ansible.team@dell.com>
+* Meenakshi Dembi (@dembim) <ansible.team@dell.com>
 
 --------------------------------
 # User Quota Module
@@ -3487,7 +4385,7 @@ Manage user quota on the Unity storage system
  Managing User Quota on the Unity storage system includes Create user quota, Get user quota, Modify user quota, Delete user quota, Create user quota for quota tree, Modify user quota for quota tree and Delete user quota for quota tree.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 <table>
     <tr>
         <th colspan=1>Parameter</th>
@@ -3657,8 +4555,10 @@ Manage user quota on the Unity storage system
             <td></td>
             <td> <br> Port number through which communication happens with Unity management server. </td>
         </tr>
-                                            </table>
+                                                    </table>
 
+### Notes
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -3829,7 +4729,7 @@ Manage user quota on the Unity storage system
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 <table>
     <tr>
         <th colspan=6>Key</th>
@@ -3837,7 +4737,7 @@ Manage user quota on the Unity storage system
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
-                                                                                    <tr>
+                                                                                            <tr>
             <td colspan=6 > changed </td>
             <td>  bool </td>
             <td> always </td>
@@ -4164,6 +5064,7 @@ Manage filesystem snapshot on the Unity storage system
 
 ### Notes
 * Filesystem snapshot cannot be deleted, if it has nfs or smb share.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -4401,7 +5302,7 @@ Manage snapshots on the Unity storage system
  Managing snapshots on the Unity storage system includes create snapshot, delete snapshot, update snapshot, get snapshot, map host and unmap host.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                    
 <table>
     <tr>
         <th colspan=1>Parameter</th>
@@ -4547,8 +5448,10 @@ Manage snapshots on the Unity storage system
             <td></td>
             <td> <br> Port number through which communication happens with Unity management server. </td>
         </tr>
-                                            </table>
+                                                    </table>
 
+### Notes
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -4628,7 +5531,7 @@ Manage snapshots on the Unity storage system
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                    
 <table>
     <tr>
         <th colspan=2>Key</th>
@@ -4636,129 +5539,66 @@ Manage snapshots on the Unity storage system
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
-                                                                                    <tr>
+                                                                                            <tr>
             <td colspan=2 > changed </td>
             <td>  bool </td>
             <td> always </td>
             <td> Whether or not the resource has changed. </td>
         </tr>
                     <tr>
-            <td colspan=2 > filesystem_snapshot_details </td>
+            <td colspan=2 > snapshot_details </td>
             <td>  complex </td>
-            <td> When filesystem snapshot exists </td>
-            <td> Details of the filesystem snapshot. </td>
+            <td> When snapshot exists </td>
+            <td> Details of the snapshot. </td>
         </tr>
                             <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > access_type </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Access type of filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > attached_wwn </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Attached WWN details. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > creation_time </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Creation time of filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > creator_schedule </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Creator schedule of filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > creator_type </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Creator type for filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > creator_user </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Creator user for filesystem snapshot. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > description </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Description of the filesystem snapshot. </td>
-            </tr>
-                                <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
                 <td colspan=1 > expiration_time </td>
                 <td> str </td>
                 <td>success</td>
-                <td> Date and time after which the filesystem snapshot will expire. </td>
+                <td> Date and time after which the snapshot will expire. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > filesystem_id </td>
-                <td> str </td>
+                <td colspan=1 > hosts_list </td>
+                <td> dict </td>
                 <td>success</td>
-                <td> Id of the filesystem for which the snapshot exists. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > filesystem_name </td>
-                <td> str </td>
-                <td>success</td>
-                <td> Name of the filesystem for which the snapshot exists. </td>
+                <td> Contains the name and id of the associated hosts. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
                 <td colspan=1 > id </td>
                 <td> str </td>
                 <td>success</td>
-                <td> Unique identifier of the filesystem snapshot instance. </td>
+                <td> Unique identifier of the snapshot instance. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
                 <td colspan=1 > is_auto_delete </td>
-                <td> bool </td>
+                <td> str </td>
                 <td>success</td>
-                <td> Is the filesystem snapshot is auto deleted or not. </td>
+                <td> Additional information mentioned for snapshot. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
                 <td colspan=1 > name </td>
                 <td> str </td>
                 <td>success</td>
-                <td> The name of the filesystem snapshot. </td>
+                <td> The name of the snapshot. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > nas_server_id </td>
+                <td colspan=1 > storage_resource_id </td>
                 <td> str </td>
                 <td>success</td>
-                <td> Id of the NAS server on which filesystem exists. </td>
+                <td> Id of the storage resource for which the snapshot exists. </td>
             </tr>
                                 <tr>
                 <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > nas_server_name </td>
+                <td colspan=1 > storage_resource_name </td>
                 <td> str </td>
                 <td>success</td>
-                <td> Name of the NAS server on which filesystem exists. </td>
-            </tr>
-                                <tr>
-                <td class="elbow-placeholder">&nbsp;</td>
-                <td colspan=1 > size </td>
-                <td> int </td>
-                <td>success</td>
-                <td> Size of the filesystem snapshot. </td>
+                <td> Name of the storage resource for which the snapshot exists. </td>
             </tr>
                                         </table>
 
@@ -4964,6 +5804,7 @@ Manage SMB shares on Unity storage system
 
 ### Notes
 * When ID/Name of the filesystem/snapshot is passed then nas_server is not required. If passed, then filesystem/snapshot should exist for the mentioned nas_server, else the task will fail.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -5185,7 +6026,7 @@ Manage Host operations on Unity
  The Host module contains the operations Creation of a Host, Addition of initiators to Host, Removal of initiators from Host, Modification of host attributes, Get details of a Host, Deletion of a Host, Addition of network address to Host, Removal of network address from Host.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                                                                                                            
 <table>
     <tr>
         <th colspan=1>Parameter</th>
@@ -5315,8 +6156,10 @@ Manage Host operations on Unity
             <td></td>
             <td> <br> Port number through which communication happens with Unity management server. </td>
         </tr>
-                                            </table>
+                                                    </table>
 
+### Notes
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -5421,7 +6264,7 @@ Manage Host operations on Unity
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 <table>
     <tr>
         <th colspan=6>Key</th>
@@ -5429,7 +6272,7 @@ Manage Host operations on Unity
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
-                                                                                    <tr>
+                                                                                            <tr>
             <td colspan=6 > changed </td>
             <td>  bool </td>
             <td> always </td>
@@ -5602,7 +6445,7 @@ Manage consistency groups on Unity storage system
  Managing the consistency group on the Unity storage system includes creating new consistency group, adding volumes to consistency group, removing volumes from consistency group, mapping hosts to consistency group, unmapping hosts from consistency group, renaming consistency group, modifying attributes of consistency group, enabling replication in consistency group, disabling replication in consistency group and deleting consistency group.
 
 ### Parameters
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 <table>
     <tr>
         <th colspan=2>Parameter</th>
@@ -5855,8 +6698,10 @@ Manage consistency groups on Unity storage system
             <td></td>
             <td> <br> Port number through which communication happens with Unity management server. </td>
         </tr>
-                                            </table>
+                                                    </table>
 
+### Notes
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -5995,7 +6840,7 @@ Manage consistency groups on Unity storage system
 ```
 
 ### Return Values
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 <table>
     <tr>
         <th colspan=10>Key</th>
@@ -6003,7 +6848,7 @@ Manage consistency groups on Unity storage system
         <th>Returned</th>
         <th width="100%">Description</th>
     </tr>
-                                                                                    <tr>
+                                                                                            <tr>
             <td colspan=10 > changed </td>
             <td>  bool </td>
             <td> always </td>
@@ -6347,6 +7192,7 @@ Manage snapshot schedules on Unity storage system
 * Snapshot schedule created through Ansible will have only one rule.
 * Modification of rule type is not allowed. Within the same type, other parameters can be modified.
 * If an existing snapshot schedule has more than 1 rule in it, only get and delete operation is allowed.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
 
 ### Examples
 ```
@@ -6657,6 +7503,1027 @@ Manage snapshot schedules on Unity storage system
                         <td> Detail of storage resource. </td>
                     </tr>
                                                                                     </table>
+
+### Authors
+* Akash Shendge (@shenda1) <ansible.team@dell.com>
+
+--------------------------------
+# NFS Server Module
+
+Manage NFS server on Unity storage system
+
+### Synopsis
+ Managing the NFS server on the Unity storage system includes creating NFS server, getting NFS server details and deleting NFS server attributes.
+
+### Parameters
+                                                                                                                                                                                                                                                                                                                                                                                                    
+<table>
+    <tr>
+        <th colspan=1>Parameter</th>
+        <th width="20%">Type</th>
+        <th>Required</th>
+        <th>Default</th>
+        <th>Choices</th>
+        <th width="80%">Description</th>
+    </tr>
+                                                            <tr>
+            <td colspan=1 > nas_server_name</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Name of the NAS server on which NFS server will be hosted. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > nas_server_id</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> ID of the NAS server on which NFS server will be hosted. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > nfs_server_id</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> ID of the NFS server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > host_name</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Host name of the NFS server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > nfs_v4_enabled</td>
+            <td> bool  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Indicates whether the NFSv4 is enabled on the NAS server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > is_secure_enabled</td>
+            <td> bool  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Indicates whether the secure NFS is enabled. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > kerberos_domain_controller_type</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td> <ul> <li>CUSTOM</li>  <li>UNIX</li>  <li>WINDOWS</li> </ul></td>
+            <td> <br> Type of Kerberos Domain Controller used for secure NFS service. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > kerberos_domain_controller_username</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Kerberos Domain Controller administrator username. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > kerberos_domain_controller_password</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Kerberos Domain Controller administrator password. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > is_extended_credentials_enabled</td>
+            <td> bool  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Indicates whether support for more than 16 unix groups in a Unix credential. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > remove_spn_from_kerberos</td>
+            <td> bool  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Indicates whether to remove the SPN from Kerberos Domain Controller. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > state</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td> <ul> <li>absent</li>  <li>present</li> </ul></td>
+            <td> <br> Define whether the NFS server should exist or not. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > unispherehost</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td></td>
+            <td> <br> IP or FQDN of the Unity management server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > username</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td></td>
+            <td> <br> The username of the Unity management server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > password</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td></td>
+            <td> <br> The password of the Unity management server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > verifycert</td>
+            <td> bool  </td>
+            <td></td>
+            <td> True </td>
+            <td></td>
+            <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > port</td>
+            <td> int  </td>
+            <td></td>
+            <td> 443 </td>
+            <td></td>
+            <td> <br> Port number through which communication happens with Unity management server. </td>
+        </tr>
+                                                    </table>
+
+### Notes
+* The check mode is supported.
+* Modify operation for NFS Server is not supported.
+* When kerberos_domain_controller_type is "UNIX" kdc_type in nfs_server_details output, it is displayed as null.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
+
+### Examples
+```
+    - name: Create NFS server with kdctype as Windows
+      dellemc.unity.nfsserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        host_name: "dummy_nas23"
+        is_secure_enabled: True
+        kerberos_domain_controller_type: "WINDOWS"
+        kerberos_domain_controller_username: "administrator"
+        kerberos_domain_controller_password: "Password123!"
+        is_extended_credentials_enabled: True
+        nfs_v4_enabled: True
+        state: "present"
+
+    - name: Create NFS server with kdctype as Unix
+      dellemc.unity.nfsserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        host_name: "dummy_nas23"
+        is_secure_enabled: True
+        kerberos_domain_controller_type: "UNIX"
+        is_extended_credentials_enabled: True
+        nfs_v4_enabled: True
+        state: "present"
+
+    - name: Get NFS server details
+      dellemc.unity.nfsserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        state: "present"
+
+    - name: Delete NFS server
+      dellemc.unity.nfsserver:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        kerberos_domain_controller_username: "administrator"
+        kerberos_domain_controller_password: "Password123!"
+        unjoin_server_account: False
+        state: "absent"
+```
+
+### Return Values
+                                                                                                                                                                                                                                                                                                                            
+<table>
+    <tr>
+        <th colspan=2>Key</th>
+        <th>Type</th>
+        <th>Returned</th>
+        <th width="100%">Description</th>
+    </tr>
+                                                                                            <tr>
+            <td colspan=2 > changed </td>
+            <td>  bool </td>
+            <td> always </td>
+            <td> Whether or not the resource has changed. </td>
+        </tr>
+                    <tr>
+            <td colspan=2 > nfs_server_details </td>
+            <td>  complex </td>
+            <td> When NFS server exists </td>
+            <td> Details of the NFS server. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > credentials_cache_ttl </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Credential cache refresh timeout. Resolution is in minutes. Default value is 15 minutes. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > existed </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates if NFS Server exists. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > host_name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Host name of the NFS server. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Unique identifier of the NFS Server instance. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > is_extended_credentials_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether the NFS server supports more than 16 Unix groups in a Unix credential. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > is_secure_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether secure NFS is enabled on the NFS server. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > kdc_type </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Type of Kerberos Domain Controller used for secure NFS service. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > nfs_v4_enabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether NFSv4 is enabled on the NAS server. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=1 > servicee_principal_name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> The Service Principal Name (SPN) for the NFS Server. </td>
+            </tr>
+                                        </table>
+
+### Authors
+* Meenakshi Dembi (@dembim) <ansible.team@dell.com>
+
+--------------------------------
+# Interface Module
+
+Manage Interfaces on Unity storage system
+
+### Synopsis
+ Managing the Interfaces on the Unity storage system includes adding Interfaces to NAS Server, getting details of interface and deleting configured interfaces.
+
+### Parameters
+                                                                                                                                                                                                                                                                                                                                                                                
+<table>
+    <tr>
+        <th colspan=1>Parameter</th>
+        <th width="20%">Type</th>
+        <th>Required</th>
+        <th>Default</th>
+        <th>Choices</th>
+        <th width="80%">Description</th>
+    </tr>
+                                                            <tr>
+            <td colspan=1 > nas_server_name</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Name of the NAS server for which interface will be configured. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > nas_server_id</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> ID of the NAS server for which interface will be configured. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > ethernet_port_name</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Name of the ethernet port. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > ethernet_port_id</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> ID of the ethernet port. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > role</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td> <ul> <li>PRODUCTION</li>  <li>BACKUP</li> </ul></td>
+            <td> <br> Indicates whether interface is configured as production or backup. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > interface_ip</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> IP of network interface. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > netmask</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Netmask of network interface. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > prefix_length</td>
+            <td> int  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Prefix length is mutually exclusive with netmask. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > gateway</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Gateway of network interface. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > vlan_id</td>
+            <td> int  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Vlan id of the interface. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > state</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td> <ul> <li>present</li>  <li>absent</li> </ul></td>
+            <td> <br> Define whether the interface should exist or not. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > unispherehost</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td></td>
+            <td> <br> IP or FQDN of the Unity management server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > username</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td></td>
+            <td> <br> The username of the Unity management server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > password</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td></td>
+            <td> <br> The password of the Unity management server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > verifycert</td>
+            <td> bool  </td>
+            <td></td>
+            <td> True </td>
+            <td></td>
+            <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > port</td>
+            <td> int  </td>
+            <td></td>
+            <td> 443 </td>
+            <td></td>
+            <td> <br> Port number through which communication happens with Unity management server. </td>
+        </tr>
+                                                    </table>
+
+### Notes
+* The check mode is supported.
+* Modify operation for interface is not supported.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
+
+### Examples
+```
+    - name: Add Interface as Backup to NAS Server
+      dellemc.unity.interface:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        ethernet_port_name: "SP A 4-Port Card Ethernet Port 0"
+        role: "BACKUP"
+        interface_ip: "xx.xx.xx.xx"
+        netmask: "xx.xx.xx.xx"
+        gateway: "xx.xx.xx.xx"
+        vlan_id: 324
+        state: "present"
+
+    - name: Add Interface as Production to NAS Server
+      dellemc.unity.interface:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        ethernet_port_name: "SP A 4-Port Card Ethernet Port 0"
+        role: "PRODUCTION"
+        interface_ip: "xx.xx.xx.xx"
+        netmask: "xx.xx.xx.xx"
+        gateway: "xx.xx.xx.xx"
+        vlan_id: 324
+        state: "present"
+
+    - name: Get interface details
+      dellemc.unity.interface:
+        unispherehost: "{{unispherehost}}"
+        username: "{{username}}"
+        password: "{{password}}"
+        verifycert: "{{verifycert}}"
+        nas_server_name: "dummy_nas"
+        interface_ip: "xx.xx.xx.xx"
+        state: "present"
+
+    - name: Delete Interface
+      dellemc.unity.interface:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      verifycert: "{{verifycert}}"
+      nas_server_name: "dummy_nas"
+      interface_ip: "xx.xx.xx.xx"
+      state: "absent"
+```
+
+### Return Values
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+<table>
+    <tr>
+        <th colspan=4>Key</th>
+        <th>Type</th>
+        <th>Returned</th>
+        <th width="100%">Description</th>
+    </tr>
+                                                                                            <tr>
+            <td colspan=4 > changed </td>
+            <td>  bool </td>
+            <td> always </td>
+            <td> Whether or not the resource has changed. </td>
+        </tr>
+                    <tr>
+            <td colspan=4 > interface_details </td>
+            <td>  complex </td>
+            <td> When interface is configured for NAS Server. </td>
+            <td> Details of the interface. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > existed </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates if interface exists. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > gateway </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Gateway of network interface. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Unique identifier interface. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > ip_address </td>
+                <td> str </td>
+                <td>success</td>
+                <td> IP address of interface. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > ip_port </td>
+                <td> complex </td>
+                <td>success</td>
+                <td> Port on which network interface is configured. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=2 > id </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> ID of ip_port </td>
+                </tr>
+                                                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > ip_protocol_version </td>
+                <td> str </td>
+                <td>success</td>
+                <td> IP protocol version. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > is_disabled </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether interface is disabled. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > is_preferred </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether interface is preferred. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > mac_address </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Mac address of ip_port. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > name </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> System configured name of interface. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=3 > nas_server </td>
+                <td> complex </td>
+                <td>success</td>
+                <td> Details of NAS server where interface is configured. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=2 > id </td>
+                    <td> str </td>
+                    <td>success</td>
+                    <td> ID of NAS Server </td>
+                </tr>
+                                                                    </table>
+
+### Authors
+* Meenakshi Dembi (@dembim) <ansible.team@dell.com>
+
+--------------------------------
+# CIFS Server Module
+
+Manage CIFS server on Unity storage system
+
+### Synopsis
+ Managing the CIFS server on the Unity storage system includes creating CIFS server, getting CIFS server details and deleting CIFS server.
+
+### Parameters
+                                                                                                                                                                                                                                                                                                                                                                                                                        
+<table>
+    <tr>
+        <th colspan=1>Parameter</th>
+        <th width="20%">Type</th>
+        <th>Required</th>
+        <th>Default</th>
+        <th>Choices</th>
+        <th width="80%">Description</th>
+    </tr>
+                                                            <tr>
+            <td colspan=1 > nas_server_name</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Name of the NAS server on which CIFS server will be hosted. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > nas_server_id</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> ID of the NAS server on which CIFS server will be hosted. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > netbios_name</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> The computer name of the SMB server in Windows network. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > workgroup</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Standalone SMB server workgroup. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > local_password</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Standalone SMB server administrator password. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > domain</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> The domain name where the SMB server is registered in Active Directory. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > domain_username</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Active Directory domain user name. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > domain_password</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Active Directory domain password. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > cifs_server_name</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> The name of the CIFS server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > cifs_server_id</td>
+            <td> str  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> The ID of the CIFS server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > interfaces</td>
+            <td> list   <br> elements: str </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> List of file IP interfaces that service CIFS protocol of SMB server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > unjoin_cifs_server_account</td>
+            <td> bool  </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <br> Keep SMB server account unjoined in Active Directory after deletion.  <br> False specifies keep SMB server account joined after deletion.  <br> True specifies unjoin SMB server account from Active Directory before deletion. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > state</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td> <ul> <li>absent</li>  <li>present</li> </ul></td>
+            <td> <br> Define whether the CIFS server should exist or not. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > unispherehost</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td></td>
+            <td> <br> IP or FQDN of the Unity management server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > username</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td></td>
+            <td> <br> The username of the Unity management server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > password</td>
+            <td> str  </td>
+            <td> True </td>
+            <td></td>
+            <td></td>
+            <td> <br> The password of the Unity management server. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > verifycert</td>
+            <td> bool  </td>
+            <td></td>
+            <td> True </td>
+            <td></td>
+            <td> <br> Boolean variable to specify whether or not to validate SSL certificate.  <br> True - Indicates that the SSL certificate should be verified.  <br> False - Indicates that the SSL certificate should not be verified. </td>
+        </tr>
+                    <tr>
+            <td colspan=1 > port</td>
+            <td> int  </td>
+            <td></td>
+            <td> 443 </td>
+            <td></td>
+            <td> <br> Port number through which communication happens with Unity management server. </td>
+        </tr>
+                                                    </table>
+
+### Notes
+* The check mode is supported.
+* The modules present in this collection named as 'dellemc.unity' are built to support the Dell Unity storage platform.
+
+### Examples
+```
+- name: Create CIFS server belonging to Active Directory
+  dellemc.unity.cifsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    nas_server_name: "test_nas1"
+    cifs_server_name: "test_cifs"
+    domain: "ad_domain"
+    domain_username: "domain_username"
+    domain_password: "domain_password"
+    state: "present"
+
+- name: Get CIFS server details using CIFS server ID
+  dellemc.unity.cifsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    cifs_server_id: "cifs_37"
+    state: "present"
+
+- name: Get CIFS server details using NAS server name
+  dellemc.unity.cifsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    nas_server_name: "test_nas1"
+    state: "present"
+
+- name: Delete CIFS server
+  dellemc.unity.cifsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    cifs_server_id: "cifs_37"
+    unjoin_cifs_server_account: True
+    domain_username: "domain_username"
+    domain_password: "domain_password"
+    state: "absent"
+
+- name: Create standalone CIFS server
+  dellemc.unity.cifsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    netbios_name: "ANSIBLE_CIFS"
+    workgroup: "ansible"
+    local_password: "Password123!"
+    nas_server_name: "test_nas1"
+    state: "present"
+
+- name: Get CIFS server details using netbios name
+  dellemc.unity.cifsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    netbios_name: "ANSIBLE_CIFS"
+    state: "present"
+
+- name: Delete standalone CIFS server
+  dellemc.unity.cifsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    verifycert: "{{verifycert}}"
+    cifs_server_id: "cifs_40"
+    state: "absent"
+```
+
+### Return Values
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+<table>
+    <tr>
+        <th colspan=6>Key</th>
+        <th>Type</th>
+        <th>Returned</th>
+        <th width="100%">Description</th>
+    </tr>
+                                                                                            <tr>
+            <td colspan=6 > changed </td>
+            <td>  bool </td>
+            <td> always </td>
+            <td> Whether or not the resource has changed. </td>
+        </tr>
+                    <tr>
+            <td colspan=6 > cifs_server_details </td>
+            <td>  complex </td>
+            <td> When CIFS server exists </td>
+            <td> Details of the CIFS server. </td>
+        </tr>
+                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > description </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Description of the SMB server. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > domain </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Domain name where SMB server is registered in Active Directory. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > file_interfaces </td>
+                <td> complex </td>
+                <td>success</td>
+                <td> The file interfaces associated with the NAS server. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=4 > UnityFileInterfaceList </td>
+                    <td> list </td>
+                    <td>success</td>
+                    <td> List of file interfaces associated with the NAS server. </td>
+                </tr>
+                                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=3 > UnityFileInterface </td>
+                        <td> complex </td>
+                        <td>success</td>
+                        <td> Details of file interface associated with the NAS server. </td>
+                    </tr>
+                                                                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > id </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Unique identifier of the CIFS server instance. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > is_standalone </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether the SMB server is standalone. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> User-specified name for the SMB server. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > nasServer </td>
+                <td> complex </td>
+                <td>success</td>
+                <td> Information about the NAS server in the storage system. </td>
+            </tr>
+                                         <tr>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td class="elbow-placeholder">&nbsp;</td>
+                    <td colspan=4 > UnityNasServer </td>
+                    <td> complex </td>
+                    <td>success</td>
+                    <td> Information about the NAS server in the storage system. </td>
+                </tr>
+                                                    <tr>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td class="elbow-placeholder">&nbsp;</td>
+                        <td colspan=3 > id </td>
+                        <td> str </td>
+                        <td>success</td>
+                        <td> Unique identifier of the NAS server instance. </td>
+                    </tr>
+                                                                            <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > netbios_name </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Computer Name of the SMB server in windows network. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > smb_multi_channel_supported </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether the SMB 3.0+ multichannel feature is supported. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > smb_protocol_versions </td>
+                <td> list </td>
+                <td>success</td>
+                <td> Supported SMB protocols, such as 1.0, 2.0, 2.1, 3.0, and so on. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > smbca_supported </td>
+                <td> bool </td>
+                <td>success</td>
+                <td> Indicates whether the SMB server supports continuous availability. </td>
+            </tr>
+                                <tr>
+                <td class="elbow-placeholder">&nbsp;</td>
+                <td colspan=5 > workgroup </td>
+                <td> str </td>
+                <td>success</td>
+                <td> Windows network workgroup for the SMB server. </td>
+            </tr>
+                                        </table>
 
 ### Authors
 * Akash Shendge (@shenda1) <ansible.team@dell.com>

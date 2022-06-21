@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# Copyright: (c) 2020, DellEMC
+# Copyright: (c) 2020, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -19,7 +19,7 @@ description:
   modifying attributes of snapshot schedule, and deleting snapshot schedule.
 
 extends_documentation_fragment:
-  - dellemc.unity.dellemc_unity.unity
+  - dellemc.unity.unity
 
 author:
 - Akash Shendge (@shenda1) <ansible.team@dell.com>
@@ -351,7 +351,7 @@ snapshot_schedule_details:
 import logging
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
-    import dellemc_ansible_unity_utils as utils
+    import utils
 
 LOG = utils.get_logger('snapshotschedule')
 
@@ -359,7 +359,7 @@ HAS_UNITY_SDK = utils.get_unity_sdk()
 
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.3.0"
+application_type = "Ansible/1.4.0"
 
 
 class SnapshotSchedule(object):

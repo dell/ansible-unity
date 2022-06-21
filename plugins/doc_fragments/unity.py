@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright: (c) 2020, DellEMC.
+# Copyright: (c) 2020, Dell Technologies.
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 from __future__ import absolute_import, division, print_function
@@ -8,17 +8,8 @@ __metaclass__ = type
 
 class ModuleDocFragment(object):
 
-    DOCUMENTATION = r'''
-options:
-  - See respective platform section for more details
-requirements:
-  - See respective platform section for more details
-notes:
-  - Ansible modules are available for DellEMC Unity Storage Platform
-'''
-
     # Documentation fragment for Unity (unity)
-    UNITY = r'''
+    DOCUMENTATION = r'''
     options:
         unispherehost:
             required: True
@@ -53,9 +44,8 @@ notes:
             required: False
             default: 443
     requirements:
-      - A Dell EMC Unity Storage device.
-      - Ansible 2.10, 2.11 or 2.12.
+      - A Dell Unity Storage device. Ansible 2.11, 2.12 or 2.13.
     notes:
       - The modules present in this collection named as 'dellemc.unity'
-        are built to support the Dell EMC Unity storage platform.
+        are built to support the Dell Unity storage platform.
 '''
