@@ -131,7 +131,7 @@ class TestNfs():
             'nfs_export_name': "nfsshare_dummy_name",
             'filesystem_id': "fs_id_1",
             'adv_host_mgmt_enabled': False,
-            'read_only_root_hosts': [{'subnet': "10.255.2.1"}],
+            'read_only_root_hosts': [{'subnet': "1x.x.x.x"}],
             'host_state': 'present-in-export',
             'state': 'present'
         })
@@ -147,7 +147,7 @@ class TestNfs():
         self.get_module_args.update({
             'nfs_export_name': "nfsshare_dummy_name",
             'filesystem_id': "fs_id_1",
-            'read_only_root_hosts': [{'subnet': "10.255.2.1/10"}],
+            'read_only_root_hosts': [{'subnet': "1x.x.x.x/10"}],
             'host_state': 'present-in-export',
             'state': 'present'
         })

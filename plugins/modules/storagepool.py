@@ -317,7 +317,7 @@ UNITY_SDK_VERSION = utils.storops_version_check()
 UNITY_SDK_VERSION_CHECK = UNITY_SDK_VERSION['supported_version']
 UNITY_SDK_VERSION_ERROR = UNITY_SDK_VERSION['unsupported_version_message']
 
-application_type = "Ansible/1.4.0"
+application_type = "Ansible/1.4.1"
 
 
 class StoragePool(object):
