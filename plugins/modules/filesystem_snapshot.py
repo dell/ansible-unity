@@ -271,7 +271,7 @@ LOG = utils.get_logger('filesystem_snapshot')
 HAS_UNITY_SDK = utils.get_unity_sdk()
 UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
-application_type = "Ansible/1.4.0"
+application_type = "Ansible/1.4.1"
 
 
 class FilesystemSnapshot(object):

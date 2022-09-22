@@ -1,6 +1,6 @@
 **Ansible Modules for Dell Technologies Unity** 
 =========================================
-### Release Notes 1.4.0
+### Release Notes 1.4.1
 
 >   © 2022 Dell Inc. or its subsidiaries. All rights reserved. Dell
 >   and other trademarks are trademarks of Dell Inc. or its
@@ -26,9 +26,9 @@ The table in this section lists the revision history of this document.
 
 Table 1. Revision history
 
-| Revision | Date      | Description                                               |
-|----------|-----------|-----------------------------------------------------------|
-| 01       | June 2022  | Current release of Ansible Modules for Dell Unity 1.4.0 |
+| Revision | Date           | Description                                             |
+|----------|----------------|---------------------------------------------------------|
+| 01       | September 2022 | Current release of Ansible Modules for Dell Unity 1.4.1 |
 
 Product Description
 -------------------
@@ -38,15 +38,7 @@ New features & enhancements
 ---------------------------
 This release has the following changes -
 
-- Added execution environment manifest file to support building an execution environment with ansible-builder.
-- Added cifsserver module to support create, list and delete CIFS server.
-- Added nfsserver module to support create, list and delete NFS server.
-- Added interface module to support create, list and delete interface.
-- Enhance nfs module to support advanced host management option.
-- Enhanced info module to list cifs server, nfs servers, ethernet port and file interface.
-- Enhanced nas server module to support create, modify and delete of nas server replication.
-- Enhanced filesystem module to support create, modify and delete of filesystem replication.
-- Check mode is supported for Info.
+- Updated the execution environment related files.
 
 Known issues
 ------------
@@ -77,7 +69,7 @@ for Unity GitHub](https://github.com/dell/ansible-unity/) page.
 
 Documentation
 -------------
-The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/1.4.0/docs)
+The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/1.4.1/docs)
 page. It includes the following:
 - README
 - Release Notes (this document)

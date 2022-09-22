@@ -1,4 +1,8 @@
 # ansible-unity Change Log
+
+## Version 1.4.1 - released on 27/09/22
+- Updated the execution environment related files.
+
 ## Version 1.4.0 - released on 28/06/22
 - Added execution environment manifest file to support building an execution environment with ansible-builder.
 - Added cifsserver module to support create, list and delete CIFS server.

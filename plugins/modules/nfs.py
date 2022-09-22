@@ -659,7 +659,7 @@ HOST_DICT = dict(type='list', required=False, elements='dict',
 HOST_STATE_LIST = ['present-in-export', 'absent-in-export']
 STATE_LIST = ['present', 'absent']
 
-application_type = "Ansible/1.4.0"
+application_type = "Ansible/1.4.1"
 
 
 class NFS(object):

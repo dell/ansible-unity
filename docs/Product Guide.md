@@ -1,5 +1,5 @@
 # Ansible Modules for Dell Technologies Unity
-## Product Guide 1.4.0
+## Product Guide 1.4.1
 © 2022 Dell Inc. or its subsidiaries. All rights reserved. Dell and other trademarks are trademarks of Dell Inc. or its subsidiaries. Other trademarks may be trademarks of their respective owners.
 
 --------------
