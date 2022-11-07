@@ -882,7 +882,7 @@ class SnapshotSchedule(object):
 
         if state == 'present' and type and schedule_details and\
                 len(schedule_details['rules']) == 1:
-            if(self.schedule_modify_required(schedule_details)):
+            if (self.schedule_modify_required(schedule_details)):
                 result['changed'] = self.modify_snapshot_schedule(
                     id, schedule_details)
 
