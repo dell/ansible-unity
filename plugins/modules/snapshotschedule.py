@@ -29,7 +29,7 @@ options:
     description:
     - The name of the snapshot schedule.
     - Name is mandatory for a create operation.
-    - Specify either name or id (but not both) for any operation.
+    - Specify either I(name) or I(id) (but not both) for any operation.
     type: str
   id:
     description:
@@ -46,23 +46,23 @@ options:
   interval:
     description:
     - Number of hours between snapshots.
-    - Applicable only when rule type is 'every_n_hours'.
+    - Applicable only when rule type is C(every_n_hours).
     type: int
   hours_of_day:
     description:
     - Hours of the day when the snapshot will be taken.
-    - Applicable only when rule type is 'every_day'.
+    - Applicable only when rule type is C(every_day).
     type: list
     elements: int
   day_interval:
     description:
     - Number of days between snapshots.
-    - Applicable only when rule type is 'every_n_days'.
+    - Applicable only when rule type is C(every_n_days).
     type: int
   days_of_week:
     description:
     - Days of the week for which the snapshot schedule rule applies.
-    - Applicable only  when rule type is 'every_week'.
+    - Applicable only when rule type is C(every_week).
     type: list
     elements: str
     choices: ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY',
@@ -70,29 +70,29 @@ options:
   day_of_month:
     description:
     - Day of the month for which the snapshot schedule rule applies.
-    - Applicable only when rule type is 'every_month'.
+    - Applicable only when rule type is C(every_month).
     - Value should be [1, 31].
     type: int
   hour:
     description:
     - The hour when the snapshot will be taken.
-    - Applicable for 'every_n_days', 'every_week', 'every_month' rule types.
-    - For create operation, if 'hour' parameter is not specified, value will
-     be taken as 0.
+    - Applicable for C(every_n_days), C(every_week), C(every_month) rule types.
+    - For create operation, if I(hour) parameter is not specified, value will
+     be taken as C(0).
     - Value should be [0, 23].
     type: int
   minute:
     description:
     - Minute offset from the hour when the snapshot will be taken.
     - Applicable for all rule types.
-    - For a create operation, if 'minute' parameter is not specified, value will
-     be taken as 0.
+    - For a create operation, if I(minute) parameter is not specified, value will
+     be taken as C(0).
     - Value should be [0, 59].
     type: int
   desired_retention:
     description:
     - The number of days/hours for which snapshot will be retained.
-    - When auto_delete is True, desired_retention cannot be specified.
+    - When I(auto_delete) is C(true), I(desired_retention) cannot be specified.
     - Maximum desired retention supported is 31 days or 744 hours.
     type: int
   retention_unit:
@@ -117,13 +117,14 @@ notes:
   parameters can be modified.
 - If an existing snapshot schedule has more than 1 rule in it, only get and
   delete operation is allowed.
+- The I(check_mode) is not supported.
 """
 
 EXAMPLES = r"""
 - name: Create snapshot schedule (Rule Type - every_n_hours)
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       name: "Ansible_Every_N_Hours_Testing"
@@ -135,7 +136,7 @@ EXAMPLES = r"""
 - name: Create snapshot schedule (Rule Type - every_day)
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       name: "Ansible_Every_Day_Testing"
@@ -149,7 +150,7 @@ EXAMPLES = r"""
 - name: Create snapshot schedule (Rule Type - every_n_days)
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       name: "Ansible_Every_N_Day_Testing"
@@ -162,7 +163,7 @@ EXAMPLES = r"""
 - name: Create snapshot schedule (Rule Type - every_week)
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       name: "Ansible_Every_Week_Testing"
@@ -178,7 +179,7 @@ EXAMPLES = r"""
 - name: Create snapshot schedule (Rule Type - every_month)
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       name: "Ansible_Every_Month_Testing"
@@ -190,7 +191,7 @@ EXAMPLES = r"""
 - name: Get snapshot schedule details using name
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       name: "Ansible_Every_N_Hours_Testing"
@@ -199,7 +200,7 @@ EXAMPLES = r"""
 - name: Get snapshot schedule details using id
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       id: "{{id}}"
@@ -208,7 +209,7 @@ EXAMPLES = r"""
 - name: Modify snapshot schedule details id
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       id: "{{id}}"
@@ -219,7 +220,7 @@ EXAMPLES = r"""
 - name: Modify snapshot schedule using name
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       name: "Ansible_Every_Day_Testing"
@@ -231,7 +232,7 @@ EXAMPLES = r"""
 - name: Delete snapshot schedule using id
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       id: "{{id}}"
@@ -240,7 +241,7 @@ EXAMPLES = r"""
 - name: Delete snapshot schedule using name
   dellemc.unity.snapshotschedule:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       name: "Ansible_Every_Day_Testing"
@@ -252,11 +253,12 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
+    sample: True
 
 snapshot_schedule_details:
     description: Details of the snapshot schedule.
     returned: When snapshot schedule exists
-    type: complex
+    type: dict
     contains:
         id:
             description: The system ID given to the snapshot schedule.
@@ -267,23 +269,23 @@ snapshot_schedule_details:
         luns:
             description: Details of volumes for which snapshot schedule
              applied.
-            type: complex
+            type: dict
             contains:
                 UnityLunList:
                     description: List of volumes for which snapshot schedule
                      applied.
-                    type: complex
+                    type: list
                     contains:
                         UnityLun:
                             description: Detail of volume.
-                            type: complex
+                            type: dict
                             contains:
                                 id:
                                     description: The system ID given to volume.
                                     type: str
         rules:
             description: Details of rules that apply to snapshot schedule.
-            type: complex
+            type: list
             contains:
                 id:
                     description: The system ID of the rule.
@@ -303,7 +305,7 @@ snapshot_schedule_details:
                 days_of_week:
                     description: Days of the week for which the snapshot
                      schedule rule applies.
-                    type: complex
+                    type: dict
                     contains:
                         DayOfWeekEnumList:
                             description: Enumeration of days of the week.
@@ -329,23 +331,58 @@ snapshot_schedule_details:
                                  thresholds.
                     type: bool
         storage_resources:
-            description: Details of storage resources for which snapshot
+            description: Details of storage resources for which snapshot.
              schedule applied.
-            type: complex
+            type: dict
             contains:
                 UnityStorageResourceList:
                     description: List of storage resources for which snapshot
                      schedule applied.
-                    type: complex
+                    type: list
                     contains:
                         UnityStorageResource:
                             description: Detail of storage resource.
-                            type: complex
+                            type: dict
                             contains:
                                 id:
                                     description: The system ID given to storage
                                                  resource.
                                     type: str
+    sample: {
+        "existed": true,
+        "hash": 8742032390151,
+        "id": "snapSch_63",
+        "is_default": false,
+        "is_modified": null,
+        "is_sync_replicated": false,
+        "luns": null,
+        "modification_time": "2021-12-14 21:37:47.905000+00:00",
+        "name": "SS7_empty_hour_SS",
+        "rules": [
+            {
+                "access_type": "FilesystemSnapAccessTypeEnum.CHECKPOINT",
+                "days_of_month": null,
+                "days_of_week": {
+                    "DayOfWeekEnumList": []
+                },
+                "existed": true,
+                "hash": 8742032280772,
+                "hours": [
+                    0
+                ],
+                "id": "SchedRule_109",
+                "interval": 2,
+                "is_auto_delete": false,
+                "minute": 0,
+                "retention_time": 86400,
+                "retention_time_in_hours": 24,
+                "rule_type": "every_n_days",
+                "type": "ScheduleTypeEnum.N_DAYS_AT_HHMM"
+            }
+        ],
+        "storage_resources": null,
+        "version": "ScheduleVersionEnum.LEGACY"
+    }
 """
 
 import logging
@@ -354,10 +391,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 
 LOG = utils.get_logger('snapshotschedule')
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -384,18 +417,7 @@ class SnapshotSchedule(object):
             mutually_exclusive=mutually_exclusive,
             required_one_of=required_one_of
         )
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="Ansible modules for Unity require the"
-                                      " Unity python library to be "
-                                      "installed. Please install the library "
-                                      "before using these modules.")
-
-        if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-                'supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -818,7 +840,7 @@ class SnapshotSchedule(object):
         # schedule details
         result = dict(
             changed=False,
-            snapshot_schedule_details=''
+            snapshot_schedule_details={}
         )
 
         self.validate_parameters()

@@ -72,8 +72,8 @@ options:
   unjoin_cifs_server_account:
     description:
     - Keep SMB server account unjoined in Active Directory after deletion.
-    - False specifies keep SMB server account joined after deletion.
-    - True specifies unjoin SMB server account from Active Directory before deletion.
+    - C(False) specifies keep SMB server account joined after deletion.
+    - C(True) specifies unjoin SMB server account from Active Directory before deletion.
     type: bool
   state:
     description:
@@ -82,7 +82,7 @@ options:
     required: true
     type: str
 notes:
-- The check mode is supported.
+- The I(check_mode) is supported.
 '''
 
 EXAMPLES = r'''
@@ -91,7 +91,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     nas_server_name: "test_nas1"
     cifs_server_name: "test_cifs"
     domain: "ad_domain"
@@ -104,7 +104,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     cifs_server_id: "cifs_37"
     state: "present"
 
@@ -113,7 +113,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     nas_server_name: "test_nas1"
     state: "present"
 
@@ -122,7 +122,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     cifs_server_id: "cifs_37"
     unjoin_cifs_server_account: True
     domain_username: "domain_username"
@@ -134,7 +134,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     netbios_name: "ANSIBLE_CIFS"
     workgroup: "ansible"
     local_password: "Password123!"
@@ -146,7 +146,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     netbios_name: "ANSIBLE_CIFS"
     state: "present"
 
@@ -155,7 +155,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     cifs_server_id: "cifs_40"
     state: "absent"
 '''
@@ -170,7 +170,7 @@ changed:
 cifs_server_details:
     description: Details of the CIFS server.
     returned: When CIFS server exists
-    type: complex
+    type: dict
     contains:
         id:
             description: Unique identifier of the CIFS server instance.
@@ -195,18 +195,18 @@ cifs_server_details:
             type: bool
         nasServer:
             description: Information about the NAS server in the storage system.
-            type: complex
+            type: dict
             contains:
                 UnityNasServer:
                     description: Information about the NAS server in the storage system.
-                    type: complex
+                    type: dict
                     contains:
                         id:
                             description: Unique identifier of the NAS server instance.
                             type: str
         file_interfaces:
             description: The file interfaces associated with the NAS server.
-            type: complex
+            type: dict
             contains:
                 UnityFileInterfaceList:
                     description: List of file interfaces associated with the NAS server.
@@ -214,7 +214,7 @@ cifs_server_details:
                     contains:
                         UnityFileInterface:
                             description: Details of file interface associated with the NAS server.
-                            type: complex
+                            type: dict
                             contains:
                                 id:
                                     description: Unique identifier of the file interface.
@@ -276,9 +276,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell import 
 
 LOG = utils.get_logger('cifsserver')
 
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -302,18 +299,7 @@ class CIFSServer(object):
             mutually_exclusive=mutually_exclusive,
             required_one_of=required_one_of
         )
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="This Ansible module for Unity require the"
-                                      " Unity python library version >= 1.2.11 to be "
-                                      "installed. Please install the library "
-                                      "before using this module.")
-
-        if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-           'supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -523,7 +509,7 @@ class CIFSServer(object):
         # result is a dictionary that contains changed status and CIFS server details
         result = dict(
             changed=False,
-            cifs_server_details=None
+            cifs_server_details={}
         )
 
         # Validate the parameters

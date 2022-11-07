@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright: (c) 2020, Dell Technologies.
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -26,25 +25,28 @@ class ModuleDocFragment(object):
             required: True
             description:
             - The password of the Unity management server.
-        verifycert:
+        validate_certs:
             type: bool
             default: True
-            required: False
+            aliases:
+            - verifycert
             description:
             - Boolean variable to specify whether or not to validate SSL
               certificate.
-            - True - Indicates that the SSL certificate should be verified.
-            - False - Indicates that the SSL certificate should not be
+            - C(True) - Indicates that the SSL certificate should be verified.
+            - C(False) - Indicates that the SSL certificate should not be
               verified.
         port:
             description:
             - Port number through which communication happens with Unity
               management server.
             type: int
-            required: False
             default: 443
     requirements:
-      - A Dell Unity Storage device. Ansible 2.11, 2.12 or 2.13.
+      - A Dell Unity Storage device version 5.1 or later.
+      - Ansible-core 2.11 or later.
+      - Python 3.8, 3.9 or 3.10.
+      - Storops Python SDK 1.2.11.
     notes:
       - The modules present in this collection named as 'dellemc.unity'
         are built to support the Dell Unity storage platform.

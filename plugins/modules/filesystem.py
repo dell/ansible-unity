@@ -39,26 +39,25 @@ options:
   filesystem_name:
     description:
     - The name of the filesystem. Mandatory only for the create operation.
-      All the operations are supported through 'filesystem_name'.
-    - It is mutually exclusive with 'filesystem_id'.
-    required: False
+      All the operations are supported through I(filesystem_name).
+    - It is mutually exclusive with I(filesystem_id).
     type: str
   filesystem_id:
     description:
-    - The id of the filesystem.It is mutually exclusive with 'filesystem_name'.
+    - The id of the filesystem.
     - It can be used only for get, modify, or delete operations.
-    required: False
+    - It is mutually exclusive with I(filesystem_name).
     type: str
   pool_name:
     description:
     - This is the name of the pool where the filesystem will be created.
-    - Either the pool_name or pool_id must be provided to create a new
+    - Either the I(pool_name) or I(pool_id) must be provided to create a new
       filesystem.
     type: str
   pool_id:
     description:
     - This is the ID of the pool where the filesystem will be created.
-    - Either the pool_name or pool_id must be provided to create a new
+    - Either the I(pool_name) or I(pool_id) must be provided to create a new
       filesystem.
     type: str
   size:
@@ -67,7 +66,7 @@ options:
     type: int
   cap_unit:
     description:
-     - The unit of the filesystem size. It defaults to 'GB', if not specified.
+     - The unit of the filesystem size. It defaults to C(GB), if not specified.
     choices: ['GB' , 'TB']
     type: str
   nas_server_name:
@@ -81,7 +80,7 @@ options:
   supported_protocols:
     description:
     - Protocols supported by the file system.
-    - It will be overridden by NAS server configuration if NAS Server is Multiprotocol.
+    - It will be overridden by NAS server configuration if NAS Server is C(Multiprotocol).
     type: str
     choices: ['NFS', 'CIFS', 'MULTIPROTOCOL']
   description:
@@ -118,7 +117,7 @@ options:
         description:
         - Integer variable, determines the lowest directory level to which
           the enabled notifications apply.
-        - Minimum value is 1.
+        - Minimum value is C(1).
         type: int
   data_reduction:
     description:
@@ -154,48 +153,48 @@ options:
         grace_period:
             description:
             - Grace period set in quota configuration after soft limit is reached.
-            - If grace_period is not set during creation of filesystem,
-              it will be set to '7 days' by default.
+            - If I(grace_period) is not set during creation of filesystem,
+              it will be set to C(7 days) by default.
             type: int
         grace_period_unit:
             description:
             - Unit of grace period.
-            - Default unit is 'days'.
+            - Default unit is C(days).
             type: str
             choices: ['minutes', 'hours', 'days']
         default_hard_limit:
             description:
             - Default hard limit for user quotas and tree quotas.
-            - If default_hard_limit is not set while creation of filesystem,
-              it will be set to 0B by default.
+            - If I(default_hard_limit) is not set while creation of filesystem,
+              it will be set to C(0B) by default.
             type: int
         default_soft_limit:
             description:
             - Default soft limit for user quotas and tree quotas.
-            - If default_soft_limit is not set while creation of filesystem,
-              it will be set to 0B by default.
+            - If I(default_soft_limit) is not set while creation of filesystem,
+              it will be set to C(0B) by default.
             type: int
         is_user_quota_enabled:
             description:
             - Indicates whether the user quota is enabled.
-            - Parameters 'is_user_quota_enabled' and 'quota_policy' are
+            - If I(is_user_quota_enabled) is not set while creation of filesystem,
+              it will be set to C(false) by default.
+            - Parameters I(is_user_quota_enabled) and I(quota_policy) are
               mutually exclusive.
-            - If is_user_quota_enabled is not set while creation of filesystem,
-              it will be set to false by default.
             type: bool
         quota_policy:
             description:
             - Quota policy set in quota configuration.
-            - Parameters 'is_user_quota_enabled' and 'quota_policy' are
+            - If I(quota_policy) is not set while creation of filesystem, it will
+              be set to C(FILE_SIZE) by default.
+            - Parameters I(is_user_quota_enabled) and I(quota_policy) are
               mutually exclusive.
-            - If quota_policy is not set while creation of filesystem, it will
-              be set to "FILE_SIZE" by default.
             choices: ['FILE_SIZE','BLOCKS']
             type: str
         cap_unit:
             description:
-            - Unit of default_soft_limit and default_hard_limit size.
-            - Default unit is 'GB'.
+            - Unit of I(default_soft_limit) and I(default_hard_limit) size.
+            - Default unit is C(GB).
             choices: ['MB', 'GB', 'TB']
             type: str
   state:
@@ -207,15 +206,12 @@ options:
   snap_schedule_name:
     description:
     - This is the name of an existing snapshot schedule which is to be associated with the filesystem.
-      This is mutually exclusive with snapshot schedule id.
-    required: false
+    - This is mutually exclusive with I(snapshot_schedule_id).
     type: str
   snap_schedule_id:
     description:
     - This is the id of an existing snapshot schedule which is to be associated with the filesystem.
-      This is mutually exclusive with snapshot schedule name.
-      filesystem.
-    required: false
+    - This is mutually exclusive with I(snapshot_schedule_name).
     type: str
   replication_params:
     description:
@@ -239,8 +235,8 @@ options:
       rpo:
         description:
         - Maximum time to wait before the system syncs the source and destination LUNs.
-        - rpo should be specified if the replication_mode is asynchronous.
-        - The value should be in range of 5 to 1440.
+        - The I(rpo) option should be specified if the I(replication_mode) is C(asynchronous).
+        - The value should be in range of C(5) to C(1440).
         type: int
       replication_type:
         description:
@@ -250,7 +246,7 @@ options:
       remote_system:
         description:
         - Details of remote system to which the replication is being configured.
-        - remote_system should be specified if the replication_type is remote.
+        - The I(remote_system) option should be specified if the I(replication_type) is C(remote).
         type: dict
         suboptions:
           remote_system_host:
@@ -271,7 +267,6 @@ options:
           remote_system_verifycert:
             type: bool
             default: True
-            required: False
             description:
             - Boolean variable to specify whether or not to validate SSL
               certificate of remote Unity unisphere Host.
@@ -282,7 +277,6 @@ options:
             description:
             - Port at which remote Unity unisphere is hosted.
             type: int
-            required: False
             default: 443
       destination_pool_id:
         type: str
@@ -299,11 +293,11 @@ options:
 notes:
 - SMB shares, NFS exports, and snapshots associated with filesystem need
   to be deleted prior to deleting a filesystem.
-- The quota_config parameter can be used to update default hard limit
+- The I(quota_config) parameter can be used to update default hard limit
   and soft limit values to limit the maximum space that can be used.
   By default they both are set to 0 during filesystem
   creation which means unlimited.
-- Check_mode is not supported.
+- The I(check_mode) is not supported.
 """
 
 EXAMPLES = r"""
@@ -312,7 +306,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_name: "ansible_test_fs"
     nas_server_name: "lglap761"
     pool_name: "pool_1"
@@ -324,7 +318,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_name: "ansible_test_fs"
     nas_server_name: "lglap761"
     pool_name: "pool_1"
@@ -341,7 +335,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_name: "ansible_test_fs"
     nas_server_name: "lglap761"
     size: 10
@@ -352,7 +346,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_name: "ansible_test_fs"
     nas_server_name: "lglap761"
     size: 10
@@ -363,7 +357,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_name: "ansible_test_fs"
     nas_server_name: "lglap761"
     smb_properties:
@@ -377,7 +371,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_id: "fs_141"
     snap_schedule_id: "{{snap_schedule_id}}"
     state: "{{state_present}}"
@@ -387,7 +381,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_id: "rs_405"
     state: "present"
 
@@ -396,7 +390,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_id: "rs_405"
     state: "absent"
 
@@ -405,7 +399,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_id: "rs_405"
     replication_params:
       replication_name: "test_repl"
@@ -426,7 +420,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_id: "rs_405"
     replication_params:
       replication_name: "test_repl"
@@ -441,7 +435,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_id: "rs_405"
     replication_state: "disable"
     state: "present"
@@ -451,7 +445,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     filesystem_id: "rs_405"
     replication_params:
         replication_name: "test_replication"
@@ -464,14 +458,12 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
-    sample: {
-        changed: True
-    }
+    sample: true
 
 filesystem_details:
     description: Details of the filesystem.
     returned: When filesystem exists
-    type: complex
+    type: dict
     contains:
         id:
             description: The system generated ID given to the filesystem.
@@ -514,48 +506,35 @@ filesystem_details:
             type: int
         pool:
             description: The pool in which this filesystem is allocated.
-            type: complex
+            type: dict
             contains:
-                UnityPool:
-                    description: Unity pool in which this filesystem is
-                                 allocated.
-                    type: complex
-                    contains:
-                        id:
-                            description: The system ID given to the pool.
-                            type: str
-                        name:
-                            description: The name of the storage pool.
-                            type: str
+                id:
+                    description: The system ID given to the pool.
+                    type: str
+                name:
+                    description: The name of the storage pool.
+                    type: str
         nas_server:
             description: The NAS Server details on which this filesystem is hosted.
-            type: complex
+            type: dict
             contains:
-                nas_server:
-                    description: nas_server details.
-                    type: complex
-                    contains:
-                        id:
-                            description: The system ID given to the NAS Server.
-                            type: str
-                        name:
-                            description: The name of the NAS Server.
-                            type: str
-        snap_list:
+                id:
+                    description: The system ID given to the NAS Server.
+                    type: str
+                name:
+                    description: The name of the NAS Server.
+                    type: str
+        snapshots:
             description: The list of snapshots of this filesystem.
             type: list
             contains:
-                snap_list:
-                    description: Filesystem snapshots.
-                    type: complex
-                    contains:
-                        id:
-                            description: The system ID given to the filesystem
-                                         snapshot.
-                            type: str
-                        name:
-                            description: The name of the filesystem snapshot.
-                            type: str
+                id:
+                    description: The system ID given to the filesystem
+                                    snapshot.
+                    type: str
+                name:
+                    description: The name of the filesystem snapshot.
+                    type: str
         is_thin_enabled:
             description: Indicates whether thin provisioning is enabled for
                          this filesystem.
@@ -571,7 +550,7 @@ filesystem_details:
         quota_config:
             description: Details of quota configuration of the filesystem
                          created.
-            type: complex
+            type: dict
             contains:
                 grace_period:
                     description: Grace period set in quota configuration
@@ -593,7 +572,7 @@ filesystem_details:
                     type: str
         replication_sessions:
             description: List of replication sessions if replication is enabled.
-            type: complex
+            type: dict
             contains:
                 id:
                     description: ID of replication session
@@ -603,106 +582,102 @@ filesystem_details:
                     type: str
                 remote_system:
                     description: Remote system
-                    type: complex
+                    type: dict
                     contains:
                         id:
                             description: ID of remote system
                             type: str
     sample: {
-        "changed": True,
-        "filesystem_details": {
-            "access_policy": "AccessPolicyEnum.UNIX",
-            "cifs_notify_on_change_dir_depth": 512,
-            "cifs_share": null,
-            "data_reduction_percent": 0,
-            "data_reduction_ratio": 1.0,
-            "data_reduction_size_saved": 0,
-            "description": "",
-            "existed": true,
-            "folder_rename_policy": "FSRenamePolicyEnum.SMB_RENAME_FORBIDDEN",
-            "format": "FSFormatEnum.UFS64",
-            "hash": 8735427610152,
-            "health": {
-                "UnityHealth": {
-                    "hash": 8735427614928
+        "access_policy": "AccessPolicyEnum.UNIX",
+        "cifs_notify_on_change_dir_depth": 512,
+        "cifs_share": null,
+        "data_reduction_percent": 0,
+        "data_reduction_ratio": 1.0,
+        "data_reduction_size_saved": 0,
+        "description": "",
+        "existed": true,
+        "folder_rename_policy": "FSRenamePolicyEnum.SMB_RENAME_FORBIDDEN",
+        "format": "FSFormatEnum.UFS64",
+        "hash": 8735427610152,
+        "health": {
+            "UnityHealth": {
+                "hash": 8735427614928
+            }
+        },
+        "host_io_size": "HostIOSizeEnum.GENERAL_8K",
+        "id": "fs_65916",
+        "is_advanced_dedup_enabled": false,
+        "is_cifs_notify_on_access_enabled": false,
+        "is_cifs_notify_on_write_enabled": false,
+        "is_cifs_op_locks_enabled": false,
+        "is_cifs_sync_writes_enabled": false,
+        "is_data_reduction_enabled": false,
+        "is_read_only": false,
+        "is_smbca": false,
+        "is_thin_enabled": true,
+        "locking_policy": "FSLockingPolicyEnum.MANDATORY",
+        "metadata_size": 11274289152,
+        "metadata_size_allocated": 4294967296,
+        "min_size_allocated": 0,
+        "name": "test_fs",
+        "nas_server": {
+            "id": "nas_18",
+            "name": "test_nas1"
+        },
+        "nfs_share": null,
+        "per_tier_size_used": [
+            6979321856,
+            0,
+            0
+        ],
+        "pool": {
+            "id": "pool_7",
+            "name": "pool 7"
+        },
+        "pool_full_policy": "ResourcePoolFullPolicyEnum.FAIL_WRITES",
+        "quota_config": {
+            "default_hard_limit": "0B",
+            "default_soft_limit": "0B",
+            "grace_period": "7.0 days",
+            "id": "quotaconfig_171798760421_0",
+            "is_user_quota_enabled": false,
+            "quota_policy": "QuotaPolicyEnum.FILE_SIZE"
+        },
+        "replication_sessions": {
+            "current_transfer_est_remain_time": 0,
+            "id": "***",
+            "last_sync_time": "2022-05-12 11:20:38+00:00",
+            "local_role": "ReplicationSessionReplicationRoleEnum.SOURCE",
+            "max_time_out_of_sync": 60,
+            "members": null,
+            "name": "local_repl_new",
+            "network_status": "ReplicationSessionNetworkStatusEnum.OK",
+            "remote_system": {
+                "UnityRemoteSystem": {
+                    "hash": 8735426929707
                 }
             },
-            "host_io_size": "HostIOSizeEnum.GENERAL_8K",
-            "id": "fs_65916",
-            "is_advanced_dedup_enabled": false,
-            "is_cifs_notify_on_access_enabled": false,
-            "is_cifs_notify_on_write_enabled": false,
-            "is_cifs_op_locks_enabled": false,
-            "is_cifs_sync_writes_enabled": false,
-            "is_data_reduction_enabled": false,
-            "is_read_only": false,
-            "is_smbca": false,
-            "is_thin_enabled": true,
-            "locking_policy": "FSLockingPolicyEnum.MANDATORY",
-            "metadata_size": 11274289152,
-            "metadata_size_allocated": 4294967296,
-            "min_size_allocated": 0,
-            "name": "test_fs",
-            "nas_server": {
-                "id": "nas_18",
-                "name": "test_nas1"
-            },
-            "nfs_share": null,
-            "per_tier_size_used": [
-                6979321856,
-                0,
-                0
-            ],
-            "pool": {
-                "id": "pool_7",
-                "name": "pool 7"
-            },
-            "pool_full_policy": "ResourcePoolFullPolicyEnum.FAIL_WRITES",
-            "quota_config": {
-                "default_hard_limit": "0B",
-                "default_soft_limit": "0B",
-                "grace_period": "7.0 days",
-                "id": "quotaconfig_171798760421_0",
-                "is_user_quota_enabled": false,
-                "quota_policy": "QuotaPolicyEnum.FILE_SIZE"
-            },
-            "replication_sessions": {
-                "current_transfer_est_remain_time": 0,
-                "id": "***",
-                "last_sync_time": "2022-05-12 11:20:38+00:00",
-                "local_role": "ReplicationSessionReplicationRoleEnum.SOURCE",
-                "max_time_out_of_sync": 60,
-                "members": null,
-                "name": "local_repl_new",
-                "network_status": "ReplicationSessionNetworkStatusEnum.OK",
-                "remote_system": {
-                    "UnityRemoteSystem": {
-                        "hash": 8735426929707
-                    }
-                },
-                "replication_resource_type": "ReplicationEndpointResourceTypeEnum.FILESYSTEM",
-                "src_resource_id": "res_66444",
-                "src_status": "ReplicationSessionStatusEnum.OK",
-                "status": "ReplicationOpStatusEnum.AUTO_SYNC_CONFIGURED",
-                "sync_progress": 0,
-                "sync_state": "ReplicationSessionSyncStateEnum.IDLE"
-            },
-            "size_allocated": 283148288,
-            "size_allocated_total": 4578148352,
-            "size_preallocated": 2401173504,
-            "size_total": 10737418240,
-            "size_total_with_unit": "10.0 GB",
-            "size_used": 1620312064,
-            "snap_count": 2,
-            "snaps_size": 21474869248,
-            "snaps_size_allocated": 32768,
-            "snapshots": [],
-            "supported_protocols": "FSSupportedProtocolEnum.NFS",
-            "tiering_policy": "TieringPolicyEnum.AUTOTIER_HIGH",
-            "type": "FilesystemTypeEnum.FILESYSTEM"
-        }
+            "replication_resource_type": "ReplicationEndpointResourceTypeEnum.FILESYSTEM",
+            "src_resource_id": "res_66444",
+            "src_status": "ReplicationSessionStatusEnum.OK",
+            "status": "ReplicationOpStatusEnum.AUTO_SYNC_CONFIGURED",
+            "sync_progress": 0,
+            "sync_state": "ReplicationSessionSyncStateEnum.IDLE"
+        },
+        "size_allocated": 283148288,
+        "size_allocated_total": 4578148352,
+        "size_preallocated": 2401173504,
+        "size_total": 10737418240,
+        "size_total_with_unit": "10.0 GB",
+        "size_used": 1620312064,
+        "snap_count": 2,
+        "snaps_size": 21474869248,
+        "snaps_size_allocated": 32768,
+        "snapshots": [],
+        "supported_protocols": "FSSupportedProtocolEnum.NFS",
+        "tiering_policy": "TieringPolicyEnum.AUTOTIER_HIGH",
+        "type": "FilesystemTypeEnum.FILESYSTEM"
     }
-
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -710,10 +685,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 
 LOG = utils.get_logger('filesystem')
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -739,18 +710,7 @@ class Filesystem(object):
             supports_check_mode=False,
             mutually_exclusive=mutually_exclusive,
             required_one_of=required_one_of)
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="Ansible modules for Unity require the"
-                                      " Unity python library to be "
-                                      "installed. Please install the library "
-                                      "before using these modules.")
-
-        if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-           'supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -1413,7 +1373,7 @@ class Filesystem(object):
                     'unispherehost': replication_params['remote_system']['remote_system_host'],
                     'username': replication_params['remote_system']['remote_system_username'],
                     'password': replication_params['remote_system']['remote_system_password'],
-                    'verifycert': replication_params['remote_system']['remote_system_verifycert'],
+                    'validate_certs': replication_params['remote_system']['remote_system_verifycert'],
                     'port': replication_params['remote_system']['remote_system_port']
                 }
                 remote_system_conn = utils.get_unity_unisphere_connection(
@@ -1654,7 +1614,7 @@ class Filesystem(object):
         changed = False
         result = dict(
             changed=False,
-            filesystem_details=None
+            filesystem_details={}
         )
 
         to_modify_dict = None

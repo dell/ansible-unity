@@ -17,7 +17,7 @@ description:
 - Managing Filesystem Snapshot on the Unity storage system includes
   create filesystem snapshot, get filesystem snapshot, modify filesystem
   snapshot and delete filesystem snapshot.
-version_added: "1.1.0"
+version_added: '1.1.0'
 extends_documentation_fragment:
   - dellemc.unity.unity
 author:
@@ -27,56 +27,56 @@ options:
     description:
     - The name of the filesystem snapshot.
     - Mandatory parameter for creating a filesystem snapshot.
-    - For all other operations either snapshot_name or snapshot_id
+    - For all other operations either I(snapshot_name) or I(snapshot_id)
       is required.
     type: str
   snapshot_id:
     description:
     - During creation snapshot_id is auto generated.
-    - For all other operations either snapshot_id or snapshot_name
+    - For all other operations either I(snapshot_id) or I(snapshot_name)
       is required.
     type: str
   filesystem_name:
     description:
     - The name of the Filesystem for which snapshot is created.
-    - For creation of filesystem snapshot either filesystem_name or
-      filesystem_id is required.
+    - For creation of filesystem snapshot either I(filesystem_name) or
+      I(filesystem_id) is required.
     - Not required for other operations.
     type: str
   filesystem_id:
     description:
     - The ID of the Filesystem for which snapshot is created.
-    - For creation of filesystem snapshot either filesystem_id or
-      filesystem_name is required.
+    - For creation of filesystem snapshot either I(filesystem_id) or
+      I(filesystem_name) is required.
     - Not required for other operations.
     type: str
   nas_server_name:
     description:
     - The name of the NAS server in which the Filesystem is created.
-    - For creation of filesystem snapshot either nas_server_name or
-      nas_server_id is required.
+    - For creation of filesystem snapshot either I(nas_server_name) or
+      I(nas_server_id) is required.
     - Not required for other operations.
     type: str
   nas_server_id:
     description:
     - The ID of the NAS server in which the Filesystem is created.
-    - For creation of filesystem snapshot either filesystem_id or
-      filesystem_name is required.
+    - For creation of filesystem snapshot either I(filesystem_id) or
+      I(filesystem_name) is required.
     - Not required for other operations.
     type: str
   auto_delete:
     description:
     - This option specifies whether or not the filesystem snapshot will be
       automatically deleted.
-    - If set to true, the filesystem snapshot will expire based on the pool
+    - If set to C(true), the filesystem snapshot will expire based on the pool
       auto deletion policy.
-    - If set to false, the filesystem snapshot will not be auto deleted
+    - If set to C(false), the filesystem snapshot will not be auto deleted
       based on the pool auto deletion policy.
-    - auto_delete can not be set to True, if expiry_time is specified.
-    - If during creation neither auto_delete nor expiry_time is mentioned
-      then the filesystem snapshot will be created keeping auto_delete as
-      True.
-    - Once the expiry_time is set, then the filesystem snapshot cannot be
+    - Option I(auto_delete) can not be set to C(True), if I(expiry_time) is specified.
+    - If during creation neither I(auto_delete) nor I(expiry_time) is mentioned
+      then the filesystem snapshot will be created keeping I(auto_delete) as
+      C(True).
+    - Once the I(expiry_time) is set, then the filesystem snapshot cannot be
       assigned to the auto delete policy.
     type: bool
   expiry_time:
@@ -96,7 +96,7 @@ options:
     description:
     - Access type of the filesystem snapshot.
     - Required only during creation of filesystem snapshot.
-    - If not given, snapshot's access type will be 'Checkpoint'.
+    - If not given, snapshot's access type will be C(Checkpoint).
     type: str
     choices: ['Checkpoint' , 'Protocol']
   state:
@@ -108,6 +108,7 @@ options:
     choices: ['absent', 'present']
 notes:
   - Filesystem snapshot cannot be deleted, if it has nfs or smb share.
+  - The I(check_mode) is not supported.
 '''
 
 EXAMPLES = r'''
@@ -116,7 +117,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_name: "ansible_test_FS_snap"
       filesystem_name: "ansible_test_FS"
       nas_server_name: "lglad069"
@@ -130,7 +131,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_name: "ansible_test_FS_snap_1"
       filesystem_name: "ansible_test_FS_1"
       nas_server_name: "lglad069"
@@ -144,7 +145,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_name: "ansible_test_FS_snap"
       state: "present"
 
@@ -153,7 +154,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_id: "10008000403"
       state: "present"
 
@@ -162,7 +163,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_name: "ansible_test_FS_snap"
       description: "Description updated"
       auto_delete: False
@@ -174,7 +175,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_id: "10008000403"
       expiry_time: "04/18/2021 8:30"
       state: "present"
@@ -184,7 +185,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_name: "ansible_test_FS_snap"
       state: "absent"
 
@@ -193,7 +194,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_id: "10008000403"
       state: "absent"
 '''
@@ -203,10 +204,12 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
+    sample: true
+
 filesystem_snapshot_details:
     description: Details of the filesystem snapshot.
     returned: When filesystem snapshot exists
-    type: complex
+    type: dict
     contains:
         access_type:
             description: Access type of filesystem snapshot.
@@ -258,6 +261,39 @@ filesystem_snapshot_details:
         nas_server_id:
             description: Id of the NAS server on which filesystem exists.
             type: str
+    sample: {
+        "access_type": "FilesystemSnapAccessTypeEnum.CHECKPOINT",
+        "attached_wwn": null,
+        "creation_time": "2022-10-21 04:42:53.951000+00:00",
+        "creator_schedule": null,
+        "creator_type": "SnapCreatorTypeEnum.USER_CUSTOM",
+        "creator_user": {
+            "id": "user_admin"
+        },
+        "description": "Created using playbook",
+        "existed": true,
+        "expiration_time": null,
+        "filesystem_id": "fs_137",
+        "filesystem_name": "test",
+        "hash": 8739894572587,
+        "host_access": null,
+        "id": "171798721695",
+        "io_limit_policy": null,
+        "is_auto_delete": true,
+        "is_modifiable": false,
+        "is_modified": false,
+        "is_read_only": true,
+        "is_system_snap": false,
+        "last_writable_time": null,
+        "lun": null,
+        "name": "test_FS_snap_1",
+        "nas_server_id": "nas_1",
+        "nas_server_name": "lglad072",
+        "parent_snap": null,
+        "size": 107374182400,
+        "snap_group": null,
+        "state": "SnapStateEnum.READY"
+    }
 
 '''
 
@@ -267,9 +303,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 from datetime import datetime
 
 LOG = utils.get_logger('filesystem_snapshot')
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -293,23 +326,12 @@ class FilesystemSnapshot(object):
                                     supports_check_mode=False,
                                     mutually_exclusive=mutually_exclusive,
                                     required_one_of=required_one_of)
+        utils.ensure_required_libs(self.module)
 
         # result is a dictionary that contains changed status and
         # filesystem snapshot details
         self.result = {"changed": False,
-                       'filesystem_snapshot_details': None}
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="Ansible modules for Unity require the"
-                                      " Unity python library to be"
-                                      " installed. Please install the "
-                                      "library before using these modules.")
-
-        if UNITY_SDK_VERSION_CHECK and \
-                not UNITY_SDK_VERSION_CHECK['supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+                       'filesystem_snapshot_details': {}}
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)

@@ -33,22 +33,20 @@ options:
     description:
     - The name of the consistency group.
     - It is mandatory for the create operation.
-    - Specify either cg_name or cg_id (but not both) for any operation.
-    required: False
+    - Specify either I(cg_name) or I(cg_id) (but not both) for any operation.
     type: str
   cg_id:
     description:
     - The ID of the consistency group.
     - It can be used only for get, modify, add/remove volumes, or delete
       operations.
-    required: False
     type: str
   volumes:
     description:
     - This is a list of volumes.
     - Either the volume ID or name must be provided for adding/removing
       existing volumes from consistency group.
-    - If volumes are given, then vol_state should also be specified.
+    - If I(volumes) are given, then I(vol_state) should also be specified.
     - Volumes cannot be added/removed from consistency group, if the
       consistency group or the volume has snapshots.
     type: list
@@ -66,7 +64,7 @@ options:
     description:
     - String variable, describes the state of volumes inside consistency
       group.
-    - If volumes are given, then vol_state should also be specified.
+    - If I(volumes) are given, then I(vol_state) should also be specified.
     choices: [present-in-group , absent-in-group]
     type: str
   new_cg_name:
@@ -94,7 +92,7 @@ options:
     - This is a list of hosts.
     - Either the host ID or name must be provided for mapping/unmapping
       hosts for a consistency group.
-    - If hosts are given, then mapping_state should also be specified.
+    - If I(hosts) are given, then I(mapping_state) should also be specified.
     - Hosts cannot be mapped to a consistency group, if the
       consistency group has no volumes.
     - When a consistency group is being mapped to the host,
@@ -115,7 +113,7 @@ options:
     description:
     - String variable, describes the state of hosts inside the consistency
       group.
-    - If hosts are given, then mapping_state should also be specified.
+    - If I(hosts) are given, then I(mapping_state) should also be specified.
     choices: [mapped , unmapped]
     type: str
   replication_params:
@@ -137,8 +135,8 @@ options:
       rpo:
         description:
         - Maximum time to wait before the system syncs the source and destination LUNs.
-        - rpo should be specified if the replication_mode is asynchronous.
-        - The value should be in range of 5 to 1440.
+        - Option I(rpo) should be specified if the I(replication_mode) is C(asynchronous).
+        - The value should be in range of C(5) to C(1440).
         type: int
       replication_type:
         description:
@@ -149,7 +147,7 @@ options:
       remote_system:
         description:
         - Details of remote system to which the replication is being configured.
-        - remote_system should be specified if the replication_type is remote.
+        - The I(remote_system) option should be specified if the I(replication_type) is C(remote).
         type: dict
         suboptions:
           remote_system_host:
@@ -170,28 +168,26 @@ options:
           remote_system_verifycert:
             type: bool
             default: True
-            required: False
             description:
             - Boolean variable to specify whether or not to validate SSL
               certificate of remote Unity unisphere Host.
-            - True - Indicates that the SSL certificate should be verified.
-            - False - Indicates that the SSL certificate should not be
+            - C(True) - Indicates that the SSL certificate should be verified.
+            - C(False) - Indicates that the SSL certificate should not be
               verified.
           remote_system_port:
             description:
             - Port at which remote Unity unisphere is hosted.
             type: int
-            required: False
             default: 443
       destination_pool_name:
         description:
         - Name of pool to allocate destination Luns.
-        - Mutually exclusive with destination_pool_id.
+        - Mutually exclusive with I(destination_pool_id).
         type: str
       destination_pool_id:
         description:
         - Id of pool to allocate destination Luns.
-        - Mutually exclusive with destination_pool_name.
+        - Mutually exclusive with I(destination_pool_name).
         type: str
   replication_state:
     description:
@@ -204,13 +200,15 @@ options:
     choices: [absent, present]
     required: true
     type: str
+notes:
+  - The I(check_mode) is not supported.
 """
 
 EXAMPLES = r"""
 - name: Create consistency group
   dellemc.unity.consistencygroup:
       unispherehost: "{{unispherehost}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       username: "{{username}}"
       password: "{{password}}"
       cg_name: "{{cg_name}}"
@@ -223,7 +221,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_id: "{{cg_id}}"
       state: "present"
 
@@ -232,7 +230,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_id: "{{cg_id}}"
       volumes:
           - vol_name: "Ansible_Test-3"
@@ -245,7 +243,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_name: "{{cg_name}}"
       new_cg_name: "{{new_cg_name}}"
       state: "present"
@@ -255,7 +253,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_name: "{{new_cg_name}}"
       snap_schedule: "{{snap_schedule2}}"
       tiering_policy: "{{tiering_policy1}}"
@@ -266,7 +264,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_id: "{{cg_id}}"
       hosts:
         - host_name: "10.226.198.248"
@@ -279,7 +277,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_id: "{{cg_id}}"
       hosts:
         - host_id: "Host_511"
@@ -292,7 +290,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_name: "{{new_cg_name}}"
       volumes:
         - vol_name: "Ansible_Test-3"
@@ -305,7 +303,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_name: "{{new_cg_name}}"
       state: "absent"
 
@@ -314,7 +312,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_id: "cg_id_1"
       replication_params:
         destination_cg_name: "destination_cg_1"
@@ -335,7 +333,7 @@ EXAMPLES = r"""
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       cg_name: "dis_repl_ans_source"
       replication_state: "disable"
       state: "present"
@@ -351,95 +349,141 @@ changed:
 consistency_group_details:
     description: Details of the consistency group.
     returned: When consistency group exists
-    type: complex
+    type: dict
     contains:
         id:
-            description: The system ID given to the consistency group
+            description: The system ID given to the consistency group.
             type: str
         relocation_policy:
-            description: FAST VP tiering policy for the consistency group
+            description: FAST VP tiering policy for the consistency group.
             type: str
         cg_replication_enabled:
-            description: Whether or not the replication is enabled.
+            description: Whether or not the replication is enabled..
             type: bool
         snap_schedule:
-            description: Snapshot schedule applied to consistency group
-            type: complex
+            description: Snapshot schedule applied to consistency group.
+            type: dict
             contains:
                 UnitySnapSchedule:
                     description: Snapshot schedule applied to consistency
-                     group
-                    type: complex
+                     group.
+                    type: dict
                     contains:
                         id:
                             description: The system ID given to the
-                                         snapshot schedule
+                                         snapshot schedule.
                             type: str
                         name:
-                            description: The name of the snapshot schedule
+                            description: The name of the snapshot schedule.
                             type: str
         luns:
-            description: Details of volumes part of consistency group
-            type: complex
+            description: Details of volumes part of consistency group.
+            type: dict
             contains:
                 UnityLunList:
-                    description: List of volumes part of consistency group
-                    type: complex
+                    description: List of volumes part of consistency group.
+                    type: list
                     contains:
                         UnityLun:
-                            description: Detail of volume
-                            type: complex
+                            description: Detail of volume.
+                            type: dict
                             contains:
                                 id:
-                                    description: The system ID given to volume
+                                    description: The system ID given to volume.
                                     type: str
                                 name:
-                                    description: The name of the volume
+                                    description: The name of the volume.
                                     type: str
         snapshots:
-            description: List of snapshots of consistency group
-            type: complex
+            description: List of snapshots of consistency group.
+            type: list
             contains:
                 name:
-                    description: Name of the snapshot
+                    description: Name of the snapshot.
                     type: str
                 creation_time:
-                    description: Date and time on which the snapshot was taken
+                    description: Date and time on which the snapshot was taken.
                     type: str
                 expirationTime:
-                    description: Date and time after which the snapshot will expire
+                    description: Date and time after which the snapshot will expire.
                     type: str
                 storageResource:
                     description: Storage resource for which the snapshot was
-                     taken
-                    type: complex
+                     taken.
+                    type: dict
                     contains:
                         UnityStorageResource:
-                            description: Details of the storage resource
-                            type: complex
+                            description: Details of the storage resource.
+                            type: dict
                             contains:
                                 id:
                                     description: The id of the storage
-                                                 resource
+                                                 resource.
                                     type: str
         block_host_access:
-            description: Details of hosts mapped to the consistency group
-            type: complex
+            description: Details of hosts mapped to the consistency group.
+            type: dict
             contains:
                 UnityBlockHostAccessList:
-                    description: List of hosts mapped to consistency group
-                    type: complex
+                    description: List of hosts mapped to consistency group.
+                    type: list
                     contains:
                         UnityBlockHostAccess:
-                            description: Details of host
-                            type: complex
+                            description: Details of host.
+                            type: dict
                             contains:
                                 id:
-                                    description: The ID of the host
+                                    description: The ID of the host.
                                     type: str
                                 name:
-                                    description: The name of the host
+                                    description: The name of the host.
                                     type: str
+    sample: {
+        "advanced_dedup_status": "DedupStatusEnum.DISABLED",
+        "block_host_access": null,
+        "cg_replication_enabled": false,
+        "data_reduction_percent": 0,
+        "data_reduction_ratio": 1.0,
+        "data_reduction_size_saved": 0,
+        "data_reduction_status": "DataReductionStatusEnum.DISABLED",
+        "datastores": null,
+        "dedup_status": null,
+        "description": "Ansible testing",
+        "esx_filesystem_block_size": null,
+        "esx_filesystem_major_version": null,
+        "existed": true,
+        "filesystem": null,
+        "hash": 8776023812033,
+        "health": {
+            "UnityHealth": {
+                "hash": 8776023811889
+            }
+        },
+        "host_v_vol_datastore": null,
+        "id": "res_7477",
+        "is_replication_destination": false,
+        "is_snap_schedule_paused": null,
+        "luns": null,
+        "metadata_size": 0,
+        "metadata_size_allocated": 0,
+        "name": "Ansible_CG_Testing",
+        "per_tier_size_used": null,
+        "pools": null,
+        "relocation_policy": "TieringPolicyEnum.MIXED",
+        "replication_type": "ReplicationTypeEnum.NONE",
+        "size_allocated": 0,
+        "size_total": 0,
+        "size_used": null,
+        "snap_count": 0,
+        "snap_schedule": null,
+        "snaps_size_allocated": 0,
+        "snaps_size_total": 0,
+        "snapshots": [],
+        "thin_status": "ThinStatusEnum.FALSE",
+        "type": "StorageResourceTypeEnum.CONSISTENCY_GROUP",
+        "virtual_volumes": null,
+        "vmware_uuid": null
+    }
 '''
 
 import logging
@@ -449,10 +493,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('consistencygroup',
                        log_devel=logging.INFO)
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -477,18 +517,7 @@ class ConsistencyGroup(object):
             required_one_of=required_one_of,
             required_together=required_together
         )
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="Ansible modules for Unity require the"
-                                      " Unity python library to be "
-                                      "installed. Please install the library "
-                                      "before using these modules.")
-
-        if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-                'supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -1132,7 +1161,7 @@ class ConsistencyGroup(object):
                 'unispherehost': replication['remote_system']['remote_system_host'],
                 'username': replication['remote_system']['remote_system_username'],
                 'password': replication['remote_system']['remote_system_password'],
-                'verifycert': replication['remote_system']['remote_system_verifycert'],
+                'validate_certs': replication['remote_system']['remote_system_verifycert'],
                 'port': replication['remote_system']['remote_system_port']
             }
             remote_system_conn = utils.get_unity_unisphere_connection(
@@ -1271,7 +1300,7 @@ class ConsistencyGroup(object):
             delete_cg='',
             add_hosts_to_cg='',
             remove_hosts_from_cg='',
-            consistency_group_details=''
+            consistency_group_details={}
         )
         cg_details = self.get_details(cg_id=cg_id, cg_name=cg_name)
 

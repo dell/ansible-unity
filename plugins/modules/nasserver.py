@@ -23,14 +23,14 @@ options:
   nas_server_id:
     description:
     - The ID of the NAS server.
-    - The parameters nas_server_name and nas_server_id are mutually exclusive.
-    - Either one is required to perform the task.
+    - Either I(nas_server_name) or I(nas_server_id) is required to perform the task.
+    - The parameters I(nas_server_name) and I(nas_server_id) are mutually exclusive.
     type: str
   nas_server_name:
     description:
     - The Name of the NAS server.
-    - The parameters nas_server_name and nas_server_id are mutually exclusive.
-    - Either one  is required to perform the task.
+    - Either I(nas_server_name) or I(nas_server_id)  is required to perform the task.
+    - The parameters I(nas_server_name) and I(nas_server_id) are mutually exclusive.
     type: str
   nas_server_new_name:
     description:
@@ -56,8 +56,8 @@ options:
     description:
     - This flag is used to mandatorily disable access in case of any user
       mapping failure.
-    - If true, then enable access in case of any user mapping failure.
-    - If false, then disable access in case of any user mapping failure.
+    - If C(true), then enable access in case of any user mapping failure.
+    - If C(false), then disable access in case of any user mapping failure.
     - It can be mentioned during modification of the NAS server.
     type: bool
   default_windows_user:
@@ -69,7 +69,7 @@ options:
   default_unix_user:
     description:
     - Default Unix user name used for granting access in the case of Windows
-     to Unix user mapping failure.
+      to Unix user mapping failure.
     - It can be mentioned during modification of the NAS server.
     type: str
   enable_windows_to_unix_username_mapping:
@@ -81,7 +81,7 @@ options:
   is_packet_reflect_enabled:
     description:
     - If the packet has to be reflected, then this parameter
-      has to be set to True.
+      has to be set to C(True).
     - It can be mentioned during modification of the NAS server.
     type: bool
   current_unix_directory_service:
@@ -110,8 +110,8 @@ options:
       rpo:
         description:
         - Maximum time to wait before the system syncs the source and destination LUNs.
-        - rpo should be specified if the replication_mode is asynchronous.
-        - The value should be in range of 5 to 1440.
+        - The I(rpo) option should be specified if the I(replication_mode) is C(asynchronous).
+        - The value should be in range of C(5) to C(1440).
         type: int
       replication_type:
         description:
@@ -121,7 +121,8 @@ options:
       remote_system:
         description:
         - Details of remote system to which the replication is being configured.
-        - remote_system should be specified if the replication_type is remote.
+        - The I(remote_system) option should be specified if the
+          I(replication_type) is C(remote).
         type: dict
         suboptions:
           remote_system_host:
@@ -142,28 +143,26 @@ options:
           remote_system_verifycert:
             type: bool
             default: True
-            required: False
             description:
             - Boolean variable to specify whether or not to validate SSL
               certificate of remote Unity unisphere Host.
-            - True - Indicates that the SSL certificate should be verified.
-            - False - Indicates that the SSL certificate should not be
+            - C(True) - Indicates that the SSL certificate should be verified.
+            - C(False) - Indicates that the SSL certificate should not be
               verified.
           remote_system_port:
             description:
             - Port at which remote Unity unisphere is hosted.
             type: int
-            required: False
             default: 443
       destination_pool_name:
         description:
         - Name of pool to allocate destination Luns.
-        - Mutually exclusive with destination_pool_id.
+        - Mutually exclusive with I(destination_pool_id).
         type: str
       destination_pool_id:
         description:
         - Id of pool to allocate destination Luns.
-        - Mutually exclusive with destination_pool_name.
+        - Mutually exclusive with I(destination_pool_name).
         type: str
       destination_sp:
         description:
@@ -172,7 +171,7 @@ options:
         type: str
       is_backup:
         description:
-        - Indicates if the destination nas server is backup
+        - Indicates if the destination nas server is backup.
         type: bool
       replication_name:
         description:
@@ -197,15 +196,16 @@ options:
     - The value present indicates that NAS server should exist on the system after
       the task is executed.
     - In this release deletion of NAS server is not supported. Hence, if state is
-      set to absent for any existing NAS server then error will be thrown.
-    - For any non-existing NAS server, if state is set to absent then it will return None.
+      set to C(absent) for any existing NAS server then error will be thrown.
+    - For any non-existing NAS server, if state is set to C(absent) then it will return None.
     type: str
     required: true
     choices: ['present', 'absent']
 
 notes:
-- Check_mode is not supported.
+- The I(check_mode) is not supported.
 '''
+
 EXAMPLES = r'''
 
     - name: Get Details of NAS Server
@@ -213,7 +213,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "{{nas_server_name}}"
         state: "present"
 
@@ -222,7 +222,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "{{nas_server_name}}"
         nas_server_new_name: "updated_sample_nas_server"
         is_replication_destination: False
@@ -241,7 +241,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_id: "nas_10"
         replication_reuse_resource: False
         replication_params:
@@ -261,7 +261,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         replication_reuse_resource: False
         replication_params:
@@ -286,7 +286,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         replication_reuse_resource: True
         replication_params:
@@ -309,7 +309,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         replication_params:
             replication_name: "test_repl"
@@ -324,7 +324,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         replication_state: "disable"
         state: "present"
@@ -334,13 +334,14 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         replication_params:
             replication_name: "test_replication"
         replication_state: "disable"
         state: "present"
 '''
+
 RETURN = r'''
 changed:
     description: Whether or not the resource has changed.
@@ -349,18 +350,18 @@ changed:
     sample: True
 nas_server_details:
     description: The NAS server details.
-    type: complex
+    type: dict
     returned: When NAS server exists.
     contains:
         name:
-            description: Name of the NAS server
+            description: Name of the NAS server.
             type: str
         id:
-            description: ID of the NAS server
+            description: ID of the NAS server.
             type: str
         allow_unmapped_user:
-            description: enable/disable access status in case of any user
-                         mapping failure
+            description: Enable/disable access status in case of any user
+                         mapping failure.
             type: bool
         current_unix_directory_service:
             description: Directory service used for querying identity
@@ -373,17 +374,17 @@ nas_server_details:
         default_windows_user:
             description: Default windows user name used for granting
                          access in the case of Unix to Windows user mapping
-                         failure
+                         failure.
             type: str
         is_backup_only:
             description: Whether the NAS server is used as backup only.
             type: bool
         is_multi_protocol_enabled:
             description: Indicates whether multiprotocol sharing mode is
-                         enabled
+                         enabled.
             type: bool
         is_packet_reflect_enabled:
-            description: If the packet reflect has to be enabled
+            description: If the packet reflect has to be enabled.
             type: bool
         is_replication_destination:
             description: If the NAS server is a replication destination
@@ -475,13 +476,11 @@ nas_server_details:
         }
     }
 '''
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 LOG = utils.get_logger('nasserver')
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -504,23 +503,12 @@ class NASServer(object):
             mutually_exclusive=mut_ex_args,
             required_one_of=required_one_of
         )
+        utils.ensure_required_libs(self.module)
 
         # result is a dictionary that contains changed status and
         # nas server details
         self.result = {"changed": False,
-                       'nas_server_details': None}
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="Ansible modules for Unity require the"
-                                      " Unity python library to be"
-                                      " installed. Please install the "
-                                      "library before using these modules.")
-
-        if UNITY_SDK_VERSION_CHECK and \
-                not UNITY_SDK_VERSION_CHECK['supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+                       'nas_server_details': {}}
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -879,7 +867,7 @@ class NASServer(object):
                     'unispherehost': replication['remote_system']['remote_system_host'],
                     'username': replication['remote_system']['remote_system_username'],
                     'password': replication['remote_system']['remote_system_password'],
-                    'verifycert': replication['remote_system']['remote_system_verifycert'],
+                    'validate_certs': replication['remote_system']['remote_system_verifycert'],
                     'port': replication['remote_system']['remote_system_port']
                 }
                 remote_system_conn = utils.get_unity_unisphere_connection(

@@ -77,9 +77,9 @@ options:
     required: true
     type: str
 notes:
-- The check mode is supported.
+- The I(check_mode) is supported.
 - Modify operation for NFS Server is not supported.
-- When kerberos_domain_controller_type is "UNIX" kdc_type in nfs_server_details output, it is displayed as null.
+- When I(kerberos_domain_controller_type) is C(UNIX), I(kdc_type) in I(nfs_server_details) output is displayed as C(null).
 '''
 
 EXAMPLES = r'''
@@ -89,7 +89,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         host_name: "dummy_nas23"
         is_secure_enabled: True
@@ -105,7 +105,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         host_name: "dummy_nas23"
         is_secure_enabled: True
@@ -119,7 +119,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         state: "present"
 
@@ -128,7 +128,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         kerberos_domain_controller_username: "administrator"
         kerberos_domain_controller_password: "Password123!"
@@ -145,7 +145,7 @@ changed:
 nfs_server_details:
     description: Details of the NFS server.
     returned: When NFS server exists
-    type: complex
+    type: dict
     contains:
         credentials_cache_ttl:
             description: Credential cache refresh timeout. Resolution is in minutes. Default value is 15 minutes.
@@ -209,10 +209,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('nfsserver')
 
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
-
 application_type = "Ansible/1.4.1"
 
 
@@ -234,18 +230,7 @@ class NFSServer(object):
             mutually_exclusive=mutually_exclusive,
             required_one_of=required_one_of
         )
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="This Ansible module for Unity require the"
-                                      " Unity python library version >= 1.2.11 to be "
-                                      "installed. Please install the library "
-                                      "before using this module.")
-
-        if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-           'supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -411,7 +396,7 @@ class NFSServer(object):
         # result is a dictionary that contains changed status and NFS server details
         result = dict(
             changed=False,
-            nfs_server_details=None
+            nfs_server_details={}
         )
 
         modify_flag = False

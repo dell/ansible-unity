@@ -19,7 +19,7 @@ description:
   Get quota tree,
   Modify quota tree and
   Delete quota tree.
-version_added: "1.2.0"
+version_added: '1.2.0'
 extends_documentation_fragment:
   - dellemc.unity.unity
 author:
@@ -28,37 +28,37 @@ options:
   filesystem_name:
     description:
     - The name of the filesystem for which quota tree is created.
-    - For creation or modification of a quota tree either filesystem_name or
-      filesystem_id is required.
+    - For creation or modification of a quota tree either I(filesystem_name) or
+      I(filesystem_id) is required.
     type: str
   filesystem_id:
     description:
     - The ID of the filesystem for which the quota tree is created.
-    - For creation of a quota tree either filesystem_id or
-      filesystem_name is required.
+    - For creation of a quota tree either I(filesystem_id) or
+      I(filesystem_name) is required.
     type: str
   nas_server_name:
     description:
     - The name of the NAS server in which the filesystem is created.
-    - For creation of a quota tree either nas_server_name or
-      nas_server_id is required.
+    - For creation of a quota tree either I(nas_server_name) or
+      I(nas_server_id) is required.
     type: str
   nas_server_id:
     description:
     - The ID of the NAS server in which the filesystem is created.
-    - For creation of a quota tree either filesystem_id or
-      filesystem_name is required.
+    - For creation of a quota tree either I(filesystem_id) or
+      I(filesystem_name) is required.
     type: str
   tree_quota_id:
     description:
     - The ID of the quota tree.
-    - Either tree_quota_id or path to quota tree is required to
+    - Either I(tree_quota_id) or I(path) to quota tree is required to
       view/modify/delete quota tree.
     type: str
   path:
     description:
     - The path to the quota tree.
-    - Either tree_quota_id or path to quota tree is required to
+    - Either I(tree_quota_id) or I(path) to quota tree is required to
       create/view/modify/delete a quota tree.
     - Path must start with a forward slash '/'.
     type: str
@@ -66,8 +66,8 @@ options:
     description:
     - Hard limitation for a quota tree on the total space available. If exceeded,
       users in quota tree cannot write data.
-    - Value 0 implies no limit.
-    - One of the values of soft_limit and hard_limit can be 0, however, both cannot be both 0
+    - Value C(0) implies no limit.
+    - One of the values of I(soft_limit) and I(hard_limit) can be C(0), however, both cannot be both C(0)
       during creation of a quota tree.
     type: int
   soft_limit:
@@ -75,13 +75,13 @@ options:
     - Soft limitation for a quota tree on the total space available. If exceeded,
       notification will be sent to users in the quota tree for the grace period mentioned, beyond
       which users cannot use space.
-    - Value 0 implies no limit.
-    - Both soft_limit and hard_limit cannot be 0 during creation of quota tree.
+    - Value C(0) implies no limit.
+    - Both I(soft_limit) and I(hard_limit) cannot be C(0) during creation of quota tree.
     type: int
   cap_unit:
     description:
-    - Unit of soft_limit and hard_limit size.
-    - It defaults to 'GB' if not specified.
+    - Unit of I(soft_limit) and I(hard_limit) size.
+    - It defaults to C(GB) if not specified.
     choices: ['MB', 'GB', 'TB']
     type: str
   description:
@@ -95,6 +95,9 @@ options:
     type: str
     required: True
     choices: ['absent', 'present']
+
+notes:
+  - The I(check_mode) is not supported.
 '''
 
 EXAMPLES = r'''
@@ -103,8 +106,8 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
-      quota_tree_id: "treequota_171798700679_10"
+      validate_certs: "{{validate_certs}}"
+      tree_quota_id: "treequota_171798700679_10"
       state: "present"
 
   - name: Get quota tree details by quota tree path
@@ -112,7 +115,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_name: "fs_2171"
       nas_server_id: "nas_21"
       path: "/test"
@@ -123,7 +126,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
       hard_limit: 6
       cap_unit: "TB"
@@ -136,7 +139,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_name: "Test_filesystem"
       nas_server_name: "lglad068"
       hard_limit: 6
@@ -150,7 +153,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       path: "/test_new"
       hard_limit: 10
       cap_unit: "TB"
@@ -162,9 +165,9 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
-      quota_tree_id: "treequota_171798700679_10"
+      tree_quota_id: "treequota_171798700679_10"
       hard_limit: 12
       cap_unit: "TB"
       soft_limit: 10
@@ -175,9 +178,9 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
-      quota_tree_id: "treequota_171798700679_10"
+      tree_quota_id: "treequota_171798700679_10"
       state: "absent"
 
   - name: Delete quota tree by path
@@ -185,7 +188,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
       path: "/test_new"
       state: "absent"
@@ -196,20 +199,22 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
+    sample: True
+
 get_tree_quota_details:
     description: Details of the quota tree.
     returned: When quota tree exists
-    type: complex
+    type: dict
     contains:
         filesystem:
             description: Filesystem details for which the quota
                          tree is created.
-            type: complex
+            type: dict
             contains:
                 UnityFileSystem:
                     description: Filesystem details for which the
                                  quota tree is created.
-                    type: complex
+                    type: dict
                     contains:
                         id:
                             description: ID of the filesystem for
@@ -247,6 +252,29 @@ get_tree_quota_details:
         state:
             description: State of the quota tree.
             type: int
+    sample: {
+        "description": "",
+        "existed": true,
+        "filesystem": {
+            "UnityFileSystem": {
+                "hash": 8788549469862,
+                "id": "fs_137",
+                "name": "test",
+                "nas_server": {
+                    "id": "nas_1",
+                    "name": "lglad072"
+                }
+            }
+        },
+        "gp_left": null,
+        "hard_limit": "6.0 TB",
+        "hash": 8788549497558,
+        "id": "treequota_171798694897_1",
+        "path": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER",
+        "size_used": 0,
+        "soft_limit": "5.0 TB",
+        "state": 0
+    }
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -254,10 +282,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 
 LOG = utils.get_logger('tree_quota')
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -278,18 +302,7 @@ class QuotaTree(object):
             argument_spec=self.module_params,
             supports_check_mode=False,
             mutually_exclusive=mutually_exclusive)
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="This Ansible module for Unity require the"
-                                      " Unity python library version >= 1.2.9 to be "
-                                      "installed. Please install the library "
-                                      "before using this module.")
-
-        if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-           'supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -547,7 +560,7 @@ class QuotaTree(object):
             changed=False,
             create_tree_quota=False,
             modify_tree_quota=False,
-            get_tree_quota_details=False,
+            get_tree_quota_details={},
             delete_tree_quota=False
 
         )
@@ -658,7 +671,7 @@ class QuotaTree(object):
         if state == "present" and tree_quota_id is not None:
             result['get_tree_quota_details'] = self.get_filesystem_tree_quota_display_attributes(tree_quota_id)
         else:
-            result['get_tree_quota_details'] = ''
+            result['get_tree_quota_details'] = {}
 
         if result['create_tree_quota'] or result['modify_tree_quota'] or result['delete_tree_quota']:
             result['changed'] = True
