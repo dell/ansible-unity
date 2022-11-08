@@ -33,31 +33,29 @@ options:
   vol_name:
     description:
     - The name of the volume. Mandatory only for create operation.
-    required: False
     type: str
   vol_id:
     description:
     - The id of the volume.
     - It can be used only for get, modify, map/unmap host, or delete operation.
-    required: False
     type: str
   pool_name:
     description:
     - This is the name of the pool where the volume will be created.
-    - Either the pool_name or pool_id must be provided to create a new volume.
+    - Either the I(pool_name) or I(pool_id) must be provided to create a new volume.
     type: str
   pool_id:
     description:
     - This is the id of the pool where the volume will be created.
-    - Either the pool_name or pool_id must be provided to create a new volume.
+    - Either the I(pool_name) or I(pool_id) must be provided to create a new volume.
     type: str
   size:
     description:
-     - The size of the volume.
+    - The size of the volume.
     type: int
   cap_unit:
     description:
-     - The unit of the volume size. It defaults to 'GB', if not specified.
+    - The unit of the volume size. It defaults to C(GB), if not specified.
     choices: ['GB' , 'TB']
     type: str
   description:
@@ -78,7 +76,7 @@ options:
   is_thin:
     description:
     - Boolean variable , specifies whether or not it is a thin volume.
-    - The value is set as True by default if not specified.
+    - The value is set as C(true) by default if not specified.
     type: bool
   sp:
     description:
@@ -94,22 +92,22 @@ options:
   host_name:
     description:
     - Name of the host to be mapped/unmapped with this volume.
-    - Either host_name or host_id can be specified in one task along with
-      mapping_state.
+    - Either I(host_name) or I(host_id) can be specified in one task along with
+      I(mapping_state).
     type: str
   host_id:
     description:
     - ID of the host to be mapped/unmapped with this volume.
-    - Either host_name or host_id can be specified in one task along with
-      mapping_state.
+    - Either I(host_name) or I(host_id) can be specified in one task along with
+      I(mapping_state).
     type: str
   hlu:
     description:
     - Host Lun Unit to be mapped/unmapped with this volume.
     - It is an optional parameter, hlu can be specified along
-      with host_name or host_id and mapping_state.
-    - If hlu is not specified, unity will choose it automatically.
-      The maximum value supported is 255.
+      with I(host_name) or I(host_id) and I(mapping_state).
+    - If I(hlu) is not specified, unity will choose it automatically.
+      The maximum value supported is C(255).
     type: int
   mapping_state:
     description:
@@ -149,11 +147,14 @@ options:
       hlu:
         description:
         - Host Lun Unit to be mapped/unmapped with this volume.
-        - It is an optional parameter, hlu can be specified along
-          with host_name or host_id and mapping_state.
-        - If hlu is not specified, unity will choose it automatically.
-          The maximum value supported is 255.
+        - It is an optional parameter, I(hlu) can be specified along
+          with I(host_name) or I(host_id) and I(mapping_state).
+        - If I(hlu) is not specified, unity will choose it automatically.
+          The maximum value supported is C(255).
         type: str
+
+notes:
+  - The I(check_mode) is not supported.
 """
 
 EXAMPLES = r"""
@@ -162,7 +163,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     vol_name: "{{vol_name}}"
     description: "{{description}}"
     pool_name: "{{pool}}"
@@ -175,7 +176,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     vol_id: "{{vol_id}}"
     size: 5
     cap_unit: "{{cap_GB}}"
@@ -186,7 +187,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     vol_name: "{{vol_name}}"
     host_name: "{{host_name}}"
     hlu: 5
@@ -198,7 +199,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     vol_name: "{{vol_name}}"
     host_name: "{{host_name}}"
     mapping_state: "{{state_unmapped}}"
@@ -209,7 +210,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     vol_id: "{{vol_id}}"
     hosts:
         - host_name: "10.226.198.248"
@@ -224,7 +225,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     vol_name: "{{vol_name}}"
     new_vol_name: "{{new_vol_name}}"
     tiering_policy: "AUTOTIER"
@@ -236,7 +237,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     vol_name: "{{vol_name}}"
     state: "{{state_absent}}"
 
@@ -245,7 +246,7 @@ EXAMPLES = r"""
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     vol_id: "{{vol_id}}"
     state: "{{state_absent}}"
 """
@@ -256,52 +257,123 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
+    sample: True
 
 volume_details:
     description: Details of the volume.
     returned: When volume exists
-    type: complex
+    type: dict
     contains:
         id:
-            description: The system generated ID given to the volume
+            description: The system generated ID given to the volume.
             type: str
         name:
-            description: Name of the volume
+            description: Name of the volume.
             type: str
         description:
-            description: Description about the volume
+            description: Description about the volume.
             type: str
         is_data_reduction_enabled:
-            description: Whether or not compression enabled on this volume
+            description: Whether or not compression enabled on this volume.
             type: bool
         size_total_with_unit:
             description: Size of the volume with actual unit.
             type: str
         snap_schedule:
-            description: Snapshot schedule applied to this volume
+            description: Snapshot schedule applied to this volume.
             type: dict
         tiering_policy:
-            description: Tiering policy applied to this volume
+            description: Tiering policy applied to this volume.
             type: str
         current_sp:
-            description: Current storage processor for this volume
+            description: Current storage processor for this volume.
             type: str
         pool:
             description: The pool in which this volume is allocated.
             type: dict
         host_access:
-            description: Host mapped to this volume
+            description: Host mapped to this volume.
             type: list
         io_limit_policy:
-            description: IO limit policy associated with this volume
+            description: IO limit policy associated with this volume.
             type: dict
         wwn:
-            description: The world wide name of this volume
+            description: The world wide name of this volume.
             type: str
         is_thin_enabled:
             description: Indicates whether thin provisioning is enabled for this
-                         volume
+                         volume.
             type: bool
+    sample: {
+        "current_node": "NodeEnum.SPB",
+        "data_reduction_percent": 0,
+        "data_reduction_ratio": 1.0,
+        "data_reduction_size_saved": 0,
+        "default_node": "NodeEnum.SPB",
+        "description": null,
+        "effective_io_limit_max_iops": null,
+        "effective_io_limit_max_kbps": null,
+        "existed": true,
+        "family_base_lun": {
+            "UnityLun": {
+                "hash": 8774954523796,
+                "id": "sv_27"
+            }
+        },
+        "family_clone_count": 0,
+        "hash": 8774954522426,
+        "health": {
+            "UnityHealth": {
+                "hash": 8774954528278
+            }
+        },
+        "host_access": [
+            {
+                "accessMask": "PRODUCTION",
+                "hlu": 0,
+                "id": "Host_75",
+                "name": "10.226.198.250"
+            }
+        ],
+        "id": "sv_27",
+        "io_limit_policy": null,
+        "is_advanced_dedup_enabled": false,
+        "is_compression_enabled": null,
+        "is_data_reduction_enabled": false,
+        "is_replication_destination": false,
+        "is_snap_schedule_paused": false,
+        "is_thin_clone": false,
+        "is_thin_enabled": false,
+        "metadata_size": 4294967296,
+        "metadata_size_allocated": 4026531840,
+        "name": "VSI-UNITY-test-task",
+        "per_tier_size_used": [
+            111400714240,
+            0,
+            0
+        ],
+        "pool": {
+            "id": "pool_3",
+            "name": "Extreme_Perf_tier"
+        },
+        "size_allocated": 107374182400,
+        "size_total": 107374182400,
+        "size_total_with_unit": "100.0 GB",
+        "size_used": null,
+        "snap_count": 0,
+        "snap_schedule": null,
+        "snap_wwn": "60:06:01:60:5C:F0:50:00:94:3E:91:4D:51:5A:4F:97",
+        "snaps_size": 0,
+        "snaps_size_allocated": 0,
+        "storage_resource": {
+            "UnityStorageResource": {
+                "hash": 8774954518887
+            }
+        },
+        "tiering_policy": "TieringPolicyEnum.AUTOTIER_HIGH",
+        "type": "LUNTypeEnum.VMWARE_ISCSI",
+        "wwn": "60:06:01:60:5C:F0:50:00:00:B5:95:61:2E:34:DB:B2"
+    }
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -310,10 +382,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 import logging
 
 LOG = utils.get_logger('volume')
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -350,18 +418,7 @@ class Volume(object):
             supports_check_mode=False,
             mutually_exclusive=mutually_exclusive,
             required_one_of=required_one_of)
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="Ansible modules for Unity require the"
-                                      " Unity python library to be "
-                                      "installed. Please install the library "
-                                      "before using these modules.")
-
-        if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-                'supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -1009,7 +1066,7 @@ class Volume(object):
         changed = False
         result = dict(
             changed=False,
-            volume_details=None
+            volume_details={}
         )
 
         to_modify_dict = None

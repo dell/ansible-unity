@@ -22,7 +22,7 @@ description:
   Create user quota for quota tree,
   Modify user quota for quota tree and
   Delete user quota for quota tree.
-version_added: "1.2.0"
+version_added: '1.2.0'
 extends_documentation_fragment:
   - dellemc.unity.unity
 author:
@@ -31,32 +31,32 @@ options:
   filesystem_name:
     description:
     - The name of the filesystem for which the user quota is created.
-    - For creation of a user quota either filesystem_name or
-      filesystem_id is required.
+    - For creation of a user quota either I(filesystem_name) or
+      I(filesystem_id) is required.
     type: str
   filesystem_id:
     description:
     - The ID of the filesystem for which the user quota is created.
-    - For creation of a user quota either filesystem_id or
-      filesystem_name is required.
+    - For creation of a user quota either I(filesystem_id) or
+      I(filesystem_name) is required.
     type: str
   nas_server_name:
     description:
     - The name of the NAS server in which the filesystem is created.
-    - For creation of a user quota either nas_server_name or
-      nas_server_id is required.
+    - For creation of a user quota either I(nas_server_name) or
+      I(nas_server_id) is required.
     type: str
   nas_server_id:
     description:
     - The ID of the NAS server in which the filesystem is created.
-    - For creation of a user quota either filesystem_id or
-      filesystem_name is required.
+    - For creation of a user quota either I(filesystem_id) or
+      I(filesystem_name) is required.
     type: str
   hard_limit:
     description:
     - Hard limitation for a user on the total space available. If exceeded, user cannot write data.
-    - Value 0 implies no limit.
-    - One of the values of soft_limit and hard_limit can be 0, however, both cannot be 0
+    - Value C(0) implies no limit.
+    - One of the values of I(soft_limit) and I(hard_limit) can be C(0), however, both cannot be C(0)
       during creation or modification of user quota.
     type: int
   soft_limit:
@@ -64,14 +64,14 @@ options:
     - Soft limitation for a user on the total space available. If exceeded,
       notification will be sent to the user for the grace period mentioned, beyond
       which the user cannot use space.
-    - Value 0 implies no limit.
-    - Both soft_limit and hard_limit cannot be 0 during creation or modification
+    - Value C(0) implies no limit.
+    - Both I(soft_limit) and I(hard_limit) cannot be C(0) during creation or modification
       of user quota.
     type: int
   cap_unit:
     description:
-    - Unit of soft_limit and hard_limit size.
-    - It defaults to 'GB' if not specified.
+    - Unit of I(soft_limit) and I(hard_limit) size.
+    - It defaults to C(GB) if not specified.
     choices: ['MB', 'GB', 'TB']
     type: str
   user_type:
@@ -83,12 +83,12 @@ options:
   win_domain:
     description:
     - Fully qualified or short domain name for Windows user type.
-    - Mandatory when user_type is 'Windows'.
+    - Mandatory when I(user_type) is C(Windows).
     type: str
   user_name:
     description:
-    - User name of the user quota when user_type is 'Windows' or 'Unix'.
-    - user_name must be specified along with win_domain when user_type is 'Windows'.
+    - User name of the user quota when I(user_type) is C(Windows) or C(Unix).
+    - Option I(user_name) must be specified along with I(win_domain) when I(user_type) is C(Windows).
     type: str
   uid:
     description:
@@ -101,22 +101,25 @@ options:
   tree_quota_id:
     description:
     - The ID of the quota tree.
-    - Either tree_quota_id or path to quota tree is required to
+    - Either I(tree_quota_id) or I(path) to quota tree is required to
       create/modify/delete user quota for a quota tree.
     type: str
   path:
     description:
     - The path to the quota tree.
-    - Either tree_quota_id or path to quota tree is required to
+    - Either I(tree_quota_id) or I(path) to quota tree is required to
       create/modify/delete user quota for a quota tree.
     - Path must start with a forward slash '/'.
     type: str
   state:
     description:
-    - The state option is used to mention the existence of the user quota.
+    - The I(state) option is used to mention the existence of the user quota.
     type: str
     required: True
     choices: ['absent', 'present']
+
+notes:
+  - The I(check_mode) is not supported.
 '''
 
 EXAMPLES = r'''
@@ -125,7 +128,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       user_quota_id: "userquota_171798700679_0_123"
       state: "present"
 
@@ -134,7 +137,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_name: "fs_2171"
       nas_server_id: "nas_21"
       user_name: "test"
@@ -145,7 +148,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
       hard_limit: 6
       cap_unit: "TB"
@@ -158,7 +161,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_name: "Test_filesystem"
       nas_server_name: "lglad068"
       hard_limit: 6
@@ -172,7 +175,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       user_quota_id: "userquota_171798700679_0_123"
       hard_limit: 10
       cap_unit: "TB"
@@ -184,7 +187,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
       user_type: "Windows"
       win_domain: "prod"
@@ -199,7 +202,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
       win_domain: "prod"
       user_name: "sample"
@@ -210,7 +213,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       tree_quota_id: "treequota_171798700679_4"
       user_type: "Windows"
       win_domain: "prod"
@@ -224,7 +227,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
       path: "/sample"
       user_type: "Unix"
@@ -238,7 +241,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       tree_quota_id: "treequota_171798700679_4"
       user_type: "Windows"
       win_domain: "prod"
@@ -252,7 +255,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
       path: "/sample"
       user_type: "Windows"
@@ -267,7 +270,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       filesystem_id: "fs_2171"
       path: "/sample"
       win_domain: "prod"
@@ -279,7 +282,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       tree_quota_id: "treequota_171798700679_4"
       win_domain: "prod"
       user_name: "sample"
@@ -291,20 +294,22 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
+    sample: True
+
 get_user_quota_details:
     description: Details of the user quota.
     returned: When user quota exists
-    type: complex
+    type: dict
     contains:
         filesystem:
             description: Filesystem details for which the user quota is
                          created.
-            type: complex
+            type: dict
             contains:
                 UnityFileSystem:
                     description: Filesystem details for which the
                                 user quota is created.
-                    type: complex
+                    type: dict
                     contains:
                         id:
                             description: ID of the filesystem for
@@ -316,7 +321,7 @@ get_user_quota_details:
                         nas_server:
                             description: Nasserver details where
                                          filesystem is created.
-                            type: complex
+                            type: dict
                             contains:
                                 name:
                                     description: Name of nasserver.
@@ -327,18 +332,18 @@ get_user_quota_details:
         tree_quota:
             description: Quota tree details for which the user quota is
                          created.
-            type: complex
+            type: dict
             contains:
                 UnityTreeQuota:
                     description: Quota tree details for which the user
                                  quota is created.
-                    type: complex
+                    type: dict
                     contains:
                         id:
                             description: ID of the quota tree.
                             type: str
                         path:
-                            description: Path to quota tree
+                            description: Path to quota tree.
                             type: str
         gp_left:
             description: The grace period left after the soft limit
@@ -386,7 +391,34 @@ get_user_quota_details:
         windows_sids:
             description: Windows SIDs that maps to this quota's uid
             type: str
-
+    sample: {
+        "existed": true,
+        "filesystem": {
+            "UnityFileSystem": {
+                "hash": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER",
+                "id": "fs_120",
+                "name": "nfs-multiprotocol",
+                "nas_server": {
+                    "id": "nas_1",
+                    "name": "lglad072"
+                }
+            }
+        },
+        "gp_left": null,
+        "hard_limit": "10.0 GB",
+        "hard_ratio": null,
+        "hash": 8752448438089,
+        "id": "userquota_171798694698_0_60000",
+        "size_used": 0,
+        "soft_limit": "10.0 GB",
+        "soft_ratio": null,
+        "state": 0,
+        "tree_quota": null,
+        "uid": 60000,
+        "unix_name": null,
+        "windows_names": null,
+        "windows_sids": null
+    }
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -394,10 +426,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 
 LOG = utils.get_logger('user_quota')
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -425,18 +453,7 @@ class UserQuota(object):
             supports_check_mode=False,
             mutually_exclusive=mutually_exclusive,
             required_if=required_if)
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="The Ansible modules for Unity require the"
-                                      " Unity python library to be "
-                                      "installed. Please install the library "
-                                      "before using the module.")
-
-        if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-           'supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -758,7 +775,7 @@ class UserQuota(object):
             changed=False,
             create_user_quota=False,
             modify_user_quota=False,
-            get_user_quota_details=None,
+            get_user_quota_details={},
             delete_user_quota=False
         )
 

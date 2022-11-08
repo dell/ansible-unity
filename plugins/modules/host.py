@@ -44,8 +44,8 @@ options:
   host_id:
     description:
     - Unique identifier of the host.
-    - host_id is auto generated during creation.
-    - Except create, all other operations require either host_id or host_name.
+    - Host Id is auto generated during creation.
+    - Except create, all other operations require either I(host_id) or Ihost_name).
     type: str
 
   description:
@@ -96,6 +96,9 @@ options:
     choices: [present , absent]
     type: str
     required: True
+
+notes:
+  - The I(check_mode) is not supported.
 '''
 
 EXAMPLES = r'''
@@ -104,7 +107,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     host_name: "ansible-test-host"
     host_os: "Linux"
     description: "ansible-test-host"
@@ -115,7 +118,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     host_name: "ansible-test-host-1"
     host_os: "Linux"
     description: "ansible-test-host-1"
@@ -130,7 +133,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     host_id: "Host_253"
     new_host_name: "ansible-test-host-2"
     host_os: "Mac OS"
@@ -142,7 +145,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     host_name: "ansible-test-host-2"
     initiators:
       - "20:00:00:90:FA:13:81:8C:10:00:00:90:FA:13:81:8C"
@@ -154,7 +157,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     host_name: "ansible-test-host-2"
     state: "present"
 
@@ -163,7 +166,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     host_id: "Host_253"
     state: "present"
 
@@ -172,7 +175,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     host_name: "ansible-test-host-2"
     state: "absent"
 
@@ -181,7 +184,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     host_name: "{{host_name}}"
     network_address: "192.168.1.2"
     network_address_state: "present-in-host"
@@ -192,7 +195,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     host_name: "{{host_name}}"
     network_address: "192.168.1.2"
     network_address_state: "absent-in-host"
@@ -204,11 +207,12 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
+    sample: true
 
 host_details:
     description: Details of the host.
     returned: When host exists.
-    type: complex
+    type: dict
     contains:
         id:
             description: The system ID given to the host.
@@ -222,7 +226,7 @@ host_details:
         fc_host_initiators:
             description: Details of the FC initiators associated with
                          the host.
-            type: complex
+            type: list
             contains:
                 id:
                     description: Unique identifier of the FC initiator path.
@@ -232,7 +236,7 @@ host_details:
                     type: str
                 paths:
                     description: Details of the paths associated with the FC initiator.
-                    type: complex
+                    type: list
                     contains:
                         id:
                             description: Unique identifier of the path.
@@ -243,7 +247,7 @@ host_details:
         iscsi_host_initiators:
             description: Details of the ISCSI initiators associated
                          with the host.
-            type: complex
+            type: list
             contains:
                 id:
                     description: Unique identifier of the ISCSI initiator path.
@@ -253,7 +257,7 @@ host_details:
                     type: str
                 paths:
                     description: Details of the paths associated with the ISCSI initiator.
-                    type: complex
+                    type: list
                     contains:
                         id:
                             description: Unique identifier of the path.
@@ -273,6 +277,66 @@ host_details:
         host_luns:
             description: Details of luns attached to host.
             type: list
+    sample: {
+        "auto_manage_type": "HostManageEnum.UNKNOWN",
+        "datastores": null,
+        "description": "ansible-test-host-1",
+        "existed": true,
+        "fc_host_initiators": [
+            {
+                "id": "HostInitiator_1",
+                "name": "HostName_1",
+                "paths": [
+                    {
+                        "id": "HostInitiator_1_Id1",
+                        "is_logged_in": true
+                    },
+                    {
+                        "id": "HostInitiator_1_Id2",
+                        "is_logged_in": true
+                    }
+                ]
+            }
+        ],
+        "hash": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER",
+        "health": {
+            "UnityHealth": {
+                "hash": 8764429420954
+            }
+        },
+        "host_container": null,
+        "host_luns": [],
+        "host_polled_uuid": null,
+        "host_pushed_uuid": null,
+        "host_uuid": null,
+        "host_v_vol_datastore": null,
+        "id": "Host_2198",
+        "iscsi_host_initiators": [
+            {
+                "id": "HostInitiator_2",
+                "name": "HostName_2",
+                "paths": [
+                    {
+                        "id": "HostInitiator_2_Id1",
+                        "is_logged_in": true
+                    },
+                    {
+                        "id": "HostInitiator_2_Id2",
+                        "is_logged_in": true
+                    }
+                ]
+            }
+        ],
+        "last_poll_time": null,
+        "name": "ansible-test-host-1",
+        "network_addresses": [],
+        "os_type": "Linux",
+        "registration_type": null,
+        "storage_resources": null,
+        "tenant": null,
+        "type": "HostTypeEnum.HOST_MANUAL",
+        "vms": null
+    }
 '''
 
 
@@ -282,8 +346,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 import ipaddress
 
 LOG = utils.get_logger('host')
-HAS_UNITY_SDK = utils.get_unity_sdk()
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -307,19 +369,7 @@ class Host(object):
                                     mutually_exclusive=mutually_exclusive,
                                     required_together=required_together,
                                     required_one_of=required_one_of)
-
-        if not HAS_UNITY_SDK:
-            err_msg = "Ansible modules for Unity require the Unity " \
-                      "python library to be installed. Please install the " \
-                      "library  before using these modules."
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
-
-        if UNITY_SDK_VERSION_CHECK and \
-                not UNITY_SDK_VERSION_CHECK['supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity = utils.get_unity_unisphere_connection(self.module.params, application_type)
         LOG.info('Got the unity instance for provisioning on Unity')
@@ -799,7 +849,7 @@ class Host(object):
         # host details
         result = dict(
             changed=False,
-            host_details=''
+            host_details={}
         )
 
         ''' Get host details based on host_name/host_id'''

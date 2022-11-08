@@ -49,16 +49,16 @@ options:
   fast_cache:
     description:
     - Indicates whether the fast cache is enabled for the storage pool.
-    - enabled - FAST Cache is enabled for the pool.
-    - disabled - FAST Cache is disabled for the pool.
+    - C(Enabled) - FAST Cache is enabled for the pool.
+    - C(Disabled) - FAST Cache is disabled for the pool.
     choices: [enabled, disabled]
     type: str
 
   fast_vp:
     description:
     - Indicates whether to enable scheduled data relocations for the pool.
-    - enabled - Enabled scheduled data relocations for the pool.
-    - disabled - Disabled scheduled data relocations for the pool.
+    - C(Enabled) - Enabled scheduled data relocations for the pool.
+    - C(Disabled) - Disabled scheduled data relocations for the pool.
     choices: [enabled, disabled]
     type: str
 
@@ -69,31 +69,31 @@ options:
     suboptions:
       disk_group_id:
         description:
-        - Id of the disk group
+        - Id of the disk group.
         type: str
 
       disk_num:
         description:
-        - Number of disks
+        - Number of disks.
         type: int
 
       raid_type:
         description:
-        - RAID group types or RAID levels
+        - RAID group types or RAID levels.
         choices: [None, RAID5, RAID0, RAID1, RAID3, RAID10, RAID6, Mixed, Automatic]
         type: str
 
       stripe_width :
         description:
-        - RAID group stripe widths, including parity or mirror disks
+        - RAID group stripe widths, including parity or mirror disks.
         choices: ['BEST_FIT', '2', '4', '5', '6', '8', '9', '10', '12', '13', '14', '16']
         type: str
 
   alert_threshold:
     description:
-    - Threshold at which the system will generate alerts about the free space in the pool, specified as a percentage
-    - minimum threshold limit is 50
-    - maximum threshold limit is 84
+    - Threshold at which the system will generate alerts about the free space in the pool, specified as a percentage.
+    - Minimum threshold limit is 50.
+    - Maximum threshold limit is 84.
     type: int
 
   is_harvest_enabled:
@@ -104,17 +104,17 @@ options:
   pool_harvest_high_threshold:
     description:
     - Max threshold for space used in pool beyond which the system automatically starts deleting snapshots in the pool.
-    - applies when the automatic deletion of snapshots based on pool space usage is enabled for the system and pool.
-    - minimum pool harvest high threshold value is 1
-    - maximum pool harvest high threshold value is 99
+    - Applies when the automatic deletion of snapshots based on pool space usage is enabled for the system and pool.
+    - Minimum pool harvest high threshold value is 1.
+    - Maximum pool harvest high threshold value is 99.
     type: float
 
   pool_harvest_low_threshold:
     description:
     - Min threshold for space used in pool below which the system automatically stops deletion of snapshots in the pool.
-    - applies when the automatic deletion of snapshots based on pool space usage is enabled for the system and pool.
-    - minimum pool harvest low threshold value is 0
-    - maximum pool harvest low threshold value is 98
+    - Applies when the automatic deletion of snapshots based on pool space usage is enabled for the system and pool.
+    - Minimum pool harvest low threshold value is 0.
+    - Maximum pool harvest low threshold value is 98.
     type: float
 
   is_snap_harvest_enabled:
@@ -125,17 +125,17 @@ options:
   snap_harvest_high_threshold:
     description:
     - Max threshold for space used in snapshot beyond which the system automatically starts deleting snapshots in the pool.
-    - applies when the automatic deletion of snapshots based on pool space usage is enabled for the pool.
-    - minimum snap harvest high threshold value is 1
-    - maximum snap harvest high threshold value is 99
+    - Applies when the automatic deletion of snapshots based on pool space usage is enabled for the pool.
+    - Minimum snap harvest high threshold value is 1.
+    - Maximum snap harvest high threshold value is 99.
     type: float
 
   snap_harvest_low_threshold:
     description:
     - Min threshold for space used in snapshot below which the system will stop automatically deleting snapshots in the pool.
-    - applies when the automatic deletion of snapshots based on pool space usage is enabled for the pool.
-    - minimum snap harvest low threshold value is 0
-    - maximum snap harvest low threshold value is 98
+    - Applies when the automatic deletion of snapshots based on pool space usage is enabled for the pool.
+    - Minimum snap harvest low threshold value is 0.
+    - Maximum snap harvest low threshold value is 98.
     type: float
 
   pool_type:
@@ -147,14 +147,15 @@ options:
   state:
     description:
     - Define whether the storage pool should exist or not.
-    - present - indicates that the storage pool should exist on the system.
-    - absent - indicates that the storage pool should not exist on the system.
+    - C(Present) - indicates that the storage pool should exist on the system.
+    - C(Absent) - indicates that the storage pool should not exist on the system.
     choices: [absent, present]
     type: str
     required: True
 
 notes:
 - Deletion of storage pool is not allowed through Ansible module.
+- The I(check_mode) is not supported.
 '''
 
 EXAMPLES = r'''
@@ -163,7 +164,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     pool_name: "{{pool_name}}"
     state: "present"
 
@@ -172,7 +173,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     pool_id: "{{pool_id}}"
     state: "present"
 
@@ -181,7 +182,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     pool_name: "{{pool_name}}"
     new_pool_name: "{{new_pool_name}}"
     pool_description: "{{pool_description}}"
@@ -194,7 +195,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     pool_id: "{{pool_id}}"
     new_pool_name: "{{new_pool_name}}"
     pool_description: "{{pool_description}}"
@@ -207,7 +208,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     pool_name: "Test"
     pool_description: "test pool"
     raid_groups:
@@ -234,11 +235,12 @@ RETURN = r'''
     description: Whether or not the storage pool has changed.
     returned: always
     type: bool
+    sample: True
 
  storage_pool_details:
     description: The storage pool details.
     returned: When storage pool exists.
-    type: complex
+    type: dict
     contains:
         id:
             description: Pool id, unique identifier of the pool.
@@ -285,7 +287,7 @@ RETURN = r'''
         drives:
             description: Indicates information about the drives
                          associated with the storage pool.
-            type: complex
+            type: list
             contains:
                 id:
                     description: Unique identifier of the drive.
@@ -302,6 +304,160 @@ RETURN = r'''
                 tier_type:
                     description: Indicates tier type of the drive.
                     type: str
+    sample: {
+        "alert_threshold": 50,
+        "creation_time": "2022-03-08 14:05:32+00:00",
+        "description": "",
+        "drives": [
+            {
+                "disk_technology": "SAS",
+                "id": "dpe_disk_22",
+                "name": "DPE Drive 22",
+                "size": 590860984320,
+                "tier_type": "PERFORMANCE"
+            },
+            {
+                "disk_technology": "SAS",
+                "id": "dpe_disk_23",
+                "name": "DPE Drive 23",
+                "size": 590860984320,
+                "tier_type": "PERFORMANCE"
+            },
+            {
+                "disk_technology": "SAS",
+                "id": "dpe_disk_24",
+                "name": "DPE Drive 24",
+                "size": 590860984320,
+                "tier_type": "PERFORMANCE"
+            }
+        ],
+        "existed": true,
+        "harvest_state": "UsageHarvestStateEnum.IDLE",
+        "hash": 8744642897210,
+        "health": {
+            "UnityHealth": {
+                "hash": 8744642799842
+            }
+        },
+        "id": "pool_280",
+        "is_all_flash": false,
+        "is_empty": false,
+        "is_fast_cache_enabled": false,
+        "is_fast_vp_enabled": false,
+        "is_harvest_enabled": true,
+        "is_snap_harvest_enabled": true,
+        "metadata_size_subscribed": 105763569664,
+        "metadata_size_used": 57176752128,
+        "name": "test_pool",
+        "object_id": 12884902146,
+        "pool_fast_vp": {
+            "UnityPoolFastVp": {
+                "hash": 8744647518980
+            }
+        },
+        "pool_space_harvest_high_threshold": 59.0,
+        "pool_space_harvest_low_threshold": 40.0,
+        "pool_type": "StoragePoolTypeEnum.DYNAMIC",
+        "raid_type": "RaidTypeEnum.RAID10",
+        "rebalance_progress": null,
+        "size_free": 470030483456,
+        "size_free_with_unit": "437.75 GB",
+        "size_subscribed": 447215820800,
+        "size_subscribed_with_unit": "416.5 GB",
+        "size_total": 574720311296,
+        "size_total_with_unit": "535.25 GB",
+        "size_used": 76838068224,
+        "size_used_with_unit": "71.56 GB",
+        "snap_size_subscribed": 128851369984,
+        "snap_size_subscribed_with_unit": "120.0 GB",
+        "snap_size_used": 2351104,
+        "snap_size_used_with_unit": "2.24 MB",
+        "snap_space_harvest_high_threshold": 80.0,
+        "snap_space_harvest_low_threshold": 60.0,
+        "tiers": {
+            "UnityPoolTierList": [
+                {
+                    "disk_count": [
+                        0,
+                        3,
+                        0
+                    ],
+                    "existed": true,
+                    "hash": 8744643017382,
+                    "name": [
+                        "Extreme Performance",
+                        "Performance",
+                        "Capacity"
+                    ],
+                    "pool_units": [
+                        null,
+                        {
+                            "UnityPoolUnitList": [
+                                {
+                                    "UnityPoolUnit": {
+                                        "hash": 8744642786759,
+                                        "id": "rg_4"
+                                    }
+                                },
+                                {
+                                    "UnityPoolUnit": {
+                                        "hash": 8744642786795,
+                                        "id": "rg_5"
+                                    }
+                                }
+                            ]
+                        },
+                        null
+                    ],
+                    "raid_type": [
+                        "RaidTypeEnum.NONE",
+                        "RaidTypeEnum.RAID10",
+                        "RaidTypeEnum.NONE"
+                    ],
+                    "size_free": [
+                        0,
+                        470030483456,
+                        0
+                    ],
+                    "size_moving_down": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "size_moving_up": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "size_moving_within": [
+                        0,
+                        0,
+                        0
+                    ],
+                    "size_total": [
+                        0,
+                        574720311296,
+                        0
+                    ],
+                    "size_used": [
+                        0,
+                        104689827840,
+                        0
+                    ],
+                    "stripe_width": [
+                        null,
+                        "RaidStripeWidthEnum._2",
+                        null
+                    ],
+                    "tier_type": [
+                        "TierTypeEnum.EXTREME_PERFORMANCE",
+                        "TierTypeEnum.PERFORMANCE",
+                        "TierTypeEnum.CAPACITY"
+                    ]
+                }
+            ]
+        }
+    }
 
 '''
 
@@ -311,11 +467,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 import logging
 
 LOG = utils.get_logger('storagepool')
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION = utils.storops_version_check()
-UNITY_SDK_VERSION_CHECK = UNITY_SDK_VERSION['supported_version']
-UNITY_SDK_VERSION_ERROR = UNITY_SDK_VERSION['unsupported_version_message']
 
 application_type = "Ansible/1.4.1"
 
@@ -336,16 +487,7 @@ class StoragePool(object):
                                     supports_check_mode=False,
                                     mutually_exclusive=mutually_exclusive,
                                     required_one_of=required_one_of)
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="Ansible modules for Unity require the"
-                                      " Unity python library to be "
-                                      "installed. Please install the library "
-                                      "before using these modules.")
-
-        if not UNITY_SDK_VERSION_CHECK:
-            LOG.error(UNITY_SDK_VERSION_ERROR)
-            self.module.fail_json(msg=UNITY_SDK_VERSION_ERROR)
+        utils.ensure_required_libs(self.module)
 
         self.conn = utils.\
             get_unity_unisphere_connection(self.module.params, application_type)
@@ -648,7 +790,7 @@ class StoragePool(object):
         # result is a dictionary that contains changed status and storage pool details
         result = dict(
             changed=False,
-            storage_pool_details=''
+            storage_pool_details={}
         )
 
         storage_pool_details = self.get_details(pool_id, pool_name)

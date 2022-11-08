@@ -19,8 +19,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 utils.get_logger = MagicMock()
 utils.get_unity_management_host_parameters = MagicMock()
-utils.get_unity_sdk = MagicMock()
-utils.storops_version_check = MagicMock(return_value={'supported_version': True, 'unsupported_version_message': ''})
+utils.ensure_required_libs = MagicMock()
 utils.get_unity_unisphere_connection = MagicMock()
 from ansible.module_utils import basic
 basic.AnsibleModule = MagicMock()

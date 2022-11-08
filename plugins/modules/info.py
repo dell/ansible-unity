@@ -52,30 +52,14 @@ options:
     description:
     - List of string variables to specify the Unity storage system entities
       for which information is required.
-    - host
-    - fc_initiator
-    - iscsi_initiator
-    - cg
-    - storage_pool
-    - vol
-    - snapshot_schedule
-    - nas_server
-    - file_system
-    - snapshot
-    - nfs_export
-    - smb_share
-    - user_quota
-    - tree_quota
-    - disk_group
-    - nfs_server
-    - cifs_server
-    - ethernet_port
-    - file_interface
     choices: [host, fc_initiator, iscsi_initiator, cg, storage_pool, vol,
     snapshot_schedule, nas_server, file_system, snapshot, nfs_export,
     smb_share, user_quota, tree_quota, disk_group, nfs_server, cifs_server, ethernet_port, file_interface]
     type: list
     elements: str
+
+notes:
+  - The I(check_mode) is supported.
 '''
 
 EXAMPLES = r'''
@@ -84,7 +68,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - host
        - fc_initiator
@@ -111,14 +95,14 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
 
  - name: Get list of hosts on Unity array
    dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - host
 
@@ -127,7 +111,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - fc_initiator
 
@@ -136,7 +120,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - iscsi_initiator
 
@@ -145,7 +129,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - cg
 
@@ -154,7 +138,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - storage_pool
 
@@ -163,7 +147,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - vol
 
@@ -172,7 +156,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - snapshot_schedule
 
@@ -181,7 +165,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - nas_server
 
@@ -190,7 +174,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - file_system
 
@@ -199,7 +183,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - snapshot
 
@@ -208,7 +192,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - nfs_export
 
@@ -217,7 +201,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - smb_share
 
@@ -226,7 +210,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - user_quota
 
@@ -235,7 +219,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - tree_quota
 
@@ -244,7 +228,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - disk_group
 
@@ -253,7 +237,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - nfs_server
 
@@ -262,7 +246,7 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - cifs_server
 
@@ -271,16 +255,16 @@ EXAMPLES = r'''
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - ethernet_port
 
- - name: Get list of file interfaces on Unity array.
+ - name: Get list of file interfaces on Unity array
    dellemc.unity.info:
      unispherehost: "{{unispherehost}}"
      username: "{{username}}"
      password: "{{password}}"
-     verifycert: "{{verifycert}}"
+     validate_certs: "{{validate_certs}}"
      gather_subset:
        - file_interface
 '''
@@ -289,7 +273,7 @@ RETURN = r'''
 Array_Details:
     description: Details of the Unity Array.
     returned: always
-    type: complex
+    type: dict
     contains:
         api_version:
             description: The current api version of the Unity Array.
@@ -306,11 +290,21 @@ Array_Details:
         software_version:
             description: The software version of the Unity Array.
             type: str
+    sample: {
+        "api_version": "12.0",
+        "earliest_api_version": "4.0",
+        "existed": true,
+        "hash": 8766644083532,
+        "id": "0",
+        "model": "Unity 480",
+        "name": "APM00213404195",
+        "software_version": "5.2.1"
+    }
 
 Hosts:
     description: Details of the hosts.
     returned: When hosts exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the host.
@@ -318,11 +312,51 @@ Hosts:
         name:
             description: The name of the host.
             type: str
+    sample: [
+        {
+            "auto_manage_type": "HostManageEnum.UNKNOWN",
+            "datastores": null,
+            "description": "",
+            "existed": true,
+            "fc_host_initiators": null,
+            "hash": 8762200072289,
+            "health": {
+                "UnityHealth": {
+                    "hash": 8762200072352
+                }
+            },
+            "host_container": null,
+            "host_ip_ports": {
+                "UnityHostIpPortList": [
+                    {
+                        "UnityHostIpPort": {
+                            "hash": 8762200072361
+                        }
+                    }
+                ]
+            },
+            "host_luns": null,
+            "host_polled_uuid": null,
+            "host_pushed_uuid": null,
+            "host_uuid": null,
+            "host_v_vol_datastore": null,
+            "id": "Host_2191",
+            "iscsi_host_initiators": null,
+            "last_poll_time": null,
+            "name": "10.225.2.153",
+            "os_type": "Linux",
+            "registration_type": null,
+            "storage_resources": null,
+            "tenant": null,
+            "type": "HostTypeEnum.HOST_MANUAL",
+            "vms": null
+        }
+    ]
 
 FC_initiators:
     description: Details of the FC initiators.
     returned: When FC initiator exist.
-    type: complex
+    type: list
     contains:
         WWN:
             description: The WWN of the FC initiator.
@@ -330,11 +364,21 @@ FC_initiators:
         id:
             description: The id of the FC initiator.
             type: str
+    sample: [
+        {
+            "WWN": "20:00:00:0E:1E:E9:B8:FC:21:00:00:0E:1E:E9:B8:FC",
+            "id": "HostInitiator_3"
+        },
+        {
+            "WWN": "20:00:00:0E:1E:E9:B8:F7:21:00:00:0E:1E:E9:B8:F7",
+            "id": "HostInitiator_4"
+        }
+    ]
 
 ISCSI_initiators:
     description: Details of the ISCSI initiators.
     returned: When ISCSI initiators exist.
-    type: complex
+    type: list
     contains:
         IQN:
             description: The IQN of the ISCSI initiator.
@@ -342,11 +386,21 @@ ISCSI_initiators:
         id:
             description: The id of the ISCSI initiator.
             type: str
+    sample: [
+        {
+            "IQN": "iqn.1994-05.com.redhat:634d768090f",
+            "id": "HostInitiator_1"
+        },
+        {
+            "IQN": "iqn.1994-05.com.redhat:2835ba62cc6d",
+            "id": "HostInitiator_2"
+        }
+    ]
 
 Consistency_Groups:
     description: Details of the Consistency Groups.
     returned: When Consistency Groups exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the Consistency Group.
@@ -354,11 +408,108 @@ Consistency_Groups:
         name:
             description: The name of the Consistency Group.
             type: str
+    sample: [
+        {
+            "advanced_dedup_status": "DedupStatusEnum.DISABLED",
+            "block_host_access": {
+                "UnityBlockHostAccessList": [
+                    {
+                        "UnityBlockHostAccess": {
+                            "hash": 8745385821206
+                        }
+                    },
+                    {
+                        "UnityBlockHostAccess": {
+                            "hash": 8745386530115
+                        }
+                    },
+                    {
+                        "UnityBlockHostAccess": {
+                            "hash": 8745386530124
+                        }
+                    }
+                ]
+            },
+            "data_reduction_percent": 0,
+            "data_reduction_ratio": 1.0,
+            "data_reduction_size_saved": 0,
+            "data_reduction_status": "DataReductionStatusEnum.DISABLED",
+            "datastores": null,
+            "dedup_status": null,
+            "description": "CG has created with all parametres.",
+            "esx_filesystem_block_size": null,
+            "esx_filesystem_major_version": null,
+            "existed": true,
+            "filesystem": null,
+            "hash": 8745385801328,
+            "health": {
+                "UnityHealth": {
+                    "hash": 8745386647098
+                }
+            },
+            "host_v_vol_datastore": null,
+            "id": "res_93",
+            "is_replication_destination": false,
+            "is_snap_schedule_paused": false,
+            "luns": {
+                "UnityLunList": [
+                    {
+                        "UnityLun": {
+                            "hash": 8745389830024,
+                            "id": "sv_64"
+                        }
+                    },
+                    {
+                        "UnityLun": {
+                            "hash": 8745386526751,
+                            "id": "sv_63"
+                        }
+                    }
+                ]
+            },
+            "metadata_size": 8858370048,
+            "metadata_size_allocated": 7516192768,
+            "name": "CG1_Ansible_Test_SS",
+            "per_tier_size_used": [
+                11811160064,
+                0,
+                0
+            ],
+            "pools": {
+                "UnityPoolList": [
+                    {
+                        "UnityPool": {
+                            "hash": 8745386552375,
+                            "id": "pool_3"
+                        }
+                    }
+                ]
+            },
+            "relocation_policy": "TieringPolicyEnum.AUTOTIER",
+            "replication_type": "ReplicationTypeEnum.NONE",
+            "size_allocated": 99418112,
+            "size_total": 268435456000,
+            "size_used": null,
+            "snap_count": 1,
+            "snap_schedule": {
+                "UnitySnapSchedule": {
+                    "hash": 8745386550224,
+                    "id": "snapSch_66"
+                }
+            },
+            "snaps_size_allocated": 8888320,
+            "snaps_size_total": 108675072,
+            "thin_status": "ThinStatusEnum.TRUE",
+            "type": "StorageResourceTypeEnum.CONSISTENCY_GROUP",
+            "virtual_volumes": null,
+            "vmware_uuid": null
+        },
+    ]
 
 Storage_Pools:
     description: Details of the Storage Pools.
     returned: When Storage Pools exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the Storage Pool.
@@ -366,11 +517,73 @@ Storage_Pools:
         name:
             description: The name of the Storage Pool.
             type: str
+    sample: [
+        {
+            "alert_threshold": 70,
+            "creation_time": "2021-10-18 12:45:12+00:00",
+            "description": "",
+            "existed": true,
+            "harvest_state": "UsageHarvestStateEnum.PAUSED_COULD_NOT_REACH_HWM",
+            "hash": 8741501012399,
+            "health": {
+                "UnityHealth": {
+                    "hash": 8741501012363
+                }
+            },
+            "id": "pool_2",
+            "is_all_flash": false,
+            "is_empty": false,
+            "is_fast_cache_enabled": false,
+            "is_harvest_enabled": true,
+            "is_snap_harvest_enabled": false,
+            "metadata_size_subscribed": 312458870784,
+            "metadata_size_used": 244544700416,
+            "name": "fastVP_pool",
+            "object_id": 12884901891,
+            "pool_fast_vp": {
+                "UnityPoolFastVp": {
+                    "hash": 8741501228023
+                }
+            },
+            "pool_space_harvest_high_threshold": 95.0,
+            "pool_space_harvest_low_threshold": 85.0,
+            "pool_type": "StoragePoolTypeEnum.TRADITIONAL",
+            "raid_type": "RaidTypeEnum.RAID5",
+            "rebalance_progress": null,
+            "size_free": 2709855928320,
+            "size_subscribed": 2499805044736,
+            "size_total": 3291018690560,
+            "size_used": 455513956352,
+            "snap_size_subscribed": 139720515584,
+            "snap_size_used": 66002944,
+            "snap_space_harvest_high_threshold": 25.0,
+            "snap_space_harvest_low_threshold": 20.0,
+            "tiers": {
+                "UnityPoolTierList": [
+                    {
+                        "UnityPoolTier": {
+                            "hash": 8741500996410
+                        }
+                    },
+                    {
+                        "UnityPoolTier": {
+                            "hash": 8741501009430
+                        }
+                    },
+                    {
+                        "UnityPoolTier": {
+                            "hash": 8741501009508
+                        }
+                    }
+                ]
+            }
+        },
+    ]
 
 Volumes:
     description: Details of the Volumes.
     returned: When Volumes exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the Volume.
@@ -378,11 +591,84 @@ Volumes:
         name:
             description: The name of the Volume.
             type: str
+    sample: [
+        {
+            "current_node": "NodeEnum.SPB",
+            "data_reduction_percent": 0,
+            "data_reduction_ratio": 1.0,
+            "data_reduction_size_saved": 0,
+            "default_node": "NodeEnum.SPB",
+            "description": null,
+            "effective_io_limit_max_iops": null,
+            "effective_io_limit_max_kbps": null,
+            "existed": true,
+            "family_base_lun": {
+                "UnityLun": {
+                    "hash": 8774260820794,
+                    "id": "sv_27"
+                }
+            },
+            "family_clone_count": 0,
+            "hash": 8774260854260,
+            "health": {
+                "UnityHealth": {
+                    "hash": 8774260812499
+                }
+            },
+            "host_access": {
+                "UnityBlockHostAccessList": [
+                    {
+                        "UnityBlockHostAccess": {
+                            "hash": 8774260826387
+                        }
+                    }
+                ]
+            },
+            "id": "sv_27",
+            "io_limit_policy": null,
+            "is_advanced_dedup_enabled": false,
+            "is_compression_enabled": null,
+            "is_data_reduction_enabled": false,
+            "is_replication_destination": false,
+            "is_snap_schedule_paused": false,
+            "is_thin_clone": false,
+            "is_thin_enabled": false,
+            "metadata_size": 4294967296,
+            "metadata_size_allocated": 4026531840,
+            "name": "VSI-UNITY-test-task",
+            "per_tier_size_used": [
+                111400714240,
+                0,
+                0
+            ],
+            "pool": {
+                "UnityPool": {
+                    "hash": 8774260811427
+                }
+            },
+            "size_allocated": 107374182400,
+            "size_total": 107374182400,
+            "size_used": null,
+            "snap_count": 0,
+            "snap_schedule": null,
+            "snap_wwn": "60:06:01:60:5C:F0:50:00:94:3E:91:4D:51:5A:4F:97",
+            "snaps_size": 0,
+            "snaps_size_allocated": 0,
+            "storage_resource": {
+                "UnityStorageResource": {
+                    "hash": 8774267822228
+                }
+            },
+            "tiering_policy": "TieringPolicyEnum.AUTOTIER_HIGH",
+            "type": "LUNTypeEnum.VMWARE_ISCSI",
+            "wwn": "60:06:01:60:5C:F0:50:00:00:B5:95:61:2E:34:DB:B2"
+        },
+    ]
 
 Snapshot_Schedules:
     description: Details of the Snapshot Schedules.
     returned: When Snapshot Schedules exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the Snapshot Schedule.
@@ -390,11 +676,50 @@ Snapshot_Schedules:
         name:
             description: The name of the Snapshot Schedule.
             type: str
+    sample: [
+        {
+            "existed": true,
+            "hash": 8775599492651,
+            "id": "snapSch_1",
+            "is_default": true,
+            "is_modified": null,
+            "is_sync_replicated": false,
+            "luns": null,
+            "modification_time": "2021-08-18 19:10:33.774000+00:00",
+            "name": "CEM_DEFAULT_SCHEDULE_DEFAULT_PROTECTION",
+            "rules": {
+                "UnitySnapScheduleRuleList": [
+                    {
+                        "UnitySnapScheduleRule": {
+                            "hash": 8775599498593
+                        }
+                    }
+                ]
+            },
+            "storage_resources": {
+                "UnityStorageResourceList": [
+                    {
+                        "UnityStorageResource": {
+                            "hash": 8775599711597,
+                            "id": "res_88"
+                        }
+                    },
+                    {
+                        "UnityStorageResource": {
+                            "hash": 8775599711528,
+                            "id": "res_3099"
+                        }
+                    }
+                ]
+            },
+            "version": "ScheduleVersionEnum.LEGACY"
+        },
+    ]
 
 NAS_Servers:
     description: Details of the NAS Servers.
     returned: When NAS Servers exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the NAS Server.
@@ -402,11 +727,89 @@ NAS_Servers:
         name:
             description: The name of the NAS Server.
             type: str
+    sample: [
+        {
+            "allow_unmapped_user": null,
+            "cifs_server": null,
+            "current_sp": {
+                "UnityStorageProcessor": {
+                    "hash": 8747629920422,
+                    "id": "spb"
+                }
+            },
+            "current_unix_directory_service": "NasServerUnixDirectoryServiceEnum.NONE",
+            "default_unix_user": null,
+            "default_windows_user": null,
+            "existed": true,
+            "file_dns_server": null,
+            "file_interface": {
+                "UnityFileInterfaceList": [
+                    {
+                        "UnityFileInterface": {
+                            "hash": 8747626606870,
+                            "id": "if_6"
+                        }
+                    }
+                ]
+            },
+            "filesystems": {
+                "UnityFileSystemList": [
+                    {
+                        "UnityFileSystem": {
+                            "hash": 8747625901355,
+                            "id": "fs_6892"
+                        }
+                    },
+                ]
+            },
+            "hash": 8747625900370,
+            "health": {
+                "UnityHealth": {
+                    "hash": 8747625900493
+                }
+            },
+            "home_sp": {
+                "UnityStorageProcessor": {
+                    "hash": 8747625877420,
+                    "id": "spb"
+                }
+            },
+            "id": "nas_1",
+            "is_backup_only": false,
+            "is_multi_protocol_enabled": false,
+            "is_packet_reflect_enabled": false,
+            "is_replication_destination": false,
+            "is_replication_enabled": false,
+            "is_windows_to_unix_username_mapping_enabled": null,
+            "name": "lglad072",
+            "pool": {
+                "UnityPool": {
+                    "hash": 8747629920479,
+                    "id": "pool_3"
+                }
+            },
+            "preferred_interface_settings": {
+                "UnityPreferredInterfaceSettings": {
+                    "hash": 8747626625166,
+                    "id": "preferred_if_1"
+                }
+            },
+            "replication_type": "ReplicationTypeEnum.NONE",
+            "size_allocated": 2952790016,
+            "tenant": null,
+            "virus_checker": {
+                "UnityVirusChecker": {
+                    "hash": 8747626604144,
+                    "id": "cava_1"
+                }
+            }
+        },
+    ]
 
 File_Systems:
     description: Details of the File Systems.
     returned: When File Systems exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the File System.
@@ -414,11 +817,83 @@ File_Systems:
         name:
             description: The name of the File System.
             type: str
+    sample: [
+        {
+            "access_policy": "AccessPolicyEnum.UNIX",
+            "cifs_notify_on_change_dir_depth": 512,
+            "cifs_share": null,
+            "data_reduction_percent": 0,
+            "data_reduction_ratio": 1.0,
+            "data_reduction_size_saved": 0,
+            "description": "",
+            "existed": true,
+            "folder_rename_policy": "FSRenamePolicyEnum.SMB_RENAME_FORBIDDEN",
+            "format": "FSFormatEnum.UFS64",
+            "hash": 8786518053735,
+            "health": {
+                "UnityHealth": {
+                    "hash": 8786518049091
+                }
+            },
+            "host_io_size": "HostIOSizeEnum.GENERAL_8K",
+            "id": "fs_12",
+            "is_advanced_dedup_enabled": false,
+            "is_cifs_notify_on_access_enabled": false,
+            "is_cifs_notify_on_write_enabled": false,
+            "is_cifs_op_locks_enabled": true,
+            "is_cifs_sync_writes_enabled": false,
+            "is_data_reduction_enabled": false,
+            "is_read_only": false,
+            "is_smbca": false,
+            "is_thin_enabled": true,
+            "locking_policy": "FSLockingPolicyEnum.MANDATORY",
+            "metadata_size": 4294967296,
+            "metadata_size_allocated": 3758096384,
+            "min_size_allocated": 0,
+            "name": "vro-daniel-test",
+            "nas_server": {
+                "UnityNasServer": {
+                    "hash": 8786517296113,
+                    "id": "nas_1"
+                }
+            },
+            "nfs_share": null,
+            "per_tier_size_used": [
+                6442450944,
+                0,
+                0
+            ],
+            "pool": {
+                "UnityPool": {
+                    "hash": 8786518259493,
+                    "id": "pool_3"
+                }
+            },
+            "pool_full_policy": "ResourcePoolFullPolicyEnum.FAIL_WRITES",
+            "size_allocated": 283148288,
+            "size_allocated_total": 4041244672,
+            "size_preallocated": 2401206272,
+            "size_total": 107374182400,
+            "size_used": 1620312064,
+            "snap_count": 0,
+            "snaps_size": 0,
+            "snaps_size_allocated": 0,
+            "storage_resource": {
+                "UnityStorageResource": {
+                    "hash": 8786518044167,
+                    "id": "res_20"
+                }
+            },
+            "supported_protocols": "FSSupportedProtocolEnum.NFS",
+            "tiering_policy": "TieringPolicyEnum.AUTOTIER_HIGH",
+            "type": "FilesystemTypeEnum.FILESYSTEM"
+        },
+    ]
 
 Snapshots:
     description: Details of the Snapshots.
     returned: When Snapshots exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the Snapshot.
@@ -426,11 +901,51 @@ Snapshots:
         name:
             description: The name of the Snapshot.
             type: str
+    sample: [
+        {
+            "access_type": "FilesystemSnapAccessTypeEnum.CHECKPOINT",
+            "attached_wwn": null,
+            "creation_time": "2022-04-06 11:19:26.818000+00:00",
+            "creator_schedule": null,
+            "creator_type": "SnapCreatorTypeEnum.REP_V2",
+            "creator_user": null,
+            "description": "",
+            "existed": true,
+            "expiration_time": null,
+            "hash": 8739100256648,
+            "host_access": null,
+            "id": "38654716464",
+            "io_limit_policy": null,
+            "is_auto_delete": false,
+            "is_modifiable": false,
+            "is_modified": false,
+            "is_read_only": true,
+            "is_system_snap": true,
+            "last_writable_time": null,
+            "lun": {
+                "UnityLun": {
+                    "hash": 8739100148962,
+                    "id": "sv_301"
+                }
+            },
+            "name": "42949677504_APM00213404195_0000.ckpt000_9508038064690266.2_238",
+            "parent_snap": null,
+            "size": 3221225472,
+            "snap_group": null,
+            "state": "SnapStateEnum.READY",
+            "storage_resource": {
+                "UnityStorageResource": {
+                    "hash": 8739100173002,
+                    "id": "sv_301"
+                }
+            }
+        },
+    ]
 
 NFS_Exports:
     description: Details of the NFS Exports.
     returned: When NFS Exports exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the NFS Export.
@@ -438,11 +953,54 @@ NFS_Exports:
         name:
             description: The name of the NFS Export.
             type: str
+    sample: [
+        {
+            "anonymous_gid": 4294967294,
+            "anonymous_uid": 4294967294,
+            "creation_time": "2021-12-01 06:21:48.381000+00:00",
+            "default_access": "NFSShareDefaultAccessEnum.NO_ACCESS",
+            "description": "",
+            "existed": true,
+            "export_option": 1,
+            "export_paths": [
+                "10.230.24.20:/zack_nfs_01"
+            ],
+            "filesystem": {
+                "UnityFileSystem": {
+                    "hash": 8747298565566,
+                    "id": "fs_67"
+                }
+            },
+            "hash": 8747298565548,
+            "host_accesses": null,
+            "id": "NFSShare_29",
+            "is_read_only": null,
+            "min_security": "NFSShareSecurityEnum.SYS",
+            "modification_time": "2022-04-01 11:44:17.553000+00:00",
+            "name": "zack_nfs_01",
+            "nfs_owner_username": null,
+            "no_access_hosts": null,
+            "no_access_hosts_string": "10.226.198.207,10.226.198.25,10.226.198.44,10.226.198.85,Host1,
+Host2,Host4,Host5,Host6,10.10.0.0/255.255.240.0",
+            "path": "/",
+            "read_only_hosts": null,
+            "read_only_hosts_string": "",
+            "read_only_root_access_hosts": null,
+            "read_only_root_hosts_string": "",
+            "read_write_hosts": null,
+            "read_write_hosts_string": "",
+            "read_write_root_hosts_string": "",
+            "role": "NFSShareRoleEnum.PRODUCTION",
+            "root_access_hosts": null,
+            "snap": null,
+            "type": "NFSTypeEnum.NFS_SHARE"
+        },
+    ]
 
 SMB_Shares:
     description: Details of the SMB Shares.
     returned: When SMB Shares exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the SMB Share.
@@ -450,11 +1008,44 @@ SMB_Shares:
         name:
             description: The name of the SMB Share.
             type: str
+    sample: [
+        {
+            "creation_time": "2022-03-17 11:56:54.867000+00:00",
+            "description": "",
+            "existed": true,
+            "export_paths": [
+                "\\\\multi-prot-pie.extreme1.com\\multi-prot-hui",
+                "\\\\10.230.24.26\\multi-prot-hui"
+            ],
+            "filesystem": {
+                "UnityFileSystem": {
+                    "hash": 8741295638110,
+                    "id": "fs_140"
+                }
+            },
+            "hash": 8741295638227,
+            "id": "SMBShare_20",
+            "is_abe_enabled": false,
+            "is_ace_enabled": false,
+            "is_branch_cache_enabled": false,
+            "is_continuous_availability_enabled": false,
+            "is_dfs_enabled": false,
+            "is_encryption_enabled": false,
+            "is_read_only": null,
+            "modified_time": "2022-03-17 11:56:54.867000+00:00",
+            "name": "multi-prot-hui",
+            "offline_availability": "CifsShareOfflineAvailabilityEnum.NONE",
+            "path": "/",
+            "snap": null,
+            "type": "CIFSTypeEnum.CIFS_SHARE",
+            "umask": "022"
+        },
+    ]
 
 User_Quotas:
     description: Details of the user quotas.
     returned: When user quotas exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the user quota.
@@ -462,11 +1053,21 @@ User_Quotas:
         uid:
             description: The UID of the user quota.
             type: str
+    sample: [
+        {
+            "id": "userquota_171798694698_0_60000",
+            "uid": 60000
+        },
+        {
+            "id": "userquota_171798694939_0_5001",
+            "uid": 5001
+        }
+    ]
 
 Tree_Quotas:
     description: Details of the quota trees.
     returned: When quota trees exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the quota tree.
@@ -474,10 +1075,21 @@ Tree_Quotas:
         path:
             description: The path of the quota tree.
             type: str
+    sample: [
+        {
+            "id": "treequota_171798709589_1",
+            "path": "/vro-ui-fs-rkKfimmN"
+        },
+        {
+            "id": "treequota_171798709590_1",
+            "path": "/vro-ui-fs-mGYXAMqk"
+        }
+    ]
+
 Disk_Groups:
     description: Details of the disk groups.
     returned: When disk groups exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the disk group.
@@ -488,28 +1100,42 @@ Disk_Groups:
         tier_type:
             description: The tier type of the disk group.
             type: str
+    sample: [
+        {
+            "id": "dg_3",
+            "name": "400 GB SAS Flash 2",
+            "tier_type": "EXTREME_PERFORMANCE"
+        },
+        {
+            "id": "dg_16",
+            "name": "600 GB SAS 10K",
+            "tier_type": "PERFORMANCE"
+        }
+    ]
+
 NFS_Servers:
     description: Details of the NFS Servers.
     returned: When NFS Servers exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the NFS Servers.
             type: str
     sample: [
-            {
-                "id": "nfs_3",
-            },
-            {
-                "id": "nfs_4",
-            },
-            {
-                "id": "nfs_9",
-            }]
+        {
+            "id": "nfs_3",
+        },
+        {
+            "id": "nfs_4",
+        },
+        {
+            "id": "nfs_9",
+        }
+    ]
 CIFS_Servers:
     description: Details of the CIFS Servers.
     returned: When CIFS Servers exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the CIFS Servers.
@@ -518,23 +1144,23 @@ CIFS_Servers:
             description: The name of the CIFS server.
             type: str
     sample: [
-            {
-                "id": "cifs_3",
-                "name": "test_cifs_1"
-            },
-            {
-                "id": "cifs_4",
-                "name": "test_cifs_2"
-            },
-            {
-                "id": "cifs_9",
-                "name": "test_cifs_3"
-            }
+        {
+            "id": "cifs_3",
+            "name": "test_cifs_1"
+        },
+        {
+            "id": "cifs_4",
+            "name": "test_cifs_2"
+        },
+        {
+            "id": "cifs_9",
+            "name": "test_cifs_3"
+        }
     ]
 Ethernet_ports:
     description: Details of the ethernet ports.
     returned: When ethernet ports exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the ethernet port.
@@ -543,23 +1169,23 @@ Ethernet_ports:
             description: The name of the ethernet port.
             type: str
     sample: [
-            {
-                "id": "spa_mgmt",
-                "name": "SP A Management Port"
-            },
-            {
-                "id": "spa_ocp_0_eth0",
-                "name": "SP A 4-Port Card Ethernet Port 0"
-            },
-            {
-                "id": "spa_ocp_0_eth1",
-                "name": "SP A 4-Port Card Ethernet Port 1"
-            }
+        {
+            "id": "spa_mgmt",
+            "name": "SP A Management Port"
+        },
+        {
+            "id": "spa_ocp_0_eth0",
+            "name": "SP A 4-Port Card Ethernet Port 0"
+        },
+        {
+            "id": "spa_ocp_0_eth1",
+            "name": "SP A 4-Port Card Ethernet Port 1"
+        }
     ]
 File_interfaces:
     description: Details of the file inetrfaces.
     returned: When file inetrface exist.
-    type: complex
+    type: list
     contains:
         id:
             description: The ID of the file inetrface.
@@ -571,23 +1197,24 @@ File_interfaces:
             description: IP address of the file inetrface.
             type: str
     sample: [
-            {
-                "id": "if_3",
-                "ip_address": "xx.xx.xx.xx",
-                "name": "1_APMXXXXXXXXXX"
-            },
-            {
-                "id": "if_3",
-                "ip_address": "xx.xx.xx.xx",
-                "name": "2_APMXXXXXXXXXX"
-            },
-            {
-                "id": "if_3",
-                "ip_address": "xx.xx.xx.xx",
-                "name": "3_APMXXXXXXXXXX"
-            }
+        {
+            "id": "if_3",
+            "ip_address": "xx.xx.xx.xx",
+            "name": "1_APMXXXXXXXXXX"
+        },
+        {
+            "id": "if_3",
+            "ip_address": "xx.xx.xx.xx",
+            "name": "2_APMXXXXXXXXXX"
+        },
+        {
+            "id": "if_3",
+            "ip_address": "xx.xx.xx.xx",
+            "name": "3_APMXXXXXXXXXX"
+        }
     ]
 '''
+
 from re import sub
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
@@ -595,8 +1222,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('info')
 SUCCESSFULL_LISTED_MSG = 'Successfully listed.'
-HAS_UNITY_SDK = utils.get_unity_sdk()
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -613,19 +1238,7 @@ class Info(object):
         """ initialize the ansible module """
         self.module = AnsibleModule(argument_spec=self.module_params,
                                     supports_check_mode=True)
-
-        if not HAS_UNITY_SDK:
-            err_msg = "Ansible modules for Unity require the Unity " \
-                      "python library to be installed. Please install the " \
-                      "library  before using these modules."
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
-
-        if UNITY_SDK_VERSION_CHECK and \
-                not UNITY_SDK_VERSION_CHECK['supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity = utils.get_unity_unisphere_connection(self.module.params,
                                                           application_type)

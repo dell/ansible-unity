@@ -56,7 +56,7 @@ options:
     type: str
   prefix_length:
     description:
-    - Prefix length is mutually exclusive with netmask.
+    - Prefix length is mutually exclusive with I(netmask).
     type: int
   gateway:
     description:
@@ -73,7 +73,7 @@ options:
     required: true
     type: str
 notes:
-- The check mode is supported.
+- The I(check_mode) is supported.
 - Modify operation for interface is not supported.
 '''
 
@@ -84,7 +84,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         ethernet_port_name: "SP A 4-Port Card Ethernet Port 0"
         role: "BACKUP"
@@ -99,7 +99,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         ethernet_port_name: "SP A 4-Port Card Ethernet Port 0"
         role: "PRODUCTION"
@@ -114,7 +114,7 @@ EXAMPLES = r'''
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
-        verifycert: "{{verifycert}}"
+        validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         interface_ip: "xx.xx.xx.xx"
         state: "present"
@@ -124,7 +124,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       nas_server_name: "dummy_nas"
       interface_ip: "xx.xx.xx.xx"
       state: "absent"
@@ -139,7 +139,7 @@ changed:
 interface_details:
     description: Details of the interface.
     returned: When interface is configured for NAS Server.
-    type: complex
+    type: dict
     contains:
         existed:
             description: Indicates if interface exists.
@@ -155,10 +155,10 @@ interface_details:
             type: str
         ip_port:
             description: Port on which network interface is configured.
-            type: complex
+            type: dict
             contains:
                 id:
-                    description: ID of ip_port
+                    description: ID of ip_port.
                     type: str
         ip_protocol_version:
             description: IP protocol version.
@@ -177,10 +177,10 @@ interface_details:
             type: bool
         nas_server:
             description: Details of NAS server where interface is configured.
-            type: complex
+            type: dict
             contains:
                 id:
-                    description: ID of NAS Server
+                    description: ID of NAS Server.
                     type: str
     sample: {
         "existed": true,
@@ -227,10 +227,6 @@ from ipaddress import ip_network
 
 LOG = utils.get_logger('interface')
 
-HAS_UNITY_SDK = utils.get_unity_sdk()
-
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
-
 application_type = "Ansible/1.4.1"
 
 
@@ -252,18 +248,7 @@ class Interface(object):
             mutually_exclusive=mutually_exclusive,
             required_one_of=required_one_of
         )
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="This Ansible module for Unity require the"
-                                      " Unity python library version >= 1.2.11 to be "
-                                      "installed. Please install the library "
-                                      "before using this module.")
-
-        if UNITY_SDK_VERSION_CHECK and not UNITY_SDK_VERSION_CHECK[
-           'supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+        utils.ensure_required_libs(self.module)
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
@@ -436,7 +421,7 @@ class Interface(object):
         # result is a dictionary that contains changed status and Interface details
         result = dict(
             changed=False,
-            interface_details=None
+            interface_details={}
         )
         modify_flag = False
 

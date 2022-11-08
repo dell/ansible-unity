@@ -16,7 +16,7 @@ short_description: Manage snapshots on the Unity storage system
 description:
 - Managing snapshots on the Unity storage system includes create snapshot,
   delete snapshot, update snapshot, get snapshot, map host and unmap host.
-version_added: "1.1.0"
+version_added: '1.1.0'
 
 extends_documentation_fragment:
   - dellemc.unity.unity
@@ -28,38 +28,38 @@ options:
     description:
     - The name of the snapshot.
     - Mandatory parameter for creating a snapshot.
-    - For all other operations either snapshot name or snapshot id is
+    - For all other operations either I(snapshot_name) or I(snapshot_id) is
       required.
     type: str
   vol_name:
     description:
     - The name of the volume for which snapshot is created.
-    - For creation of a snapshot either vol_name or cg_name is required.
+    - For creation of a snapshot either I(vol_name) or I(cg_name) is required.
     - Not required for other operations.
     type: str
   cg_name:
     description:
     - The name of the Consistency Group for which snapshot is created.
-    - For creation of a snapshot either vol_name or cg_name is required.
+    - For creation of a snapshot either I(vol_name) or I(cg_name) is required.
     - Not required for other operations.
     type: str
   snapshot_id:
     description:
     - The id of the snapshot.
-    - For all operations other than creation either snapshot name or
-     snapshot id is required.
+    - For all operations other than creation either I(snapshot_name) or
+      I(snapshot_id) is required.
     type: str
   auto_delete:
     description:
     - This option specifies whether the snapshot is auto deleted or not.
-    - If set to true, snapshot will expire based on the pool auto deletion
+    - If set to C(true), snapshot will expire based on the pool auto deletion
       policy.
-    - If set to false, snapshot will not be auto deleted
+    - If set to (false), snapshot will not be auto deleted
       based on the pool auto deletion policy.
-    - auto_delete can not be set to True, if expiry_time is specified.
-    - If during creation neither auto_delete nor expiry_time is mentioned
-      then snapshot will be created keeping auto_delete as True.
-    - Once the expiry_time is set then snapshot cannot be assigned
+    - Option I(auto_delete) can not be set to C(true), if I(expiry_time) is specified.
+    - If during creation neither I(auto_delete) nor I(expiry_time) is mentioned
+      then snapshot will be created keeping I(auto_delete) as C(true).
+    - Once the I(expiry_time) is set then snapshot cannot be assigned
       to the auto delete policy.
     type: bool
   expiry_time:
@@ -80,7 +80,7 @@ options:
     type: str
   state:
     description:
-    - The state option is used to mention the existence of
+    - The I(state) option is used to mention the existence of
       the snapshot.
     type: str
     required: True
@@ -88,24 +88,27 @@ options:
   host_name:
     description:
     - The name of the host.
-    - Either host_name or host_id is required to map or unmap a snapshot from
+    - Either I(host_name) or I(host_id) is required to map or unmap a snapshot from
       a host.
     - Snapshot can be attached to multiple hosts.
     type: str
   host_id:
     description:
     - The id of the host.
-    - Either host_name or host_id is required to map or unmap a snapshot from
+    - Either I(host_name) or I(host_id) is required to map or unmap a snapshot from
       a host.
     - Snapshot can be attached to multiple hosts.
     type: str
   host_state:
     description:
-    - The host_state option is used to mention the existence of the host
+    - The I(host_state) option is used to mention the existence of the host
       for snapshot.
     - It is required when a snapshot is mapped or unmapped from host.
     type: str
     choices: ['mapped', 'unmapped']
+
+notes:
+  - The I(check_mode) is not supported.
 '''
 
 EXAMPLES = r'''
@@ -114,7 +117,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       port: "{{port}}"
       cg_name: "{{cg_name}}"
       snapshot_name: "{{cg_snapshot_name}}"
@@ -127,7 +130,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       port: "{{port}}"
       vol_name: "{{vol_name}}"
       snapshot_name: "{{vol_snapshot_name}}"
@@ -142,7 +145,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       port: "{{port}}"
       snapshot_name: "{{vol_snapshot_name}}"
       host_name: "{{host_name}}"
@@ -154,7 +157,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       port: "{{port}}"
       snapshot_name: "{{vol_snapshot_name}}"
       host_name: "{{host_name}}"
@@ -166,7 +169,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_name: "{{vol_snapshot_name}}"
       new_snapshot_name: "{{new_snapshot_name}}"
       description: "{{new_description}}"
@@ -179,7 +182,7 @@ EXAMPLES = r'''
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
-      verifycert: "{{verifycert}}"
+      validate_certs: "{{validate_certs}}"
       snapshot_name: "{{cg_snapshot_name}}"
       state: "absent"
 '''
@@ -189,10 +192,12 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
+    sample: True
+
 snapshot_details:
     description: Details of the snapshot.
     returned: When snapshot exists
-    type: complex
+    type: dict
     contains:
         is_auto_delete:
             description: Additional information mentioned for snapshot.
@@ -219,7 +224,37 @@ snapshot_details:
             description: Id of the storage resource for which the snapshot
                          exists.
             type: str
-
+    sample: {
+        "access_type": null,
+        "attached_wwn": null,
+        "creation_time": "2022-10-21 08:20:25.803000+00:00",
+        "creator_schedule": null,
+        "creator_type": "SnapCreatorTypeEnum.USER_CUSTOM",
+        "creator_user": {
+            "id": "user_admin"
+        },
+        "description": "Test snap creation",
+        "existed": true,
+        "expiration_time": null,
+        "hash": 8756689457056,
+        "hosts_list": [],
+        "id": "85899355291",
+        "io_limit_policy": null,
+        "is_auto_delete": true,
+        "is_modifiable": false,
+        "is_modified": false,
+        "is_read_only": true,
+        "is_system_snap": false,
+        "last_writable_time": null,
+        "lun": null,
+        "name": "ansible_snap_cg_1_1",
+        "parent_snap": null,
+        "size": null,
+        "snap_group": null,
+        "state": "SnapStateEnum.READY",
+        "storage_resource_id": "res_95",
+        "storage_resource_name": "CG_ansible_test_2_new"
+    }
 '''
 
 import logging
@@ -229,9 +264,6 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 from datetime import datetime
 
 LOG = utils.get_logger('snapshot')
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -255,23 +287,12 @@ class Snapshot(object):
                                     supports_check_mode=False,
                                     mutually_exclusive=mutually_exclusive,
                                     required_one_of=required_one_of)
+        utils.ensure_required_libs(self.module)
 
         # result is a dictionary that contains changed status and
         # snapshot details
         self.result = {"changed": False,
-                       'snapshot_details': None}
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="Ansible modules for Unity require the"
-                                      " Unity python library to be"
-                                      " installed. Please install the "
-                                      "library before using these modules.")
-
-        if UNITY_SDK_VERSION_CHECK and \
-                not UNITY_SDK_VERSION_CHECK['supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+                       'snapshot_details': {}}
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)

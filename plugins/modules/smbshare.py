@@ -11,7 +11,7 @@ DOCUMENTATION = r'''
 ---
 module: smbshare
 version_added: '1.1.0'
-short_description:  Manage SMB shares on Unity storage system
+short_description: Manage SMB shares on Unity storage system
 extends_documentation_fragment:
 - dellemc.unity.unity
 author:
@@ -24,14 +24,14 @@ options:
     description:
     - Name of the SMB share.
     - Required during creation of the SMB share.
-    - For all other operations either share_name or share_id is required.
+    - For all other operations either I(share_name) or I(share_id) is required.
     type: str
   share_id:
     description:
     - ID of the SMB share.
     - Should not be specified during creation. Id is auto generated.
-    - For all other operations either share_name or share_id is required.
-    - If share_id is used then no need to pass nas_server/filesystem/snapshot/path.
+    - For all other operations either I(share_name) or I(share_id) is required.
+    - If I(share_id) is used then no need to pass nas_server/filesystem/snapshot/path.
     type: str
   path:
     description:
@@ -43,45 +43,45 @@ options:
   filesystem_id:
     description:
     - The ID of the File System.
-    - Either filesystem_name or filesystem_id is required for creation of the SMB share for filesystem.
-    - If filesystem name is specified, then nas_server_name/nas_server_id is required to
+    - Either I(filesystem_name) or I(filesystem_id) is required for creation of the SMB share for filesystem.
+    - If I(filesystem_name) is specified, then I(nas_server_name)/I(nas_server_id) is required to
       uniquely identify the filesystem.
-    - filesystem_name and filesystem_id are mutually exclusive parameters.
+    - Options I(filesystem_name) and I(filesystem_id) are mutually exclusive parameters.
     type: str
   snapshot_id:
     description:
     - The ID of the Filesystem Snapshot.
-    - Either snapshot_name or snapshot_id is required for creation of the SMB share for a snapshot.
-    - If snapshot name is specified, then nas_server_name/nas_server_id is required to
+    - Either I(snapshot_name) or I(snapshot_id) is required for creation of the SMB share for a snapshot.
+    - If I(snapshot_name) is specified, then I(nas_server_name)/I(nas_server_id) is required to
       uniquely identify the snapshot.
-    - snapshot_name and snapshot_id are mutually exclusive parameters.
+    - Options I(snapshot_name) and I(snapshot_id) are mutually exclusive parameters.
     type: str
   nas_server_id:
     description:
     - The ID of the NAS Server.
-    - It is not required if share_id is used.
+    - It is not required if I(share_id) is used.
     type: str
   filesystem_name:
     description:
     - The Name of the File System.
-    - Either filesystem_name or filesystem_id is required for creation of the SMB share for filesystem.
-    - If filesystem name is specified, then nas_server_name/nas_server_id is required to
+    - Either I(filesystem_name) or I(filesystem_id) is required for creation of the SMB share for filesystem.
+    - If I(filesystem_name) is specified, then I(nas_server_name)/I(nas_server_id) is required to
       uniquely identify the filesystem.
-    - filesystem_name and filesytem_id are mutually exclusive parameters.
+    - Options I(filesystem_name) and I(filesytem_id) are mutually exclusive parameters.
     type: str
   snapshot_name:
     description:
     - The Name of the Filesystem Snapshot.
-    - Either snapshot_name or snapshot_id is required for creation of the SMB share for a snapshot.
-    - If snapshot name is specified, then nas_server_name/nas_server_id is required to
+    - Either I(snapshot_name) or I(snapshot_id) is required for creation of the SMB share for a snapshot.
+    - If I(snapshot_name) is specified, then I(nas_server_name)/I(nas_server_id) is required to
       uniquely identify the snapshot.
-    - snapshot_name and snapshot_id are mutually exclusive parameters.
+    - Options I(snapshot_name) and I(snapshot_id) are mutually exclusive parameters.
     type: str
   nas_server_name:
     description:
     - The Name of the NAS Server.
-    - It is not required if share_id is used.
-    - nas_server_name and nas_server_id are mutually exclusive parameters.
+    - It is not required if I(share_id) is used.
+    - Options I(nas_server_name) and I(nas_server_id) are mutually exclusive parameters.
     type: str
   description:
     description:
@@ -92,31 +92,31 @@ options:
   is_abe_enabled:
     description:
     - Indicates whether Access-based Enumeration (ABE) for SMB share is enabled.
-    - During creation, if not mentioned then default is False.
+    - During creation, if not mentioned then default is C(false).
     type: bool
   is_branch_cache_enabled:
     description:
     - Indicates whether Branch Cache optimization for SMB share is enabled.
-    - During creation, if not mentioned then default is False.
+    - During creation, if not mentioned then default is C(false).
     type: bool
   is_continuous_availability_enabled:
     description:
     - Indicates whether continuous availability for SMB 3.0 is enabled.
-    - During creation, if not mentioned then default is False.
+    - During creation, if not mentioned then default is C(false).
     type: bool
   is_encryption_enabled:
     description:
     - Indicates whether encryption for SMB 3.0 is enabled at the shared folder level.
-    - During creation, if not mentioned then default is False.
+    - During creation, if not mentioned then default is C(false).
     type: bool
   offline_availability:
     description:
     - Defines valid states of Offline Availability.
-    - MANUAL- Only specified files will be available offline.
-    - DOCUMENTS- All files that users open will be available offline.
-    - PROGRAMS- Program will preferably run from the offline cache even when
+    - C(MANUAL)- Only specified files will be available offline.
+    - C(DOCUMENTS)- All files that users open will be available offline.
+    - C(PROGRAMS)- Program will preferably run from the offline cache even when
       connected to the network. All files that users open will be available offline.
-    - NONE- Prevents clients from storing documents and programs in offline cache.
+    - C(NONE)- Prevents clients from storing documents and programs in offline cache.
     type: str
     choices: ["MANUAL","DOCUMENTS","PROGRAMS","NONE"]
   umask:
@@ -126,15 +126,16 @@ options:
   state:
     description:
     - Define whether the SMB share should exist or not.
-    - present  indicates that the share should exist on the system.
-    - absent  indicates that the share should not exist on the system.
+    - Value C(present) indicates that the share should exist on the system.
+    - Value C(absent) indicates that the share should not exist on the system.
     type: str
     required: true
     choices: ['absent', 'present']
 notes:
-- When ID/Name of the filesystem/snapshot is passed then nas_server is not required.
-  If passed, then filesystem/snapshot should exist for the mentioned nas_server,
+- When ID/Name of the filesystem/snapshot is passed then I(nas_server) is not required.
+  If passed, then filesystem/snapshot should exist for the mentioned I(nas_server),
   else the task will fail.
+- The I(check_mode) is not supported.
 '''
 
 EXAMPLES = r'''
@@ -143,7 +144,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     share_name: "sample_smb_share"
     filesystem_name: "sample_fs"
     nas_server_id: "NAS_11"
@@ -161,7 +162,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     share_name: "sample_smb_share"
     nas_server_name: "sample_nas_server"
     description: "Sample SMB share attributes updated"
@@ -177,7 +178,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     share_name: "sample_snap_smb_share"
     snapshot_name: "sample_snapshot"
     nas_server_id: "NAS_11"
@@ -194,7 +195,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     share_name: "sample_snap_smb_share"
     snapshot_name: "sample_snapshot"
     description: "Sample SMB share attributes updated for snapshot"
@@ -210,7 +211,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     share_id: "{{smb_share_id}}"
     state: "present"
 - name: Delete SMB share
@@ -218,7 +219,7 @@ EXAMPLES = r'''
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
-    verifycert: "{{verifycert}}"
+    validate_certs: "{{validate_certs}}"
     share_id: "{{smb_share_id}}"
     state: "absent"
 '''
@@ -231,7 +232,7 @@ changed:
     sample: True
 smb_share_details:
     description: The SMB share details.
-    type: complex
+    type: dict
     returned: When share exists.
     contains:
         id:
@@ -262,9 +263,9 @@ smb_share_details:
         description:
             description: Additional information about the share.
             type: str
-            sample: "This share is created for demo purpose only."
+            sample: This share is created for demo purpose only.
         is_abe_enabled:
-            description: Whether Access Based enumeration is enforced or not
+            description: Whether Access Based enumeration is enforced or not.
             type: bool
             sample: false
         is_branch_cache_enabled:
@@ -272,7 +273,7 @@ smb_share_details:
             type: bool
             sample: false
         is_continuous_availability_enabled:
-            description: Whether the share will be available continuously or not
+            description: Whether the share will be available continuously or not.
             type: bool
             sample: false
         is_encryption_enabled:
@@ -280,17 +281,49 @@ smb_share_details:
             type: bool
             sample: false
         umask:
-            description: Unix mask for the SMB share
+            description: Unix mask for the SMB share.
             type: str
+    sample: {
+        "creation_time": "2022-03-17 11:56:54.867000+00:00",
+        "description": "",
+        "existed": true,
+        "export_paths": [
+            "\\\\multi-prot-pie.extreme1.com\\multi-prot-hui",
+            "\\\\10.230.24.26\\multi-prot-hui"
+        ],
+        "filesystem": {
+            "UnityFileSystem": {
+                "hash": 8748426746492
+            }
+        },
+        "filesystem_id": "fs_140",
+        "filesystem_name": "multi-prot-hui",
+        "hash": 8748426746588,
+        "id": "SMBShare_20",
+        "is_abe_enabled": false,
+        "is_ace_enabled": false,
+        "is_branch_cache_enabled": false,
+        "is_continuous_availability_enabled": false,
+        "is_dfs_enabled": false,
+        "is_encryption_enabled": false,
+        "is_read_only": null,
+        "modified_time": "2022-03-17 11:56:54.867000+00:00",
+        "name": "multi-prot-hui",
+        "nas_server_id": "nas_5",
+        "nas_server_name": "multi-prot",
+        "offline_availability": "CifsShareOfflineAvailabilityEnum.NONE",
+        "path": "/",
+        "snap": null,
+        "type": "CIFSTypeEnum.CIFS_SHARE",
+        "umask": "022"
+    }
 '''
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 
 LOG = utils.get_logger('smbshare')
-
-HAS_UNITY_SDK = utils.get_unity_sdk()
-UNITY_SDK_VERSION_CHECK = utils.storops_version_check()
 
 application_type = "Ansible/1.4.1"
 
@@ -323,23 +356,12 @@ class SMBShare(object):
             mutually_exclusive=mut_ex_args,
             required_one_of=required_one_of
         )
+        utils.ensure_required_libs(self.module)
 
         # result is a dictionary that contains changed status and
         # snapshot details
         self.result = {"changed": False,
-                       'smb_share_details': None}
-
-        if not HAS_UNITY_SDK:
-            self.module.fail_json(msg="Ansible modules for Unity require the"
-                                      " Unity python library to be"
-                                      " installed. Please install the "
-                                      "library before using these modules.")
-
-        if UNITY_SDK_VERSION_CHECK and \
-                not UNITY_SDK_VERSION_CHECK['supported_version']:
-            err_msg = UNITY_SDK_VERSION_CHECK['unsupported_version_message']
-            LOG.error(err_msg)
-            self.module.fail_json(msg=err_msg)
+                       'smb_share_details': {}}
 
         self.unity_conn = utils.get_unity_unisphere_connection(
             self.module.params, application_type)
