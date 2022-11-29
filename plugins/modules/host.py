@@ -95,7 +95,7 @@ options:
     - State of the host.
     choices: [present , absent]
     type: str
-    required: True
+    required: true
 
 notes:
   - The I(check_mode) is not supported.

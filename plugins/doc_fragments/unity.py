@@ -33,8 +33,8 @@ class ModuleDocFragment(object):
             description:
             - Boolean variable to specify whether or not to validate SSL
               certificate.
-            - C(True) - Indicates that the SSL certificate should be verified.
-            - C(False) - Indicates that the SSL certificate should not be
+            - C(true) - Indicates that the SSL certificate should be verified.
+            - C(false) - Indicates that the SSL certificate should not be
               verified.
         port:
             description:

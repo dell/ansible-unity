@@ -115,7 +115,7 @@ options:
     description:
     - The I(state) option is used to mention the existence of the user quota.
     type: str
-    required: True
+    required: true
     choices: ['absent', 'present']
 
 notes:

@@ -83,7 +83,7 @@ options:
     - The I(state) option is used to mention the existence of
       the snapshot.
     type: str
-    required: True
+    required: true
     choices: [ 'absent', 'present' ]
   host_name:
     description:

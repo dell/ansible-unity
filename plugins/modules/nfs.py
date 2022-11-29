@@ -105,7 +105,7 @@ options:
   state:
     description:
     - State variable to determine whether NFS export will exist or not.
-    required: True
+    required: true
     type: str
     choices: ['absent', 'present']
   default_access:

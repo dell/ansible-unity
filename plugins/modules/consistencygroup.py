@@ -130,7 +130,7 @@ options:
         description:
         - The replication mode.
         type: str
-        required: True
+        required: true
         choices: ['asynchronous', 'manual']
       rpo:
         description:
@@ -151,18 +151,18 @@ options:
         type: dict
         suboptions:
           remote_system_host:
-            required: True
+            required: true
             description:
             - IP or FQDN for remote Unity unisphere Host.
             type: str
           remote_system_username:
             type: str
-            required: True
+            required: true
             description:
             - User name of remote Unity unisphere Host.
           remote_system_password:
             type: str
-            required: True
+            required: true
             description:
             - Password of remote Unity unisphere Host.
           remote_system_verifycert:

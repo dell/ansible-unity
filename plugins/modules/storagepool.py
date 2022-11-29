@@ -151,7 +151,7 @@ options:
     - C(Absent) - indicates that the storage pool should not exist on the system.
     choices: [absent, present]
     type: str
-    required: True
+    required: true
 
 notes:
 - Deletion of storage pool is not allowed through Ansible module.
