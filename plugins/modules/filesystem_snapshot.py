@@ -104,7 +104,7 @@ options:
     - The state option is used to mention the existence of the filesystem
       snapshot.
     type: str
-    required: True
+    required: true
     choices: ['absent', 'present']
 notes:
   - Filesystem snapshot cannot be deleted, if it has nfs or smb share.
