@@ -68,7 +68,7 @@ options:
   remove_spn_from_kerberos:
     description:
     - Indicates whether to remove the SPN from Kerberos Domain Controller.
-    default: True
+    default: true
     type: bool
   state:
     description:
@@ -209,7 +209,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('nfsserver')
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 class NFSServer(object):

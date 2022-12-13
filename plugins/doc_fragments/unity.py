@@ -11,23 +11,23 @@ class ModuleDocFragment(object):
     DOCUMENTATION = r'''
     options:
         unispherehost:
-            required: True
+            required: true
             description:
             - IP or FQDN of the Unity management server.
             type: str
         username:
             type: str
-            required: True
+            required: true
             description:
             - The username of the Unity management server.
         password:
             type: str
-            required: True
+            required: true
             description:
             - The password of the Unity management server.
         validate_certs:
             type: bool
-            default: True
+            default: true
             aliases:
             - verifycert
             description:
@@ -44,8 +44,8 @@ class ModuleDocFragment(object):
             default: 443
     requirements:
       - A Dell Unity Storage device version 5.1 or later.
-      - Ansible-core 2.11 or later.
-      - Python 3.8, 3.9 or 3.10.
+      - Ansible-core 2.12 or later.
+      - Python 3.9, 3.10 or 3.11.
       - Storops Python SDK 1.2.11.
     notes:
       - The modules present in this collection named as 'dellemc.unity'

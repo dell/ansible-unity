@@ -266,12 +266,12 @@ options:
             - Password of remote Unity unisphere Host.
           remote_system_verifycert:
             type: bool
-            default: True
+            default: true
             description:
             - Boolean variable to specify whether or not to validate SSL
               certificate of remote Unity unisphere Host.
-            - True - Indicates that the SSL certificate should be verified.
-            - False - Indicates that the SSL certificate should not be
+            - C(true) - Indicates that the SSL certificate should be verified.
+            - C(false) - Indicates that the SSL certificate should not be
               verified.
           remote_system_port:
             description:
@@ -280,10 +280,12 @@ options:
             default: 443
       destination_pool_id:
         type: str
-        description: ID of pool to allocate destination filesystem.
+        description:
+        - ID of pool to allocate destination filesystem.
       destination_pool_name:
         type: str
-        description: Name of pool to allocate destination filesystem.
+        description:
+        - Name of pool to allocate destination filesystem.
   replication_state:
     description:
     - State of the replication.
@@ -686,7 +688,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('filesystem')
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 class Filesystem(object):

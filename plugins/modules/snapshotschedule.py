@@ -392,7 +392,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('snapshotschedule')
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 class SnapshotSchedule(object):

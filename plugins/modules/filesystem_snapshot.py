@@ -72,10 +72,10 @@ options:
       auto deletion policy.
     - If set to C(false), the filesystem snapshot will not be auto deleted
       based on the pool auto deletion policy.
-    - Option I(auto_delete) can not be set to C(True), if I(expiry_time) is specified.
+    - Option I(auto_delete) can not be set to C(true), if I(expiry_time) is specified.
     - If during creation neither I(auto_delete) nor I(expiry_time) is mentioned
       then the filesystem snapshot will be created keeping I(auto_delete) as
-      C(True).
+      C(true).
     - Once the I(expiry_time) is set, then the filesystem snapshot cannot be
       assigned to the auto delete policy.
     type: bool
@@ -304,7 +304,7 @@ from datetime import datetime
 
 LOG = utils.get_logger('filesystem_snapshot')
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 class FilesystemSnapshot(object):
