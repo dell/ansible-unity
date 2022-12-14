@@ -607,7 +607,7 @@ HOST_DICT = dict(type='list', required=False, elements='dict',
 HOST_STATE_LIST = ['present-in-export', 'absent-in-export']
 STATE_LIST = ['present', 'absent']
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 class NFS(object):
@@ -1267,7 +1267,7 @@ class NFS(object):
             # Share to be created from snapshot
             return self.create_nfs_share_from_snapshot()
         else:
-            msg = "Please provide filesystem/snapshot to create NFS export"
+            msg = "Please provide filesystem or filesystem snapshot to create NFS export"
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 

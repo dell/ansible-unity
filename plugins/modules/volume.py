@@ -383,7 +383,7 @@ import logging
 
 LOG = utils.get_logger('volume')
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 def is_none_or_empty_string(param):

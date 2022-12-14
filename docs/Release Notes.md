@@ -1,6 +1,6 @@
 **Ansible Modules for Dell Technologies Unity** 
 =========================================
-### Release Notes 1.4.1
+### Release Notes 1.5.0
 
 >   © 2022 Dell Inc. or its subsidiaries. All rights reserved. Dell
 >   and other trademarks are trademarks of Dell Inc. or its
@@ -28,7 +28,7 @@ Table 1. Revision history
 
 | Revision | Date           | Description                                             |
 |----------|----------------|---------------------------------------------------------|
-| 01       | September 2022 | Current release of Ansible Modules for Dell Unity 1.4.1 |
+| 01       | December 2022  | Current release of Ansible Modules for Dell Unity 1.5.0 |
 
 Product Description
 -------------------
@@ -38,7 +38,7 @@ New features & enhancements
 ---------------------------
 This release has the following changes -
 
-- Updated the execution environment related files.
+- Updated modules to adhere with ansible community guidelines.
 
 Known issues
 ------------
@@ -69,7 +69,7 @@ for Unity GitHub](https://github.com/dell/ansible-unity/) page.
 
 Documentation
 -------------
-The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/1.4.1/docs)
+The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/1.5.0/docs)
 page. It includes the following:
 - README
 - Release Notes (this document)

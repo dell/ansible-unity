@@ -72,8 +72,8 @@ options:
   unjoin_cifs_server_account:
     description:
     - Keep SMB server account unjoined in Active Directory after deletion.
-    - C(False) specifies keep SMB server account joined after deletion.
-    - C(True) specifies unjoin SMB server account from Active Directory before deletion.
+    - C(false) specifies keep SMB server account joined after deletion.
+    - C(true) specifies unjoin SMB server account from Active Directory before deletion.
     type: bool
   state:
     description:
@@ -277,7 +277,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell import 
 LOG = utils.get_logger('cifsserver')
 
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 class CIFSServer(object):

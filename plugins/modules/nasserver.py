@@ -81,7 +81,7 @@ options:
   is_packet_reflect_enabled:
     description:
     - If the packet has to be reflected, then this parameter
-      has to be set to C(True).
+      has to be set to C(true).
     - It can be mentioned during modification of the NAS server.
     type: bool
   current_unix_directory_service:
@@ -142,12 +142,12 @@ options:
             - Password of remote Unity unisphere Host.
           remote_system_verifycert:
             type: bool
-            default: True
+            default: true
             description:
             - Boolean variable to specify whether or not to validate SSL
               certificate of remote Unity unisphere Host.
-            - C(True) - Indicates that the SSL certificate should be verified.
-            - C(False) - Indicates that the SSL certificate should not be
+            - C(true) - Indicates that the SSL certificate should be verified.
+            - C(false) - Indicates that the SSL certificate should not be
               verified.
           remote_system_port:
             description:
@@ -482,7 +482,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 LOG = utils.get_logger('nasserver')
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 class NASServer(object):
@@ -604,7 +604,7 @@ class NASServer(object):
             if nas_server_obj.is_multi_protocol_enabled is None:
                 return True
             elif self.module.params["is_multiprotocol_enabled"] != \
-                    nas_server_obj.is_replication_destination:
+                    nas_server_obj.is_multi_protocol_enabled:
                 return True
 
         # Is Back Up Enabled

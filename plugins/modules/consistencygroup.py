@@ -167,12 +167,12 @@ options:
             - Password of remote Unity unisphere Host.
           remote_system_verifycert:
             type: bool
-            default: True
+            default: true
             description:
             - Boolean variable to specify whether or not to validate SSL
               certificate of remote Unity unisphere Host.
-            - C(True) - Indicates that the SSL certificate should be verified.
-            - C(False) - Indicates that the SSL certificate should not be
+            - C(true) - Indicates that the SSL certificate should be verified.
+            - C(false) - Indicates that the SSL certificate should not be
               verified.
           remote_system_port:
             description:
@@ -494,7 +494,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 LOG = utils.get_logger('consistencygroup',
                        log_devel=logging.INFO)
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 class ConsistencyGroup(object):

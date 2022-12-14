@@ -347,7 +347,7 @@ import ipaddress
 
 LOG = utils.get_logger('host')
 
-application_type = "Ansible/1.4.1"
+application_type = "Ansible/1.5.0"
 
 
 class Host(object):
@@ -658,9 +658,11 @@ class Host(object):
                     """ Checking for initiator logged_in state """
                     for path in initiator_details["paths"][0]["UnityHostInitiatorPathList"]:
                         path_id = path["UnityHostInitiatorPath"]["id"]
-                        path_id_details = utils.host.UnityHostInitiatorPathList \
-                            .get(cli=self.unity._cli, _id=path_id) \
-                            ._get_properties()
+
+                        path_id_obj = utils.host.UnityHostInitiatorPathList \
+                            .get(cli=self.unity._cli, _id=path_id)
+
+                        path_id_details = path_id_obj._get_properties()
 
                         """ if is_logged_in is True, can't remove initiator"""
                         if (path_id_details["is_logged_in"]):
@@ -672,7 +674,7 @@ class Host(object):
 
                         elif (not path_id_details["is_logged_in"]):
                             """ if is_logged_in is False, remove initiator """
-                            path_id.delete()
+                            path_id_obj.delete()
 
                         else:
                             """ if logged_in state does not exist """
