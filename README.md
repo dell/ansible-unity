@@ -39,7 +39,7 @@ The modules are written in such a way that all requests are idempotent and hence
 
 ## List of Ansible Modules for Dell Unity
   * [Consistency group module](https://github.com/dell/ansible-unity/blob/1.5.0/docs/Product%20Guide.md#consistency-group-module)
-  * [Filesystem module](https://github.com/dell/ansible-unity/blob/1.5.0/docs/Product%20Guide.md#file-system-module)
+  * [Filesystem module](https://github.com/dell/ansible-unity/blob/1.5.0/docs/Product%20Guide.md#filesystem-module)
   * [Filesystem snapshot module](https://github.com/dell/ansible-unity/blob/1.5.0/docs/Product%20Guide.md#filesystem-snapshot-module)
   * [Info module](https://github.com/dell/ansible-unity/blob/1.5.0/docs/Product%20Guide.md#info-module)
   * [Host module](https://github.com/dell/ansible-unity/blob/1.5.0/docs/Product%20Guide.md#host-module)
