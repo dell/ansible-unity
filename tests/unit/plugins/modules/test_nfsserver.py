@@ -41,7 +41,6 @@ class TestNFSServer():
         return nfsserver_module_mock
 
     def test_get_nfs_server_details(self, nfsserver_module_mock):
-        nfs_server_details = MockNFSServerApi.get_nfs_server_details_method_response()
         self.get_module_args.update({
             'nfs_server_id': 'nfs_95',
             'state': 'present'

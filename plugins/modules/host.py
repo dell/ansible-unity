@@ -347,7 +347,7 @@ import ipaddress
 
 LOG = utils.get_logger('host')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class Host(object):
@@ -747,7 +747,8 @@ class Host(object):
                 network_address_list.append(port.address)
         return network_address_list
 
-    def manage_network_address(self, host_details, network_address_list, network_address, network_address_state):
+    def manage_network_address(self, host_details, network_address_list,
+                               network_address, network_address_state):
         try:
             is_mapped = False
             changed = False

@@ -494,7 +494,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 LOG = utils.get_logger('consistencygroup',
                        log_devel=logging.INFO)
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class ConsistencyGroup(object):
@@ -1411,16 +1411,7 @@ class ConsistencyGroup(object):
 
         self.module.exit_json(**result)
 
-    def validate_cg_replication_params(self, replication):
-        ''' Validate cg replication params '''
-
-        # Valdiate replication
-        if replication is None:
-            errormsg = "Please specify replication_params to enable replication."
-            LOG.error(errormsg)
-            self.module.fail_json(msg=errormsg)
-
-        # validate destination pool info
+    def validate_destination_pool_info(self, replication):
         if replication['destination_pool_id'] is not None and replication['destination_pool_name'] is not None:
             errormsg = "'destination_pool_id' and 'destination_pool_name' is mutually exclusive."
             LOG.error(errormsg)
@@ -1431,7 +1422,7 @@ class ConsistencyGroup(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
-        # Validate replication mode
+    def validate_replication_mode(self, replication):
         if 'replication_mode' in replication and replication['replication_mode'] == 'asynchronous':
             if replication['rpo'] is None:
                 errormsg = "rpo is required together with 'asynchronous' replication_mode."
@@ -1442,19 +1433,28 @@ class ConsistencyGroup(object):
                 LOG.error(errormsg)
                 self.module.fail_json(msg=errormsg)
 
-        # Validate replication type
-        if replication['replication_type'] == 'remote' and replication['remote_system'] is None:
-            errormsg = "remote_system is required together with 'remote' replication_type"
+    def validate_cg_replication_params(self, replication):
+        ''' Validate cg replication params '''
+        # Valdiate replication
+        if replication is None:
+            errormsg = "Please specify replication_params to enable replication."
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
-
-        # Validate destination cg name
-        if 'destination_cg_name' in replication and replication['destination_cg_name'] is not None:
-            dst_cg_name_length = len(replication['destination_cg_name'])
-            if dst_cg_name_length == 0 or dst_cg_name_length > 95:
-                errormsg = "destination_cg_name value should be in range of 1 to 95"
+        else:
+            self.validate_destination_pool_info(replication)
+            self.validate_replication_mode(replication)
+            # Validate replication type
+            if replication['replication_type'] == 'remote' and replication['remote_system'] is None:
+                errormsg = "remote_system is required together with 'remote' replication_type"
                 LOG.error(errormsg)
                 self.module.fail_json(msg=errormsg)
+            # Validate destination cg name
+            if 'destination_cg_name' in replication and replication['destination_cg_name'] is not None:
+                dst_cg_name_length = len(replication['destination_cg_name'])
+                if dst_cg_name_length == 0 or dst_cg_name_length > 95:
+                    errormsg = "destination_cg_name value should be in range of 1 to 95"
+                    LOG.error(errormsg)
+                    self.module.fail_json(msg=errormsg)
 
 
 def get_consistencygroup_parameters():

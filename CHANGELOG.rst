@@ -5,6 +5,16 @@ Dellemc.Unity Change Log
 .. contents:: Topics
 
 
+v1.6.0
+======
+
+Minor Changes
+-------------
+
+- Support addition of host from the Host List to NFS Export in nfs module.
+- Support enable/disable advanced dedup in volume module.
+- Add synchronous replication support for filesystem.
+
 v1.5.0
 ======
 

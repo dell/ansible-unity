@@ -277,7 +277,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell import 
 LOG = utils.get_logger('cifsserver')
 
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class CIFSServer(object):
@@ -518,8 +518,10 @@ class CIFSServer(object):
         if nas_server_name is not None:
             nas_server_id = self.get_nas_server_id(nas_server_name)
 
-        cifs_server_details = self.get_details(cifs_server_id=cifs_server_id, cifs_server_name=cifs_server_name,
-                                               netbios_name=netbios_name, nas_server_id=nas_server_id)
+        cifs_server_details = self.get_details(cifs_server_id=cifs_server_id,
+                                               cifs_server_name=cifs_server_name,
+                                               netbios_name=netbios_name,
+                                               nas_server_id=nas_server_id)
 
         # Check if modification is required
         if cifs_server_details:
@@ -533,12 +535,11 @@ class CIFSServer(object):
             if not nas_server_id:
                 self.module.fail_json(msg="Please provide nas server id/name to create CIFS server.")
 
-            if any([netbios_name, workgroup, local_password]):
-                if not all([netbios_name, workgroup, local_password]):
-                    msg = "netbios_name, workgroup and local_password" \
-                          " are required to create standalone CIFS server."
-                    LOG.error(msg)
-                    self.module.fail_json(msg=msg)
+            if any([netbios_name, workgroup, local_password]) and not all([netbios_name, workgroup, local_password]):
+                msg = "netbios_name, workgroup and local_password " \
+                      "are required to create standalone CIFS server."
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
 
             result['changed'] = self.create_cifs_server(nas_server_id, interfaces, netbios_name,
                                                         cifs_server_name, domain, domain_username, domain_password,

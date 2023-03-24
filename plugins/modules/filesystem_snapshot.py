@@ -304,7 +304,7 @@ from datetime import datetime
 
 LOG = utils.get_logger('filesystem_snapshot')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class FilesystemSnapshot(object):
@@ -357,12 +357,13 @@ class FilesystemSnapshot(object):
             error_message = "Modification of access type is not allowed."
             LOG.error(error_message)
             self.module.fail_json(msg=error_message)
-        if expiry_time:
-            # If the snapshot has is_auto_delete True,
-            # Check if auto_delete in the input is either None or True
-            if fs_snapshot.is_auto_delete and (auto_del is None or auto_del):
-                self.module.fail_json(msg="expiry_time can be assigned when"
-                                          " auto delete is False.")
+
+        # If the snapshot has is_auto_delete True,
+        # Check if auto_delete in the input is either None or True
+        if expiry_time and fs_snapshot.is_auto_delete \
+                and (auto_del is None or auto_del):
+            self.module.fail_json(msg="expiry_time can be assigned when"
+                                      " auto delete is False.")
         if auto_del is not None:
             if fs_snapshot.expiration_time:
                 error_msg = "expiry_time for filesystem snapshot is set." \
@@ -537,11 +538,7 @@ class FilesystemSnapshot(object):
         error_msg = ("Failed to get NAS server %s." % nas_server)
         try:
             obj_nas = self.unity_conn.get_nas_server(_id=id, name=name)
-            if name and obj_nas.existed:
-                LOG.info("Successfully got the NAS server object %s.",
-                         obj_nas)
-                return obj_nas
-            elif id and obj_nas.existed:
+            if (name and obj_nas.existed) or (id and obj_nas.existed):
                 LOG.info("Successfully got the NAS server object %s.",
                          obj_nas)
                 return obj_nas

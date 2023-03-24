@@ -10,6 +10,7 @@ __metaclass__ = type
 
 from ansible_collections.dellemc.unity.tests.unit.plugins.module_utils.mock_sdk_response \
     import MockSDKObject
+from mock.mock import MagicMock
 
 
 class MockNfsApi:
@@ -68,10 +69,18 @@ class MockNfsApi:
                                       "min_security": "NFSShareSecurityEnum.SYS",
                                       "modification_time": "2022-04-24 17:07:57.749000+00:00",
                                       "name": "nfsshare_dummy_name",
-                                      "no_access_hosts_string": "**.***.**.0/255.***.*.*,198.***.**.*/255.***.*.*",
-                                      "path": "/", "read_only_hosts_string": "", "read_only_root_hosts_string": "",
-                                      "read_write_hosts_string": "",
-                                      "read_write_root_hosts_string": "", "role": "NFSShareRoleEnum.PRODUCTION",
+                                      "no_access_hosts": None,
+                                      "no_access_hosts_string": None,
+                                      "read_only_hosts": None,
+                                      "read_only_hosts_string": None,
+                                      "read_only_root_access_hosts": None,
+                                      "read_only_root_hosts_string": None,
+                                      "read_write_hosts": None,
+                                      "read_write_hosts_string": None,
+                                      "read_write_root_hosts_string": None,
+                                      "root_access_hosts": None,
+                                      "path": "/",
+                                      "role": "NFSShareRoleEnum.PRODUCTION",
                                       "type": "NFSTypeEnum.NFS_SHARE"})
 
     NFS_SHARE_DISPLAY_ATTR = {'anonymous_gid': 4294967294, 'anonymous_uid': 4294967294, 'creation_time': '2022-03-09 15:05:34.720000+00:00',
@@ -81,7 +90,7 @@ class MockNfsApi:
                               'id': 'NFSShare_id_1', 'is_read_only': None, 'min_security': 'NFSShareSecurityEnum.SYS',
                               'modification_time': '2022-04-24 17:07:57.749000+00:00', 'name': 'nfsshare_dummy_name',
                               'nfs_owner_username': None, 'no_access_hosts': None,
-                              'no_access_hosts_string': '**.***.**.0/255.***.*.*,198.***.**.*/255.***.*.*',
+                              'no_access_hosts_string': None,
                               'path': '/', 'read_only_hosts': None, 'read_only_hosts_string': '', 'read_only_root_access_hosts': None,
                               'read_only_root_hosts_string': '', 'read_write_hosts': None, 'read_write_hosts_string': '',
                               'read_write_root_hosts_string': '', 'role': 'NFSShareRoleEnum.PRODUCTION', 'root_access_hosts': None,
@@ -96,7 +105,20 @@ class MockNfsApi:
                 return nfs_share_object
             elif action == 'remove':
                 nfs_share_object = MockNfsApi.NFS_SHARE_OBJECT
-                nfs_share_object.no_access_hosts_string = 'host1,**.***.**.0/255.***.*.*,**.***.2.2/255.***.*.*,198.***.**.*/255.***.*.*'
+                nfs_share_object.no_access_hosts = {
+                    'UnityHostList': [
+                        {
+                            'UnityHost': {
+                                'id': 'Host_1389'
+                            }
+                        },
+                        {
+                            'UnityHost': {
+                                'id': 'Host_1330'
+                            }
+                        }
+                    ]
+                }
                 return nfs_share_object
         else:
             if action == 'add':
@@ -113,11 +135,24 @@ class MockNfsApi:
         if advhostmgmt:
             if action == 'add':
                 nfs_share_display_attr = MockNfsApi.NFS_SHARE_DISPLAY_ATTR
-                nfs_share_display_attr['no_access_hosts_string'] = 'host1,**.***.**.0/255.***.*.*,**.***.2.2/255.***.*.*,198.***.**.*/255.***.*.*'
+                nfs_share_display_attr['no_access_hosts'] = {
+                    'UnityHostList': [
+                        {
+                            'UnityHost': {
+                                'id': 'Host_1389'
+                            }
+                        },
+                        {
+                            'UnityHost': {
+                                'id': 'Host_1330'
+                            }
+                        }
+                    ]
+                }
                 return nfs_share_display_attr
             elif action == 'remove':
                 nfs_share_display_attr = MockNfsApi.NFS_SHARE_DISPLAY_ATTR
-                nfs_share_display_attr['no_access_hosts_string'] = '**.***.**.0/255.***.*.*,198.***.**.*/255.***.*.*'
+                nfs_share_display_attr['no_access_hosts'] = None
                 return nfs_share_display_attr
         else:
             if action == 'add':
@@ -128,6 +163,19 @@ class MockNfsApi:
                 nfs_share_display_attr = MockNfsApi.NFS_SHARE_DISPLAY_ATTR
                 nfs_share_display_attr['read_only_root_hosts_string'] = ''
                 return nfs_share_display_attr
+
+    @staticmethod
+    def get_host_obj(id):
+        if id == 1:
+            host_1 = MagicMock()
+            host_1.id = 'Host_1389'
+            host_1.name = 'host_1'
+            return host_1
+        elif id == 2:
+            host_2 = MagicMock()
+            host_2.id = 'Host_1330'
+            host_2.name = 'host_2'
+            return host_2
 
     @staticmethod
     def host_access_negative_response(response_type):

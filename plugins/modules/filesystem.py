@@ -231,12 +231,13 @@ options:
         - The replication mode.
         - This is a mandatory field while creating a replication session.
         type: str
-        choices: ['asynchronous', 'manual']
+        choices: ['synchronous', 'asynchronous', 'manual']
       rpo:
         description:
         - Maximum time to wait before the system syncs the source and destination LUNs.
         - The I(rpo) option should be specified if the I(replication_mode) is C(asynchronous).
-        - The value should be in range of C(5) to C(1440).
+        - The value should be in range of C(5) to C(1440) for C(asynchronous),
+          C(0) for C(synchronous) and C(-1) for C(manual).
         type: int
       replication_type:
         description:
@@ -688,7 +689,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('filesystem')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class Filesystem(object):
@@ -1135,7 +1136,6 @@ class Filesystem(object):
             obj_fs = obj_fs.update()
             resp = obj_fs.modify(**fs_update_payload)
             LOG.info("Successfully modified the FS with response %s", resp)
-            changed = True if resp else False
 
         except Exception as e:
             errormsg = "Failed to modify FileSystem instance id: {0}" \
@@ -1404,12 +1404,22 @@ class Filesystem(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
-        if (replication_params['rpo'] and (replication_params['rpo'] < 5 or replication_params['rpo'] > 1440)) \
-                and (replication_params['replication_mode'] and replication_params['replication_mode'] != 'manual' or
-                     not replication_params['replication_mode'] and replication_params['rpo'] != -1):
-            errormsg = "rpo value should be in range of 5 to 1440"
-            LOG.error(errormsg)
-            self.module.fail_json(msg=errormsg)
+        rpo, replication_mode = replication_params['rpo'], replication_params[
+            'replication_mode']
+
+        if rpo and replication_mode:
+
+            rpo_criteria = {
+                "asynchronous": lambda n: 5 <= n <= 1440,
+                "synchronous": lambda n: n == 0,
+                "manual": lambda n: n == -1
+            }
+
+            if rpo and not rpo_criteria[replication_mode](rpo):
+                errormsg = f"Invalid rpo value - {rpo} for " \
+                           f"{replication_mode} replication mode."
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
 
     def validate_replication_params(self, replication_params):
         ''' Validate replication params '''
@@ -1457,9 +1467,11 @@ class Filesystem(object):
         try:
             LOG.info("Modifying replication session of filesystem %s", obj_fs.name)
             modify_payload = {}
-            if replication_params['replication_mode'] and \
-                    replication_params['replication_mode'] == 'manual':
-                rpo = -1
+            if replication_params['replication_mode']:
+                if replication_params['replication_mode'] == 'manual':
+                    rpo = -1
+                elif replication_params['replication_mode'] == 'synchronous':
+                    rpo = 0
             elif replication_params['rpo']:
                 rpo = replication_params['rpo']
             name = repl_session.name
@@ -1479,7 +1491,7 @@ class Filesystem(object):
 
             return False
         except Exception as e:
-            errormsg = "Modifying replication session failed with error %s", e
+            errormsg = "Modifying replication session failed with error %s" % e
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
@@ -1512,7 +1524,7 @@ class Filesystem(object):
                     LOG.error(errormsg)
                     self.module.fail_json(msg=errormsg)
 
-            LOG.info(("Enabling replication to the filesystem %s", obj_fs.name))
+            LOG.info("Enabling replication to the filesystem %s", obj_fs.name)
             obj_fs.replicate_with_dst_resource_provisioning(**replication_args_list)
             return True
         except Exception as e:
@@ -1805,11 +1817,14 @@ def get_replication_args_list(replication_params):
 
     if replication_params['replication_name']:
         replication_args_list['replication_name'] = replication_params['replication_name']
-    if 'replication_mode' in replication_params and \
-            replication_params['replication_mode'] == 'asynchronous':
-        replication_args_list['max_time_out_of_sync'] = replication_params['rpo']
-    else:
-        replication_args_list['max_time_out_of_sync'] = -1
+
+    if 'replication_mode' in replication_params:
+        if replication_params['replication_mode'] == 'asynchronous':
+            replication_args_list['max_time_out_of_sync'] = replication_params['rpo']
+        elif replication_params['replication_mode'] == 'synchronous':
+            replication_args_list['max_time_out_of_sync'] = 0
+        else:
+            replication_args_list['max_time_out_of_sync'] = -1
 
     return replication_args_list
 
@@ -1859,7 +1874,9 @@ def get_filesystem_parameters():
             replication_name=dict(type='str'),
             new_replication_name=dict(type='str'),
             replication_type=dict(type='str', choices=['local', 'remote']),
-            replication_mode=dict(type='str', choices=['asynchronous', 'manual']),
+            replication_mode=dict(type='str',
+                                  choices=['synchronous', 'asynchronous',
+                                           'manual']),
             rpo=dict(type='int'),
             remote_system=dict(type='dict',
                                options=dict(

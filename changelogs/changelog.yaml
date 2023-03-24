@@ -150,3 +150,10 @@ releases:
       minor_changes:
       - Updated modules to adhere with ansible community guidelines.
     release_date: '2022-12-20'
+  1.6.0:
+    changes:
+      minor_changes:
+      - Support addition of host from the Host List to NFS Export in nfs module.
+      - Support enable/disable advanced dedup in volume module.
+      - Add synchronous replication support for filesystem.
+    release_date: '2023-03-31'

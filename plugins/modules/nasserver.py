@@ -482,7 +482,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 LOG = utils.get_logger('nasserver')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class NASServer(object):
@@ -592,71 +592,62 @@ class NASServer(object):
             return True
 
         # Is Replication Destination
-        if self.module.params["is_replication_destination"] is not None:
-            if nas_server_obj.is_replication_destination is None:
-                return True
-            elif self.module.params["is_replication_destination"] != \
-                    nas_server_obj.is_replication_destination:
-                return True
+        if self.module.params["is_replication_destination"] is not None and \
+                (nas_server_obj.is_replication_destination is None or
+                 self.module.params["is_replication_destination"] !=
+                 nas_server_obj.is_replication_destination):
+            return True
 
         # Is Multiprotocol Enabled
-        if self.module.params["is_multiprotocol_enabled"] is not None:
-            if nas_server_obj.is_multi_protocol_enabled is None:
-                return True
-            elif self.module.params["is_multiprotocol_enabled"] != \
-                    nas_server_obj.is_multi_protocol_enabled:
-                return True
+        if self.module.params["is_multiprotocol_enabled"] is not None and \
+                (nas_server_obj.is_multi_protocol_enabled is None or
+                 self.module.params["is_multiprotocol_enabled"] !=
+                 nas_server_obj.is_multi_protocol_enabled):
+            return True
 
         # Is Back Up Enabled
-        if self.module.params["is_backup_only"] is not None:
-            if nas_server_obj.is_backup_only is None:
-                return True
-            elif self.module.params["is_backup_only"] != \
-                    nas_server_obj.is_backup_only:
-                return True
+        if self.module.params["is_backup_only"] is not None and \
+                (nas_server_obj.is_backup_only is None or
+                 self.module.params["is_backup_only"] !=
+                 nas_server_obj.is_backup_only):
+            return True
 
         # Is Packet Reflect Enabled
-        if self.module.params["is_packet_reflect_enabled"] is not None:
-            if nas_server_obj.is_packet_reflect_enabled is None:
-                return True
-            elif self.module.params["is_packet_reflect_enabled"] != \
-                    nas_server_obj.is_packet_reflect_enabled:
-                return True
+        if self.module.params["is_packet_reflect_enabled"] is not None and \
+                (nas_server_obj.is_packet_reflect_enabled is None or
+                 self.module.params["is_packet_reflect_enabled"] !=
+                 nas_server_obj.is_packet_reflect_enabled):
+            return True
 
         # Allow Unmapped User
-        if self.module.params["allow_unmapped_user"] is not None:
-            if nas_server_obj.allow_unmapped_user is None:
-                return True
-            elif self.module.params["allow_unmapped_user"] != \
-                    nas_server_obj.allow_unmapped_user:
-                return True
+        if self.module.params["allow_unmapped_user"] is not None and \
+                (nas_server_obj.allow_unmapped_user is None or
+                 self.module.params["allow_unmapped_user"] !=
+                 nas_server_obj.allow_unmapped_user):
+            return True
 
         # Enable Windows To Unix User Mapping Flag
         nas_win_flag = \
             nas_server_obj.is_windows_to_unix_username_mapping_enabled
         input_win_flag = \
             self.module.params["enable_windows_to_unix_username_mapping"]
-        if input_win_flag is not None:
-            if nas_win_flag is None:
-                return True
-            elif nas_win_flag != input_win_flag:
-                return True
+        if input_win_flag is not None and \
+                (nas_win_flag is None or nas_win_flag != input_win_flag):
+            return True
 
         # Default Windows User
-        if self.module.params["default_windows_user"] is not None:
-            if nas_server_obj.default_windows_user is None:
-                return True
-            elif self.module.params["default_windows_user"] != \
-                    nas_server_obj.default_windows_user:
-                return True
+        if self.module.params["default_windows_user"] is not None and \
+                (nas_server_obj.default_windows_user is None or
+                 self.module.params["default_windows_user"] !=
+                 nas_server_obj.default_windows_user):
+            return True
 
         # Default Unix User
-        if self.module.params["default_unix_user"] is not None:
-            if nas_server_obj.default_unix_user is None:
-                return True
-            elif self.module.params["default_unix_user"] != \
-                    nas_server_obj.default_unix_user:
-                return True
+        if self.module.params["default_unix_user"] is not None and \
+                (nas_server_obj.default_unix_user is None or
+                 self.module.params["default_unix_user"] !=
+                 nas_server_obj.default_unix_user):
+            return True
 
         return False
 
@@ -913,28 +904,28 @@ class NASServer(object):
             errormsg = "Please specify replication_params to enable replication."
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
-
-        # validate destination pool info
-        if replication['destination_pool_id'] is not None and replication['destination_pool_name'] is not None:
-            errormsg = "'destination_pool_id' and 'destination_pool_name' is mutually exclusive."
-            LOG.error(errormsg)
-            self.module.fail_json(msg=errormsg)
-
-        # Validate replication mode
-        self.validate_rpo(replication)
-        # Validate replication type
-        if replication['replication_type'] == 'remote' and replication['remote_system'] is None:
-            errormsg = "Remote_system is required together with 'remote' replication_type"
-            LOG.error(errormsg)
-            self.module.fail_json(msg=errormsg)
-
-        # Validate destination NAS server name
-        if 'destination_nas_name' in replication and replication['destination_nas_name'] is not None:
-            dst_nas_server_name_length = len(replication['destination_nas_name'])
-            if dst_nas_server_name_length == 0 or dst_nas_server_name_length > 95:
-                errormsg = "destination_nas_name value should be in range of 1 to 95"
+        else:
+            # validate destination pool info
+            if replication['destination_pool_id'] is not None and replication['destination_pool_name'] is not None:
+                errormsg = "'destination_pool_id' and 'destination_pool_name' is mutually exclusive."
                 LOG.error(errormsg)
                 self.module.fail_json(msg=errormsg)
+
+            # Validate replication mode
+            self.validate_rpo(replication)
+            # Validate replication type
+            if replication['replication_type'] == 'remote' and replication['remote_system'] is None:
+                errormsg = "Remote_system is required together with 'remote' replication_type"
+                LOG.error(errormsg)
+                self.module.fail_json(msg=errormsg)
+
+            # Validate destination NAS server name
+            if 'destination_nas_name' in replication and replication['destination_nas_name'] is not None:
+                dst_nas_server_name_length = len(replication['destination_nas_name'])
+                if dst_nas_server_name_length == 0 or dst_nas_server_name_length > 95:
+                    errormsg = "destination_nas_name value should be in range of 1 to 95"
+                    LOG.error(errormsg)
+                    self.module.fail_json(msg=errormsg)
 
     def validate_create_replication_params(self, replication):
         ''' Validate replication params '''

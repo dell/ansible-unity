@@ -265,7 +265,7 @@ from datetime import datetime
 
 LOG = utils.get_logger('snapshot')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class Snapshot(object):
@@ -312,12 +312,12 @@ class Snapshot(object):
                   auto_del=None, expiry_time=None, host=None,
                   host_state=None):
         """Determines whether to update the snapshot or not"""
-        if expiry_time:
-            # If the snapshot has is_auto_delete True,
-            # Check if auto_delete in the input is either None or True
-            if snapshot.is_auto_delete and (auto_del is None or auto_del):
-                self.module.fail_json(msg="expiry_time can be assigned when"
-                                          " auto delete is False")
+        # If the snapshot has is_auto_delete True,
+        # Check if auto_delete in the input is either None or True
+        if expiry_time and snapshot.is_auto_delete and \
+                (auto_del is None or auto_del):
+            self.module.fail_json(msg="expiry_time can be assigned "
+                                      "when auto delete is False")
         if auto_del and snapshot.expiration_time:
             error_msg = "expiry_time for snapshot is set." \
                         " Once it is set then snapshot cannot" \

@@ -607,7 +607,7 @@ HOST_DICT = dict(type='list', required=False, elements='dict',
 HOST_STATE_LIST = ['present-in-export', 'absent-in-export']
 STATE_LIST = ['present', 'absent']
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class NFS(object):
@@ -680,15 +680,16 @@ class NFS(object):
                     "of name" % host_dict.get('host_name')
                 LOG.error(msg)
                 self.module.fail_json(msg=msg)
+
         if host_dict.get('ip_address'):
             ip_or_fqdn = host_dict.get('ip_address')
             version = get_ip_version(ip_or_fqdn)
-            if version == 0:
-                # validate its FQDN or not
-                if not fqdn_pat.match(ip_or_fqdn):
-                    msg = "%s is not a valid FQDN" % ip_or_fqdn
-                    LOG.error(msg)
-                    self.module.fail_json(msg=msg)
+            # validate its FQDN or not
+            if version == 0 and not fqdn_pat.match(ip_or_fqdn):
+                msg = "%s is not a valid FQDN" % ip_or_fqdn
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
+
         if host_dict.get('subnet'):
             subnet = host_dict.get('subnet')
             subnet_info = subnet.split("/")
@@ -754,24 +755,24 @@ class NFS(object):
     def validate_input(self):
         """ Validate input parameters """
 
-        if self.module.params['nfs_export_name']:
-            if not self.module.params['snapshot_name'] and not \
-                    self.module.params['snapshot_id']:
-                if ((self.module.params['filesystem_name']) and
-                    (not self.module.params['nas_server_id'] and
-                     not self.module.params['nas_server_name'])):
-                    msg = "Please provide nas server id or name along with " \
-                          "filesystem name and nfs name"
-                    LOG.error(msg)
-                    self.module.fail_json(msg=msg)
+        if self.module.params['nfs_export_name'] and \
+                not self.module.params['snapshot_name'] and \
+                not self.module.params['snapshot_id']:
+            if ((self.module.params['filesystem_name']) and
+                (not self.module.params['nas_server_id'] and
+                 not self.module.params['nas_server_name'])):
+                msg = "Please provide nas server id or name along with " \
+                      "filesystem name and nfs name"
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
 
-                if ((not self.module.params['nas_server_id']) and
-                    (not self.module.params['nas_server_name']) and
-                        (not self.module.params['filesystem_id'])):
-                    msg = "Please provide either nas server id/name or " \
-                          "filesystem id"
-                    LOG.error(msg)
-                    self.module.fail_json(msg=msg)
+            if ((not self.module.params['nas_server_id']) and
+                (not self.module.params['nas_server_name']) and
+                    (not self.module.params['filesystem_id'])):
+                msg = "Please provide either nas server id/name or " \
+                      "filesystem id"
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
         self.validate_module_attributes()
         self.validate_host_access_input_params()
 
@@ -1044,26 +1045,38 @@ class NFS(object):
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
-    def get_host_name_by_id(self, host_id):
-        """ Get host name by host ID
-
-        :param host_id: str
-        :return: unity host name
-        :rtype: str
+    def get_host_obj(self, host_id=None, host_name=None, ip_address=None):
         """
-        LOG.info("Getting host name from ID: %s", host_id)
+        Get host object
+        :param host_id: ID of the host
+        :param host_name: Name of the host
+        :param ip_address: Network address of the host
+        :return: Host object
+        :rtype: object
+        """
         try:
-            host_obj = self.unity.get_host(_id=host_id)
+            host_obj = None
+            host = None
+            if host_id:
+                host = host_id
+                host_obj = self.unity.get_host(_id=host_id)
+            elif host_name:
+                host = host_name
+                host_obj = self.unity.get_host(name=host_name)
+            elif ip_address:
+                host = ip_address
+                host_obj = self.unity.get_host(address=ip_address)
+
             if host_obj and host_obj.existed:
-                LOG.info("Successfully got host name: %s", host_obj.name)
-                return host_obj.name
+                LOG.info("Successfully got host: %s", host_obj.name)
+                return host_obj
             else:
-                msg = "Host ID: %s does not exists" % host_id
+                msg = f'Host : {host} does not exists'
                 LOG.error(msg)
                 self.module.fail_json(msg=msg)
+
         except Exception as e:
-            msg = "Failed to get host name by ID: %s error: %s" % (
-                host_id, str(e))
+            msg = f'Failed to get host {host}, error: {e}'
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
@@ -1074,8 +1087,7 @@ class NFS(object):
         :return Host access data in string
         """
         if host_dict.get("host_id"):
-            return self.get_host_name_by_id(
-                host_dict.get("host_id")) + ','
+            return self.get_host_obj(host_id=(host_dict.get("host_id"))).name + ','
         elif host_dict.get("host_name"):
             return host_dict.get(
                 "host_name") + ','
@@ -1092,6 +1104,58 @@ class NFS(object):
             return "@" + host_dict.get(
                 "netgroup") + ','
 
+    def get_host_obj_value(self, host_dict):
+        """
+        Form host access value using host object
+        :host_dict Host access type info
+        :return Host object
+        """
+        if host_dict.get("host_id"):
+            return self.get_host_obj(host_id=host_dict.get("host_id"))
+        elif host_dict.get("host_name"):
+            return self.get_host_obj(host_name=host_dict.get("host_name"))
+        elif host_dict.get("ip_address"):
+            return self.get_host_obj(ip_address=host_dict.get("ip_address"))
+
+    def format_host_dict_for_adv_mgmt(self):
+        """
+        Form host access for advance management
+        :return: Formatted Host access type info
+        :rtype: dict
+        """
+        result_host = {}
+        for param in list(self.host_param_mapping.keys()):
+            if self.module.params[param]:
+                result_host[param] = []
+                for host_dict in self.module.params[param]:
+                    result_host[param].append(self.get_host_obj_value(host_dict))
+
+        if 'read_only_root_hosts' in result_host:
+            result_host['read_only_root_access_hosts'] = result_host.pop('read_only_root_hosts')
+        if 'read_write_root_hosts' in result_host:
+            result_host['root_access_hosts'] = result_host.pop('read_write_root_hosts')
+        return result_host
+
+    def format_host_dict_for_non_adv_mgmt(self):
+        """
+        Form host access for non advance management option
+        :return: Formatted Host access type info
+        :rtype: dict
+        """
+        result_host = {}
+        for param in list(self.host_param_mapping.keys()):
+            if self.module.params[param]:
+                result_host[param] = ''
+                for host_dict in self.module.params[param]:
+                    result_host[param] += self.get_host_access_string_value(host_dict)
+
+        if result_host != {}:
+            # Since we are supporting HOST STRING parameters instead of HOST
+            # parameters, so lets change given input HOST parameter name to
+            # HOST STRING parameter name and strip trailing ','
+            result_host = {self.host_param_mapping[k]: v[:-1] for k, v in result_host.items()}
+        return result_host
+
     def get_host_dict_from_pb(self):
         """ Traverse all given hosts params and provides with host dict,
             which has respective host str param name with its value
@@ -1101,21 +1165,13 @@ class NFS(object):
                 required by SDK
         :rtype: dict
         """
-        result_host = {}
         LOG.info("Getting host parameters")
+        result_host = {}
         if self.module.params['host_state']:
-            for param in list(self.host_param_mapping.keys()):
-                if self.module.params[param]:
-                    result_host[param] = ''
-                    for host_dict in self.module.params[param]:
-                        result_host[param] += self.get_host_access_string_value(host_dict)
-
-        if result_host:
-            # Since we are supporting HOST STRING parameters instead of HOST
-            # parameters, so lets change given input HOST parameter name to
-            # HOST STRING parameter name and strip trailing ','
-            result_host = {self.host_param_mapping[k]: v[:-1]
-                           for k, v in result_host.items()}
+            if not self.module.params['adv_host_mgmt_enabled']:
+                result_host = self.format_host_dict_for_non_adv_mgmt()
+            else:
+                result_host = self.format_host_dict_for_adv_mgmt()
         return result_host
 
     def get_adv_param_from_pb(self):
@@ -1281,7 +1337,7 @@ class NFS(object):
         :rytpe: list
         """
         if not host_str:
-            LOG.info("Empty host_str given")
+            LOG.debug("Empty host_str given")
             return []
 
         host_list = []
@@ -1302,6 +1358,201 @@ class NFS(object):
             self.module.fail_json(msg=msg)
         return host_list
 
+    def add_host_dict_for_adv(self, existing_host_dict, new_host_dict):
+        """ Compares & adds up new hosts with the existing ones and provide
+            the final consolidated hosts for advance host management
+
+        :param existing_host_dict: All hosts params details which are
+            associated with existing nfs which to be modified
+        :type existing_host_dict: dict
+        :param new_host_dict: All hosts param details which are to be added
+        :type new_host_dict: dict
+        :return: consolidated hosts params details which contains newly added
+            hosts along with the existing ones
+        :rtype: dict
+        """
+        modify_host_dict = {}
+        for host_access_key in existing_host_dict:
+            LOG.debug("Checking for param: %s", host_access_key)
+            new_host_obj_list = new_host_dict[host_access_key]
+            if new_host_obj_list and not existing_host_dict[host_access_key]:
+                # Existing nfs host is empty so lets directly add
+                # new_host_str as it is
+                LOG.debug("Existing nfs host key: %s is empty, so lets add new host given value as it is", host_access_key)
+                modify_host_dict[host_access_key] = new_host_obj_list
+                continue
+
+            existing_host_obj_list = [self.get_host_obj(host_id=existing_host_dict['UnityHost']['id'])
+                                      for existing_host_dict in existing_host_dict[host_access_key]['UnityHostList']]
+
+            if not new_host_obj_list:
+                LOG.debug("Nothing to add as no host given")
+                continue
+
+            existing_set = set(host.id for host in existing_host_obj_list)
+            actual_to_add = [new_host for new_host in new_host_obj_list if new_host.id not in existing_set]
+
+            if not actual_to_add:
+                LOG.debug("All host given to be added is already added")
+                continue
+
+            # Lets extends actual_to_add list, which is new with existing
+            actual_to_add.extend(existing_host_obj_list)
+            modify_host_dict[host_access_key] = actual_to_add
+
+        return modify_host_dict
+
+    def add_host_dict_for_non_adv(self, existing_host_dict, new_host_dict):
+        """ Compares & adds up new hosts with the existing ones and provide
+            the final consolidated hosts for non advance host management
+
+        :param existing_host_dict: All hosts params details which are
+            associated with existing nfs which to be modified
+        :type existing_host_dict: dict
+        :param new_host_dict: All hosts param details which are to be added
+        :type new_host_dict: dict
+        :return: consolidated hosts params details which contains newly added
+            hosts along with the existing ones
+        :rtype: dict
+        """
+        modify_host_dict = {}
+        for host_access_key in existing_host_dict:
+            LOG.debug("Checking add host for param: %s", host_access_key)
+            existing_host_str = existing_host_dict[host_access_key]
+            existing_host_list = self.convert_host_str_to_list(
+                existing_host_str)
+
+            new_host_str = new_host_dict[host_access_key]
+            new_host_list = self.convert_host_str_to_list(
+                new_host_str)
+
+            if not new_host_list:
+                LOG.debug("Nothing to add as no host given")
+                continue
+
+            if new_host_list and not existing_host_list:
+                # Existing nfs host is empty so lets directly add
+                # new_host_str as it is
+                LOG.debug("Existing nfs host key: %s is empty, so lets add new host given value as it is", host_access_key)
+                modify_host_dict[host_access_key] = new_host_str
+                continue
+
+            actual_to_add = list(set(new_host_list) - set(existing_host_list))
+            if not actual_to_add:
+                LOG.debug("All host given to be added is already added")
+                continue
+
+            # Lets extends actual_to_add list, which is new with existing
+            actual_to_add.extend(existing_host_list)
+
+            # Since SDK takes host_str as ',' separated instead of list, so
+            # lets convert str to list
+            # Note: explicity str() needed here to convert IP4/IP6 object
+            modify_host_dict[host_access_key] = ",".join(str(v) for v in actual_to_add)
+        return modify_host_dict
+
+    def remove_host_dict_for_adv(self, existing_host_dict, new_host_dict):
+        """ Compares & remove new hosts from the existing ones and provide
+            the remaining hosts for advance host management
+
+        :param existing_host_dict: All hosts params details which are
+            associated with existing nfs which to be modified
+        :type existing_host_dict: dict
+        :param new_host_dict: All hosts param details which are to be removed
+        :type new_host_dict: dict
+        :return: existing hosts params details from which given new hosts are
+            removed
+        :rtype: dict
+        """
+        modify_host_dict = {}
+        for host_access_key in existing_host_dict:
+            LOG.debug("Checking host for param: %s", host_access_key)
+            if not existing_host_dict[host_access_key]:
+                # existing list is already empty, so nothing to remove
+                LOG.debug("Existing list is already empty, so nothing to remove")
+                continue
+
+            existing_host_obj_list = [self.get_host_obj(host_id=existing_host_dict['UnityHost']['id'])
+                                      for existing_host_dict in existing_host_dict[host_access_key]['UnityHostList']]
+            new_host_obj_list = new_host_dict[host_access_key]
+
+            if new_host_obj_list == []:
+                LOG.debug("Nothing to remove as no host given")
+                continue
+
+            unique_new_host_list = [new_host.id for new_host in new_host_obj_list]
+            if len(new_host_obj_list) > len(set(unique_new_host_list)):
+                msg = f'Duplicate host given: {unique_new_host_list} in host param: {host_access_key}'
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
+
+            unique_existing_host_list = [host.id for host in existing_host_obj_list]
+            actual_to_remove = list(set(unique_new_host_list) & set(
+                unique_existing_host_list))
+            if not actual_to_remove:
+                continue
+
+            final_host_list = [existing_host for existing_host in existing_host_obj_list if existing_host.id not in unique_new_host_list]
+
+            modify_host_dict[host_access_key] = final_host_list
+
+        return modify_host_dict
+
+    def remove_host_dict_for_non_adv(self, existing_host_dict, new_host_dict):
+        """ Compares & remove new hosts from the existing ones and provide
+            the remaining hosts for non advance host management
+
+        :param existing_host_dict: All hosts params details which are
+            associated with existing nfs which to be modified
+        :type existing_host_dict: dict
+        :param new_host_dict: All hosts param details which are to be removed
+        :type new_host_dict: dict
+        :return: existing hosts params details from which given new hosts are
+            removed
+        :rtype: dict
+        """
+        modify_host_dict = {}
+
+        for host_access_key in existing_host_dict:
+            LOG.debug("Checking remove host for param: %s", host_access_key)
+            existing_host_str = existing_host_dict[host_access_key]
+            existing_host_list = self.convert_host_str_to_list(
+                existing_host_str)
+
+            new_host_str = new_host_dict[host_access_key]
+            new_host_list = self.convert_host_str_to_list(
+                new_host_str)
+
+            if not new_host_list:
+                LOG.debug("Nothing to remove as no host given")
+                continue
+
+            if len(new_host_list) > len(set(new_host_list)):
+                msg = "Duplicate host given: %s in host param: %s" % (
+                    new_host_list, host_access_key)
+                LOG.error(msg)
+                self.module.fail_json(msg=msg)
+
+            if new_host_list and not existing_host_list:
+                # existing list is already empty, so nothing to remove
+                LOG.debug("Existing list is already empty, so nothing to remove")
+                continue
+
+            actual_to_remove = list(set(new_host_list) & set(
+                existing_host_list))
+            if not actual_to_remove:
+                continue
+
+            final_host_list = list(set(existing_host_list) - set(
+                actual_to_remove))
+
+            # Since SDK takes host_str as ',' separated instead of list, so
+            # lets convert str to list
+            # Note: explicity str() needed here to convert IP4/IP6 object
+            modify_host_dict[host_access_key] = ",".join(str(v) for v in final_host_list)
+
+        return modify_host_dict
+
     def add_host(self, existing_host_dict, new_host_dict):
         """ Compares & adds up new hosts with the existing ones and provide
             the final consolidated hosts
@@ -1315,41 +1566,10 @@ class NFS(object):
             hosts along with the existing ones
         :rtype: dict
         """
-        modify_host_dict = {}
-        for k in existing_host_dict:
-            LOG.info("Checking add host for param: %s", k)
-            existing_host_str = existing_host_dict[k]
-            existing_host_list = self.convert_host_str_to_list(
-                existing_host_str)
-
-            new_host_str = new_host_dict[k]
-            new_host_list = self.convert_host_str_to_list(
-                new_host_str)
-
-            if not new_host_list:
-                LOG.info("Nothing to add as no host given")
-                continue
-
-            if new_host_list and not existing_host_list:
-                # Existing nfs host is empty so lets directly add
-                # new_host_str as it is
-                LOG.info("Existing nfs host key: %s is empty, so lets add "
-                         "new host given value as it is", k)
-                modify_host_dict[k] = new_host_str
-                continue
-
-            actual_to_add = list(set(new_host_list) - set(existing_host_list))
-            if not actual_to_add:
-                LOG.info("All host given to be added is already added")
-                continue
-
-            # Lets extends actual_to_add list, which is new with existing
-            actual_to_add.extend(existing_host_list)
-
-            # Since SDK takes host_str as ',' separated instead of list, so
-            # lets convert str to list
-            # Note: explicity str() needed here to convert IP4/IP6 object
-            modify_host_dict[k] = ",".join(str(v) for v in actual_to_add)
+        if self.module.params['adv_host_mgmt_enabled']:
+            modify_host_dict = self.add_host_dict_for_adv(existing_host_dict, new_host_dict)
+        else:
+            modify_host_dict = self.add_host_dict_for_non_adv(existing_host_dict, new_host_dict)
 
         return modify_host_dict
 
@@ -1366,46 +1586,10 @@ class NFS(object):
             removed
         :rtype: dict
         """
-        modify_host_dict = {}
-
-        for k in existing_host_dict:
-            LOG.info("Checking remove host for param: %s", k)
-            existing_host_str = existing_host_dict[k]
-            existing_host_list = self.convert_host_str_to_list(
-                existing_host_str)
-
-            new_host_str = new_host_dict[k]
-            new_host_list = self.convert_host_str_to_list(
-                new_host_str)
-
-            if not new_host_list:
-                LOG.info("Nothing to remove as no host given")
-                continue
-
-            if len(new_host_list) > len(set(new_host_list)):
-                msg = "Duplicate host given: %s in host param: %s" % (
-                    new_host_list, k)
-                LOG.error(msg)
-                self.module.fail_json(msg=msg)
-
-            if new_host_list and not existing_host_list:
-                # existing list is already empty, so nothing to remove
-                LOG.info("Existing list is already empty, so nothing to "
-                         "remove")
-                continue
-
-            actual_to_remove = list(set(new_host_list) & set(
-                existing_host_list))
-            if not actual_to_remove:
-                continue
-
-            final_host_list = list(set(existing_host_list) - set(
-                actual_to_remove))
-
-            # Since SDK takes host_str as ',' separated instead of list, so
-            # lets convert str to list
-            # Note: explicity str() needed here to convert IP4/IP6 object
-            modify_host_dict[k] = ",".join(str(v) for v in final_host_list)
+        if self.module.params['adv_host_mgmt_enabled']:
+            modify_host_dict = self.remove_host_dict_for_adv(existing_host_dict, new_host_dict)
+        else:
+            modify_host_dict = self.remove_host_dict_for_non_adv(existing_host_dict, new_host_dict)
 
         return modify_host_dict
 
@@ -1423,12 +1607,11 @@ class NFS(object):
         LOG.info("Modifying nfs share")
 
         nfs_details = nfs_obj._get_properties()
-
         fields = ('description', 'anonymous_uid', 'anonymous_gid')
         for field in fields:
-            if self.module.params[field] is not None:
-                if self.module.params[field] != nfs_details[field]:
-                    modify_param[field] = self.module.params[field]
+            if self.module.params[field] is not None and \
+                    self.module.params[field] != nfs_details[field]:
+                modify_param[field] = self.module.params[field]
 
         if self.module.params['min_security'] and self.module.params[
                 'min_security'] != nfs_obj.min_security.name:
@@ -1443,9 +1626,14 @@ class NFS(object):
         new_host_dict = self.get_host_dict_from_pb()
         if new_host_dict:
             try:
-                if is_nfs_have_host_with_host_obj(nfs_details):
-                    msg = "Modification of nfs host is restricted as nfs " \
+                if is_nfs_have_host_with_host_obj(nfs_details) and not self.module.params['adv_host_mgmt_enabled']:
+                    msg = "Modification of nfs host is restricted using adv_host_mgmt_enabled as false since nfs " \
                           "already have host added using host obj"
+                    LOG.error(msg)
+                    self.module.fail_json(msg=msg)
+                elif is_nfs_have_host_with_host_string(nfs_details) and self.module.params['adv_host_mgmt_enabled']:
+                    msg = "Modification of nfs host is restricted using adv_host_mgmt_enabled as true since nfs " \
+                          "already have host added without host obj"
                     LOG.error(msg)
                     self.module.fail_json(msg=msg)
                 LOG.info("Extracting same given param from nfs")
@@ -1459,13 +1647,11 @@ class NFS(object):
             if self.module.params['host_state'] == HOST_STATE_LIST[0]:
                 # present-in-export
                 LOG.info("Getting host to be added")
-                modify_host_dict = self.add_host(existing_host_dict,
-                                                 new_host_dict)
+                modify_host_dict = self.add_host(existing_host_dict, new_host_dict)
             else:
                 # absent-in-export
                 LOG.info("Getting host to be removed")
-                modify_host_dict = self.remove_host(existing_host_dict,
-                                                    new_host_dict)
+                modify_host_dict = self.remove_host(existing_host_dict, new_host_dict)
 
             if modify_host_dict:
                 modify_param.update(modify_host_dict)
@@ -1586,6 +1772,26 @@ def is_nfs_have_host_with_host_obj(nfs_details):
     host_obj_params = ('no_access_hosts', 'read_only_hosts',
                        'read_only_root_access_hosts', 'read_write_hosts',
                        'root_access_hosts')
+    for host_obj_param in host_obj_params:
+        if nfs_details.get(host_obj_param):
+            return True
+    return False
+
+
+def is_nfs_have_host_with_host_string(nfs_details):
+    """ Check whether nfs host is already added using host by string method
+
+    :param nfs_details: nfs details
+    :return: True if nfs have host already added with host string method else False
+    :rtype: bool
+    """
+    host_obj_params = (
+        'no_access_hosts_string',
+        'read_only_hosts_string',
+        'read_only_root_hosts_string',
+        'read_write_hosts_string',
+        'read_write_root_hosts_string'
+    )
     for host_obj_param in host_obj_params:
         if nfs_details.get(host_obj_param):
             return True
