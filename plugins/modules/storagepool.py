@@ -468,7 +468,7 @@ import logging
 
 LOG = utils.get_logger('storagepool')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class StoragePool(object):

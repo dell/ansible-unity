@@ -28,6 +28,7 @@ extends_documentation_fragment:
 
 author:
 - Arindam Datta (@arindam-emc) <ansible.team@dell.com>
+- Pavan Mudunuri(@Pavan-Mudunuri) <ansible.team@dell.com>
 
 options:
   vol_name:
@@ -70,12 +71,19 @@ options:
     type: str
   compression:
     description:
-    - Boolean variable , specifies whether or not to enable compression.
+    - Boolean variable, Specifies whether or not to enable compression.
       Compression is supported only for thin volumes.
+    type: bool
+  advanced_dedup:
+    description:
+    - Boolean variable, Indicates whether or not to enable advanced deduplication.
+    - Compression should be enabled to enable advanced deduplication.
+    - It can only be enabled on the all flash high end platforms.
+    - Deduplicated data will remain as is even after advanced deduplication is disabled.
     type: bool
   is_thin:
     description:
-    - Boolean variable , specifies whether or not it is a thin volume.
+    - Boolean variable, Specifies whether or not it is a thin volume.
     - The value is set as C(true) by default if not specified.
     type: bool
   sp:
@@ -169,6 +177,9 @@ EXAMPLES = r"""
     pool_name: "{{pool}}"
     size: 2
     cap_unit: "{{cap_GB}}"
+    is_thin: True
+    compression: True
+    advanced_dedup: True
     state: "{{state_present}}"
 
 - name: Expand Volume by volume id
@@ -230,6 +241,8 @@ EXAMPLES = r"""
     new_vol_name: "{{new_vol_name}}"
     tiering_policy: "AUTOTIER"
     compression: True
+    is_thin: True
+    advanced_dedup: True
     state: "{{state_present}}"
 
 - name: Delete Volume by vol name
@@ -383,7 +396,7 @@ import logging
 
 LOG = utils.get_logger('volume')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 def is_none_or_empty_string(param):
@@ -587,7 +600,7 @@ class Volume(object):
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
-    def get_NodeEnum_enum(self, sp):
+    def get_node_enum(self, sp):
         """Get the storage processor enum.
              :param sp: The storage processor string
              :return: storage processor enum
@@ -629,11 +642,12 @@ class Volume(object):
 
             description = self.module.params['description']
             compression = self.module.params['compression']
+            advanced_dedup = self.module.params['advanced_dedup']
             is_thin = self.module.params['is_thin']
             snap_schedule = None
 
             sp = self.module.params['sp']
-            sp = self.get_NodeEnum_enum(sp) if sp else None
+            sp = self.get_node_enum(sp) if sp else None
 
             io_limit_policy = self.get_io_limit_policy(
                 id=self.param_io_limit_pol_id) \
@@ -655,7 +669,8 @@ class Volume(object):
                                           tiering_policy=tiering_policy,
                                           snap_schedule=snap_schedule,
                                           io_limit_policy=io_limit_policy,
-                                          is_compression=compression)
+                                          is_compression=compression,
+                                          is_advanced_dedup_enabled=advanced_dedup)
 
             LOG.info("Successfully created volume , %s", obj_vol)
 
@@ -676,7 +691,6 @@ class Volume(object):
 
         try:
             to_modify = False
-            hlu = self.module.params['hlu']
             mapping_state = self.module.params['mapping_state']
 
             host_id_list = []
@@ -753,13 +767,18 @@ class Volume(object):
                     compression != obj_vol.is_data_reduction_enabled:
                 to_update.update({'is_compression': compression})
 
+            advanced_dedup = self.module.params['advanced_dedup']
+            if advanced_dedup is not None and \
+                    advanced_dedup != obj_vol.is_advanced_dedup_enabled:
+                to_update.update({'is_advanced_dedup_enabled': advanced_dedup})
+
             is_thin = self.module.params['is_thin']
             if is_thin is not None and is_thin != obj_vol.is_thin_enabled:
                 self.module.fail_json(msg="Modifying is_thin is not allowed")
 
             sp = self.module.params['sp']
-            if sp and self.get_NodeEnum_enum(sp) != obj_vol.current_node:
-                to_update.update({'sp': self.get_NodeEnum_enum(sp)})
+            if sp and self.get_node_enum(sp) != obj_vol.current_node:
+                to_update.update({'sp': self.get_node_enum(sp)})
 
             tiering_policy = self.module.params['tiering_policy']
             if tiering_policy and self.get_tiering_policy_enum(
@@ -871,7 +890,7 @@ class Volume(object):
             param_list = ['name', 'size', 'host_access', 'description', 'sp',
                           'io_limit_policy', 'tiering_policy',
                           'snap_schedule', 'is_snap_schedule_paused',
-                          'is_compression']
+                          'is_compression', 'is_advanced_dedup_enabled']
 
             for item in param_list:
                 if item not in to_modify_dict.keys():
@@ -888,9 +907,9 @@ class Volume(object):
                            io_limit_policy=to_modify_dict['io_limit_policy'],
                            tiering_policy=to_modify_dict['tiering_policy'],
                            snap_schedule=to_modify_dict['snap_schedule'],
-                           is_snap_schedule_paused=to_modify_dict[
-                               'is_snap_schedule_paused'],
-                           is_compression=to_modify_dict['is_compression'])
+                           is_snap_schedule_paused=to_modify_dict['is_snap_schedule_paused'],
+                           is_compression=to_modify_dict['is_compression'],
+                           is_advanced_dedup_enabled=to_modify_dict['is_advanced_dedup_enabled'])
 
         except Exception as e:
             errormsg = "Failed to modify the volume {0} " \
@@ -1175,11 +1194,12 @@ class Volume(object):
 
             obj_vol = self.create_volume(obj_pool=obj_pool, size=size,
                                          host_access=host_access)
-            LOG.debug("Successfully created volume , %s", obj_vol)
-            vol_id = obj_vol.id
-            volume_details = obj_vol._get_properties()
-            LOG.debug("Got volume id , %s", vol_id)
-            changed = True
+            if obj_vol:
+                LOG.debug("Successfully created volume , %s", obj_vol)
+                vol_id = obj_vol.id
+                volume_details = obj_vol._get_properties()
+                LOG.debug("Got volume id , %s", vol_id)
+                changed = True
 
         if state == 'present' and volume_details and to_modify_dict:
             self.modify_volume(obj_vol=obj_vol, to_modify_dict=to_modify_dict)
@@ -1224,6 +1244,7 @@ def get_volume_parameters():
         cap_unit=dict(required=False, type='str', choices=['GB', 'TB']),
         is_thin=dict(required=False, type='bool'),
         compression=dict(required=False, type='bool'),
+        advanced_dedup=dict(required=False, type='bool'),
         sp=dict(required=False, type='str', choices=['SPA', 'SPB']),
         io_limit_policy=dict(required=False, type='str'),
         snap_schedule=dict(required=False, type='str'),

@@ -392,7 +392,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('snapshotschedule')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class SnapshotSchedule(object):
@@ -519,7 +519,7 @@ class SnapshotSchedule(object):
         LOG.info("Modify Flag: %s", modified)
         return modified
 
-    def get_daysOfWeek_enum(self, days_of_week):
+    def get_days_of_week_enum(self, days_of_week):
         """Get the enum for days of week.
             :param days_of_week: The list of days of week
             :return: The list of days_of_week enum
@@ -589,7 +589,7 @@ class SnapshotSchedule(object):
                                  is_auto_delete=auto_delete)
             elif type == "every_week":
                 if days_of_week:
-                    days_of_week_enum = self.get_daysOfWeek_enum(days_of_week)
+                    days_of_week_enum = self.get_days_of_week_enum(days_of_week)
                 else:
                     days = schedule_details['rules'][0]['days_of_week'][
                         'DayOfWeekEnumList']
@@ -598,7 +598,7 @@ class SnapshotSchedule(object):
                     for day in days:
                         temp = day.split(".")
                         existing_days.append(temp[1])
-                    days_of_week_enum = self.get_daysOfWeek_enum(days_of_week)
+                    days_of_week_enum = self.get_days_of_week_enum(days_of_week)
 
                 rule_dict = utils.snap_schedule.UnitySnapScheduleRule.\
                     every_week(days_of_week=days_of_week_enum, hour=hour,

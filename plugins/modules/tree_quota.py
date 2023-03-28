@@ -283,7 +283,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('tree_quota')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class QuotaTree(object):
@@ -549,9 +549,7 @@ class QuotaTree(object):
         tree_quota_id = self.module.params['tree_quota_id']
         create_tree_quota_obj = None
         nas_server_resource = None
-        get_unity_quota_tree_details = None
         fs_id = None
-        changed = False
 
         '''
         result is a dictionary to contain end state and quota tree details

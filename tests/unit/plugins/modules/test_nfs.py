@@ -55,6 +55,7 @@ class TestNfs():
         get_nfs_share_display_attrs_data = MockNfsApi.get_nfs_share_display_attr_on_host_access('add', True)
         nfs_module_mock.unity.get_filesystem = MagicMock(return_value=fs_object)
         nfs_module_mock.unity.get_nfs_share = MagicMock(return_value=nfs_object)
+        nfs_module_mock.unity.get_host = MagicMock(side_effect=[MockNfsApi.get_host_obj(id=1), MockNfsApi.get_host_obj(id=2)])
         nfs.get_nfs_share_display_attrs = MagicMock(return_value=get_nfs_share_display_attrs_data)
         nfs_module_mock.perform_module_operation()
         assert nfs_module_mock.module.exit_json.call_args[1]['changed'] is True
@@ -77,6 +78,8 @@ class TestNfs():
         get_nfs_share_display_attrs_data = MockNfsApi.get_nfs_share_display_attr_on_host_access('remove', True)
         nfs_module_mock.unity.get_filesystem = MagicMock(return_value=fs_object)
         nfs_module_mock.unity.get_nfs_share = MagicMock(return_value=nfs_object)
+        nfs_module_mock.unity.get_host = MagicMock(side_effect=[MockNfsApi.get_host_obj(id=1), MockNfsApi.get_host_obj(id=2),
+                                                                MockNfsApi.get_host_obj(id=1), MockNfsApi.get_host_obj(id=2)])
         nfs.get_nfs_share_display_attrs = MagicMock(return_value=get_nfs_share_display_attrs_data)
         nfs_module_mock.perform_module_operation()
         assert nfs_module_mock.module.exit_json.call_args[1]['changed'] is True
@@ -107,7 +110,7 @@ class TestNfs():
         self.get_module_args.update({
             'nfs_export_name': "nfsshare_dummy_name",
             'filesystem_id': "fs_id_1",
-            'adv_host_mgmt_enabled': True,
+            'adv_host_mgmt_enabled': False,
             'read_only_root_hosts': [{'domain': MockNfsApi.DUMMY_DOMAIN_VALUE}, {'subnet': MockNfsApi.DUMMY_SUBNET_VALUE}],
             'host_state': 'absent-in-export',
             'state': 'present'
@@ -162,7 +165,7 @@ class TestNfs():
         self.get_module_args.update({
             'nfs_export_name': "nfsshare_dummy_name",
             'filesystem_id': "fs_id_1",
-            'adv_host_mgmt_enabled': True,
+            'adv_host_mgmt_enabled': False,
             'read_only_root_hosts': [{'domain': MockNfsApi.DUMMY_DOMAIN_VALUE}, {'subnet': MockNfsApi.DUMMY_SUBNET_VALUE}],
             'host_state': 'absent-in-export',
             'state': 'present'

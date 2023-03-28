@@ -53,7 +53,7 @@ class TestFileSystem():
         filesystem_module_mock.module.params = self.FILE_SYSTEM_MODULE_ARGS
         filesystem_module_mock.is_modify_required = MagicMock(return_value=False)
         filesystem_module_mock.perform_module_operation()
-        assert "rpo value should be in range of 5 to 1440" in \
+        assert "Invalid rpo value" in \
             filesystem_module_mock.module.fail_json.call_args[1]['msg']
 
     def test_enable_fs_replication_throws_ex(self, filesystem_module_mock):

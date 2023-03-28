@@ -227,7 +227,7 @@ from ipaddress import ip_network
 
 LOG = utils.get_logger('interface')
 
-application_type = "Ansible/1.5.0"
+application_type = "Ansible/1.6.0"
 
 
 class Interface(object):
@@ -366,18 +366,22 @@ class Interface(object):
 
     def validate_input_params(self):
         """Validates input parameters"""
-        param_list = ["nas_server_id", "nas_server_name", "ethernet_port_name", "ethernet_port_id", "role", "interface_ip",
-                      "netmask", "gateway"]
+        param_list = ["nas_server_id", "nas_server_name",
+                      "ethernet_port_name", "ethernet_port_id", "role",
+                      "interface_ip", "netmask", "gateway"]
 
         for param in param_list:
             msg = "Please provide valid value for: %s" % param
-            if self.module.params[param] is not None and len(self.module.params[param].strip()) == 0:
+            if self.module.params[param] is not None and \
+                    len(self.module.params[param].strip()) == 0:
                 errmsg = msg.format(param)
                 self.module.fail_json(msg=errmsg)
 
-        if self.module.params['vlan_id'] is not None:
-            if self.module.params['vlan_id'] <= 3 or self.module.params['vlan_id'] >= 4094:
-                self.module.fail_json(msg='vlan_id should be in the range of 3 to 4094')
+        if self.module.params['vlan_id'] is not None and \
+                (self.module.params['vlan_id'] <= 3 or
+                 self.module.params['vlan_id'] >= 4094):
+            self.module.fail_json(msg='vlan_id should be in the '
+                                      'range of 3 to 4094')
 
         if self.module.params['interface_ip'] and \
                 not is_valid_ip(self.module.params['interface_ip']):
@@ -389,17 +393,23 @@ class Interface(object):
 
         if self.module.params['netmask'] and not \
                 utils.is_valid_netmask(self.module.params['netmask']):
-            self.module.fail_json(msg='Invalid IPV4 address specified for netmask')
+            self.module.fail_json(msg='Invalid IPV4 address specified '
+                                      'for netmask')
 
-        if self.module.params['interface_ip'] and (get_ip_version(self.module.params['interface_ip']) == 6):
+        if self.module.params['interface_ip'] and \
+                (get_ip_version(self.module.params['interface_ip']) == 6):
             self.module.fail_json(msg='IPv6 format is not supported')
 
     def validate_create_params(self):
         """Validates input parameters for adding interface"""
         if self.module.params['role'] is None:
-            self.module.fail_json(msg='Role is a mandatory parameter for adding interface to NAS Server.')
-        if self.module.params['ethernet_port_name'] is None and self.module.params['ethernet_port_id'] is None:
-            self.module.fail_json(msg='ethernet_port_name/ethernet_port_id is mandatory parameter for adding interface to NAS Server.')
+            self.module.fail_json(msg='Role is a mandatory parameter'
+                                      ' for adding interface to NAS Server.')
+        if self.module.params['ethernet_port_name'] is None and \
+                self.module.params['ethernet_port_id'] is None:
+            self.module.fail_json(msg='ethernet_port_name/ethernet_port_id '
+                                      'is mandatory parameter for adding '
+                                      'interface to NAS Server.')
 
     def perform_module_operation(self):
         """

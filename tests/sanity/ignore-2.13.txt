@@ -16,4 +16,12 @@ plugins/modules/cifsserver.py validate-modules:missing-gplv3-license
 plugins/modules/nfsserver.py validate-modules:missing-gplv3-license
 plugins/modules/host.py import-2.7
 plugins/modules/interface.py import-2.7
+plugins/modules/nfs.py import-2.7
+plugins/modules/nfs.py import-3.5
+plugins/modules/nfs.py compile-2.7
+plugins/modules/nfs.py compile-3.5
+plugins/modules/filesystem.py compile-2.7
+plugins/modules/filesystem.py compile-3.5
+plugins/modules/filesystem.py import-2.7
+plugins/modules/filesystem.py import-3.5
 plugins/modules/interface.py validate-modules:missing-gplv3-license
