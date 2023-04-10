@@ -30,6 +30,10 @@ class MockConsistenyGroupApi:
         'mapping_state': None,
         'replication_params': {},
         'replication_state': None,
+        'retention_duration': None,
+        'copy_name': None,
+        'force_refresh': False,
+        'snapshot_name': None,
         'state': None
     }
     IP_ADDRESS_MOCK_VALUE = '***.***.***.**'
@@ -68,6 +72,41 @@ class MockConsistenyGroupApi:
                               'snaps_size_allocated': 0, 'snaps_size_total': 0, 'thin_status': 'ThinStatusEnum.TRUE',
                               'type': 'StorageResourceTypeEnum.CONSISTENCY_GROUP', 'virtual_volumes': None, 'vmware_uuid': None,
                               'existed': True, 'snapshots': [], 'cg_replication_enabled': False})
+
+    @staticmethod
+    def cg_get_refreshable_details_method_response():
+        return {'advanced_dedup_status': 'DedupStatusEnum.DISABLED', 'block_host_access': None, 'data_reduction_percent': 0,
+                'data_reduction_ratio': 1.0, 'data_reduction_size_saved': 0, 'data_reduction_status': 'DataReductionStatusEnum.DISABLED',
+                'datastores': None, 'dedup_status': None, 'description': '', 'esx_filesystem_block_size': None,
+                'esx_filesystem_major_version': None, 'filesystem': None, 'health': {}, 'host_v_vol_datastore': None,
+                'id': 'cg_id_2', 'is_replication_destination': False, 'is_snap_schedule_paused': None,
+                'luns': [{'id': 'lun_id_2', 'name': 'test_lun_cg_issue_clone', 'is_thin_enabled': False,
+                          'size_total': 1, 'is_data_reduction_enabled': False}],
+                'name': 'lun_test_cg_clone', 'per_tier_size_used': [1, 0, 0],
+                'pools': [{'id': 'pool_id_1'}],
+                'relocation_policy': 'TieringPolicyEnum.AUTOTIER_HIGH', 'replication_type': 'ReplicationTypeEnum.NONE',
+                'size_allocated': 0, 'size_total': 1, 'size_used': None, 'snap_count': 0, 'snap_schedule': None,
+                'snaps_size_allocated': 0, 'snaps_size_total': 0, 'thin_status': 'ThinStatusEnum.TRUE',
+                'type': 'StorageResourceTypeEnum.CONSISTENCY_GROUP', 'virtual_volumes': None, 'vmware_uuid': None,
+                'existed': True, 'snapshots': [], 'cg_replication_enabled': False, 'is_thin_clone': True}
+
+    @staticmethod
+    def get_refreshable_cg_object():
+        return MockSDKObject({'advanced_dedup_status': 'DedupStatusEnum.DISABLED', 'block_host_access': None,
+                              'data_reduction_percent': 0, 'data_reduction_ratio': 1.0, 'data_reduction_size_saved': 0,
+                              'data_reduction_status': 'DataReductionStatusEnum.DISABLED',
+                              'datastores': None, 'dedup_status': None, 'description': '', 'esx_filesystem_block_size': None,
+                              'esx_filesystem_major_version': None, 'filesystem': None, 'health': {}, 'host_v_vol_datastore': None,
+                              'id': 'cg_id_2', 'is_replication_destination': False, 'is_snap_schedule_paused': None,
+                              'luns': [MockSDKObject({'id': 'lun_id_2', 'name': 'test_lun_cg_issue_clone',
+                                                      'is_thin_enabled': False, 'size_total': 1, 'is_data_reduction_enabled': False})],
+                              'name': 'lun_test_cg_clone', 'per_tier_size_used': [1, 0, 0],
+                              'pools': [MockSDKObject({'id': 'pool_id_1'})],
+                              'relocation_policy': 'TieringPolicyEnum.AUTOTIER_HIGH', 'replication_type': 'ReplicationTypeEnum.NONE',
+                              'size_allocated': 0, 'size_total': 1, 'size_used': None, 'snap_count': 0, 'snap_schedule': None,
+                              'snaps_size_allocated': 0, 'snaps_size_total': 0, 'thin_status': 'ThinStatusEnum.TRUE',
+                              'type': 'StorageResourceTypeEnum.CONSISTENCY_GROUP', 'virtual_volumes': None, 'vmware_uuid': None,
+                              'existed': True, 'snapshots': [], 'cg_replication_enabled': False, 'is_thin_clone': True})
 
     @staticmethod
     def get_cg_replication_dependent_response(response_type):
@@ -120,3 +159,12 @@ class MockConsistenyGroupApi:
         conn = MockConsistenyGroupApi.get_cg_replication_dependent_response("remote_system")[0]
         conn.get_pool = MagicMock(return_value=MockConsistenyGroupApi.get_cg_replication_dependent_response('remote_system_pool_object'))
         return conn
+
+    @staticmethod
+    def refresh_cg_response(response_type):
+        if response_type == 'api':
+            return {'copy': {
+                    'id': "85899345930"
+                    }}
+        else:
+            return 'Failed to refresh thin clone [name: lun_test_cg_clone, id: cg_id_2] with error'

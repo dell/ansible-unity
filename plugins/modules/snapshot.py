@@ -15,7 +15,8 @@ module: snapshot
 short_description: Manage snapshots on the Unity storage system
 description:
 - Managing snapshots on the Unity storage system includes create snapshot,
-  delete snapshot, update snapshot, get snapshot, map host and unmap host.
+  delete snapshot, update snapshot, get snapshot, refresh snapshot,
+  map host and unmap host.
 version_added: '1.1.0'
 
 extends_documentation_fragment:
@@ -82,9 +83,11 @@ options:
     description:
     - The I(state) option is used to mention the existence of
       the snapshot.
+    - The C(refreshed) state is not idempotent. It always executes the
+      refresh operation.
     type: str
     required: true
-    choices: [ 'absent', 'present' ]
+    choices: [ 'absent', 'present', 'refreshed' ]
   host_name:
     description:
     - The name of the host.
@@ -106,6 +109,19 @@ options:
     - It is required when a snapshot is mapped or unmapped from host.
     type: str
     choices: ['mapped', 'unmapped']
+  retention_duration:
+    description:
+    - This option is for specifying the retention duration for the backup copy
+      of the snapshot created during the refresh operation.
+    - The retention duration is set in seconds. See the examples how to
+      calculate it.
+    - If set to C(0), the backup copy is deleted immediately
+    - If not set, the storage defaults are used
+    type: int
+  copy_name:
+    description:
+    - The backup copy name of the snapshot created by the refresh operation.
+    type: str
 
 notes:
   - The I(check_mode) is not supported.
@@ -185,6 +201,36 @@ EXAMPLES = r'''
       validate_certs: "{{validate_certs}}"
       snapshot_name: "{{cg_snapshot_name}}"
       state: "absent"
+
+  - name: Refresh a Snapshot, keep backup snapshot for 2 days
+    dellemc.unity.snapshot:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      validate_certs: "{{validate_certs}}"
+      snapshot_name: "{{snapshot_name}}"
+      retention_duration: "{{ '2days' | community.general.to_seconds | int }}"
+      state: "refreshed"
+
+  - name: Refresh a Snapshot, delete backup snapshot
+    dellemc.unity.snapshot:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      validate_certs: "{{validate_certs}}"
+      snapshot_name: "{{snapshot_name}}"
+      retention_duration: 0
+      state: "refreshed"
+
+  - name: Refresh a Snapshot and set backup snapshot name
+    dellemc.unity.snapshot:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      validate_certs: "{{validate_certs}}"
+      snapshot_name: "{{snapshot_name}}"
+      copy_name: "{{snapshot_name}}_before_refresh"
+      state: "refreshed"
 '''
 
 RETURN = r'''
@@ -394,6 +440,20 @@ class Snapshot(object):
             LOG.error(error_msg)
             self.module.fail_json(msg=error_msg)
 
+    def refresh_snapshot(self, snapshot, copy_name=None,
+                         retention_duration=None):
+        try:
+            resp = snapshot.refresh(copy_name=copy_name,
+                                    retention_duration=retention_duration)
+            resp.raise_if_err()
+            snapshot.update()
+        except Exception as e:
+            error_msg = "Failed to refresh snapshot" \
+                        " [name: %s , id: %s] with error %s"\
+                        % (snapshot.name, snapshot.id, str(e))
+            LOG.error(error_msg)
+            self.module.fail_json(msg=error_msg)
+
     def get_snapshot_obj(self, name=None, id=None):
         snapshot = id if id else name
         msg = "Failed to get details of snapshot %s with error %s "
@@ -480,6 +540,8 @@ class Snapshot(object):
         host_id = self.module.params['host_id']
         host_state = self.module.params['host_state']
         state = self.module.params['state']
+        retention_duration = self.module.params['retention_duration']
+        copy_name = self.module.params['copy_name']
         host = None
         storage_resource = None
         changed = False
@@ -615,6 +677,14 @@ class Snapshot(object):
             snapshot = self.delete_snapshot(snapshot)
             changed = True
 
+        # Refresh the snapshot:
+        if snapshot and state == "refreshed":
+            snapshot = self\
+                .refresh_snapshot(snapshot=snapshot,
+                                  copy_name=copy_name,
+                                  retention_duration=retention_duration)
+            changed = True
+
         # Add snapshot details to the result.
         if snapshot:
             snapshot.update()
@@ -736,7 +806,10 @@ def get_snapshot_parameters():
         host_id=dict(required=False, type='str'),
         host_state=dict(required=False, type='str',
                         choices=['mapped', 'unmapped']),
-        state=dict(required=True, type='str', choices=['present', 'absent'])
+        retention_duration=dict(required=False, type='int'),
+        copy_name=dict(required=False, type='str'),
+        state=dict(required=True, type='str',
+                   choices=['present', 'absent', 'refreshed'])
     )
 
 

@@ -21,7 +21,8 @@ description:
   Map Volume to host,
   Unmap volume to host,
   Display volume details,
-  Delete volume.
+  Delete volume,
+  Refresh thin clone volume.
 
 extends_documentation_fragment:
   - dellemc.unity.unity
@@ -135,7 +136,9 @@ options:
   state:
     description:
     - State variable to determine whether volume will exist or not.
-    choices: ['absent', 'present']
+    - The C(refreshed) state is not idempotent. It always executes the
+      refresh operation.
+    choices: ['absent', 'present', 'refreshed']
     required: true
     type: str
   hosts:
@@ -160,6 +163,29 @@ options:
         - If I(hlu) is not specified, unity will choose it automatically.
           The maximum value supported is C(255).
         type: str
+  retention_duration:
+    description:
+    - This option is for specifying the retention duration for the backup copy
+      of the snapshot created during the refresh operation.
+    - The retention duration is set in seconds. See the examples how to
+      calculate it.
+    - If set to C(0), the backup copy is deleted immediately
+    - If not set, the storage defaults are used
+    type: int
+  copy_name:
+    description:
+    - The backup copy name of the snapshot created by the refresh operation.
+    type: str
+  force_refresh:
+    description:
+    - When set to C(true), the refresh operation will proceed even if host
+      access is configured on the storage resource.
+    type: bool
+    default: false
+  snapshot_name:
+    description:
+    - The source snapshot which is used to refresh the thin clone
+    type: str
 
 notes:
   - The I(check_mode) is not supported.
@@ -262,6 +288,48 @@ EXAMPLES = r"""
     validate_certs: "{{validate_certs}}"
     vol_id: "{{vol_id}}"
     state: "{{state_absent}}"
+
+- name: Force Refresh a thin clone, keep backup snapshot for 2 days
+  dellemc.unity.volume:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    vol_name: "{{vol_name}}"
+    retention_duration: "{{ '2days' | community.general.to_seconds | int }}"
+    force_refresh: True
+    state: "refreshed"
+
+- name: Refresh a Snapshot, delete backup snapshot
+  dellemc.unity.snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    vol_name: "{{vol_name}}"
+    retention_duration: 0
+    state: "refreshed"
+
+- name: Refresh a thin clone and set backup snapshot name
+  dellemc.unity.snapshot:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      validate_certs: "{{validate_certs}}"
+      vol_name: "{{vol_name}}"
+      copy_name: "{{snapshot_name}}_before_refresh"
+      state: "refreshed"
+
+- name: Refresh a thin clone from a snapshot, keep backup snapshot for 2 days
+  dellemc.unity.volume:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    vol_name: "{{vol_name}}"
+    snapshot_name: "{{new_snapshot_name}}"
+    retention_duration: "{{ '2days' | community.general.to_seconds | int }}"
+    state: "refreshed"
 """
 
 RETURN = r'''
@@ -934,6 +1002,34 @@ class Volume(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
+    def refresh_volume(self, obj_vol, snapshot=None, copy_name=None,
+                       force=False, retention_duration=None):
+        """Refresh thin clone
+
+        :param copy_name: name of the backup snapshot
+        :param force: proceeed refresh even if host access is configured
+        :param retention_duration: Backup copy retention duration in seconds
+        """
+        try:
+            if snapshot is not None:
+                resp = snapshot\
+                    .refresh_thin_clone(sr=obj_vol.storage_resource,
+                                        copy_name=copy_name,
+                                        force=force,
+                                        retention_duration=retention_duration)
+            else:
+                resp = obj_vol.refresh(copy_name=copy_name,
+                                       force=force,
+                                       retention_duration=retention_duration)
+            resp.raise_if_err()
+            obj_vol.update()
+        except Exception as e:
+            error_msg = "Failed to refresh thin clone" \
+                        " [name: %s, id: %s] with error %s"\
+                        % (obj_vol.name, obj_vol.id, str(e))
+            LOG.error(error_msg)
+            self.module.fail_json(msg=error_msg)
+
     def get_volume_host_access_list(self, obj_vol):
         """
         Get volume host access list
@@ -1078,6 +1174,10 @@ class Volume(object):
         hlu = self.module.params['hlu']
         mapping_state = self.module.params['mapping_state']
         new_vol_name = self.module.params['new_vol_name']
+        retention_duration = self.module.params['retention_duration']
+        copy_name = self.module.params['copy_name']
+        force_refresh = self.module.params['force_refresh']
+        snapshot_name = self.module.params['snapshot_name']
         state = self.module.params['state']
         hosts = self.module.params['hosts']
 
@@ -1226,6 +1326,16 @@ class Volume(object):
             volume_details = self.get_volume_display_attributes(
                 obj_vol=obj_vol)
 
+        if state == 'refreshed' and volume_details:
+            snapshot = None
+            if snapshot_name is not None:
+                snapshot = self.unity_conn.get_snap(name=snapshot_name)
+
+            self.refresh_volume(obj_vol=obj_vol, snapshot=snapshot,
+                                copy_name=copy_name, force=force_refresh,
+                                retention_duration=retention_duration)
+            changed = True
+
         result['changed'] = changed
         result['volume_details'] = volume_details
         self.module.exit_json(**result)
@@ -1262,7 +1372,13 @@ def get_volume_parameters():
         new_vol_name=dict(required=False, type='str'),
         tiering_policy=dict(required=False, type='str', choices=[
             'AUTOTIER_HIGH', 'AUTOTIER', 'HIGHEST', 'LOWEST']),
-        state=dict(required=True, type='str', choices=['present', 'absent'])
+        retention_duration=dict(required=False, type='int'),
+        copy_name=dict(required=False, type='str'),
+        force_refresh=dict(required=False, type='bool',
+                           default=False),
+        snapshot_name=dict(required=False, type='str'),
+        state=dict(required=True, type='str',
+                   choices=['present', 'absent', 'refreshed'])
     )
 
 
