@@ -464,7 +464,6 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
-import logging
 
 LOG = utils.get_logger('storagepool')
 

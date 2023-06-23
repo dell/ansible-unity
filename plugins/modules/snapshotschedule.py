@@ -385,7 +385,6 @@ snapshot_schedule_details:
     }
 """
 
-import logging
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils

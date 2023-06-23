@@ -1215,7 +1215,6 @@ File_interfaces:
     ]
 '''
 
-from re import sub
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
