@@ -144,7 +144,7 @@ EXAMPLES = r"""
       hours_of_day:
         - 8
         - 14
-      auto_delete: True
+      auto_delete: true
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_n_days)
@@ -185,7 +185,7 @@ EXAMPLES = r"""
       name: "Ansible_Every_Month_Testing"
       type: "every_month"
       day_of_month: 17
-      auto_delete: True
+      auto_delete: true
       state: "{{state_present}}"
 
 - name: Get snapshot schedule details using name
@@ -226,7 +226,7 @@ EXAMPLES = r"""
       name: "Ansible_Every_Day_Testing"
       type: "every_day"
       desired_retention: 200
-      auto_delete: False
+      auto_delete: false
       state: "{{state_present}}"
 
 - name: Delete snapshot schedule using id
@@ -253,7 +253,7 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
-    sample: True
+    sample: true
 
 snapshot_schedule_details:
     description: Details of the snapshot schedule.
@@ -385,14 +385,13 @@ snapshot_schedule_details:
     }
 """
 
-import logging
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 
 LOG = utils.get_logger('snapshotschedule')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class SnapshotSchedule(object):

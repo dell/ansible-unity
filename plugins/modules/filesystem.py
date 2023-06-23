@@ -330,7 +330,7 @@ EXAMPLES = r"""
         grace_period: 8
         grace_period_unit: "days"
         default_soft_limit: 10
-        is_user_quota_enabled: False
+        is_user_quota_enabled: false
     state: "present"
 
 - name: Expand FileSystem size
@@ -364,9 +364,9 @@ EXAMPLES = r"""
     filesystem_name: "ansible_test_fs"
     nas_server_name: "lglap761"
     smb_properties:
-      is_smb_op_locks_enabled: True
+      is_smb_op_locks_enabled: true
       smb_notify_on_change_dir_depth: 5
-      is_smb_notify_on_access_enabled: True
+      is_smb_notify_on_access_enabled: true
     state: "present"
 
 - name: Modify FileSystem Snap Schedule
@@ -411,7 +411,7 @@ EXAMPLES = r"""
       rpo: 60
       remote_system:
         remote_system_host: '0.1.2.3'
-        remote_system_verifycert: False
+        remote_system_verifycert: false
         remote_system_username: 'username'
         remote_system_password: 'password'
       destination_pool_name: "pool_test_1"
@@ -689,7 +689,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('filesystem')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class Filesystem(object):

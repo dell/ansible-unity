@@ -122,7 +122,7 @@ EXAMPLES = r'''
       filesystem_name: "ansible_test_FS"
       nas_server_name: "lglad069"
       description: "Created using playbook"
-      auto_delete: True
+      auto_delete: true
       fs_access_type: "Protocol"
       state: "present"
 
@@ -166,7 +166,7 @@ EXAMPLES = r'''
       validate_certs: "{{validate_certs}}"
       snapshot_name: "ansible_test_FS_snap"
       description: "Description updated"
-      auto_delete: False
+      auto_delete: false
       expiry_time: "04/15/2021 5:30"
       state: "present"
 
@@ -304,7 +304,7 @@ from datetime import datetime
 
 LOG = utils.get_logger('filesystem_snapshot')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class FilesystemSnapshot(object):

@@ -217,10 +217,10 @@ EXAMPLES = r'''
       raid_type : "RAID10"
       stripe_width : "BEST_FIT"
     alert_threshold : 50
-    is_harvest_enabled : True
+    is_harvest_enabled : true
     pool_harvest_high_threshold : 60
     pool_harvest_low_threshold : 40
-    is_snap_harvest_enabled : True
+    is_snap_harvest_enabled : true
     snap_harvest_high_threshold : 70
     snap_harvest_low_threshold : 50
     fast_vp: "enabled"
@@ -235,7 +235,7 @@ RETURN = r'''
     description: Whether or not the storage pool has changed.
     returned: always
     type: bool
-    sample: True
+    sample: true
 
  storage_pool_details:
     description: The storage pool details.
@@ -464,11 +464,10 @@ RETURN = r'''
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
-import logging
 
 LOG = utils.get_logger('storagepool')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class StoragePool(object):
@@ -499,7 +498,9 @@ class StoragePool(object):
             details = api_response._get_properties()
 
             is_fast_vp_enabled = api_response._get_property_from_raw(
-                'pool_fast_vp').is_schedule_enabled
+                'pool_fast_vp')
+            if is_fast_vp_enabled:
+                is_fast_vp_enabled = is_fast_vp_enabled.is_schedule_enabled
             details['is_fast_vp_enabled'] = is_fast_vp_enabled
 
             details['size_free_with_unit'] = utils.\

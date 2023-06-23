@@ -177,9 +177,9 @@ EXAMPLES = r"""
     pool_name: "{{pool}}"
     size: 2
     cap_unit: "{{cap_GB}}"
-    is_thin: True
-    compression: True
-    advanced_dedup: True
+    is_thin: true
+    compression: true
+    advanced_dedup: true
     state: "{{state_present}}"
 
 - name: Expand Volume by volume id
@@ -240,9 +240,9 @@ EXAMPLES = r"""
     vol_name: "{{vol_name}}"
     new_vol_name: "{{new_vol_name}}"
     tiering_policy: "AUTOTIER"
-    compression: True
-    is_thin: True
-    advanced_dedup: True
+    compression: true
+    is_thin: true
+    advanced_dedup: true
     state: "{{state_present}}"
 
 - name: Delete Volume by vol name
@@ -270,7 +270,7 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
-    sample: True
+    sample: true
 
 volume_details:
     description: Details of the volume.
@@ -392,11 +392,10 @@ volume_details:
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
-import logging
 
 LOG = utils.get_logger('volume')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 def is_none_or_empty_string(param):

@@ -43,7 +43,7 @@ Should explain what happened, what was expected and how to reproduce it together
 
  - Ansible Version: [e.g. 2.14]
  - Python Version [e.g. 3.10]
- - Ansible modules for Dell Unity Version: [e.g. 1.6.0]
+ - Ansible modules for Dell Unity Version: [e.g. 1.7.0]
  - Unity SDK version: [e.g. Unity 1.2.11]
  - Any other additional information...
 

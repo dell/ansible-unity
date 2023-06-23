@@ -153,7 +153,19 @@ releases:
   1.6.0:
     changes:
       minor_changes:
+      - Add synchronous replication support for filesystem.
       - Support addition of host from the Host List to NFS Export in nfs module.
       - Support enable/disable advanced dedup in volume module.
-      - Add synchronous replication support for filesystem.
     release_date: '2023-03-31'
+  1.7.0:
+    changes:
+      minor_changes:
+      - Added replication session module to get details, pause, resume, sync, failover,
+        failback and delete replication sessions.
+      - Added support for Unity XT SeaHawk 5.3
+      - Documentation updates for boolean values based on ansible community guidelines.
+    modules:
+    - description: Manage replication session on the Unity storage system
+      name: replication_session
+      namespace: ''
+    release_date: '2023-06-30'

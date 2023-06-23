@@ -25,3 +25,8 @@ plugins/modules/filesystem.py compile-3.5
 plugins/modules/filesystem.py import-2.7
 plugins/modules/filesystem.py import-3.5
 plugins/modules/interface.py validate-modules:missing-gplv3-license
+plugins/modules/replication_session.py validate-modules:missing-gplv3-license
+plugins/modules/replication_session.py import-2.7
+plugins/modules/replication_session.py import-3.5
+plugins/modules/replication_session.py compile-2.7
+plugins/modules/replication_session.py compile-3.5

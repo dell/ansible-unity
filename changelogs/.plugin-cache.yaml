@@ -6,6 +6,7 @@ plugins:
   callback: {}
   cliconf: {}
   connection: {}
+  filter: {}
   httpapi: {}
   inventory: {}
   lookup: {}
@@ -60,6 +61,11 @@ plugins:
       name: nfsserver
       namespace: ''
       version_added: 1.4.0
+    replication_session:
+      description: Manage replication session on Unity storage system
+      name: replication_session
+      namespace: ''
+      version_added: 1.7.0
     smbshare:
       description: Manage SMB shares on Unity storage system
       name: smbshare
@@ -98,5 +104,6 @@ plugins:
   netconf: {}
   shell: {}
   strategy: {}
+  test: {}
   vars: {}
-version: 1.6.0
+version: 1.7.0

@@ -5,15 +5,30 @@ Dellemc.Unity Change Log
 .. contents:: Topics
 
 
+v1.7.0
+======
+
+Minor Changes
+-------------
+
+- Added replication session module to get details, pause, resume, sync, failover, failback and delete replication sessions.
+- Added support for Unity XT SeaHawk 5.3
+- Documentation updates for boolean values based on ansible community guidelines.
+
+New Modules
+-----------
+
+- dellemc.unity.replication_session - Manage replication session on the Unity storage system
+
 v1.6.0
 ======
 
 Minor Changes
 -------------
 
+- Add synchronous replication support for filesystem.
 - Support addition of host from the Host List to NFS Export in nfs module.
 - Support enable/disable advanced dedup in volume module.
-- Add synchronous replication support for filesystem.
 
 v1.5.0
 ======

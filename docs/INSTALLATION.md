@@ -35,7 +35,7 @@ You may obtain a copy of the License at
 
   * Download the latest tar build from any of the available distribution channel [Ansible Galaxy](https://galaxy.ansible.com/dellemc/unity) /[Automation Hub](https://console.redhat.com/ansible/automation-hub/repo/published/dellemc/unity) and use this command to install the collection anywhere in your system:
 
-        ansible-galaxy collection install dellemc-unity-1.6.0.tar.gz -p <install_path>
+        ansible-galaxy collection install dellemc-unity-1.7.0.tar.gz -p <install_path>
 
   * Set the environment variable:
 
@@ -62,7 +62,7 @@ You may obtain a copy of the License at
 
 ## Ansible modules execution
 
-The Ansible server must be configured with Python library for Unity to run the Ansible playbooks. The [Documents](https://github.com/dell/ansible-unity/blob/1.6.0/docs/) provide information on different Ansible modules along with their functions and syntax. The parameters table in the Product Guide provides information on various parameters which needs to be configured before running the modules.
+The Ansible server must be configured with Python library for Unity to run the Ansible playbooks. The [Documents](https://github.com/dell/ansible-unity/blob/1.7.0/docs/) provide information on different Ansible modules along with their functions and syntax. The parameters table in the Product Guide provides information on various parameters which needs to be configured before running the modules.
 
 ## SSL certificate validation
 

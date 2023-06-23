@@ -347,7 +347,7 @@ import ipaddress
 
 LOG = utils.get_logger('host')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class Host(object):

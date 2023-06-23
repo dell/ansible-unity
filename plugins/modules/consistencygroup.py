@@ -321,7 +321,7 @@ EXAMPLES = r"""
         replication_type: "remote"
         remote_system:
           remote_system_host: '10.1.2.3'
-          remote_system_verifycert: False
+          remote_system_verifycert: false
           remote_system_username: 'username'
           remote_system_password: 'password'
         destination_pool_name: "pool_test_1"
@@ -494,7 +494,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 LOG = utils.get_logger('consistencygroup',
                        log_devel=logging.INFO)
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class ConsistencyGroup(object):

@@ -150,11 +150,11 @@ EXAMPLES = r'''
     nas_server_id: "NAS_11"
     path: "/sample_fs"
     description: "Sample SMB share created"
-    is_abe_enabled: True
-    is_branch_cache_enabled: True
+    is_abe_enabled: true
+    is_branch_cache_enabled: true
     offline_availability: "DOCUMENTS"
-    is_continuous_availability_enabled: True
-    is_encryption_enabled: True
+    is_continuous_availability_enabled: true
+    is_encryption_enabled: true
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a filesystem
@@ -166,11 +166,11 @@ EXAMPLES = r'''
     share_name: "sample_smb_share"
     nas_server_name: "sample_nas_server"
     description: "Sample SMB share attributes updated"
-    is_abe_enabled: False
-    is_branch_cache_enabled: False
+    is_abe_enabled: false
+    is_branch_cache_enabled: false
     offline_availability: "MANUAL"
-    is_continuous_availability_enabled: "False"
-    is_encryption_enabled: "False"
+    is_continuous_availability_enabled: "false"
+    is_encryption_enabled: "false"
     umask: "022"
     state: "present"
 - name: Create SMB share for a snapshot
@@ -184,10 +184,10 @@ EXAMPLES = r'''
     nas_server_id: "NAS_11"
     path: "/sample_snapshot"
     description: "Sample SMB share created for snapshot"
-    is_abe_enabled: True
-    is_branch_cache_enabled: True
-    is_continuous_availability_enabled: True
-    is_encryption_enabled: True
+    is_abe_enabled: true
+    is_branch_cache_enabled: true
+    is_continuous_availability_enabled: true
+    is_encryption_enabled: true
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a snapshot
@@ -199,11 +199,11 @@ EXAMPLES = r'''
     share_name: "sample_snap_smb_share"
     snapshot_name: "sample_snapshot"
     description: "Sample SMB share attributes updated for snapshot"
-    is_abe_enabled: False
-    is_branch_cache_enabled: False
+    is_abe_enabled: false
+    is_branch_cache_enabled: false
     offline_availability: "MANUAL"
-    is_continuous_availability_enabled: "False"
-    is_encryption_enabled: "False"
+    is_continuous_availability_enabled: "false"
+    is_encryption_enabled: "false"
     umask: "022"
     state: "present"
 - name: Get details of SMB share
@@ -229,7 +229,7 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
-    sample: True
+    sample: true
 smb_share_details:
     description: The SMB share details.
     type: dict
@@ -325,7 +325,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('smbshare')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class SMBShare(object):
