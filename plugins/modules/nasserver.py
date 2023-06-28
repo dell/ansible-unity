@@ -225,15 +225,15 @@ EXAMPLES = r'''
         validate_certs: "{{validate_certs}}"
         nas_server_name: "{{nas_server_name}}"
         nas_server_new_name: "updated_sample_nas_server"
-        is_replication_destination: False
-        is_backup_only: False
-        is_multiprotocol_enabled: True
-        allow_unmapped_user: True
+        is_replication_destination: false
+        is_backup_only: false
+        is_multiprotocol_enabled: true
+        allow_unmapped_user: true
         default_unix_user: "default_unix_sample_user"
         default_windows_user: "default_windows_sample_user"
-        enable_windows_to_unix_username_mapping: True
+        enable_windows_to_unix_username_mapping: true
         current_unix_directory_service: "LDAP"
-        is_packet_reflect_enabled: True
+        is_packet_reflect_enabled: true
         state: "present"
 
     - name: Enable replication for NAS Server on Local System
@@ -243,7 +243,7 @@ EXAMPLES = r'''
         password: "{{password}}"
         validate_certs: "{{validate_certs}}"
         nas_server_id: "nas_10"
-        replication_reuse_resource: False
+        replication_reuse_resource: false
         replication_params:
           replication_name: "test_replication"
           destination_nas_server_name: "destination_nas"
@@ -252,7 +252,7 @@ EXAMPLES = r'''
           replication_type: "local"
           destination_pool_name: "Pool_Ansible_Neo_DND"
           destination_sp: "SPA"
-          is_backup: True
+          is_backup: true
         replication_state: "enable"
         state: "present"
 
@@ -263,7 +263,7 @@ EXAMPLES = r'''
         password: "{{password}}"
         validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
-        replication_reuse_resource: False
+        replication_reuse_resource: false
         replication_params:
           replication_name: "test_replication"
           destination_nas_server_name: "destination_nas"
@@ -272,12 +272,12 @@ EXAMPLES = r'''
           replication_type: "remote"
           remote_system:
             remote_system_host: '10.10.10.10'
-            remote_system_verifycert: False
+            remote_system_verifycert: false
             remote_system_username: 'test1'
             remote_system_password: 'test1!'
           destination_pool_name: "fastVP_pool"
           destination_sp: "SPA"
-          is_backup: True
+          is_backup: true
         replication_state: "enable"
         state: "present"
 
@@ -288,7 +288,7 @@ EXAMPLES = r'''
         password: "{{password}}"
         validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
-        replication_reuse_resource: True
+        replication_reuse_resource: true
         replication_params:
           destination_nas_server_name: "destination_nas"
           replication_mode: "asynchronous"
@@ -297,7 +297,7 @@ EXAMPLES = r'''
           replication_name: "test_replication"
           remote_system:
             remote_system_host: '10.10.10.10'
-            remote_system_verifycert: False
+            remote_system_verifycert: false
             remote_system_username: 'test1'
             remote_system_password: 'test1!'
           destination_pool_name: "fastVP_pool"
@@ -347,7 +347,7 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
-    sample: True
+    sample: true
 nas_server_details:
     description: The NAS server details.
     type: dict
@@ -388,7 +388,7 @@ nas_server_details:
             type: bool
         is_replication_destination:
             description: If the NAS server is a replication destination
-                         then True.
+                         then true.
             type: bool
         is_windows_to_unix_username_mapping_enabled:
             description: Indicates whether a Unix to/from Windows user name
@@ -482,7 +482,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
 LOG = utils.get_logger('nasserver')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class NASServer(object):

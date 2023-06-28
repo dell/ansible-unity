@@ -294,7 +294,7 @@ changed:
     description: Whether or not the resource has changed.
     returned: always
     type: bool
-    sample: True
+    sample: true
 
 get_user_quota_details:
     description: Details of the user quota.
@@ -427,7 +427,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('user_quota')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class UserQuota(object):

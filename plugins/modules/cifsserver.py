@@ -124,7 +124,7 @@ EXAMPLES = r'''
     password: "{{password}}"
     validate_certs: "{{validate_certs}}"
     cifs_server_id: "cifs_37"
-    unjoin_cifs_server_account: True
+    unjoin_cifs_server_account: true
     domain_username: "domain_username"
     domain_password: "domain_password"
     state: "absent"
@@ -277,7 +277,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell import 
 LOG = utils.get_logger('cifsserver')
 
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class CIFSServer(object):

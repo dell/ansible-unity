@@ -568,7 +568,7 @@ nfs_share_details:
       'root_access_hosts': None,
       'snap': None,
       'type': 'NFSTypeEnum.NFS_SHARE',
-      'existed': True,
+      'existed': true,
       'nas_server': {
       'UnityNasServer': {
           'id': 'nas_id_1',
@@ -607,7 +607,7 @@ HOST_DICT = dict(type='list', required=False, elements='dict',
 HOST_STATE_LIST = ['present-in-export', 'absent-in-export']
 STATE_LIST = ['present', 'absent']
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class NFS(object):

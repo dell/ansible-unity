@@ -92,12 +92,12 @@ EXAMPLES = r'''
         validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         host_name: "dummy_nas23"
-        is_secure_enabled: True
+        is_secure_enabled: true
         kerberos_domain_controller_type: "WINDOWS"
         kerberos_domain_controller_username: "administrator"
         kerberos_domain_controller_password: "Password123!"
-        is_extended_credentials_enabled: True
-        nfs_v4_enabled: True
+        is_extended_credentials_enabled: true
+        nfs_v4_enabled: true
         state: "present"
 
     - name: Create NFS server with kdctype as Unix
@@ -108,10 +108,10 @@ EXAMPLES = r'''
         validate_certs: "{{validate_certs}}"
         nas_server_name: "dummy_nas"
         host_name: "dummy_nas23"
-        is_secure_enabled: True
+        is_secure_enabled: true
         kerberos_domain_controller_type: "UNIX"
-        is_extended_credentials_enabled: True
-        nfs_v4_enabled: True
+        is_extended_credentials_enabled: true
+        nfs_v4_enabled: true
         state: "present"
 
     - name: Get NFS server details
@@ -132,7 +132,7 @@ EXAMPLES = r'''
         nas_server_name: "dummy_nas"
         kerberos_domain_controller_username: "administrator"
         kerberos_domain_controller_password: "Password123!"
-        unjoin_server_account: False
+        unjoin_server_account: false
         state: "absent"
 '''
 
@@ -209,7 +209,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('nfsserver')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class NFSServer(object):

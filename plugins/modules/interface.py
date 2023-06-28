@@ -227,7 +227,7 @@ from ipaddress import ip_network
 
 LOG = utils.get_logger('interface')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class Interface(object):

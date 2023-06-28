@@ -5,7 +5,6 @@
 """Mock Api response for Unit tests of interface on Unity"""
 
 from __future__ import (absolute_import, division, print_function)
-from unittest.mock import MagicMock
 
 __metaclass__ = type
 

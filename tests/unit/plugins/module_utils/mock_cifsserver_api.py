@@ -5,12 +5,8 @@
 """Mock Api response for Unit tests of CIFS server module on Unity"""
 
 from __future__ import (absolute_import, division, print_function)
-from unittest.mock import MagicMock
 
 __metaclass__ = type
-
-from ansible_collections.dellemc.unity.tests.unit.plugins.module_utils.mock_sdk_response \
-    import MockSDKObject
 
 
 class MockCIFSServerApi:

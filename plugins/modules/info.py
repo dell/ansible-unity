@@ -38,6 +38,7 @@ description:
   Get list of CIFS Servers in Unity array.
   Get list of Ethernet ports in Unity array.
   Get list of File interfaces used in Unity array.
+  Get list of Replication sessions in Unity array.
 
 extends_documentation_fragment:
   - dellemc.unity.unity
@@ -54,7 +55,7 @@ options:
       for which information is required.
     choices: [host, fc_initiator, iscsi_initiator, cg, storage_pool, vol,
     snapshot_schedule, nas_server, file_system, snapshot, nfs_export,
-    smb_share, user_quota, tree_quota, disk_group, nfs_server, cifs_server, ethernet_port, file_interface]
+    smb_share, user_quota, tree_quota, disk_group, nfs_server, cifs_server, ethernet_port, file_interface, replication_session]
     type: list
     elements: str
 
@@ -89,6 +90,7 @@ EXAMPLES = r'''
        - cifs_server
        - ethernet_port
        - file_interface
+       - replication_session
 
  - name: Get information of Unity array
    dellemc.unity.info:
@@ -267,6 +269,15 @@ EXAMPLES = r'''
      validate_certs: "{{validate_certs}}"
      gather_subset:
        - file_interface
+
+ - name: Get list of replication sessions on Unity array
+   dellemc.unity.info:
+     unispherehost: "{{unispherehost}}"
+     username: "{{username}}"
+     password: "{{password}}"
+     validate_certs: "{{validate_certs}}"
+     gather_subset:
+       - replication_session
 '''
 
 RETURN = r'''
@@ -1213,9 +1224,77 @@ File_interfaces:
             "name": "3_APMXXXXXXXXXX"
         }
     ]
+Replication_sessions:
+    description: Details of the Replication sessions.
+    returned: When Replication sessions exist.
+    type: list
+    contains:
+        id:
+            description: The ID of the Replication session.
+            type: str
+        name:
+            description: The name of the Replication session.
+            type: str
+    sample: [
+        {
+            "current_transfer_est_remain_time": 0,
+            "daily_snap_replication_policy": null,
+            "dst_resource_id": "nas_8",
+            "dst_spa_interface": {
+                "UnityRemoteInterface": {
+                    "hash": 8771253398547,
+                    "id": "APM00213404195:if_181"
+                }
+            },
+            "dst_spb_interface": {
+               "UnityRemoteInterface": {
+                   "hash": 8771253424144,
+                   "id": "APM00213404195:if_180"
+              }
+            },
+            "dst_status": "ReplicationSessionStatusEnum.OK",
+            "existed": true,
+            "hash": 8771259012271,
+            "health": {
+                "UnityHealth": {
+                    "hash": 8771253424168
+                }
+            },
+            "hourly_snap_replication_policy": null,
+            "id": "103079215114_APM00213404195_0000_103079215274_APM00213404194_0000",
+            "last_sync_time": "2023-04-18 10:35:25+00:00",
+            "local_role": "ReplicationSessionReplicationRoleEnum.DESTINATION",
+            "max_time_out_of_sync": 0,
+            "members": null,
+            "name": "rep_sess_nas",
+            "network_status": "ReplicationSessionNetworkStatusEnum.OK",
+            "remote_system": {
+                "UnityRemoteSystem": {
+                    "hash": 8771253380142
+                }
+            },
+            "replication_resource_type": "ReplicationEndpointResourceTypeEnum.NASSERVER",
+            "src_resource_id": "nas_213",
+            "src_spa_interface": {
+                "UnityRemoteInterface": {
+                    "hash": 8771253475010,
+                    "id": "APM00213404194:if_195"
+                }
+            },
+            "src_spb_interface": {
+                "UnityRemoteInterface": {
+                    "hash": 8771253374169,
+                    "id": "APM00213404194:if_194"
+                }
+            },
+            "src_status": "ReplicationSessionStatusEnum.OK",
+            "status": "ReplicationOpStatusEnum.ACTIVE",
+            "sync_progress": 0,
+            "sync_state": "ReplicationSessionSyncStateEnum.IN_SYNC"
+        },
+    ]
 '''
 
-from re import sub
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
@@ -1223,7 +1302,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 LOG = utils.get_logger('info')
 SUCCESSFULL_LISTED_MSG = 'Successfully listed.'
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class Info(object):
@@ -1549,6 +1628,20 @@ class Info(object):
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
+    def get_replication_session_list(self):
+        """Get the list of replication sessions on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting replication sessions list")
+            replication_sessions = self.unity.get_replication_session()
+            return result_list(replication_sessions)
+
+        except Exception as e:
+            msg = 'Get replication session list from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
     def perform_module_operation(self):
         """ Perform different actions on Info based on user parameter
             chosen in playbook """
@@ -1575,6 +1668,7 @@ class Info(object):
         cifs_server = []
         ethernet_port = []
         file_interface = []
+        replication_session = []
 
         subset = self.module.params['gather_subset']
         if subset is not None:
@@ -1616,6 +1710,8 @@ class Info(object):
                 ethernet_port = self.get_ethernet_port_list()
             if 'file_interface' in subset:
                 file_interface = self.get_file_interface_list()
+            if 'replication_session' in subset:
+                replication_session = self.get_replication_session_list()
 
         self.module.exit_json(
             Array_Details=array_details,
@@ -1637,7 +1733,8 @@ class Info(object):
             NFS_Servers=nfs_server,
             CIFS_Servers=cifs_server,
             Ethernet_ports=ethernet_port,
-            File_interfaces=file_interface
+            File_interfaces=file_interface,
+            Replication_sessions=replication_session
         )
 
 
@@ -1770,7 +1867,7 @@ def get_info_parameters():
                                             'file_system', 'snapshot',
                                             'nfs_export', 'smb_share',
                                             'user_quota', 'tree_quota', 'disk_group', 'nfs_server', 'cifs_server',
-                                            'ethernet_port', 'file_interface']))
+                                            'ethernet_port', 'file_interface', 'replication_session']))
 
 
 def main():

@@ -8,8 +8,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from ansible_collections.dellemc.unity.tests.unit.plugins.module_utils.mock_sdk_response import MockSDKObject
-
 
 class MockVolumeApi:
 

@@ -21,7 +21,7 @@ Requirements
 The below requirements are needed on the host that executes this module.
 
 - A Dell Unity Storage device version 5.1 or later.
-- Ansible-core 2.12 or later.
+- Ansible-core 2.13 or later.
 - Python 3.9, 3.10 or 3.11.
 - Storops Python SDK 1.2.11.
 

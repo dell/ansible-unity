@@ -12,8 +12,6 @@ import pytest
 from mock.mock import MagicMock
 from ansible_collections.dellemc.unity.tests.unit.plugins.module_utils.mock_nfsserver_api \
     import MockNFSServerApi
-from ansible_collections.dellemc.unity.tests.unit.plugins.module_utils.mock_sdk_response \
-    import MockSDKObject
 from ansible_collections.dellemc.unity.tests.unit.plugins.module_utils.mock_api_exception \
     import HttpError as http_error, MockApiException
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell import utils

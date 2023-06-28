@@ -122,7 +122,7 @@ EXAMPLES = r'''
       cg_name: "{{cg_name}}"
       snapshot_name: "{{cg_snapshot_name}}"
       description: "{{description}}"
-      auto_delete: False
+      auto_delete: false
       state: "present"
 
   - name: Create a Snapshot for a volume with Host attached
@@ -257,7 +257,6 @@ snapshot_details:
     }
 '''
 
-import logging
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
     import utils
@@ -265,7 +264,7 @@ from datetime import datetime
 
 LOG = utils.get_logger('snapshot')
 
-application_type = "Ansible/1.6.0"
+application_type = "Ansible/1.7.0"
 
 
 class Snapshot(object):
