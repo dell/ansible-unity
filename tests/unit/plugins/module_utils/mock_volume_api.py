@@ -34,6 +34,10 @@ class MockVolumeApi:
         'mapping_state': None,
         'new_vol_name': None,
         'tiering_policy': None,
+        'retention_duration': None,
+        'copy_name': None,
+        'force_refresh': False,
+        'snapshot_name': None,
         'state': None,
     }
 
@@ -170,3 +174,61 @@ class MockVolumeApi:
                     }}
         else:
             return 'Failed to modify the volume Atest with error'
+
+    @staticmethod
+    def refreshable_volume_response(response_type):
+        if response_type == 'api':
+            return {'volume_details': {
+                    'current_node': 'NodeEnum.SPB',
+                    'data_reduction_percent': 0,
+                    'data_reduction_ratio': 1.0,
+                    'data_reduction_size_saved': 0,
+                    'default_node': 'NodeEnum.SPB',
+                    'description': None,
+                    'effective_io_limit_max_iops': None,
+                    'effective_io_limit_max_kbps': None,
+                    'existed': True,
+                    'family_base_lun': {'UnityLun': {'id': 'sv_1613'}},
+                    'family_clone_count': 0,
+                    'hash': 8769317548849,
+                    'health': {'UnityHealth': {}},
+                    'host_access': [],
+                    'id': 'sv_214551',
+                    'io_limit_policy': None,
+                    'is_advanced_dedup_enabled': False,
+                    'is_compression_enabled': True,
+                    'is_data_reduction_enabled': True,
+                    'is_replication_destination': False,
+                    'is_snap_schedule_paused': False,
+                    'is_thin_clone': True,
+                    'is_thin_enabled': True,
+                    'metadata_size': 3758096384,
+                    'metadata_size_allocated': 3221225472,
+                    'name': 'Atest',
+                    'per_tier_size_used': [3489660928, 0, 0],
+                    'pool': {'id': 'pool_3', 'name': 'Extreme_Perf_tier'},
+                    'size_allocated': 0,
+                    'size_total': 2147483648,
+                    'size_total_with_unit': '2.0 GB',
+                    'size_used': None,
+                    'snap_count': 0,
+                    'snap_schedule': None,
+                    'snap_wwn': '60:06:01:60:5C:F0:50:00:F6:42:70:38:7A:90:40:FF',
+                    'snaps_size': 0,
+                    'snaps_size_allocated': 0,
+                    'storage_resource': {'UnityStorageResource': {'id': 'sv_1678', 'type': 8}},
+                    'tiering_policy': 'TieringPolicyEnum.AUTOTIER_HIGH',
+                    'type': 'LUNTypeEnum.STANDALONE',
+                    'wwn': '60:06:01:60:5C:F0:50:00:41:25:EA:63:94:92:92:AE',
+                    }}
+        else:
+            return None
+
+    @staticmethod
+    def refresh_volume_response(response_type):
+        if response_type == 'api':
+            return {'copy': {
+                    'id': "85899345930"
+                    }}
+        else:
+            return 'Failed to refresh thin clone [name: Atest, id: sv_214551] with error'

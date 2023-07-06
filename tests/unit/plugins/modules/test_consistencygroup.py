@@ -191,3 +191,37 @@ class TestConsistencyGroup():
         consistencygroup_module_mock.perform_module_operation()
         assert consistencygroup_module_mock.module.fail_json.call_args[1]['msg'] == \
             MockConsistenyGroupApi.get_cg_replication_dependent_response('disable_cg_exception')
+
+    def test_refresh_cg(self, consistencygroup_module_mock):
+        self.get_module_args.update({
+            'cg_name': 'lun_test_cg_clone',
+            'state': 'refreshed'
+        })
+        consistencygroup_module_mock.module.params = self.get_module_args
+        cg_details = MockConsistenyGroupApi.cg_get_refreshable_details_method_response()
+        cg_object = MockConsistenyGroupApi.get_refreshable_cg_object()
+        refresh_resp = MockSDKObject(MockConsistenyGroupApi.refresh_cg_response('api')['copy'])
+        consistencygroup_module_mock.unity_conn.get_cg = MagicMock(return_value=cg_object)
+        consistencygroup_module_mock.get_details = MagicMock(return_value=cg_details)
+        cg_object.get_id = MagicMock(return_value=cg_details['id'])
+        utils.cg.UnityConsistencyGroup.get = MagicMock(return_value=cg_object)
+        cg_object.refresh = MagicMock(return_value=refresh_resp)
+        consistencygroup_module_mock.perform_module_operation()
+        assert consistencygroup_module_mock.module.exit_json.call_args[1]['changed'] is True
+
+    def test_refresh_cg_throws_exception(self, consistencygroup_module_mock):
+        self.get_module_args.update({
+            'cg_name': 'lun_test_cg_clone',
+            'state': 'refreshed'
+        })
+        consistencygroup_module_mock.module.params = self.get_module_args
+        cg_details = MockConsistenyGroupApi.cg_get_refreshable_details_method_response()
+        cg_object = MockConsistenyGroupApi.get_refreshable_cg_object()
+        consistencygroup_module_mock.unity_conn.get_cg = MagicMock(return_value=cg_object)
+        consistencygroup_module_mock.get_details = MagicMock(return_value=cg_details)
+        cg_object.get_id = MagicMock(return_value=cg_details['id'])
+        utils.cg.UnityConsistencyGroup.get = MagicMock(return_value=cg_object)
+        cg_object.refresh = MagicMock(side_effect=MockApiException)
+        consistencygroup_module_mock.perform_module_operation()
+        assert MockConsistenyGroupApi.refresh_cg_response('error') in \
+            consistencygroup_module_mock.module.fail_json.call_args[1]['msg']

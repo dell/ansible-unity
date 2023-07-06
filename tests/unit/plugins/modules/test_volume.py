@@ -126,3 +126,35 @@ class TestUnityVolume():
         volume_module_mock.perform_module_operation()
         assert MockVolumeApi.modify_volume_response('error') in \
             volume_module_mock.module.fail_json.call_args[1]['msg']
+
+    def test_refresh_volume(self, volume_module_mock):
+        self.get_module_args.update({
+            'vol_name': "Atest",
+            'state': 'refreshed'
+        })
+        volume_module_mock.module.params = self.get_module_args
+        volume_module_mock.host_access_modify_required = MagicMock(return_value=False)
+        obj_vol = MockSDKObject(MockVolumeApi.refreshable_volume_response('api')['volume_details'])
+        refresh_resp = MockVolumeApi.refresh_volume_response('api')['copy']
+        volume_module_mock.unity_conn.get_lun = MagicMock(return_value=obj_vol)
+        obj_vol.refresh = MagicMock(return_value=MockSDKObject(refresh_resp))
+        volume_module_mock.volume_modify_required = MagicMock()
+        volume_module_mock.get_volume_display_attributes = MagicMock()
+        volume_module_mock.perform_module_operation()
+        assert volume_module_mock.module.exit_json.call_args[1]['changed'] is True
+
+    def test_refresh_volume_exception(self, volume_module_mock):
+        self.get_module_args.update({
+            'vol_name': "Atest",
+            'state': 'refreshed'
+        })
+        volume_module_mock.module.params = self.get_module_args
+        volume_module_mock.host_access_modify_required = MagicMock(return_value=False)
+        obj_vol = MockSDKObject(MockVolumeApi.refreshable_volume_response('api')['volume_details'])
+        volume_module_mock.unity_conn.get_lun = MagicMock(return_value=obj_vol)
+        obj_vol.refresh = MagicMock(side_effect=MockApiException)
+        volume_module_mock.volume_modify_required = MagicMock()
+        volume_module_mock.get_volume_display_attributes = MagicMock()
+        volume_module_mock.perform_module_operation()
+        assert MockVolumeApi.refresh_volume_response('error') in \
+            volume_module_mock.module.fail_json.call_args[1]['msg']

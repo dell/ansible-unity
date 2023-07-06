@@ -16,7 +16,7 @@ short_description: Manage filesystem snapshot on the Unity storage system
 description:
 - Managing Filesystem Snapshot on the Unity storage system includes
   create filesystem snapshot, get filesystem snapshot, modify filesystem
-  snapshot and delete filesystem snapshot.
+  snapshot, delete filesystem snapshot and refresh filesystem snapshot.
 version_added: '1.1.0'
 extends_documentation_fragment:
   - dellemc.unity.unity
@@ -99,13 +99,26 @@ options:
     - If not given, snapshot's access type will be C(Checkpoint).
     type: str
     choices: ['Checkpoint' , 'Protocol']
+  retention_duration:
+    description:
+    - This option is for specifying the retention duration for the backup copy
+      of the snapshot created during the refresh operation.
+    - The retention duration is set in seconds. See the examples how to
+      calculate it.
+    - If set to C(0), the backup copy is deleted immediately
+    - If not set, the storage defaults are used
+    type: int
+  copy_name:
+    description:
+    - The backup copy name of the snapshot created by the refresh operation.
+    type: str
   state:
     description:
     - The state option is used to mention the existence of the filesystem
       snapshot.
     type: str
     required: true
-    choices: ['absent', 'present']
+    choices: ['absent', 'present', 'refreshed']
 notes:
   - Filesystem snapshot cannot be deleted, if it has nfs or smb share.
   - The I(check_mode) is not supported.
@@ -197,6 +210,37 @@ EXAMPLES = r'''
       validate_certs: "{{validate_certs}}"
       snapshot_id: "10008000403"
       state: "absent"
+
+  - name: Refresh a Snapshot, keep backup snapshot for 3 days
+    dellemc.unity.snapshot:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      validate_certs: "{{validate_certs}}"
+      snapshot_name: "ansible_test_FS_snap"
+      retention_duration: "{{ '3days' | community.general.to_seconds | int }}"
+      state: "refreshed"
+
+  - name: Refresh a Snapshot, delete backup snapshot
+    dellemc.unity.snapshot:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      validate_certs: "{{validate_certs}}"
+      snapshot_name: "ansible_test_FS_snap"
+      retention_duration: 0
+      state: "refreshed"
+
+  - name: Refresh a Snapshot and set backup snapshot name
+    dellemc.unity.snapshot:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      validate_certs: "{{validate_certs}}"
+      snapshot_name: "ansible_test_FS_snap"
+      copy_name: "{{snapshot_name}}_before_refresh"
+      state: "refreshed"
+
 '''
 
 RETURN = r'''
@@ -471,6 +515,20 @@ class FilesystemSnapshot(object):
             LOG.error(error_msg)
             self.module.fail_json(msg=error_msg)
 
+    def refresh_fs_snapshot(self, fs_snapshot, copy_name=None,
+                            retention_duration=None):
+        try:
+            resp = fs_snapshot.refresh(copy_name=copy_name,
+                                       retention_duration=retention_duration)
+            resp.raise_if_err()
+            fs_snapshot.update()
+        except Exception as e:
+            error_msg = "Failed to refresh snapshot" \
+                        " [name: %s , id: %s] with error %s"\
+                        % (fs_snapshot.name, fs_snapshot.id, str(e))
+            LOG.error(error_msg)
+            self.module.fail_json(msg=error_msg)
+
     def get_fs_snapshot_obj(self, name=None, id=None):
         fs_snapshot = id if id else name
         msg = "Failed to get details of filesystem snapshot %s with error %s."
@@ -585,6 +643,8 @@ class FilesystemSnapshot(object):
         description = self.module.params['description']
         fs_access_type = self.module.params['fs_access_type']
         state = self.module.params['state']
+        retention_duration = self.module.params['retention_duration']
+        copy_name = self.module.params['copy_name']
         nas_server_resource = None
         filesystem_resource = None
         changed = False
@@ -707,6 +767,14 @@ class FilesystemSnapshot(object):
             fs_snapshot = self.delete_fs_snapshot(fs_snapshot)
             changed = True
 
+        # Refresh the snapshot:
+        if fs_snapshot and state == "refreshed":
+            fs_snapshot = self\
+                .refresh_fs_snapshot(fs_snapshot=fs_snapshot,
+                                     copy_name=copy_name,
+                                     retention_duration=retention_duration)
+            changed = True
+
         # Add filesystem snapshot details to the result.
         if fs_snapshot:
             fs_snapshot.update()
@@ -754,7 +822,10 @@ def get_snapshot_parameters():
         description=dict(required=False, type='str'),
         fs_access_type=dict(required=False, type='str',
                             choices=['Checkpoint', 'Protocol']),
-        state=dict(required=True, type='str', choices=['present', 'absent'])
+        retention_duration=dict(required=False, type='int'),
+        copy_name=dict(required=False, type='str'),
+        state=dict(required=True, type='str',
+                   choices=['present', 'absent', 'refreshed'])
     )
 
 

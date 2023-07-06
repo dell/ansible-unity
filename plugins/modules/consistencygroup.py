@@ -20,7 +20,8 @@ description:
   consistency group, unmapping hosts from consistency group,
   renaming consistency group, modifying attributes of consistency group,
   enabling replication in consistency group, disabling replication in
-  consistency group and deleting consistency group.
+  consistency group, deleting consistency group
+  and refreshing thin clone consistency group.
 
 extends_documentation_fragment:
   - dellemc.unity.unity
@@ -197,8 +198,33 @@ options:
   state:
     description:
     - Define whether the consistency group should exist or not.
-    choices: [absent, present]
+    - The C(refreshed) state is not idempotent. It always executes the
+      refresh operation.
+    choices: [absent, present, refreshed]
     required: true
+    type: str
+  retention_duration:
+    description:
+    - This option is for specifying the retention duration for the backup copy
+      of the snapshot created during the refresh operation.
+    - The retention duration is set in seconds. See the examples how to
+      calculate it.
+    - If set to C(0), the backup copy is deleted immediately
+    - If not set, the storage defaults are used
+    type: int
+  copy_name:
+    description:
+    - The backup copy name of the snapshot created by the refresh operation.
+    type: str
+  force_refresh:
+    description:
+    - When set to C(true), the refresh operation will proceed even if host
+      access is configured on the storage resource.
+    type: bool
+    default: false
+  snapshot_name:
+    description:
+    - The source snapshot which is used to refresh the thin clone
     type: str
 notes:
   - The I(check_mode) is not supported.
@@ -337,6 +363,48 @@ EXAMPLES = r"""
       cg_name: "dis_repl_ans_source"
       replication_state: "disable"
       state: "present"
+
+- name: Force Refresh a thin clone, keep backup snapshot for 2 days
+  dellemc.unity.consistencygroup:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    cg_name: "{{cg_name}}"
+    retention_duration: "{{ '2days' | community.general.to_seconds | int }}"
+    force_refresh: True
+    state: "refreshed"
+
+- name: Refresh a Snapshot, delete backup snapshot
+  dellemc.unity.consistencygroup:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    cg_name: "{{cg_name}}"
+    retention_duration: 0
+    state: "refreshed"
+
+- name: Refresh a thin clone and set backup snapshot name
+  dellemc.unity.consistencygroup:
+      unispherehost: "{{unispherehost}}"
+      username: "{{username}}"
+      password: "{{password}}"
+      validate_certs: "{{validate_certs}}"
+      cg_name: "{{cg_name}}"
+      copy_name: "{{snapshot_name}}_before_refresh"
+      state: "refreshed"
+
+- name: Refresh a thin clone from a snapshot, keep backup snapshot for 2 days
+  dellemc.unity.consistencygroup:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    cg_name: "{{cg_name}}"
+    snapshot_name: "{{new_snapshot_name}}"
+    retention_duration: "{{ '2days' | community.general.to_seconds | int }}"
+    state: "refreshed"
 """
 
 RETURN = r'''
@@ -1062,6 +1130,35 @@ class ConsistencyGroup(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
+    def refresh_cg(self, cg_name, snapshot=None, copy_name=None, force=False,
+                   retention_duration=None):
+        """Refresh thin clone
+
+        :param copy_name: name of the backup snapshot
+        :param force: proceeed refresh even if host access is configured
+        :param retention_duration: Backup copy retention duration in seconds
+        """
+        cg_obj = self.return_cg_instance(cg_name)
+        try:
+            if snapshot is not None:
+                resp = snapshot\
+                    .refresh_thin_clone(sr=cg_obj,
+                                        copy_name=copy_name,
+                                        force=force,
+                                        retention_duration=retention_duration)
+            else:
+                resp = cg_obj.refresh(copy_name=copy_name,
+                                      force=force,
+                                      retention_duration=retention_duration)
+            resp.raise_if_err()
+            cg_obj.update()
+        except Exception as e:
+            error_msg = "Failed to refresh thin clone" \
+                        " [name: %s, id: %s] with error %s"\
+                        % (cg_obj.name, cg_obj.id, str(e))
+            LOG.error(error_msg)
+            self.module.fail_json(msg=error_msg)
+
     def refine_volumes(self, volumes):
         """Refine volumes.
             :param volumes: Volumes that is to be added/removed
@@ -1286,6 +1383,10 @@ class ConsistencyGroup(object):
         mapping_state = self.module.params['mapping_state']
         replication = self.module.params['replication_params']
         replication_state = self.module.params['replication_state']
+        retention_duration = self.module.params['retention_duration']
+        copy_name = self.module.params['copy_name']
+        force_refresh = self.module.params['force_refresh']
+        snapshot_name = self.module.params['snapshot_name']
         state = self.module.params['state']
 
         # result is a dictionary that contains changed status and consistency
@@ -1399,6 +1500,16 @@ class ConsistencyGroup(object):
             else:
                 result['changed'] = self.disable_cg_replication(cg_name)
 
+        if state == 'refreshed' and cg_details:
+            snapshot = None
+            if snapshot_name is not None:
+                snapshot = self.unity_conn.get_snap(name=snapshot_name)
+
+            self.refresh_cg(cg_name=cg_name, snapshot=snapshot,
+                            copy_name=copy_name, force=force_refresh,
+                            retention_duration=retention_duration)
+            result['changed'] = True
+
         if result['create_cg'] or result['modify_cg'] or result[
             'add_vols_to_cg'] or result['remove_vols_from_cg'] or result[
             'delete_cg'] or result['rename_cg'] or result[
@@ -1501,7 +1612,13 @@ def get_consistencygroup_parameters():
             destination_pool_id=dict(type='str')
         )),
         replication_state=dict(type='str', choices=['enable', 'disable']),
-        state=dict(required=True, type='str', choices=['present', 'absent'])
+        retention_duration=dict(required=False, type='int'),
+        copy_name=dict(required=False, type='str'),
+        force_refresh=dict(required=False, type='bool',
+                           default=False),
+        snapshot_name=dict(required=False, type='str'),
+        state=dict(required=True, type='str',
+                   choices=['present', 'absent', 'refreshed'])
     )
 
 

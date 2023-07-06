@@ -46,7 +46,7 @@ class ModuleDocFragment(object):
       - A Dell Unity Storage device version 5.1 or later.
       - Ansible-core 2.13 or later.
       - Python 3.9, 3.10 or 3.11.
-      - Storops Python SDK 1.2.11.
+      - Storops Python SDK > 1.2.11.
     notes:
       - The modules present in this collection named as 'dellemc.unity'
         are built to support the Dell Unity storage platform.
