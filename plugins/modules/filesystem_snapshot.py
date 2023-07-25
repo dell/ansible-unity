@@ -304,7 +304,7 @@ from datetime import datetime
 
 LOG = utils.get_logger('filesystem_snapshot')
 
-application_type = "Ansible/1.7.0"
+application_type = "Ansible/1.7.1"
 
 
 class FilesystemSnapshot(object):

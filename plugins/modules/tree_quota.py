@@ -283,7 +283,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('tree_quota')
 
-application_type = "Ansible/1.7.0"
+application_type = "Ansible/1.7.1"
 
 
 class QuotaTree(object):

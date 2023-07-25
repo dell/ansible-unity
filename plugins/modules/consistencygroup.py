@@ -494,7 +494,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 LOG = utils.get_logger('consistencygroup',
                        log_devel=logging.INFO)
 
-application_type = "Ansible/1.7.0"
+application_type = "Ansible/1.7.1"
 
 
 class ConsistencyGroup(object):

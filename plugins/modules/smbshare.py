@@ -325,7 +325,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('smbshare')
 
-application_type = "Ansible/1.7.0"
+application_type = "Ansible/1.7.1"
 
 
 class SMBShare(object):

@@ -5,6 +5,14 @@ Dellemc.Unity Change Log
 .. contents:: Topics
 
 
+v1.7.1
+======
+
+Minor Changes
+-------------
+
+- Patch update to fix import errors in utils file.
+
 v1.7.0
 ======
 
