@@ -1,6 +1,7 @@
 # Ansible Modules for Dell Technologies Unity
 
 The Ansible Modules for Dell Technologies (Dell) Unity allow Data Center and IT administrators to use RedHat Ansible to automate and orchestrate the configuration and management of Dell Unity arrays.
+> **NOTE:** The Ansible Modules for Dell Unity are released on a monthly cadence starting July '23
 
 The capabilities of the Ansible modules are managing consistency groups, filesystem, filesystem snapshots, CIFS server, NAS server, NFS server, NFS export, SMB share, interface, hosts, snapshots, snapshot schedules, storage pools, user quotas, quota trees, replication sessions and volumes. Capabilities also include gathering facts from the array. The options available for each are list, show, create, modify and delete. These tasks can be executed by running simple playbooks written in yaml syntax. The modules are written so that all the operations are idempotent, so making multiple identical requests has the same effect as making a single request.
 
