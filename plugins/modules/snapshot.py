@@ -264,7 +264,7 @@ from datetime import datetime
 
 LOG = utils.get_logger('snapshot')
 
-application_type = "Ansible/1.7.0"
+application_type = "Ansible/1.7.1"
 
 
 class Snapshot(object):
