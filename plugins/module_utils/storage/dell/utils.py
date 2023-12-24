@@ -115,7 +115,7 @@ def get_unity_management_host_parameters():
         password=dict(type='str', required=True, no_log=True),
         validate_certs=dict(type='bool', required=False,
                             aliases=['verifycert'], default=True),
-        port=dict(type='int', required=False, default=443, no_log=True)
+        port=dict(type='int', required=False, default=443)
     )
 
 
