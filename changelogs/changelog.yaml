@@ -174,3 +174,8 @@ releases:
       minor_changes:
       - Patch update to fix import errors in utils file.
     release_date: '2023-07-31'
+  2.0.0:
+    changes:
+      major_changes:
+      - Adding support for Unity Puffin v5.4.
+    release_date: '2024-03-29'

@@ -1,8 +1,8 @@
 **Ansible Modules for Dell Technologies Unity** 
 =========================================
-### Release Notes 1.7.1
+### Release Notes 2.0.0
 
->   © 2022 Dell Inc. or its subsidiaries. All rights reserved. Dell
+>   © 2024 Dell Inc. or its subsidiaries. All rights reserved. Dell
 >   and other trademarks are trademarks of Dell Inc. or its
 >   subsidiaries. Other trademarks may be trademarks of their respective
 >   owners.
@@ -28,7 +28,7 @@ Table 1. Revision history
 
 | Revision | Date           | Description                                             |
 |----------|----------------|---------------------------------------------------------|
-| 01       | July 2023     | Current release of Ansible Modules for Dell Unity 1.7.1 |
+| 01       | March 2024     | Current release of Ansible Modules for Dell Unity 2.0.0 |
 
 Product Description
 -------------------
@@ -38,9 +38,7 @@ New features & enhancements
 ---------------------------
 This release has the following changes -
 
-- Support addition of host from the Host List to NFS Export in nfs module.
-- Support enable/disable advanced dedup in volume module.
-- Add synchronous replication support for filesystem.
+- Adding support for Unity Puffin v5.4.
 
 Known issues
 ------------
@@ -71,7 +69,7 @@ for Unity GitHub](https://github.com/dell/ansible-unity/) page.
 
 Documentation
 -------------
-The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/1.7.1/docs)
+The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/2.0.0/docs)
 page. It includes the following:
 - README
 - Release Notes (this document)

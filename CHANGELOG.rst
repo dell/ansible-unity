@@ -5,6 +5,14 @@ Dellemc.Unity Change Log
 .. contents:: Topics
 
 
+v2.0.0
+======
+
+Major Changes
+-------------
+
+- Adding support for Unity Puffin v5.4.
+
 v1.7.1
 ======
 
