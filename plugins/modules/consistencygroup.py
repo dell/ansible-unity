@@ -320,10 +320,10 @@ EXAMPLES = r"""
           rpo: 60
           replication_type: "remote"
           remote_system:
-            remote_system_host: '10.1.2.3'
-            remote_system_verifycert: false
-            remote_system_username: 'username'
-            remote_system_password: 'password'
+              remote_system_host: '10.1.2.3'
+              remote_system_verifycert: false
+              remote_system_username: 'username'
+              remote_system_password: 'password'
           destination_pool_name: "pool_test_1"
       replication_state: "enable"
       state: "present"
