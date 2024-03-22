@@ -224,10 +224,10 @@ EXAMPLES = r"""
     validate_certs: "{{validate_certs}}"
     vol_id: "{{vol_id}}"
     hosts:
-        - host_name: "10.226.198.248"
-          hlu: 1
-        - host_id: "Host_929"
-          hlu: 2
+      - host_name: "10.226.198.248"
+        hlu: 1
+      - host_id: "Host_929"
+        hlu: 2
     mapping_state: "mapped"
     state: "present"
 

@@ -112,91 +112,91 @@ notes:
 '''
 
 EXAMPLES = r'''
-  - name: Create Filesystem Snapshot
-    dellemc.unity.filesystem_snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_name: "ansible_test_FS_snap"
-      filesystem_name: "ansible_test_FS"
-      nas_server_name: "lglad069"
-      description: "Created using playbook"
-      auto_delete: true
-      fs_access_type: "Protocol"
-      state: "present"
+- name: Create Filesystem Snapshot
+  dellemc.unity.filesystem_snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_name: "ansible_test_FS_snap"
+    filesystem_name: "ansible_test_FS"
+    nas_server_name: "lglad069"
+    description: "Created using playbook"
+    auto_delete: true
+    fs_access_type: "Protocol"
+    state: "present"
 
-  - name: Create Filesystem Snapshot with expiry time
-    dellemc.unity.filesystem_snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_name: "ansible_test_FS_snap_1"
-      filesystem_name: "ansible_test_FS_1"
-      nas_server_name: "lglad069"
-      description: "Created using playbook"
-      expiry_time: "04/15/2021 2:30"
-      fs_access_type: "Protocol"
-      state: "present"
+- name: Create Filesystem Snapshot with expiry time
+  dellemc.unity.filesystem_snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_name: "ansible_test_FS_snap_1"
+    filesystem_name: "ansible_test_FS_1"
+    nas_server_name: "lglad069"
+    description: "Created using playbook"
+    expiry_time: "04/15/2021 2:30"
+    fs_access_type: "Protocol"
+    state: "present"
 
-  - name: Get Filesystem Snapshot Details using Name
-    dellemc.unity.filesystem_snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_name: "ansible_test_FS_snap"
-      state: "present"
+- name: Get Filesystem Snapshot Details using Name
+  dellemc.unity.filesystem_snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_name: "ansible_test_FS_snap"
+    state: "present"
 
-  - name: Get Filesystem Snapshot Details using ID
-    dellemc.unity.filesystem_snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_id: "10008000403"
-      state: "present"
+- name: Get Filesystem Snapshot Details using ID
+  dellemc.unity.filesystem_snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_id: "10008000403"
+    state: "present"
 
-  - name: Update Filesystem Snapshot attributes
-    dellemc.unity.filesystem_snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_name: "ansible_test_FS_snap"
-      description: "Description updated"
-      auto_delete: false
-      expiry_time: "04/15/2021 5:30"
-      state: "present"
+- name: Update Filesystem Snapshot attributes
+  dellemc.unity.filesystem_snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_name: "ansible_test_FS_snap"
+    description: "Description updated"
+    auto_delete: false
+    expiry_time: "04/15/2021 5:30"
+    state: "present"
 
-  - name: Update Filesystem Snapshot attributes using ID
-    dellemc.unity.filesystem_snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_id: "10008000403"
-      expiry_time: "04/18/2021 8:30"
-      state: "present"
+- name: Update Filesystem Snapshot attributes using ID
+  dellemc.unity.filesystem_snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_id: "10008000403"
+    expiry_time: "04/18/2021 8:30"
+    state: "present"
 
-  - name: Delete Filesystem Snapshot using Name
-    dellemc.unity.filesystem_snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_name: "ansible_test_FS_snap"
-      state: "absent"
+- name: Delete Filesystem Snapshot using Name
+  dellemc.unity.filesystem_snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_name: "ansible_test_FS_snap"
+    state: "absent"
 
-  - name: Delete Filesystem Snapshot using ID
-    dellemc.unity.filesystem_snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_id: "10008000403"
-      state: "absent"
+- name: Delete Filesystem Snapshot using ID
+  dellemc.unity.filesystem_snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_id: "10008000403"
+    state: "absent"
 '''
 
 RETURN = r'''

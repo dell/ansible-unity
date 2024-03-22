@@ -101,97 +101,97 @@ notes:
 '''
 
 EXAMPLES = r'''
-  - name: Get quota tree details by quota tree id
-    dellemc.unity.tree_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      tree_quota_id: "treequota_171798700679_10"
-      state: "present"
+- name: Get quota tree details by quota tree id
+  dellemc.unity.tree_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    tree_quota_id: "treequota_171798700679_10"
+    state: "present"
 
-  - name: Get quota tree details by quota tree path
-    dellemc.unity.tree_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_name: "fs_2171"
-      nas_server_id: "nas_21"
-      path: "/test"
-      state: "present"
+- name: Get quota tree details by quota tree path
+  dellemc.unity.tree_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_name: "fs_2171"
+    nas_server_id: "nas_21"
+    path: "/test"
+    state: "present"
 
-  - name: Create quota tree for a filesystem with filesystem id
-    dellemc.unity.tree_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      hard_limit: 6
-      cap_unit: "TB"
-      soft_limit: 5
-      path: "/test_new"
-      state: "present"
+- name: Create quota tree for a filesystem with filesystem id
+  dellemc.unity.tree_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    hard_limit: 6
+    cap_unit: "TB"
+    soft_limit: 5
+    path: "/test_new"
+    state: "present"
 
-  - name: Create quota tree for a filesystem with filesystem name
-    dellemc.unity.tree_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_name: "Test_filesystem"
-      nas_server_name: "lglad068"
-      hard_limit: 6
-      cap_unit: "TB"
-      soft_limit:  5
-      path: "/test_new"
-      state: "present"
+- name: Create quota tree for a filesystem with filesystem name
+  dellemc.unity.tree_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_name: "Test_filesystem"
+    nas_server_name: "lglad068"
+    hard_limit: 6
+    cap_unit: "TB"
+    soft_limit: 5
+    path: "/test_new"
+    state: "present"
 
-  - name: Modify quota tree limit usage by quota tree path
-    dellemc.unity.tree_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      path: "/test_new"
-      hard_limit: 10
-      cap_unit: "TB"
-      soft_limit: 8
-      state: "present"
+- name: Modify quota tree limit usage by quota tree path
+  dellemc.unity.tree_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    path: "/test_new"
+    hard_limit: 10
+    cap_unit: "TB"
+    soft_limit: 8
+    state: "present"
 
-  - name: Modify quota tree by quota tree id
-    dellemc.unity.tree_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      tree_quota_id: "treequota_171798700679_10"
-      hard_limit: 12
-      cap_unit: "TB"
-      soft_limit: 10
-      state: "present"
+- name: Modify quota tree by quota tree id
+  dellemc.unity.tree_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    tree_quota_id: "treequota_171798700679_10"
+    hard_limit: 12
+    cap_unit: "TB"
+    soft_limit: 10
+    state: "present"
 
-  - name: Delete quota tree by quota tree id
-    dellemc.unity.tree_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      tree_quota_id: "treequota_171798700679_10"
-      state: "absent"
+- name: Delete quota tree by quota tree id
+  dellemc.unity.tree_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    tree_quota_id: "treequota_171798700679_10"
+    state: "absent"
 
-  - name: Delete quota tree by path
-    dellemc.unity.tree_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      path: "/test_new"
-      state: "absent"
+- name: Delete quota tree by path
+  dellemc.unity.tree_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    path: "/test_new"
+    state: "absent"
 '''
 
 RETURN = r'''

@@ -267,8 +267,8 @@ EXAMPLES = r"""
       validate_certs: "{{validate_certs}}"
       cg_id: "{{cg_id}}"
       hosts:
-        - host_name: "10.226.198.248"
-        - host_id: "Host_511"
+          - host_name: "10.226.198.248"
+          - host_id: "Host_511"
       mapping_state: "mapped"
       state: "present"
 
@@ -280,8 +280,8 @@ EXAMPLES = r"""
       validate_certs: "{{validate_certs}}"
       cg_id: "{{cg_id}}"
       hosts:
-        - host_id: "Host_511"
-        - host_name: "10.226.198.248"
+          - host_id: "Host_511"
+          - host_name: "10.226.198.248"
       mapping_state: "unmapped"
       state: "present"
 
@@ -293,8 +293,8 @@ EXAMPLES = r"""
       validate_certs: "{{validate_certs}}"
       cg_name: "{{new_cg_name}}"
       volumes:
-        - vol_name: "Ansible_Test-3"
-        - vol_id: "sv_1744"
+          - vol_name: "Ansible_Test-3"
+          - vol_id: "sv_1744"
       vol_state: "{{vol_state_absent}}"
       state: "present"
 
@@ -315,16 +315,16 @@ EXAMPLES = r"""
       validate_certs: "{{validate_certs}}"
       cg_id: "cg_id_1"
       replication_params:
-        destination_cg_name: "destination_cg_1"
-        replication_mode: "asynchronous"
-        rpo: 60
-        replication_type: "remote"
-        remote_system:
-          remote_system_host: '10.1.2.3'
-          remote_system_verifycert: false
-          remote_system_username: 'username'
-          remote_system_password: 'password'
-        destination_pool_name: "pool_test_1"
+          destination_cg_name: "destination_cg_1"
+          replication_mode: "asynchronous"
+          rpo: 60
+          replication_type: "remote"
+          remote_system:
+            remote_system_host: '10.1.2.3'
+            remote_system_verifycert: false
+            remote_system_username: 'username'
+            remote_system_password: 'password'
+          destination_pool_name: "pool_test_1"
       replication_state: "enable"
       state: "present"
 

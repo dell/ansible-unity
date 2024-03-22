@@ -395,15 +395,15 @@ EXAMPLES = r"""
     filesystem_id: "fs_377"
     adv_host_mgmt_enabled: false
     no_access_hosts:
-    - domain: "google.com"
+      - domain: "google.com"
     read_only_hosts:
-    - netgroup: "netgroup_admin"
+      - netgroup: "netgroup_admin"
     read_only_root_hosts:
-    - host_name: "host5"
+      - host_name: "host5"
     read_write_hosts:
-    - subnet: "168.159.57.4/255.255.255.0"
+      - subnet: "168.159.57.4/255.255.255.0"
     read_write_root_hosts:
-    - ip_address: "10.255.2.4"
+      - ip_address: "10.255.2.4"
     host_state: "present-in-export"
     state: "present"
 
@@ -417,15 +417,15 @@ EXAMPLES = r"""
     filesystem_id: "fs_377"
     adv_host_mgmt_enabled: false
     no_access_hosts:
-    - domain: "google.com"
+      - domain: "google.com"
     read_only_hosts:
-    - netgroup: "netgroup_admin"
+      - netgroup: "netgroup_admin"
     read_only_root_hosts:
-    - host_name: "host5"
+      - host_name: "host5"
     read_write_hosts:
-    - subnet: "168.159.57.4/255.255.255.0"
+      - subnet: "168.159.57.4/255.255.255.0"
     read_write_root_hosts:
-    - ip_address: "10.255.2.4"
+      - ip_address: "10.255.2.4"
     host_state: "absent-in-export"
     state: "present"
 

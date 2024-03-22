@@ -327,10 +327,10 @@ EXAMPLES = r"""
     pool_name: "pool_1"
     size: 5
     quota_config:
-        grace_period: 8
-        grace_period_unit: "days"
-        default_soft_limit: 10
-        is_user_quota_enabled: false
+      grace_period: 8
+      grace_period_unit: "days"
+      default_soft_limit: 10
+      is_user_quota_enabled: false
     state: "present"
 
 - name: Expand FileSystem size
@@ -451,7 +451,7 @@ EXAMPLES = r"""
     validate_certs: "{{validate_certs}}"
     filesystem_id: "rs_405"
     replication_params:
-        replication_name: "test_replication"
+      replication_name: "test_replication"
     replication_state: "disable"
     state: "present"
 """

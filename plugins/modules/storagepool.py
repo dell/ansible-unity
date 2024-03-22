@@ -212,22 +212,21 @@ EXAMPLES = r'''
     pool_name: "Test"
     pool_description: "test pool"
     raid_groups:
-      disk_group_id : "dg_16"
-      disk_num : 2
-      raid_type : "RAID10"
-      stripe_width : "BEST_FIT"
-    alert_threshold : 50
-    is_harvest_enabled : true
-    pool_harvest_high_threshold : 60
-    pool_harvest_low_threshold : 40
-    is_snap_harvest_enabled : true
-    snap_harvest_high_threshold : 70
-    snap_harvest_low_threshold : 50
+      disk_group_id: "dg_16"
+      disk_num: 2
+      raid_type: "RAID10"
+      stripe_width: "BEST_FIT"
+    alert_threshold: 50
+    is_harvest_enabled: true
+    pool_harvest_high_threshold: 60
+    pool_harvest_low_threshold: 40
+    is_snap_harvest_enabled: true
+    snap_harvest_high_threshold: 70
+    snap_harvest_low_threshold: 50
     fast_vp: "enabled"
     fast_cache: "enabled"
-    pool_type : "DYNAMIC"
+    pool_type: "DYNAMIC"
     state: "present"
-
 '''
 
 RETURN = r'''

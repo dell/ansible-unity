@@ -142,8 +142,8 @@ EXAMPLES = r"""
       name: "Ansible_Every_Day_Testing"
       type: "every_day"
       hours_of_day:
-        - 8
-        - 14
+          - 8
+          - 14
       auto_delete: true
       state: "{{state_present}}"
 
@@ -169,8 +169,8 @@ EXAMPLES = r"""
       name: "Ansible_Every_Week_Testing"
       type: "every_week"
       days_of_week:
-        - MONDAY
-        - FRIDAY
+          - MONDAY
+          - FRIDAY
       hour: 12
       minute: 30
       desired_retention: 200

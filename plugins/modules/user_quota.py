@@ -123,170 +123,170 @@ notes:
 '''
 
 EXAMPLES = r'''
-  - name: Get user quota details by user quota id
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      user_quota_id: "userquota_171798700679_0_123"
-      state: "present"
+- name: Get user quota details by user quota id
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    user_quota_id: "userquota_171798700679_0_123"
+    state: "present"
 
-  - name: Get user quota details by user quota uid/user name
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_name: "fs_2171"
-      nas_server_id: "nas_21"
-      user_name: "test"
-      state: "present"
+- name: Get user quota details by user quota uid/user name
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_name: "fs_2171"
+    nas_server_id: "nas_21"
+    user_name: "test"
+    state: "present"
 
-  - name: Create user quota for a filesystem with filesystem id
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      hard_limit: 6
-      cap_unit: "TB"
-      soft_limit: 5
-      uid: "111"
-      state: "present"
+- name: Create user quota for a filesystem with filesystem id
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    hard_limit: 6
+    cap_unit: "TB"
+    soft_limit: 5
+    uid: "111"
+    state: "present"
 
-  - name: Create user quota for a filesystem with filesystem name
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_name: "Test_filesystem"
-      nas_server_name: "lglad068"
-      hard_limit: 6
-      cap_unit: "TB"
-      soft_limit:  5
-      uid: "111"
-      state: "present"
+- name: Create user quota for a filesystem with filesystem name
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_name: "Test_filesystem"
+    nas_server_name: "lglad068"
+    hard_limit: 6
+    cap_unit: "TB"
+    soft_limit: 5
+    uid: "111"
+    state: "present"
 
-  - name: Modify user quota limit usage by user quota id
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      user_quota_id: "userquota_171798700679_0_123"
-      hard_limit: 10
-      cap_unit: "TB"
-      soft_limit: 8
-      state: "present"
+- name: Modify user quota limit usage by user quota id
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    user_quota_id: "userquota_171798700679_0_123"
+    hard_limit: 10
+    cap_unit: "TB"
+    soft_limit: 8
+    state: "present"
 
-  - name: Modify user quota by filesystem id and user quota uid/user_name
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      user_type: "Windows"
-      win_domain: "prod"
-      user_name: "sample"
-      hard_limit: 12
-      cap_unit: "TB"
-      soft_limit: 10
-      state: "present"
+- name: Modify user quota by filesystem id and user quota uid/user_name
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    user_type: "Windows"
+    win_domain: "prod"
+    user_name: "sample"
+    hard_limit: 12
+    cap_unit: "TB"
+    soft_limit: 10
+    state: "present"
 
-  - name: Delete user quota
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      win_domain: "prod"
-      user_name: "sample"
-      state: "absent"
+- name: Delete user quota
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    win_domain: "prod"
+    user_name: "sample"
+    state: "absent"
 
-  - name: Create user quota of a quota tree
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      tree_quota_id: "treequota_171798700679_4"
-      user_type: "Windows"
-      win_domain: "prod"
-      user_name: "sample"
-      soft_limit: 9
-      cap_unit: "TB"
-      state: "present"
+- name: Create user quota of a quota tree
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    tree_quota_id: "treequota_171798700679_4"
+    user_type: "Windows"
+    win_domain: "prod"
+    user_name: "sample"
+    soft_limit: 9
+    cap_unit: "TB"
+    state: "present"
 
-  - name: Create user quota of a quota tree by quota tree path
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      path: "/sample"
-      user_type: "Unix"
-      user_name: "test"
-      hard_limit: 2
-      cap_unit: "TB"
-      state: "present"
+- name: Create user quota of a quota tree by quota tree path
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    path: "/sample"
+    user_type: "Unix"
+    user_name: "test"
+    hard_limit: 2
+    cap_unit: "TB"
+    state: "present"
 
-  - name: Modify user quota of a quota tree
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      tree_quota_id: "treequota_171798700679_4"
-      user_type: "Windows"
-      win_domain: "prod"
-      user_name: "sample"
-      soft_limit: 10
-      cap_unit: "TB"
-      state: "present"
+- name: Modify user quota of a quota tree
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    tree_quota_id: "treequota_171798700679_4"
+    user_type: "Windows"
+    win_domain: "prod"
+    user_name: "sample"
+    soft_limit: 10
+    cap_unit: "TB"
+    state: "present"
 
-  - name: Modify user quota of a quota tree by quota tree path
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      path: "/sample"
-      user_type: "Windows"
-      win_domain: "prod"
-      user_name: "sample"
-      hard_limit: 12
-      cap_unit: "TB"
-      state: "present"
+- name: Modify user quota of a quota tree by quota tree path
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    path: "/sample"
+    user_type: "Windows"
+    win_domain: "prod"
+    user_name: "sample"
+    hard_limit: 12
+    cap_unit: "TB"
+    state: "present"
 
-  - name: Delete user quota of a quota tree by quota tree path
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      filesystem_id: "fs_2171"
-      path: "/sample"
-      win_domain: "prod"
-      user_name: "sample"
-      state: "absent"
+- name: Delete user quota of a quota tree by quota tree path
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "fs_2171"
+    path: "/sample"
+    win_domain: "prod"
+    user_name: "sample"
+    state: "absent"
 
-  - name: Delete user quota of a quota tree by quota tree id
-    dellemc.unity.user_quota:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      tree_quota_id: "treequota_171798700679_4"
-      win_domain: "prod"
-      user_name: "sample"
-      state: "absent"
+- name: Delete user quota of a quota tree by quota tree id
+  dellemc.unity.user_quota:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    tree_quota_id: "treequota_171798700679_4"
+    win_domain: "prod"
+    user_name: "sample"
+    state: "absent"
 '''
 
 RETURN = r'''

@@ -84,56 +84,56 @@ notes:
 
 EXAMPLES = r'''
 
-    - name: Create NFS server with kdctype as Windows
-      dellemc.unity.nfsserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "dummy_nas"
-        host_name: "dummy_nas23"
-        is_secure_enabled: true
-        kerberos_domain_controller_type: "WINDOWS"
-        kerberos_domain_controller_username: "administrator"
-        kerberos_domain_controller_password: "Password123!"
-        is_extended_credentials_enabled: true
-        nfs_v4_enabled: true
-        state: "present"
+- name: Create NFS server with kdctype as Windows
+  dellemc.unity.nfsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "dummy_nas"
+    host_name: "dummy_nas23"
+    is_secure_enabled: true
+    kerberos_domain_controller_type: "WINDOWS"
+    kerberos_domain_controller_username: "administrator"
+    kerberos_domain_controller_password: "Password123!"
+    is_extended_credentials_enabled: true
+    nfs_v4_enabled: true
+    state: "present"
 
-    - name: Create NFS server with kdctype as Unix
-      dellemc.unity.nfsserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "dummy_nas"
-        host_name: "dummy_nas23"
-        is_secure_enabled: true
-        kerberos_domain_controller_type: "UNIX"
-        is_extended_credentials_enabled: true
-        nfs_v4_enabled: true
-        state: "present"
+- name: Create NFS server with kdctype as Unix
+  dellemc.unity.nfsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "dummy_nas"
+    host_name: "dummy_nas23"
+    is_secure_enabled: true
+    kerberos_domain_controller_type: "UNIX"
+    is_extended_credentials_enabled: true
+    nfs_v4_enabled: true
+    state: "present"
 
-    - name: Get NFS server details
-      dellemc.unity.nfsserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "dummy_nas"
-        state: "present"
+- name: Get NFS server details
+  dellemc.unity.nfsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "dummy_nas"
+    state: "present"
 
-    - name: Delete NFS server
-      dellemc.unity.nfsserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "dummy_nas"
-        kerberos_domain_controller_username: "administrator"
-        kerberos_domain_controller_password: "Password123!"
-        unjoin_server_account: false
-        state: "absent"
+- name: Delete NFS server
+  dellemc.unity.nfsserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "dummy_nas"
+    kerberos_domain_controller_username: "administrator"
+    kerberos_domain_controller_password: "Password123!"
+    unjoin_server_account: false
+    state: "absent"
 '''
 
 RETURN = r'''
