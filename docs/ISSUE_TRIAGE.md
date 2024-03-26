@@ -41,9 +41,9 @@ This section describes the various issue templates and the expected content.
 
 Should explain what happened, what was expected and how to reproduce it together with any additional information that may help giving a complete picture of what happened such as screenshots, output and any environment related information that's applicable and/or maybe related to the reported problem:
 
- - Ansible Version: [e.g. 2.14]
+ - Ansible Version: [e.g. 2.16]
  - Python Version [e.g. 3.10]
- - Ansible modules for Dell Unity Version: [e.g. 1.7.1]
+ - Ansible modules for Dell Unity Version: [e.g. 2.0.0]
  - Unity SDK version: [e.g. Unity 1.2.11]
  - Any other additional information...
 

@@ -208,138 +208,138 @@ notes:
 
 EXAMPLES = r'''
 
-    - name: Get Details of NAS Server
-      dellemc.unity.nasserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "{{nas_server_name}}"
-        state: "present"
+- name: Get Details of NAS Server
+  dellemc.unity.nasserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "{{nas_server_name}}"
+    state: "present"
 
-    - name: Modify Details of NAS Server
-      dellemc.unity.nasserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "{{nas_server_name}}"
-        nas_server_new_name: "updated_sample_nas_server"
-        is_replication_destination: false
-        is_backup_only: false
-        is_multiprotocol_enabled: true
-        allow_unmapped_user: true
-        default_unix_user: "default_unix_sample_user"
-        default_windows_user: "default_windows_sample_user"
-        enable_windows_to_unix_username_mapping: true
-        current_unix_directory_service: "LDAP"
-        is_packet_reflect_enabled: true
-        state: "present"
+- name: Modify Details of NAS Server
+  dellemc.unity.nasserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "{{nas_server_name}}"
+    nas_server_new_name: "updated_sample_nas_server"
+    is_replication_destination: false
+    is_backup_only: false
+    is_multiprotocol_enabled: true
+    allow_unmapped_user: true
+    default_unix_user: "default_unix_sample_user"
+    default_windows_user: "default_windows_sample_user"
+    enable_windows_to_unix_username_mapping: true
+    current_unix_directory_service: "LDAP"
+    is_packet_reflect_enabled: true
+    state: "present"
 
-    - name: Enable replication for NAS Server on Local System
-      dellemc.unity.nasserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_id: "nas_10"
-        replication_reuse_resource: false
-        replication_params:
-          replication_name: "test_replication"
-          destination_nas_server_name: "destination_nas"
-          replication_mode: "asynchronous"
-          rpo: 60
-          replication_type: "local"
-          destination_pool_name: "Pool_Ansible_Neo_DND"
-          destination_sp: "SPA"
-          is_backup: true
-        replication_state: "enable"
-        state: "present"
+- name: Enable replication for NAS Server on Local System
+  dellemc.unity.nasserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_id: "nas_10"
+    replication_reuse_resource: false
+    replication_params:
+      replication_name: "test_replication"
+      destination_nas_server_name: "destination_nas"
+      replication_mode: "asynchronous"
+      rpo: 60
+      replication_type: "local"
+      destination_pool_name: "Pool_Ansible_Neo_DND"
+      destination_sp: "SPA"
+      is_backup: true
+    replication_state: "enable"
+    state: "present"
 
-    - name: Enable replication for NAS Server on Remote System
-      dellemc.unity.nasserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "dummy_nas"
-        replication_reuse_resource: false
-        replication_params:
-          replication_name: "test_replication"
-          destination_nas_server_name: "destination_nas"
-          replication_mode: "asynchronous"
-          rpo: 60
-          replication_type: "remote"
-          remote_system:
-            remote_system_host: '10.10.10.10'
-            remote_system_verifycert: false
-            remote_system_username: 'test1'
-            remote_system_password: 'test1!'
-          destination_pool_name: "fastVP_pool"
-          destination_sp: "SPA"
-          is_backup: true
-        replication_state: "enable"
-        state: "present"
+- name: Enable replication for NAS Server on Remote System
+  dellemc.unity.nasserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "dummy_nas"
+    replication_reuse_resource: false
+    replication_params:
+      replication_name: "test_replication"
+      destination_nas_server_name: "destination_nas"
+      replication_mode: "asynchronous"
+      rpo: 60
+      replication_type: "remote"
+      remote_system:
+        remote_system_host: '10.10.10.10'
+        remote_system_verifycert: false
+        remote_system_username: 'test1'
+        remote_system_password: 'test1!'
+      destination_pool_name: "fastVP_pool"
+      destination_sp: "SPA"
+      is_backup: true
+    replication_state: "enable"
+    state: "present"
 
-    - name: Enable replication for NAS Server on Remote System in existing NAS Server
-      dellemc.unity.nasserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "dummy_nas"
-        replication_reuse_resource: true
-        replication_params:
-          destination_nas_server_name: "destination_nas"
-          replication_mode: "asynchronous"
-          rpo: 60
-          replication_type: "remote"
-          replication_name: "test_replication"
-          remote_system:
-            remote_system_host: '10.10.10.10'
-            remote_system_verifycert: false
-            remote_system_username: 'test1'
-            remote_system_password: 'test1!'
-          destination_pool_name: "fastVP_pool"
-        replication_state: "enable"
-        state: "present"
+- name: Enable replication for NAS Server on Remote System in existing NAS Server
+  dellemc.unity.nasserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "dummy_nas"
+    replication_reuse_resource: true
+    replication_params:
+      destination_nas_server_name: "destination_nas"
+      replication_mode: "asynchronous"
+      rpo: 60
+      replication_type: "remote"
+      replication_name: "test_replication"
+      remote_system:
+        remote_system_host: '10.10.10.10'
+        remote_system_verifycert: false
+        remote_system_username: 'test1'
+        remote_system_password: 'test1!'
+      destination_pool_name: "fastVP_pool"
+    replication_state: "enable"
+    state: "present"
 
-    - name: Modify replication on the nasserver
-      dellemc.unity.nasserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "dummy_nas"
-        replication_params:
-            replication_name: "test_repl"
-            new_replication_name: "test_repl_updated"
-            replication_mode: "asynchronous"
-            rpo: 50
-        replication_state: "enable"
-        state: "present"
+- name: Modify replication on the nasserver
+  dellemc.unity.nasserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "dummy_nas"
+    replication_params:
+      replication_name: "test_repl"
+      new_replication_name: "test_repl_updated"
+      replication_mode: "asynchronous"
+      rpo: 50
+    replication_state: "enable"
+    state: "present"
 
-    - name: Disable replication on the nasserver
-      dellemc.unity.nasserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "dummy_nas"
-        replication_state: "disable"
-        state: "present"
+- name: Disable replication on the nasserver
+  dellemc.unity.nasserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "dummy_nas"
+    replication_state: "disable"
+    state: "present"
 
-    - name: Disable replication by specifying replication_name on the nasserver
-      dellemc.unity.nasserver:
-        unispherehost: "{{unispherehost}}"
-        username: "{{username}}"
-        password: "{{password}}"
-        validate_certs: "{{validate_certs}}"
-        nas_server_name: "dummy_nas"
-        replication_params:
-            replication_name: "test_replication"
-        replication_state: "disable"
-        state: "present"
+- name: Disable replication by specifying replication_name on the nasserver
+  dellemc.unity.nasserver:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    nas_server_name: "dummy_nas"
+    replication_params:
+      replication_name: "test_replication"
+    replication_state: "disable"
+    state: "present"
 '''
 
 RETURN = r'''

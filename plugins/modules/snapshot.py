@@ -112,79 +112,79 @@ notes:
 '''
 
 EXAMPLES = r'''
-  - name: Create a Snapshot for a CG
-    dellemc.unity.snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      port: "{{port}}"
-      cg_name: "{{cg_name}}"
-      snapshot_name: "{{cg_snapshot_name}}"
-      description: "{{description}}"
-      auto_delete: false
-      state: "present"
+- name: Create a Snapshot for a CG
+  dellemc.unity.snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    port: "{{port}}"
+    cg_name: "{{cg_name}}"
+    snapshot_name: "{{cg_snapshot_name}}"
+    description: "{{description}}"
+    auto_delete: false
+    state: "present"
 
-  - name: Create a Snapshot for a volume with Host attached
-    dellemc.unity.snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      port: "{{port}}"
-      vol_name: "{{vol_name}}"
-      snapshot_name: "{{vol_snapshot_name}}"
-      description: "{{description}}"
-      expiry_time: "04/15/2025 16:30"
-      host_name: "{{host_name}}"
-      host_state: "mapped"
-      state: "present"
+- name: Create a Snapshot for a volume with Host attached
+  dellemc.unity.snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    port: "{{port}}"
+    vol_name: "{{vol_name}}"
+    snapshot_name: "{{vol_snapshot_name}}"
+    description: "{{description}}"
+    expiry_time: "04/15/2025 16:30"
+    host_name: "{{host_name}}"
+    host_state: "mapped"
+    state: "present"
 
-  - name: Unmap a host for a Snapshot
-    dellemc.unity.snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      port: "{{port}}"
-      snapshot_name: "{{vol_snapshot_name}}"
-      host_name: "{{host_name}}"
-      host_state: "unmapped"
-      state: "present"
+- name: Unmap a host for a Snapshot
+  dellemc.unity.snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    port: "{{port}}"
+    snapshot_name: "{{vol_snapshot_name}}"
+    host_name: "{{host_name}}"
+    host_state: "unmapped"
+    state: "present"
 
-  - name: Map snapshot to a host
-    dellemc.unity.snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      port: "{{port}}"
-      snapshot_name: "{{vol_snapshot_name}}"
-      host_name: "{{host_name}}"
-      host_state: "mapped"
-      state: "present"
+- name: Map snapshot to a host
+  dellemc.unity.snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    port: "{{port}}"
+    snapshot_name: "{{vol_snapshot_name}}"
+    host_name: "{{host_name}}"
+    host_state: "mapped"
+    state: "present"
 
-  - name: Update attributes of a Snapshot for a volume
-    dellemc.unity.snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_name: "{{vol_snapshot_name}}"
-      new_snapshot_name: "{{new_snapshot_name}}"
-      description: "{{new_description}}"
-      host_name: "{{host_name}}"
-      host_state: "unmapped"
-      state: "present"
+- name: Update attributes of a Snapshot for a volume
+  dellemc.unity.snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_name: "{{vol_snapshot_name}}"
+    new_snapshot_name: "{{new_snapshot_name}}"
+    description: "{{new_description}}"
+    host_name: "{{host_name}}"
+    host_state: "unmapped"
+    state: "present"
 
-  - name: Delete Snapshot of CG
-    dellemc.unity.snapshot:
-      unispherehost: "{{unispherehost}}"
-      username: "{{username}}"
-      password: "{{password}}"
-      validate_certs: "{{validate_certs}}"
-      snapshot_name: "{{cg_snapshot_name}}"
-      state: "absent"
+- name: Delete Snapshot of CG
+  dellemc.unity.snapshot:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    snapshot_name: "{{cg_snapshot_name}}"
+    state: "absent"
 '''
 
 RETURN = r'''
