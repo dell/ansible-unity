@@ -26,7 +26,7 @@
     pool_type: "DYNAMIC"
 
   tasks:
-    - name: Get the details of Storage pool by name
+    - name: Get the details of the full storage pool by name
       dellemc.unity.storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
@@ -124,7 +124,7 @@
         fast_cache: "{{ fast_cache_enabled }}"
         state: "present"
 
-    - name: Rename Storage pool by name
+    - name: Rename Storage pool by name back to original
       dellemc.unity.storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"

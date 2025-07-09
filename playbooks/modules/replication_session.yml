@@ -11,7 +11,7 @@
     session_name: "test-session"
 
   tasks:
-    - name: Get replication session details
+    - name: Get replication session details using name
       dellemc.unity.replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
@@ -19,7 +19,7 @@
         validate_certs: "{{ validate_certs }}"
         session_name: "{{ session_name }}"
 
-    - name: Get replication session details
+    - name: Get replication session details using ID
       dellemc.unity.replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"

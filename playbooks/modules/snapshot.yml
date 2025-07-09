@@ -66,7 +66,7 @@
         host_state: "mapped"
         state: "present"
 
-    - name: Set snapshot id
+    - name: Set snapshot id for LUN
       ansible.builtin.set_fact:
         vol_snapshot_id: "{{ result.snapshot_details.id }}"
 

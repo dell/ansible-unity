@@ -126,7 +126,7 @@
         state: "absent"
       check_mode: true
 
-    - name: Delete CIFS server
+    - name: Delete CIFS server with domain
       dellemc.unity.cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"

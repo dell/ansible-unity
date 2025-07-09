@@ -140,19 +140,6 @@
           is_smb_notify_on_access_enabled: true
         state: "present"
 
-    - name: Modify FileSystem smb_properties - Idempotency
-      dellemc.unity.filesystem:
-        unispherehost: "{{ unispherehost }}"
-        username: "{{ username }}"
-        password: "{{ password }}"
-        validate_certs: "{{ validate_certs }}"
-        filesystem_id: "{{ filesystem_id }}"
-        smb_properties:
-          is_smb_op_locks_enabled: true
-          smb_notify_on_change_dir_depth: 5
-          is_smb_notify_on_access_enabled: true
-        state: "present"
-
     - name: Modify FileSystem snap schedule
       dellemc.unity.filesystem:
         unispherehost: "{{ unispherehost }}"
