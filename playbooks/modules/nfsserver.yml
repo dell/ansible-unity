@@ -51,7 +51,7 @@
         nas_server_name: "dummy_nas"
         state: "present"
 
-    - name: Delete NFS server
+    - name: Delete NFS server with windows kdctype
       dellemc.unity.nfsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"

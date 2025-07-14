@@ -157,7 +157,7 @@
         id: "{{ id }}"
         state: "{{ state_absent }}"
 
-    - name: Delete snapshot schedule using name
+    - name: Delete snapshot schedule using name for day
       dellemc.unity.snapshotschedule:
         unispherehost: "{{ unispherehost }}"
         validate_certs: "{{ validate_certs }}"
@@ -166,7 +166,7 @@
         name: "Ansible_Every_Day_Testing"
         state: "{{ state_absent }}"
 
-    - name: Delete snapshot schedule using name
+    - name: Delete snapshot schedule using name for N days
       dellemc.unity.snapshotschedule:
         unispherehost: "{{ unispherehost }}"
         validate_certs: "{{ validate_certs }}"
@@ -175,7 +175,7 @@
         name: "Ansible_Every_N_Day_Testing"
         state: "{{ state_absent }}"
 
-    - name: Delete snapshot schedule using name
+    - name: Delete snapshot schedule using name for week
       dellemc.unity.snapshotschedule:
         unispherehost: "{{ unispherehost }}"
         validate_certs: "{{ validate_certs }}"
@@ -184,7 +184,7 @@
         name: "Ansible_Every_Week_Testing"
         state: "{{ state_absent }}"
 
-    - name: Delete snapshot schedule using name
+    - name: Delete snapshot schedule using name for month
       dellemc.unity.snapshotschedule:
         unispherehost: "{{ unispherehost }}"
         validate_certs: "{{ validate_certs }}"

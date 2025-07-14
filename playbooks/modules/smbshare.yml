@@ -143,7 +143,7 @@
         is_encryption_enabled: true
         state: "present"
 
-    - name: Set Snapshot SMB Share ID
+    - name: Set Snapshot SMB Share ID for Snapshot
       ansible.builtin.set_fact:
         snap_share_id: "{{ smb_result.smb_share_details.id }}"
 
@@ -165,7 +165,7 @@
         is_encryption_enabled: true
         state: "present"
 
-    - name: Get SMB Share Details using Name
+    - name: Get SMB Share Details using Name for Snapshot
       dellemc.unity.smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
@@ -175,7 +175,7 @@
         snapshot_name: "{{ snapshot_name }}"
         state: "present"
 
-    - name: Update the details of the SMB share
+    - name: Update the details of the SMB share for Snapshot
       dellemc.unity.smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
@@ -192,7 +192,7 @@
         is_encryption_enabled: false
         state: "present"
 
-    - name: Update the details of the SMB share Idempotency
+    - name: Update the details of the SMB share for Snapshot Idempotency
       dellemc.unity.smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
