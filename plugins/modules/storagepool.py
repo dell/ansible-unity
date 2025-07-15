@@ -494,7 +494,8 @@ class StoragePool(object):
         try:
             api_response = self.conn.get_pool(_id=pool_id, name=pool_name)
             details = api_response._get_properties()
-
+            if details['existed'] is False:
+                self.module.exit_json(msg="Pool does not exist", failed=True)
             is_fast_vp_enabled = api_response._get_property_from_raw(
                 'pool_fast_vp')
             if is_fast_vp_enabled:
