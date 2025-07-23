@@ -969,7 +969,7 @@ class Volume(object):
                                        'id': obj_vol.snap_schedule.id}})
             if obj_vol.io_limit_policy:
                 volume_details.update(
-                    {'io_limit_policy': {'name': obj_vol.io_limit_policy.id,
+                    {'io_limit_policy': {'name': obj_vol.io_limit_policy.name,
                                          'id': obj_vol.io_limit_policy.id}})
             if obj_vol.pool:
                 volume_details.update({'pool': {'name': obj_vol.pool.name,
