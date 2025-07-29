@@ -121,7 +121,7 @@ notes:
 
 EXAMPLES = r"""
 - name: Create snapshot schedule (Rule Type - every_n_hours)
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -133,7 +133,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_day)
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -147,7 +147,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_n_days)
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -160,7 +160,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_week)
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -176,7 +176,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Create snapshot schedule (Rule Type - every_month)
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -188,7 +188,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Get snapshot schedule details using name
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -197,7 +197,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Get snapshot schedule details using id
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -206,7 +206,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Modify snapshot schedule details id
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -217,7 +217,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Modify snapshot schedule using name
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -229,7 +229,7 @@ EXAMPLES = r"""
       state: "{{state_present}}"
 
 - name: Delete snapshot schedule using id
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -238,7 +238,7 @@ EXAMPLES = r"""
       state: "{{state_absent}}"
 
 - name: Delete snapshot schedule using name
-  dellemc.unity.snapshotschedule:
+  snapshotschedule:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"

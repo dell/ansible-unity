@@ -1,8 +1,8 @@
 **Ansible Modules for Dell Technologies Unity** 
 =========================================
-### Release Notes 2.0.0
+### Release Notes 2.1.0
 
->   © 2024 Dell Inc. or its subsidiaries. All rights reserved. Dell
+>   © 2025 Dell Inc. or its subsidiaries. All rights reserved. Dell
 >   and other trademarks are trademarks of Dell Inc. or its
 >   subsidiaries. Other trademarks may be trademarks of their respective
 >   owners.
@@ -29,6 +29,7 @@ Table 1. Revision history
 | Revision | Date           | Description                                             |
 |----------|----------------|---------------------------------------------------------|
 | 01       | March 2024     | Current release of Ansible Modules for Dell Unity 2.0.0 |
+| 02       | Aug 2025     | Current release of Ansible Modules for Dell Unity 2.1.0 |
 
 Product Description
 -------------------
@@ -38,7 +39,8 @@ New features & enhancements
 ---------------------------
 This release has the following changes -
 
-- Adding support for Unity Puffin v5.4.
+- Adding support for Unity v5.5.
+- Bugfixes and Security Updates.
 
 Known issues
 ------------
@@ -69,7 +71,7 @@ for Unity GitHub](https://github.com/dell/ansible-unity/) page.
 
 Documentation
 -------------
-The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/2.0.0/docs)
+The documentation is available on [Ansible Modules for Unity GitHub](https://github.com/dell/ansible-unity/tree/2.1.0/docs)
 page. It includes the following:
 - README
 - Release Notes (this document)

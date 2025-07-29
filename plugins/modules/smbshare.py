@@ -139,7 +139,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Create SMB share for a filesystem
-  dellemc.unity.smbshare:
+  smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -157,7 +157,7 @@ EXAMPLES = r'''
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a filesystem
-  dellemc.unity.smbshare:
+  smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -173,7 +173,7 @@ EXAMPLES = r'''
     umask: "022"
     state: "present"
 - name: Create SMB share for a snapshot
-  dellemc.unity.smbshare:
+  smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -190,7 +190,7 @@ EXAMPLES = r'''
     umask: "777"
     state: "present"
 - name: Modify Attributes of SMB share for a snapshot
-  dellemc.unity.smbshare:
+  smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -206,7 +206,7 @@ EXAMPLES = r'''
     umask: "022"
     state: "present"
 - name: Get details of SMB share
-  dellemc.unity.smbshare:
+  smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -214,7 +214,7 @@ EXAMPLES = r'''
     share_id: "{{smb_share_id}}"
     state: "present"
 - name: Delete SMB share
-  dellemc.unity.smbshare:
+  smbshare:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

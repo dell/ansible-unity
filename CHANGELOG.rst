@@ -4,6 +4,24 @@ Dellemc.Unity Change Log
 
 .. contents:: Topics
 
+v2.1.0
+======
+
+Release Summary
+---------------
+
+This release fixes a few bugs and security issues while qualifing with ansible 2.19 and Unity 5.5.
+
+Major Changes
+-------------
+
+- Adding support for Unity v5.5.
+
+Bug Fixes
+-------------
+
+- Storage Pool - clear error message for non-existant Pool.
+- Filesystem - Set proper RPO when using an async replication_mode.
 
 v2.0.0
 ======
@@ -34,7 +52,7 @@ Minor Changes
 New Modules
 -----------
 
-- dellemc.unity.replication_session - Manage replication session on the Unity storage system
+- replication_session - Manage replication session on the Unity storage system
 
 v1.6.0
 ======
@@ -81,9 +99,9 @@ Minor Changes
 New Modules
 -----------
 
-- dellemc.unity.cifsserver - Manage CIFS server on Unity storage system
-- dellemc.unity.interface - Manage Interfaces on Unity storage system
-- dellemc.unity.nfsserver - Manage NFS server on Unity storage system
+- cifsserver - Manage CIFS server on Unity storage system
+- interface - Manage Interfaces on Unity storage system
+- nfsserver - Manage NFS server on Unity storage system
 
 v1.3.0
 ======
@@ -132,8 +150,8 @@ Minor Changes
 New Modules
 -----------
 
-- dellemc.unity.tree_quota - Manage quota tree on the Unity storage system
-- dellemc.unity.user_quota - Manage user quota on the Unity storage system
+- tree_quota - Manage quota tree on the Unity storage system
+- user_quota - Manage user quota on the Unity storage system
 
 v1.1.0
 ======
@@ -151,11 +169,11 @@ Minor Changes
 New Modules
 -----------
 
-- dellemc.unity.filesystem - Manage filesystem on Unity storage system
-- dellemc.unity.filesystem_snapshot - Manage filesystem snapshot on the Unity storage system
-- dellemc.unity.nasserver - Manage NAS servers on Unity storage system
-- dellemc.unity.nfs - Manage NFS export on Unity storage system
-- dellemc.unity.smbshare - Manage SMB shares on Unity storage system
+- filesystem - Manage filesystem on Unity storage system
+- filesystem_snapshot - Manage filesystem snapshot on the Unity storage system
+- nasserver - Manage NAS servers on Unity storage system
+- nfs - Manage NFS export on Unity storage system
+- smbshare - Manage SMB shares on Unity storage system
 
 v1.0.0
 ======
@@ -178,10 +196,10 @@ Major Changes
 New Modules
 -----------
 
-- dellemc.unity.consistencygroup - Manage consistency groups on Unity storage system
-- dellemc.unity.host - Manage Host operations on Unity
-- dellemc.unity.info - Gathering information about Unity
-- dellemc.unity.snapshot - Manage snapshots on the Unity storage system
-- dellemc.unity.snapshotschedule - Manage snapshot schedules on Unity storage system
-- dellemc.unity.storagepool - Manage storage pool on Unity
-- dellemc.unity.volume - Manage volume on Unity storage system
+- consistencygroup - Manage consistency groups on Unity storage system
+- host - Manage Host operations on Unity
+- info - Gathering information about Unity
+- snapshot - Manage snapshots on the Unity storage system
+- snapshotschedule - Manage snapshot schedules on Unity storage system
+- storagepool - Manage storage pool on Unity
+- volume - Manage volume on Unity storage system

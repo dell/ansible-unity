@@ -159,7 +159,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Get Storage pool details using pool_name
-  dellemc.unity.storagepool:
+  storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -168,7 +168,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get Storage pool details using pool_id
-  dellemc.unity.storagepool:
+  storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -177,7 +177,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Modify Storage pool attributes using pool_name
-  dellemc.unity.storagepool:
+  storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -190,7 +190,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Modify Storage pool attributes using pool_id
-  dellemc.unity.storagepool:
+  storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -203,7 +203,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Create a StoragePool
-  dellemc.unity.storagepool:
+  storagepool:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

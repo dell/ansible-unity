@@ -13,7 +13,7 @@
 
   tasks:
     - name: Create standalone CIFS server with check mode
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -27,7 +27,7 @@
 
     - name: Create standalone CIFS server
       register: result
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -40,7 +40,7 @@
 
     - name: Create standalone CIFS server - Idempotency
       register: result
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -52,7 +52,7 @@
         state: "present"
 
     - name: Get CIFS server details
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -61,7 +61,7 @@
         state: "present"
 
     - name: Get CIFS server details using NAS server name
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -70,7 +70,7 @@
         state: "present"
 
     - name: Get CIFS server details using NAS server ID
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -79,7 +79,7 @@
         state: "present"
 
     - name: Delete CIFS server
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -88,7 +88,7 @@
         state: "absent"
 
     - name: Create CIFS server belonging to Active Directory
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -101,7 +101,7 @@
         state: "present"
 
     - name: Create CIFS server belonging to Active Directory - Idempotency
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -114,7 +114,7 @@
         state: "present"
 
     - name: Delete CIFS server with check mode
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -127,7 +127,7 @@
       check_mode: true
 
     - name: Delete CIFS server with domain
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -139,7 +139,7 @@
         state: "absent"
 
     - name: Delete CIFS server - Idempotency
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

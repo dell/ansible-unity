@@ -101,7 +101,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Get quota tree details by quota tree id
-  dellemc.unity.tree_quota:
+  tree_quota:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -110,7 +110,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get quota tree details by quota tree path
-  dellemc.unity.tree_quota:
+  tree_quota:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -121,7 +121,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Create quota tree for a filesystem with filesystem id
-  dellemc.unity.tree_quota:
+  tree_quota:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -134,7 +134,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Create quota tree for a filesystem with filesystem name
-  dellemc.unity.tree_quota:
+  tree_quota:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -148,7 +148,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Modify quota tree limit usage by quota tree path
-  dellemc.unity.tree_quota:
+  tree_quota:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -160,7 +160,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Modify quota tree by quota tree id
-  dellemc.unity.tree_quota:
+  tree_quota:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -173,7 +173,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete quota tree by quota tree id
-  dellemc.unity.tree_quota:
+  tree_quota:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -183,7 +183,7 @@ EXAMPLES = r'''
     state: "absent"
 
 - name: Delete quota tree by path
-  dellemc.unity.tree_quota:
+  tree_quota:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

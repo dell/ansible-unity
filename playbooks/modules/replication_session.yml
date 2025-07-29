@@ -12,7 +12,7 @@
 
   tasks:
     - name: Get replication session details using name
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -20,7 +20,7 @@
         session_name: "{{ session_name }}"
 
     - name: Get replication session details using ID
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -28,7 +28,7 @@
         session_id: "{{ session_id }}"
 
     - name: Pause replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -37,7 +37,7 @@
         pause: true
 
     - name: Pause replication session -- Idempotency
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -46,7 +46,7 @@
         pause: true
 
     - name: Resume replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -56,7 +56,7 @@
         pause: false
 
     - name: Resume replication session -- Idempotency
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -66,7 +66,7 @@
         pause: false
 
     - name: Sync replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -75,7 +75,7 @@
         sync: true
 
     - name: Failover replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -85,7 +85,7 @@
         force: true
 
     - name: Failover replication session -- Idempotency
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -95,7 +95,7 @@
         force: true
 
     - name: Failback replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ dest_unispherhost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -105,7 +105,7 @@
         force_full_copy: true
 
     - name: Failback replication session -- Idempotency
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -115,7 +115,7 @@
         force_full_copy: true
 
     - name: Delete replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -124,7 +124,7 @@
         state: "absent"
 
     - name: Delete replication session -- Idempotency
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

@@ -27,7 +27,7 @@
 
   tasks:
     - name: Get the details of the full storage pool by name
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -53,7 +53,7 @@
 
     - name: Get the details of Storage pool by name
       register: result
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -66,7 +66,7 @@
         pool_id: "{{ result.storage_pool_details.id }}"
 
     - name: Get the details of Storage pool by pool id
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -75,7 +75,7 @@
         state: "present"
 
     - name: Rename Storage pool by name
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -85,7 +85,7 @@
         state: "present"
 
     - name: Update Storage pool description
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -95,7 +95,7 @@
         state: "present"
 
     - name: Update Storage pool description- Idempotent
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -105,7 +105,7 @@
         state: "present"
 
     - name: Update fast_vp by pool name
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -115,7 +115,7 @@
         state: "present"
 
     - name: Update fast_cache by pool name
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -125,7 +125,7 @@
         state: "present"
 
     - name: Rename Storage pool by name back to original
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -135,7 +135,7 @@
         state: "present"
 
     - name: Create a Storage pool
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -160,7 +160,7 @@
         state: "present"
 
     - name: Create a StoragePool - idempotency
-      dellemc.unity.storagepool:
+      storagepool:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

@@ -205,7 +205,7 @@ notes:
 
 EXAMPLES = r"""
 - name: Create consistency group
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       validate_certs: "{{validate_certs}}"
       username: "{{username}}"
@@ -216,7 +216,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Get details of consistency group using id
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -225,7 +225,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Add volumes to consistency group
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -238,7 +238,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Rename consistency group
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -248,7 +248,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Modify consistency group details
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -259,7 +259,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Map hosts to a consistency group
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -272,7 +272,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Unmap hosts from a consistency group
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -285,7 +285,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Remove volumes from consistency group
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -298,7 +298,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Delete consistency group
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -307,7 +307,7 @@ EXAMPLES = r"""
       state: "absent"
 
 - name: Enable replication for consistency group
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"
@@ -328,7 +328,7 @@ EXAMPLES = r"""
       state: "present"
 
 - name: Disable replication for consistency group
-  dellemc.unity.consistencygroup:
+  consistencygroup:
       unispherehost: "{{unispherehost}}"
       username: "{{username}}"
       password: "{{password}}"

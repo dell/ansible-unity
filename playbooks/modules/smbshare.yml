@@ -17,7 +17,7 @@
   tasks:
     - name: Create a SMB Share for Filesystem
       register: smb_result
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -40,7 +40,7 @@
         fs_share_id: "{{ smb_result.smb_share_details.id }}"
 
     - name: Create a SMB Share for Filesystem Idempotency
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -59,7 +59,7 @@
         state: "present"
 
     - name: Get SMB Share Details using Name
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -69,7 +69,7 @@
         state: "present"
 
     - name: Update the details of the SMB share
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -86,7 +86,7 @@
         state: "present"
 
     - name: Update the details of the SMB share Idempotency
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -103,7 +103,7 @@
         state: "present"
 
     - name: Delete SMB share for Filesystem
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -113,7 +113,7 @@
         state: "absent"
 
     - name: Delete SMB share for Filesystem Idempotency
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -126,7 +126,7 @@
     # Hence, NAS Server is not required for Unique Identification of Snapshot.
     - name: Create a SMB Share for Snapshot
       register: smb_result
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -148,7 +148,7 @@
         snap_share_id: "{{ smb_result.smb_share_details.id }}"
 
     - name: Create a SMB Share for Snapshot Idempotency
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -166,7 +166,7 @@
         state: "present"
 
     - name: Get SMB Share Details using Name for Snapshot
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -176,7 +176,7 @@
         state: "present"
 
     - name: Update the details of the SMB share for Snapshot
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -193,7 +193,7 @@
         state: "present"
 
     - name: Update the details of the SMB share for Snapshot Idempotency
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -210,7 +210,7 @@
         state: "present"
 
     - name: Delete SMB share for Filesystem Snapshot
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -219,7 +219,7 @@
         state: "absent"
 
     - name: Delete SMB share for Filesystem Snapshot Idempotency
-      dellemc.unity.smbshare:
+      smbshare:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

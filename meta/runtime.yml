@@ -1,5 +1,5 @@
 ---
-requires_ansible: ">=2.14"
+requires_ansible: ">=2.17"
 plugin_routing:
     modules:
         dellemc_unity_info:

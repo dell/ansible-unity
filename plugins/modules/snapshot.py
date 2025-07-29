@@ -112,7 +112,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Create a Snapshot for a CG
-  dellemc.unity.snapshot:
+  snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -125,7 +125,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Create a Snapshot for a volume with Host attached
-  dellemc.unity.snapshot:
+  snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -140,7 +140,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Unmap a host for a Snapshot
-  dellemc.unity.snapshot:
+  snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -152,7 +152,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Map snapshot to a host
-  dellemc.unity.snapshot:
+  snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -164,7 +164,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Update attributes of a Snapshot for a volume
-  dellemc.unity.snapshot:
+  snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -177,7 +177,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete Snapshot of CG
-  dellemc.unity.snapshot:
+  snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

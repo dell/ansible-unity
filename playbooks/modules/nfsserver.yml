@@ -11,7 +11,7 @@
 
   tasks:
     - name: Create NFS server with kdctype as Windows
-      dellemc.unity.nfsserver:
+      nfsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -27,7 +27,7 @@
         state: "present"
 
     - name: Create NFS server with kdctype as Windows - Idempotency
-      dellemc.unity.nfsserver:
+      nfsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -43,7 +43,7 @@
         state: "present"
 
     - name: Get NFS server details
-      dellemc.unity.nfsserver:
+      nfsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -52,7 +52,7 @@
         state: "present"
 
     - name: Delete NFS server with windows kdctype
-      dellemc.unity.nfsserver:
+      nfsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -64,7 +64,7 @@
         state: "absent"
 
     - name: Create NFS server with kdctype as Unix
-      dellemc.unity.nfsserver:
+      nfsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -78,7 +78,7 @@
         state: "present"
 
     - name: Create NFS server with kdctype as Unix - Idempotency
-      dellemc.unity.nfsserver:
+      nfsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -92,7 +92,7 @@
         state: "present"
 
     - name: Delete NFS server
-      dellemc.unity.nfsserver:
+      nfsserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

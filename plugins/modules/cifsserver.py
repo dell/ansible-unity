@@ -86,7 +86,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Create CIFS server belonging to Active Directory
-  dellemc.unity.cifsserver:
+  cifsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -99,7 +99,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get CIFS server details using CIFS server ID
-  dellemc.unity.cifsserver:
+  cifsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -108,7 +108,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get CIFS server details using NAS server name
-  dellemc.unity.cifsserver:
+  cifsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -117,7 +117,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete CIFS server
-  dellemc.unity.cifsserver:
+  cifsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -129,7 +129,7 @@ EXAMPLES = r'''
     state: "absent"
 
 - name: Create standalone CIFS server
-  dellemc.unity.cifsserver:
+  cifsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -141,7 +141,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get CIFS server details using netbios name
-  dellemc.unity.cifsserver:
+  cifsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -150,7 +150,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete standalone CIFS server
-  dellemc.unity.cifsserver:
+  cifsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
