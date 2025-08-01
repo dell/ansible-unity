@@ -23,7 +23,7 @@
   tasks:
     - name: Create consistency group with volume and host access
       register: result_cg
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         validate_certs: "{{ validate_certs }}"
         username: "{{ username }}"
@@ -45,7 +45,7 @@
         cg_id: "{{ result_cg.consistency_group_details.id }}"
 
     - name: Get details of consistency group using id
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -54,7 +54,7 @@
         state: "{{ state_present }}"
 
     - name: Add volumes to consistency group
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -67,7 +67,7 @@
         state: "{{ state_present }}"
 
     - name: Add volumes to consistency group - Idempotency
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -80,7 +80,7 @@
         state: "{{ state_present }}"
 
     - name: Rename consistency group
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -90,7 +90,7 @@
         state: "{{ state_present }}"
 
     - name: Rename consistency group - Idempotency
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -100,7 +100,7 @@
         state: "{{ state_present }}"
 
     - name: Modify consistency group details
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -111,7 +111,7 @@
         state: "{{ state_present }}"
 
     - name: Modify consistency group details - Idempotency
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -122,7 +122,7 @@
         state: "{{ state_present }}"
 
     - name: Map host to consistency group
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -134,7 +134,7 @@
         state: "{{ state_present }}"
 
     - name: Map host to consistency group -- Idempotency
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -146,7 +146,7 @@
         state: "{{ state_present }}"
 
     - name: Unmap host to consistency group
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -159,7 +159,7 @@
         state: "{{ state_present }}"
 
     - name: Unmap host to consistency group -- Idempotency
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -172,7 +172,7 @@
         state: "{{ state_present }}"
 
     - name: Remove volumes from consistency group
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -186,7 +186,7 @@
         state: "{{ state_present }}"
 
     - name: Remove volumes from consistency group - Idempotency
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -200,7 +200,7 @@
         state: "{{ state_present }}"
 
     - name: Delete consistency group
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -209,7 +209,7 @@
         state: "{{ state_absent }}"
 
     - name: Delete consistency group Idempotency
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -218,7 +218,7 @@
         state: "{{ state_absent }}"
 
     - name: Enable replication for consistency group
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -239,7 +239,7 @@
         state: "present"
 
     - name: Disable replication for consistency group
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -249,7 +249,7 @@
         state: "present"
 
     - name: Disable replication for consistency group Idempotency
-      dellemc.unity.consistencygroup:
+      consistencygroup:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

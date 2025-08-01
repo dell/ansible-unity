@@ -21,9 +21,9 @@ Requirements
 The below requirements are needed on the host that executes this module.
 
 - A Dell Unity Storage device version 5.1 or later.
-- Ansible-core 2.13 or later.
-- Python 3.9, 3.10 or 3.11.
-- Storops Python SDK 1.2.11.
+- Ansible-core 2.17 or later.
+- Python 3.11, or 3.12.
+- Storops Python SDK 1.2.12.
 
 
 
@@ -130,7 +130,7 @@ Examples
 
     
     - name: Create CIFS server belonging to Active Directory
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -143,7 +143,7 @@ Examples
         state: "present"
 
     - name: Get CIFS server details using CIFS server ID
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -152,7 +152,7 @@ Examples
         state: "present"
 
     - name: Get CIFS server details using NAS server name
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -161,7 +161,7 @@ Examples
         state: "present"
 
     - name: Delete CIFS server
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -173,7 +173,7 @@ Examples
         state: "absent"
 
     - name: Create standalone CIFS server
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -185,7 +185,7 @@ Examples
         state: "present"
 
     - name: Get CIFS server details using netbios name
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -194,7 +194,7 @@ Examples
         state: "present"
 
     - name: Delete standalone CIFS server
-      dellemc.unity.cifsserver:
+      cifsserver:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"

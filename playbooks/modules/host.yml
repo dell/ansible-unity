@@ -16,7 +16,7 @@
   tasks:
     - name: Create empty Host "{{ host_name_1 }}"
       register: result
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -31,7 +31,7 @@
         host_id_1: "{{ result.host_details.id }}"
 
     - name: Create empty Host "{{ host_name_3 }}"
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -43,7 +43,7 @@
 
     - name: Create Host with Initiators "{{ host_name_2 }}"
       register: result
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -62,7 +62,7 @@
         host_id_2: "{{ result.host_details.id }}"
 
     - name: Get Host details using host_name.
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -71,7 +71,7 @@
         state: "present"
 
     - name: Get Host details using host_id.
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -80,7 +80,7 @@
         state: "present"
 
     - name: Modify Host using host_name
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -91,7 +91,7 @@
         state: "present"
 
     - name: Modify Host using host_id
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -103,7 +103,7 @@
         state: "present"
 
     - name: Add Initiators to Host.
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -116,7 +116,7 @@
         state: "present"
 
     - name: Modify multiple attributes of Host.
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -131,7 +131,7 @@
         state: "present"
 
     - name: Delete Host. {{ new_host_name_2 }}
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -140,7 +140,7 @@
         state: "absent"
 
     - name: Delete Host. {{ host_name_3 }}
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -149,7 +149,7 @@
         state: "absent"
 
     - name: Delete Host. {{ new_host_name_1 }}
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -158,7 +158,7 @@
         state: "absent"
 
     - name: Add network address to Host.
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -169,7 +169,7 @@
         state: "present"
 
     - name: Delete network address from Host.
-      dellemc.unity.host:
+      host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

@@ -26,7 +26,7 @@
 
   tasks:
     - name: Create FileSystem
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -41,7 +41,7 @@
       register: fs_result
 
     - name: Create FileSystem - idempotency
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -59,7 +59,7 @@
         filesystem_id: "{{ fs_result.filesystem_details.id }}"
 
     - name: Create FileSystem with quota configuration
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -77,7 +77,7 @@
         state: "{{ state_present }}"
 
     - name: Create FileSystem with quota configuration -- Idempotency
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -95,7 +95,7 @@
         state: "{{ state_present }}"
 
     - name: Expand FileSystem Size
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -105,7 +105,7 @@
         state: "present"
 
     - name: Expand FileSystem Size - Idempotency
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -115,7 +115,7 @@
         state: "present"
 
     - name: Modify FileSystem smb_properties
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -128,7 +128,7 @@
         state: "present"
 
     - name: Modify FileSystem smb_properties - Idempotency
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -141,7 +141,7 @@
         state: "present"
 
     - name: Modify FileSystem snap schedule
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -151,7 +151,7 @@
         state: "{{ state_present }}"
 
     - name: Modify FileSystem snap schedule - Idempotency
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -161,7 +161,7 @@
         state: "{{ state_present }}"
 
     - name: Remove snap-schedule from filesystem
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -171,7 +171,7 @@
         state: "{{ state_present }}"
 
     - name: Get details of FileSystem using id
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -180,7 +180,7 @@
         state: "present"
 
     - name: Delete a FileSystem using id
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -189,7 +189,7 @@
         state: "absent"
 
     - name: Delete a FileSystem using id -Idempotency
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -198,7 +198,7 @@
         state: "absent"
 
     - name: Enable replication for filesystem
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -220,7 +220,7 @@
         state: "present"
 
     - name: Enable replication for filesystem - Idempotency
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -242,7 +242,7 @@
         state: "present"
 
     - name: Modify replication for filesystem
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -257,7 +257,7 @@
         state: "present"
 
     - name: Disable replication for filesystem
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -270,7 +270,7 @@
         state: "present"
 
     - name: Disable replication for filesystem - Idempotency
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

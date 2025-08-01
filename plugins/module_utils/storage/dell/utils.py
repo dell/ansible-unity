@@ -1,4 +1,4 @@
-# Copyright: (c) 2020, Dell Technologies
+# Copyright: (c) 2020-2025, Dell Technologies
 
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
@@ -92,7 +92,7 @@ def ensure_required_libs(module):
         module.fail_json(msg=missing_required_lib("urllib3"),
                          exception=URLLIB3_IMP_ERR)
 
-    min_ver = '1.2.11'
+    min_ver = '1.2.12'
     try:
         curr_version = pkg_resources.require("storops")[0].version
     except Exception as err:

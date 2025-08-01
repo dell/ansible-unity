@@ -10,7 +10,7 @@
 
   tasks:
     - name: Get detailed list of Unity entities.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -33,14 +33,14 @@
           - disk_group
 
     - name: Get information of Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
         validate_certs: "{{ validate_certs }}"
 
     - name: Get list of Unity hosts.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -49,7 +49,7 @@
           - host
 
     - name: Get list of FC initiators on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -58,7 +58,7 @@
           - fc_initiator
 
     - name: Get list of ISCSI initiators on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -67,7 +67,7 @@
           - iscsi_initiator
 
     - name: Get list of consistency groups on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -76,7 +76,7 @@
           - cg
 
     - name: Get list of storage pools on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -85,7 +85,7 @@
           - storage_pool
 
     - name: Get list of volumes on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -94,7 +94,7 @@
           - vol
 
     - name: Get list of snapshot schedules on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -103,7 +103,7 @@
           - snapshot_schedule
 
     - name: Get list of NAS Servers on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -112,7 +112,7 @@
           - nas_server
 
     - name: Get list of File Systems on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -121,7 +121,7 @@
           - file_system
 
     - name: Get list of Snapshots on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -130,7 +130,7 @@
           - snapshot
 
     - name: Get list of NFS exports on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -139,7 +139,7 @@
           - nfs_export
 
     - name: Get list of SMB shares on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -148,7 +148,7 @@
           - smb_share
 
     - name: Get list of user quota on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -157,7 +157,7 @@
           - user_quota
 
     - name: Get list of quota tree on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -166,7 +166,7 @@
           - tree_quota
 
     - name: Get details of Disk Group.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -175,7 +175,7 @@
           - disk_group
 
     - name: Get list of NFS Servers on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -184,7 +184,7 @@
           - nfs_server
 
     - name: Get list of CIFS Servers on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -193,7 +193,7 @@
           - cifs_server
 
     - name: Get list of ethernet ports on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -202,7 +202,7 @@
           - ethernet_port
 
     - name: Get list of file interfaces on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -211,7 +211,7 @@
           - file_interface
 
     - name: Get list of replication sessions on Unity array.
-      dellemc.unity.info:
+      info:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

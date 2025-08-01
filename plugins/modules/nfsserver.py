@@ -84,7 +84,7 @@ notes:
 EXAMPLES = r'''
 
 - name: Create NFS server with kdctype as Windows
-  dellemc.unity.nfsserver:
+  nfsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -100,7 +100,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Create NFS server with kdctype as Unix
-  dellemc.unity.nfsserver:
+  nfsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -114,7 +114,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get NFS server details
-  dellemc.unity.nfsserver:
+  nfsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -123,7 +123,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete NFS server
-  dellemc.unity.nfsserver:
+  nfsserver:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

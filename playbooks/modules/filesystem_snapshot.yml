@@ -21,7 +21,7 @@
 
   tasks:
     - name: Create Filesystem Snapshot
-      dellemc.unity.filesystem_snapshot:
+      filesystem_snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -40,7 +40,7 @@
         snapshot_id: "{{ result.dellemc.unity.filesystem_snapshot_details.id }}"
 
     - name: Create Filesystem Snapshot - Idempotency
-      dellemc.unity.filesystem_snapshot:
+      filesystem_snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -54,7 +54,7 @@
         state: "present"
 
     - name: Get Filesystem Snapshot Details using Name
-      dellemc.unity.filesystem_snapshot:
+      filesystem_snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -63,7 +63,7 @@
         state: "present"
 
     - name: Get Filesystem Snapshot Details using ID
-      dellemc.unity.filesystem_snapshot:
+      filesystem_snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -72,7 +72,7 @@
         state: "present"
 
     - name: Update Filesystem Snapshot attributes
-      dellemc.unity.filesystem_snapshot:
+      filesystem_snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -84,7 +84,7 @@
         state: "present"
 
     - name: Get Filesystem Snapshot Details
-      dellemc.unity.filesystem_snapshot:
+      filesystem_snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -93,7 +93,7 @@
         state: "present"
 
     - name: Delete Filesystem Snapshot using Name
-      dellemc.unity.filesystem_snapshot:
+      filesystem_snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -102,7 +102,7 @@
         state: "absent"
 
     - name: Delete Filesystem Snapshot using ID- Idempotency
-      dellemc.unity.filesystem_snapshot:
+      filesystem_snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

@@ -21,9 +21,9 @@ Requirements
 The below requirements are needed on the host that executes this module.
 
 - A Dell Unity Storage device version 5.1 or later.
-- Ansible-core 2.13 or later.
-- Python 3.9, 3.10 or 3.11.
-- Storops Python SDK 1.2.11.
+- Ansible-core 2.17 or later.
+- Python 3.11, or 3.12.
+- Storops Python SDK 1.2.12.
 
 
 
@@ -318,7 +318,7 @@ Examples
 
     
     - name: Create FileSystem
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -330,7 +330,7 @@ Examples
         state: "present"
 
     - name: Create FileSystem with quota configuration
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -347,7 +347,7 @@ Examples
         state: "present"
 
     - name: Expand FileSystem size
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -358,7 +358,7 @@ Examples
         state: "present"
 
     - name: Expand FileSystem size
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -369,7 +369,7 @@ Examples
         state: "present"
 
     - name: Modify FileSystem smb_properties
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -383,7 +383,7 @@ Examples
         state: "present"
 
     - name: Modify FileSystem Snap Schedule
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -393,7 +393,7 @@ Examples
         state: "{{state_present}}"
 
     - name: Get details of FileSystem using id
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -402,7 +402,7 @@ Examples
         state: "present"
 
     - name: Delete a FileSystem using id
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -411,7 +411,7 @@ Examples
         state: "absent"
 
     - name: Enable replication on the fs
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -432,7 +432,7 @@ Examples
         state: "present"
 
     - name: Modify replication on the fs
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -447,7 +447,7 @@ Examples
         state: "present"
 
     - name: Disable replication on the fs
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -457,7 +457,7 @@ Examples
         state: "present"
 
     - name: Disable replication by specifying replication_name on the fs
-      dellemc.unity.filesystem:
+      filesystem:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"

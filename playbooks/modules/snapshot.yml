@@ -21,7 +21,7 @@
   tasks:
     - name: Create a Snapshot for a CG
       register: result
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -38,7 +38,7 @@
         cg_snapshot_id: "{{ result.snapshot_details.id }}"
 
     - name: Create a Snapshot for a CG Idempotency
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -52,7 +52,7 @@
 
     - name: Create a Snapshot for a LUN with Host attached.
       register: result
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -71,7 +71,7 @@
         vol_snapshot_id: "{{ result.snapshot_details.id }}"
 
     - name: Create a Snapshot for a LUN with Host attached Idempotency.
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -86,7 +86,7 @@
         state: "present"
 
     - name: Unmap a host for a Snapshot using Id
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -98,7 +98,7 @@
         state: "present"
 
     - name: Unmap a host for a Snapshot Idempotency case
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -110,7 +110,7 @@
         state: "present"
 
     - name: Map snapshot to a host using Id
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -122,7 +122,7 @@
         state: "present"
 
     - name: Get Snapshot Details using Id
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -131,7 +131,7 @@
         state: "present"
 
     - name: Update attributes of a Snapshot for a LUN using Id
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -145,7 +145,7 @@
         state: "present"
 
     - name: Update attributes of a Snapshot for a LUN Idempotency case
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -158,7 +158,7 @@
         state: "present"
 
     - name: Delete Snapshot of CG.
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -167,7 +167,7 @@
         state: "absent"
 
     - name: Delete Snapshot of CG using Id Idempotency case.
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -176,7 +176,7 @@
         state: "absent"
 
     - name: Delete Snapshot of volume.
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -185,7 +185,7 @@
         state: "absent"
 
     - name: Delete Snapshot of volume Idempotency.
-      dellemc.unity.snapshot:
+      snapshot:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

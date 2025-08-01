@@ -112,7 +112,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Create Filesystem Snapshot
-  dellemc.unity.filesystem_snapshot:
+  filesystem_snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -126,7 +126,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Create Filesystem Snapshot with expiry time
-  dellemc.unity.filesystem_snapshot:
+  filesystem_snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -140,7 +140,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get Filesystem Snapshot Details using Name
-  dellemc.unity.filesystem_snapshot:
+  filesystem_snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -149,7 +149,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get Filesystem Snapshot Details using ID
-  dellemc.unity.filesystem_snapshot:
+  filesystem_snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -158,7 +158,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Update Filesystem Snapshot attributes
-  dellemc.unity.filesystem_snapshot:
+  filesystem_snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -170,7 +170,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Update Filesystem Snapshot attributes using ID
-  dellemc.unity.filesystem_snapshot:
+  filesystem_snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -180,7 +180,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete Filesystem Snapshot using Name
-  dellemc.unity.filesystem_snapshot:
+  filesystem_snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -189,7 +189,7 @@ EXAMPLES = r'''
     state: "absent"
 
 - name: Delete Filesystem Snapshot using ID
-  dellemc.unity.filesystem_snapshot:
+  filesystem_snapshot:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

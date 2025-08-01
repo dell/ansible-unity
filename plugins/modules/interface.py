@@ -79,7 +79,7 @@ notes:
 EXAMPLES = r'''
 
 - name: Add Interface as Backup to NAS Server
-  dellemc.unity.interface:
+  interface:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -94,7 +94,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Add Interface as Production to NAS Server
-  dellemc.unity.interface:
+  interface:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -109,7 +109,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get interface details
-  dellemc.unity.interface:
+  interface:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -119,7 +119,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete Interface
-  dellemc.unity.interface:
+  interface:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

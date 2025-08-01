@@ -102,7 +102,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Create empty Host
-  dellemc.unity.host:
+  host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -113,7 +113,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Create Host with Initiators
-  dellemc.unity.host:
+  host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -128,7 +128,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Modify Host using host_id
-  dellemc.unity.host:
+  host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -140,7 +140,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Add Initiators to Host
-  dellemc.unity.host:
+  host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -152,7 +152,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get Host details using host_name
-  dellemc.unity.host:
+  host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -161,7 +161,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Get Host details using host_id
-  dellemc.unity.host:
+  host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -170,7 +170,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete Host
-  dellemc.unity.host:
+  host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -179,7 +179,7 @@ EXAMPLES = r'''
     state: "absent"
 
 - name: Add network address to Host
-  dellemc.unity.host:
+  host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -190,7 +190,7 @@ EXAMPLES = r'''
     state: "present"
 
 - name: Delete network address from Host
-  dellemc.unity.host:
+  host:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

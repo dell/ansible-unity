@@ -11,7 +11,7 @@
     nas_server_new_name: "new_lglad073"
   tasks:
     - name: Get NAS Server Details using Name
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -20,7 +20,7 @@
         state: "present"
 
     - name: Rename NAS Server to new Name
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -30,7 +30,7 @@
         state: "present"
 
     - name: Rename NAS Server to Old Name
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -40,7 +40,7 @@
         state: "present"
 
     - name: Modify Details of NAS Server
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -51,7 +51,7 @@
         state: "present"
 
     - name: Enable replication for NAS Server on Local System
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -71,7 +71,7 @@
         state: "present"
 
     - name: Enable replication for NAS Server on Remote System
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -96,7 +96,7 @@
         state: "present"
 
     - name: Enable replication for NAS Server on Remote System in existing NAS Server
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -119,7 +119,7 @@
         state: "present"
 
     - name: Modify replication for NAS Server
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -134,7 +134,7 @@
         state: "present"
 
     - name: Modify replication for NAS Server - Idempotency
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -149,7 +149,7 @@
         state: "present"
 
     - name: Disable replication for NAS Server
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -161,7 +161,7 @@
         state: "present"
 
     - name: Disable replication for NAS Server - Idempotency
-      dellemc.unity.nasserver:
+      nasserver:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

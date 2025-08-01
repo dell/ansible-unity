@@ -1,4 +1,4 @@
-# Copyright: (c) 2024, Dell Technologies.
+# Copyright: (c) 2024-2025, Dell Technologies.
 # Apache License version 2.0 (see MODULE-LICENSE or http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 from __future__ import absolute_import, division, print_function
@@ -43,10 +43,10 @@ class ModuleDocFragment(object):
             type: int
             default: 443
     requirements:
-      - A Dell Unity Storage device version 5.1 or later.
-      - Ansible-core 2.14 or later.
-      - Python 3.9, 3.10 or 3.11.
-      - Storops Python SDK 1.2.11.
+      - A Dell Unity Storage device version 5.3 or later.
+      - Ansible-core 2.17 or later.
+      - Python 3.11, 3.12 or 3.13.
+      - Storops Python SDK 1.2.12.
     notes:
       - The modules present in this collection named as 'dellemc.unity'
         are built to support the Dell Unity storage platform.

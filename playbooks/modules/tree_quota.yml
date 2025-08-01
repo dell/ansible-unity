@@ -18,7 +18,7 @@
   tasks:
     - name: Create quota tree of filesystem
       register: result
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -35,7 +35,7 @@
         tree_quota_id: "{{ result.get_tree_quota_details.id }}"
 
     - name: Create quota tree of filesystem -- Idempotency
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -48,7 +48,7 @@
         state: "{{ state_present }}"
 
     - name: Get quota tree details by quota tree path
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -58,7 +58,7 @@
         state: "{{ state_present }}"
 
     - name: Get quota tree details by quota tree id
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -68,7 +68,7 @@
         state: "{{ state_present }}"
 
     - name: Modify quota tree of filesystem by quota tree path
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -81,7 +81,7 @@
         state: "{{ state_present }}"
 
     - name: Modify quota tree of filesystem -- Idempotency
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -94,7 +94,7 @@
         state: "{{ state_present }}"
 
     - name: Modify quota tree of filesystem by quota tree id
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -108,7 +108,7 @@
         state: "{{ state_present }}"
 
     - name: Delete quota tree of filesystem by quota tree path
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -118,7 +118,7 @@
         state: "{{ state_absent }}"
 
     - name: Delete quota tree of filesystem -- Idempotency
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -128,7 +128,7 @@
         state: "{{ state_absent }}"
 
     - name: Delete quota tree of filesystem by quota tree id
-      dellemc.unity.tree_quota:
+      tree_quota:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

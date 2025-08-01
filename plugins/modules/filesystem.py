@@ -304,7 +304,7 @@ notes:
 
 EXAMPLES = r"""
 - name: Create FileSystem
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -316,7 +316,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Create FileSystem with quota configuration
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -333,7 +333,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Expand FileSystem size
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -344,7 +344,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Expand FileSystem size
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -355,7 +355,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify FileSystem smb_properties
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -369,7 +369,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify FileSystem Snap Schedule
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -379,7 +379,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Get details of FileSystem using id
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -388,7 +388,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Delete a FileSystem using id
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -397,7 +397,7 @@ EXAMPLES = r"""
     state: "absent"
 
 - name: Enable replication on the fs
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -418,7 +418,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify replication on the fs
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -433,7 +433,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Disable replication on the fs
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -443,7 +443,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Disable replication by specifying replication_name on the fs
-  dellemc.unity.filesystem:
+  filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

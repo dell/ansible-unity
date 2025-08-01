@@ -179,3 +179,12 @@ releases:
       major_changes:
       - Adding support for Unity Puffin v5.4.
     release_date: '2024-03-29'
+  2.1.0:
+    changes:
+      major_changes:
+      - Adding support for Unity v5.5.
+      bugfixs:
+      - Storage Pool - clear error message for non-existant Pool.
+      - Filesystem - Set proper RPO when using an async replication_mode.
+      release_summary: This release fixes a few bugs and security issues while qualifing with ansible 2.19 and Unity 5.5.
+    release_date: '2025-08-06'

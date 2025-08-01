@@ -21,9 +21,9 @@ Requirements
 The below requirements are needed on the host that executes this module.
 
 - A Dell Unity Storage device version 5.1 or later.
-- Ansible-core 2.13 or later.
-- Python 3.9, 3.10 or 3.11.
-- Storops Python SDK 1.2.11.
+- Ansible-core 2.17 or later.
+- Python 3.11, or 3.12.
+- Storops Python SDK 1.2.12.
 
 
 
@@ -120,7 +120,7 @@ Examples
     
 
         - name: Add Interface as Backup to NAS Server
-          dellemc.unity.interface:
+          interface:
             unispherehost: "{{unispherehost}}"
             username: "{{username}}"
             password: "{{password}}"
@@ -135,7 +135,7 @@ Examples
             state: "present"
 
         - name: Add Interface as Production to NAS Server
-          dellemc.unity.interface:
+          interface:
             unispherehost: "{{unispherehost}}"
             username: "{{username}}"
             password: "{{password}}"
@@ -150,7 +150,7 @@ Examples
             state: "present"
 
         - name: Get interface details
-          dellemc.unity.interface:
+          interface:
             unispherehost: "{{unispherehost}}"
             username: "{{username}}"
             password: "{{password}}"
@@ -160,7 +160,7 @@ Examples
             state: "present"
 
         - name: Delete Interface
-          dellemc.unity.interface:
+          interface:
           unispherehost: "{{unispherehost}}"
           username: "{{username}}"
           password: "{{password}}"

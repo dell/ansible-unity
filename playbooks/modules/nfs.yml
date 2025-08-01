@@ -31,7 +31,7 @@
 
   tasks:
     - name: Create nfs share from filesystem
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -50,7 +50,7 @@
         nfs_export_id_from_fs: "{{ result['nfs_share_details']['id'] }}"
 
     - name: Create nfs share from filesystem - idempotency
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -63,7 +63,7 @@
       register: result
 
     - name: Modify nfs share(fs)
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -79,7 +79,7 @@
       register: result
 
     - name: Modify nfs share(fs) - idempotency
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -95,7 +95,7 @@
       register: result
 
     - name: Create nfs share from snapshot
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -114,7 +114,7 @@
         nfs_export_id_from_snap: "{{ result['nfs_share_details']['id'] }}"
 
     - name: Create nfs share from snapshot - idempotency
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -126,7 +126,7 @@
       register: result
 
     - name: Modify nfs share(snapshot)
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -141,7 +141,7 @@
       register: result
 
     - name: Modify nfs share(snapshot) - idempotency
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -156,7 +156,7 @@
       register: result
 
     - name: Add host in nfs share(fs)
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -179,7 +179,7 @@
       register: result
 
     - name: Add host in nfs share(fs) - idempotency
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -202,7 +202,7 @@
       register: result
 
     - name: Add more host in nfs share(fs)
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -230,7 +230,7 @@
       register: result
 
     - name: Remove host in nfs share(fs)
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -258,7 +258,7 @@
       register: result
 
     - name: Remove host in nfs share(fs) - idempotency
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -286,7 +286,7 @@
       register: result
 
     - name: Add host in nfs share(snapshot)
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -309,7 +309,7 @@
       register: result
 
     - name: Add host in nfs share(snapshot) - idempotency
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -332,7 +332,7 @@
       register: result
 
     - name: Add more host in nfs share(snapshot)
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -360,7 +360,7 @@
       register: result
 
     - name: Remove host in nfs share(snapshot)
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -388,7 +388,7 @@
       register: result
 
     - name: Remove host in nfs share(snapshot) - idempotency
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -416,7 +416,7 @@
       register: result
 
     - name: Get nfs details by nfs ID
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -426,7 +426,7 @@
       register: result
 
     - name: Get nfs details by nfs name and filesystem ID
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -437,7 +437,7 @@
       register: result
 
     - name: Get nfs details by nfs name, filesystem name & nas server ID
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -449,7 +449,7 @@
       register: result
 
     - name: Get nfs details by nfs name, filesystem name & nas server name
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -461,7 +461,7 @@
       register: result
 
     - name: Get nfs details by snapshot name
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -472,7 +472,7 @@
       register: result
 
     - name: Get nfs details by snapshot ID
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -483,7 +483,7 @@
       register: result
 
     - name: Delete nfs share by nfs ID
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -493,7 +493,7 @@
       register: result
 
     - name: Delete nfs share by nfs name
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -505,7 +505,7 @@
       register: result
 
     - name: Add host in nfs share(fs) with adv_host_mgmt_enabled as false
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -528,7 +528,7 @@
       register: result
 
     - name: Remove host in nfs share(fs) with adv_host_mgmt_enabled as false
-      dellemc.unity.nfs:
+      nfs:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

@@ -64,7 +64,7 @@ notes:
 
 EXAMPLES = r'''
 - name: Get detailed list of Unity entities
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -92,14 +92,14 @@ EXAMPLES = r'''
       - replication_session
 
 - name: Get information of Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
     validate_certs: "{{validate_certs}}"
 
 - name: Get list of hosts on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -108,7 +108,7 @@ EXAMPLES = r'''
       - host
 
 - name: Get list of FC initiators on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -117,7 +117,7 @@ EXAMPLES = r'''
       - fc_initiator
 
 - name: Get list of ISCSI initiators on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -126,7 +126,7 @@ EXAMPLES = r'''
       - iscsi_initiator
 
 - name: Get list of consistency groups on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -135,7 +135,7 @@ EXAMPLES = r'''
       - cg
 
 - name: Get list of storage pools on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -144,7 +144,7 @@ EXAMPLES = r'''
       - storage_pool
 
 - name: Get list of volumes on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -153,7 +153,7 @@ EXAMPLES = r'''
       - vol
 
 - name: Get list of snapshot schedules on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -162,7 +162,7 @@ EXAMPLES = r'''
       - snapshot_schedule
 
 - name: Get list of NAS Servers on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -171,7 +171,7 @@ EXAMPLES = r'''
       - nas_server
 
 - name: Get list of File Systems on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -180,7 +180,7 @@ EXAMPLES = r'''
       - file_system
 
 - name: Get list of Snapshots on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -189,7 +189,7 @@ EXAMPLES = r'''
       - snapshot
 
 - name: Get list of NFS exports on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -198,7 +198,7 @@ EXAMPLES = r'''
       - nfs_export
 
 - name: Get list of SMB shares on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -207,7 +207,7 @@ EXAMPLES = r'''
       - smb_share
 
 - name: Get list of user quotas on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -216,7 +216,7 @@ EXAMPLES = r'''
       - user_quota
 
 - name: Get list of quota trees on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -225,7 +225,7 @@ EXAMPLES = r'''
       - tree_quota
 
 - name: Get list of disk groups on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -234,7 +234,7 @@ EXAMPLES = r'''
       - disk_group
 
 - name: Get list of NFS Servers on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -243,7 +243,7 @@ EXAMPLES = r'''
       - nfs_server
 
 - name: Get list of CIFS Servers on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -252,7 +252,7 @@ EXAMPLES = r'''
       - cifs_server
 
 - name: Get list of ethernet ports on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -261,7 +261,7 @@ EXAMPLES = r'''
       - ethernet_port
 
 - name: Get list of file interfaces on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -270,7 +270,7 @@ EXAMPLES = r'''
       - file_interface
 
 - name: Get list of replication sessions on Unity array
-  dellemc.unity.info:
+  info:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"

@@ -34,7 +34,7 @@
 
   tasks:
     - name: Create Volume
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -52,7 +52,7 @@
       register: vol_result
 
     - name: Create Volume - Idempotency
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -73,7 +73,7 @@
         vol_id: "{{ vol_result.volume_details.id }}"
 
     - name: Expand Volume by volume id
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -84,7 +84,7 @@
         state: "{{ state_present }}"
 
     - name: Modify Volume attributes
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -99,7 +99,7 @@
         state: "{{ state_present }}"
 
     - name: Modify Volume attributes - Idempotency
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -114,7 +114,7 @@
         state: "{{ state_present }}"
 
     - name: Remove snap_schedule from a Volume
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -124,7 +124,7 @@
         state: "{{ state_present }}"
 
     - name: Map Host by host_name to Volume
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -136,7 +136,7 @@
         state: "{{ state_present }}"
 
     - name: Map Host by host_name to Volume- Idempotency
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -148,7 +148,7 @@
         state: "{{ state_present }}"
 
     - name: Unmap Host by host_name from Volume
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -159,7 +159,7 @@
         state: "{{ state_present }}"
 
     - name: Unmap Host by host_name from Volume -Idempotency
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -170,7 +170,7 @@
         state: "{{ state_present }}"
 
     - name: Map Multiple Hosts to a Volume
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -181,7 +181,7 @@
         state: "{{ state_present }}"
 
     - name: Map Multiple Hosts to a Volume - Idempotency
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -192,7 +192,7 @@
         state: "{{ state_present }}"
 
     - name: Unmap Hosts from Volume
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -203,7 +203,7 @@
         state: "{{ state_present }}"
 
     - name: Unmap Hosts from Volume - Idempotency
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -214,7 +214,7 @@
         state: "{{ state_present }}"
 
     - name: Get details of volume using id
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -223,7 +223,7 @@
         state: "present"
 
     - name: Delete a volume using id
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -232,7 +232,7 @@
         state: "absent"
 
     - name: Delete a volume using id -Idempotency
-      dellemc.unity.volume:
+      volume:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"

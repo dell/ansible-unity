@@ -21,9 +21,9 @@ Requirements
 The below requirements are needed on the host that executes this module.
 
 - A Dell Unity Storage device version 5.1 or later.
-- Ansible-core 2.13 or later.
-- Python 3.9, 3.10 or 3.11.
-- Storops Python SDK 1.2.11.
+- Ansible-core 2.17 or later.
+- Python 3.11, or 3.12.
+- Storops Python SDK 1.2.12.
 
 
 
@@ -112,7 +112,7 @@ Examples
 
     
     - name: Get replication session details
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -120,7 +120,7 @@ Examples
         session_name: "fs_replication"
 
     - name: Get replication session details based on session_id
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -128,7 +128,7 @@ Examples
         session_id: "103079215114_APM00213404195_0000_103079215274_APM00213404194_0000"
 
     - name: Pause a replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -137,7 +137,7 @@ Examples
         pause: true
 
     - name: Resume a replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -147,7 +147,7 @@ Examples
         force_full_copy: true
 
     - name: Sync a replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -156,7 +156,7 @@ Examples
         sync: true
 
     - name: Failover with sync a replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -166,7 +166,7 @@ Examples
         force: true
 
     - name: Failover a replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -175,7 +175,7 @@ Examples
         failover_with_sync: false
 
     - name: Failback a replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
@@ -185,7 +185,7 @@ Examples
         force_full_copy: true
 
     - name: Delete a replication session
-      dellemc.unity.replication_session:
+      replication_session:
         unispherehost: "{{unispherehost}}"
         username: "{{username}}"
         password: "{{password}}"
