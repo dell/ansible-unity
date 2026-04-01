@@ -68,6 +68,7 @@ Ansible Modules for Dell Technnologies Unity follows [Semantic Versioning](https
 New version will be release regularly if significant changes (bug fix or new feature) are made in the collection.
 
 Released code versions are located on "release" branches with names of the form "release-x.y.z" where x.y.z corresponds to the version number. More information on branching strategy followed can be found [here](https://github.com/dell/ansible-unity/blob/2.1.0/docs/BRANCHING.md).
+Ansible Modules for Dell Technologies Unity deprecation cycle is aligned with that of [Ansible](https://docs.ansible.com/ansible/latest/dev_guide/module_lifecycle.html).
 
 
 ## Support
@@ -75,4 +76,3 @@ Released code versions are located on "release" branches with names of the form 
 As Red Hat Ansible Certified Content, this collection is entitled to support through the Ansible Automation Platform (AAP) using the **Create issue** button on the top right corner. If a support case cannot be opened with Red Hat and the collection has been obtained either from Galaxy or GitHub, there may community help available on the [Ansible Forum](https://forum.ansible.com/).
 
 Alternatively, the support is available through [GitHub Issues](https://github.com/dell/ansible-unity/issues) or at [Dell Community forum](https://www.dell.com/community/Automation/bd-p/Automation).
-Ansible Modules for Dell Technologies Unity deprecation cycle is aligned with that of [Ansible](https://docs.ansible.com/ansible/latest/dev_guide/module_lifecycle.html).
