@@ -13,7 +13,7 @@ The capabilities of the Ansible modules are managing consistency groups, filesys
 * [Branching strategy](https://github.com/dell/ansible-unity/blob/2.1.0/docs/BRANCHING.md)
 * [List of adopters](https://github.com/dell/ansible-unity/blob/2.1.0/docs/ADOPTERS.md)
 * [Maintainers](https://github.com/dell/ansible-unity/blob/2.1.0/docs/MAINTAINERS.md)
-* [Support](https://github.com/dell/ansible-unity/blob/2.1.0/docs/SUPPORT.md)
+* [Support](#Support)
 * [License](#license)
 * [Security](https://github.com/dell/ansible-unity/blob/2.1.0/docs/SECURITY.md)
 * [Prerequisites](#prerequisites)
@@ -68,5 +68,11 @@ Ansible Modules for Dell Technnologies Unity follows [Semantic Versioning](https
 New version will be release regularly if significant changes (bug fix or new feature) are made in the collection.
 
 Released code versions are located on "release" branches with names of the form "release-x.y.z" where x.y.z corresponds to the version number. More information on branching strategy followed can be found [here](https://github.com/dell/ansible-unity/blob/2.1.0/docs/BRANCHING.md).
-
 Ansible Modules for Dell Technologies Unity deprecation cycle is aligned with that of [Ansible](https://docs.ansible.com/ansible/latest/dev_guide/module_lifecycle.html).
+
+
+## Support
+
+The support is available through [GitHub Issues](https://github.com/dell/ansible-unity/issues) or at [Dell Community forum](https://www.dell.com/community/Automation/bd-p/Automation).
+
+As Red Hat Ansible Certified Content, this collection is entitled to support through the Ansible Automation Platform (AAP) using the **Create issue** button on the top right corner. If a support case cannot be opened with Red Hat, and the collection was obtained from Ansible Galaxy or GitHub, you can seek community support through the [Ansible Forum](https://forum.ansible.com/).
