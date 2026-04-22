@@ -1,0 +1,167 @@
+---
+- name: Initiator Module Operations on Unity
+  hosts: localhost
+  connection: local
+  vars:
+    unispherehost: '10.*.*.*'
+    validate_certs: false
+    username: 'user'
+    password: '**'
+    host_name_1: "ansible-test-initiator-host-1"
+    host_name_2: "ansible-test-initiator-host-2"
+    fc_initiator_1: "20:00:00:90:FA:13:82:34:10:00:00:90:FA:13:82:34"
+    fc_initiator_2: "20:00:00:90:FA:13:81:8C:10:00:00:90:FA:13:81:8C"
+    iscsi_initiator_1: "iqn.1994-05.com.redhat:c38e6e8cfd81"
+    iscsi_initiator_2: "iqn.11-05.com.test:f14a6cef331b"
+
+  tasks:
+    - name: List all initiators
+      register: result
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+
+    - name: Display all initiators
+      ansible.builtin.debug:
+        var: result.initiator_details
+
+    - name: Create host with FC initiators
+      register: result
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_1 }}"
+        host_os: "Linux"
+        description: "Test host for FC initiators"
+        initiators:
+          - "{{ fc_initiator_1 }}"
+          - "{{ fc_initiator_2 }}"
+        state: "present"
+
+    - name: Set host_id for host 1
+      ansible.builtin.set_fact:
+        host_id_1: "{{ result.host_details.id }}"
+
+    - name: Display host 1 details
+      ansible.builtin.debug:
+        var: result.host_details
+
+    - name: Create host with iSCSI initiators
+      register: result
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_2 }}"
+        host_os: "VMware ESXi"
+        description: "Test host for iSCSI initiators"
+        initiators:
+          - "{{ iscsi_initiator_1 }}"
+          - "{{ iscsi_initiator_2 }}"
+        state: "present"
+
+    - name: Set host_id for host 2
+      ansible.builtin.set_fact:
+        host_id_2: "{{ result.host_details.id }}"
+
+    - name: Display host 2 details
+      ansible.builtin.debug:
+        var: result.host_details
+
+    - name: Add additional FC initiator to existing host
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_1 }}"
+        initiators:
+          - "20:00:00:90:FA:13:82:35:10:00:00:90:FA:13:82:35"
+        state: "present"
+
+    - name: Add initiator using host_id
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_id: "{{ host_id_2 }}"
+        initiators:
+          - "iqn.11-05.com.test:24514718452e"
+        state: "present"
+
+    - name: List all initiators after additions
+      register: result
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+
+    - name: Display updated initiators list
+      ansible.builtin.debug:
+        var: result.initiator_details
+
+    - name: Remove FC initiator from host
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_1 }}"
+        initiators:
+          - "{{ fc_initiator_2 }}"
+        state: "absent"
+
+    - name: Remove iSCSI initiator from host using host_id
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_id: "{{ host_id_2 }}"
+        initiators:
+          - "{{ iscsi_initiator_2 }}"
+        state: "absent"
+
+    - name: List all initiators after removals
+      register: result
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+
+    - name: Display final initiators list
+      ansible.builtin.debug:
+        var: result.initiator_details
+
+    # Cleanup tasks
+    - name: Remove remaining initiators from host 1
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_1 }}"
+        initiators:
+          - "{{ fc_initiator_1 }}"
+          - "20:00:00:90:FA:13:82:35:10:00:00:90:FA:13:82:35"
+        state: "absent"
+
+    - name: Remove remaining initiators from host 2
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_2 }}"
+        initiators:
+          - "{{ iscsi_initiator_1 }}"
+          - "iqn.11-05.com.test:24514718452e"
+        state: "absent"

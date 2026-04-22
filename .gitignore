@@ -42,3 +42,10 @@ config.yml
 
 # ansible-galaxy build output files
 *.tar.gz
+
+# Demo and test files (not for git sync)
+.ansible/
+playbooks/test_initiator_demo.yml
+playbooks/test_initiator_quick.yml
+playbooks/TEST_INITIATOR_README.md
+playbooks/run_initiator_test.sh

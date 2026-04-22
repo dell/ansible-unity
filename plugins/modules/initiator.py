@@ -48,7 +48,7 @@ options:
     description:
     - Operating system running on the host.
     - Used when creating a new host.
-    - choices: ['AIX', 'Citrix XenServer', 'HP-UX', 'IBM VIOS', 'Linux',
+    choices: ['AIX', 'Citrix XenServer', 'HP-UX', 'IBM VIOS', 'Linux',
     'Mac OS', 'Solaris', 'VMware ESXi', 'Windows Client', 'Windows Server']
     type: str
 
