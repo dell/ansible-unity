@@ -2,7 +2,7 @@
 
 The Ansible Modules for Dell Technologies (Dell) Unity allow Data Center and IT administrators to use RedHat Ansible to automate and orchestrate the configuration and management of Dell Unity arrays.
 
-The capabilities of the Ansible modules are managing consistency groups, filesystem, filesystem snapshots, CIFS server, NAS server, NFS server, NFS export, SMB share, interface, hosts, snapshots, snapshot schedules, storage pools, user quotas, quota trees, replication sessions and volumes. Capabilities also include gathering facts from the array. The options available for each are list, show, create, modify and delete. These tasks can be executed by running simple playbooks written in yaml syntax. The modules are written so that all the operations are idempotent, so making multiple identical requests has the same effect as making a single request.
+The capabilities of the Ansible modules are managing consistency groups, filesystem, filesystem snapshots, CIFS server, NAS server, NFS server, NFS export, SMB share, interface, hosts, initiators, snapshots, snapshot schedules, storage pools, user quotas, quota trees, replication sessions and volumes. Capabilities also include gathering facts from the array. The options available for each are list, show, create, modify and delete. These tasks can be executed by running simple playbooks written in yaml syntax. The modules are written so that all the operations are idempotent, so making multiple identical requests has the same effect as making a single request.
 
 ## Table of contents
 
@@ -43,6 +43,7 @@ The modules are written in such a way that all requests are idempotent and hence
   * [Filesystem snapshot module](https://github.com/dell/ansible-unity/blob/2.1.0/docs/modules/filesystem_snapshot.rst)
   * [Info module](https://github.com/dell/ansible-unity/blob/2.1.0/docs/modules/info.rst)
   * [Host module](https://github.com/dell/ansible-unity/blob/2.1.0/docs/modules/host.rst)
+  * [Initiator module](https://github.com/dell/ansible-unity/blob/2.1.0/docs/modules/initiator.rst)
   * [CIFS server module](https://github.com/dell/ansible-unity/blob/2.1.0/docs/modules/cifsserver.rst)
   * [NAS server module](https://github.com/dell/ansible-unity/blob/2.1.0/docs/modules/nasserver.rst)
   * [NFS server module](https://github.com/dell/ansible-unity/blob/2.1.0/docs/modules/nfsserver.rst)
