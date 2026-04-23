@@ -13,6 +13,9 @@
     fc_initiator_2: "20:00:00:90:FA:13:81:8C:10:00:00:90:FA:13:81:8C"
     iscsi_initiator_1: "iqn.1994-05.com.redhat:c38e6e8cfd81"
     iscsi_initiator_2: "iqn.11-05.com.test:f14a6cef331b"
+    # Track if hosts were created by this test
+    host_1_created: false
+    host_2_created: false
 
   tasks:
     - name: List all initiators
@@ -27,9 +30,22 @@
       ansible.builtin.debug:
         var: result.initiator_details
 
-    - name: Create host with FC initiators
-      register: result
-      dellemc.unity.initiator:
+    - name: Get list of all hosts
+      register: hosts_info
+      dellemc.unity.info:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        gather_subset:
+          - host
+
+    - name: Check if host 1 exists in host list
+      ansible.builtin.set_fact:
+        host_1_exists: "{{ hosts_info.Hosts | selectattr('name', 'equalto', host_name_1) | list | length > 0 }}"
+
+    - name: Create host 1 without initiators if it doesn't exist
+      dellemc.unity.host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -37,6 +53,23 @@
         host_name: "{{ host_name_1 }}"
         host_os: "Linux"
         description: "Test host for FC initiators"
+        state: "present"
+      register: host_1_create
+      when: not host_1_exists
+
+    - name: Set flag if host 1 was created by this test
+      ansible.builtin.set_fact:
+        host_1_created: true
+      when: not host_1_exists
+
+    - name: Add FC initiators to host 1
+      register: result
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_1 }}"
         initiators:
           - "{{ fc_initiator_1 }}"
           - "{{ fc_initiator_2 }}"
@@ -50,9 +83,12 @@
       ansible.builtin.debug:
         var: result.host_details
 
-    - name: Create host with iSCSI initiators
-      register: result
-      dellemc.unity.initiator:
+    - name: Check if host 2 exists in host list
+      ansible.builtin.set_fact:
+        host_2_exists: "{{ hosts_info.Hosts | selectattr('name', 'equalto', host_name_2) | list | length > 0 }}"
+
+    - name: Create host 2 without initiators if it doesn't exist
+      dellemc.unity.host:
         unispherehost: "{{ unispherehost }}"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -60,6 +96,23 @@
         host_name: "{{ host_name_2 }}"
         host_os: "VMware ESXi"
         description: "Test host for iSCSI initiators"
+        state: "present"
+      register: host_2_create
+      when: not host_2_exists
+
+    - name: Set flag if host 2 was created by this test
+      ansible.builtin.set_fact:
+        host_2_created: true
+      when: not host_2_exists
+
+    - name: Add iSCSI initiators to host 2
+      register: result
+      dellemc.unity.initiator:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_2 }}"
         initiators:
           - "{{ iscsi_initiator_1 }}"
           - "{{ iscsi_initiator_2 }}"
@@ -165,3 +218,30 @@
           - "{{ iscsi_initiator_1 }}"
           - "iqn.11-05.com.test:24514718452e"
         state: "absent"
+
+    - name: Delete host 1 if it was created by this test
+      dellemc.unity.host:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_1 }}"
+        state: "absent"
+      when: host_1_created
+
+    - name: Delete host 2 if it was created by this test
+      dellemc.unity.host:
+        unispherehost: "{{ unispherehost }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        validate_certs: "{{ validate_certs }}"
+        host_name: "{{ host_name_2 }}"
+        state: "absent"
+      when: host_2_created
+
+    - name: Display cleanup status
+      ansible.builtin.debug:
+        msg:
+          - "Host 1 created by test: {{ host_1_created }}"
+          - "Host 2 created by test: {{ host_2_created }}"
+          - "Cleanup completed successfully"
