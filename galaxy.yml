@@ -28,6 +28,7 @@ authors:
   - Spandita Panigrahi <ansible.team@dell.com>
   - Ananthu S Kuttattu <ansible.team@dell.com>
   - Pavan Mudunuri <ansible.team@dell.com>
+  - Shrinidhi Rao K Katte <ansible.team@dell.com>
 
 ### OPTIONAL but strongly recommended
 # A short summary description of the collection
@@ -72,3 +73,9 @@ issues: https://www.dell.com/community/Automation/bd-p/Automation
 # files like 'galaxy.yml', '*.pyc', '*.retry', and '.git' are always filtered
 build_ignore:
   - codecov.yml
+  - .venv*
+  - .ansible-lint
+  - .github
+  - .gitignore
+  - catalog-info.yaml
+  - .pytest_cache
