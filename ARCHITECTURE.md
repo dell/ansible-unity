@@ -4,7 +4,7 @@
 
 <!-- yaml-metadata-start -->
 scope_paths: ["./"]
-capture_git_sha: "301cd2815f4477fae7d9e39b9a973792df25b1b6"
+capture_git_sha: "4249d6850969ebc4af1c1450a70131ad8de7169b"
 status: "current"
 auto_update: false
 preview_before_apply: true
@@ -29,7 +29,7 @@ Published to Ansible Galaxy under the `dellemc` namespace. Uses the `storops` Py
 | Modules | `plugins/modules/*.py` | One file per resource (18 modules) |
 | Module utilities | `plugins/module_utils/storage/dell/` | SDK init, connection factory, logger, error helpers |
 | Doc fragments | `plugins/doc_fragments/unity.py` | Shared DOCUMENTATION fragment for connection params |
-| Runtime metadata | `meta/runtime.yml` | `requires_ansible`, action groups, tombstones |
+| Runtime metadata | `meta/runtime.yml` | `meta/runtime.yml` contains 15 tombstone entries for deprecated `dellemc_unity_*` prefixed module names. |
 | Execution env | `meta/execution-environment.yml` | EE definition |
 | Example playbooks | `playbooks/modules/` | One example playbook per module |
 | Unit tests | `tests/unit/plugins/modules/` | One test file per module |
@@ -99,7 +99,7 @@ Published to Ansible Galaxy under the `dellemc` namespace. Uses the `storops` Py
 ## Known Constraints
 
 1. **SDK version coupling is strict** — each collection release is tested against exactly one SDK version (or tight range). Mismatch is a blocking defect.
-2. **`meta/runtime.yml` is source of truth for action groups** — every new module must be appended to the `dellemc.unity.all` list.
+2. **`meta/runtime.yml` is source of truth** — tombstone/redirect entries for deprecated module names must not be removed.
 3. **Tombstone entries are permanent** — deprecated `dellemc_unity_*` prefixed module names must not be removed.
 4. **`verifycert: false` is lab-only** — production requires `true`.
 5. **Example playbooks are mandatory** — every module must ship a working example in `playbooks/modules/`.
