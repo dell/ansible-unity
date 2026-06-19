@@ -23,6 +23,11 @@ Bug Fixes
 - Storage Pool - clear error message for non-existant Pool.
 - Filesystem - Set proper RPO when using an async replication_mode.
 
+New Modules
+-----------
+
+- initiator - Manage Initiator operations on Unity storage system with host auto-creation support
+
 v2.0.0
 ======
 
