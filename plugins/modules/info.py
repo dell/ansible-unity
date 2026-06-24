@@ -54,7 +54,7 @@ options:
       for which information is required.
     choices: [host, fc_initiator, iscsi_initiator, cg, storage_pool, vol,
     snapshot_schedule, nas_server, file_system, snapshot, nfs_export,
-    smb_share, user_quota, tree_quota, disk_group, nfs_server, cifs_server, ethernet_port, file_interface, replication_session]
+    smb_share, user_quota, tree_quota, disk_group, nfs_server, cifs_server, ethernet_port, fc_port, file_interface, replication_session]
     type: list
     elements: str
 
@@ -88,6 +88,7 @@ EXAMPLES = r'''
       - nfs_server
       - cifs_server
       - ethernet_port
+      - fc_port
       - file_interface
       - replication_session
 
@@ -259,6 +260,15 @@ EXAMPLES = r'''
     validate_certs: "{{validate_certs}}"
     gather_subset:
       - ethernet_port
+
+- name: Get list of FC ports on Unity array
+  info:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    gather_subset:
+      - fc_port
 
 - name: Get list of file interfaces on Unity array
   info:
@@ -1192,6 +1202,29 @@ Ethernet_ports:
             "name": "SP A 4-Port Card Ethernet Port 1"
         }
     ]
+FC_ports:
+    description: Details of the FC ports.
+    returned: When FC ports exist.
+    type: list
+    contains:
+        id:
+            description: The ID of the FC port.
+            type: str
+        name:
+            description: The name of the FC port.
+            type: str
+    sample: [
+        {
+        "id": "spa_iom_0_fc0",
+        "name": "SP A I/O Module 0 FC Port 0",
+        "wwn": "YY:YY:YY:YY:YY:YY:YY:YY:XX:XX:XX:XX:XX:XX:XX:XX",
+        },
+        {
+        "id": "spa_iom_0_fc1",
+        "name": "SP A I/O Module 0 FC Port 1",
+        "wwn": "YY:YY:YY:YY:YY:YY:YY:YY:XX:XX:XX:XX:XX:XX:XX:XX",
+        }
+    ]
 File_interfaces:
     description: Details of the file inetrfaces.
     returned: When file inetrface exist.
@@ -1613,6 +1646,20 @@ class Info(object):
             LOG.error(msg)
             self.module.fail_json(msg=msg)
 
+    def get_fc_port_list(self):
+        """Get the list of FC ports on a given Unity storage system"""
+
+        try:
+            LOG.info("Getting fc ports list")
+            fc_port = self.unity.get_fc_port()
+            return result_list(fc_port)
+
+        except Exception as e:
+            msg = 'Get FC port list from unity array failed with' \
+                  ' error %s' % (str(e))
+            LOG.error(msg)
+            self.module.fail_json(msg=msg)
+
     def get_file_interface_list(self):
         """Get the list of file interfaces on a given Unity storage system"""
 
@@ -1666,6 +1713,7 @@ class Info(object):
         nfs_server = []
         cifs_server = []
         ethernet_port = []
+        fc_port = []
         file_interface = []
         replication_session = []
 
@@ -1707,6 +1755,8 @@ class Info(object):
                 cifs_server = self.get_cifs_server_list()
             if 'ethernet_port' in subset:
                 ethernet_port = self.get_ethernet_port_list()
+            if 'fc_port' in subset:
+                fc_port = self.get_fc_port_list()
             if 'file_interface' in subset:
                 file_interface = self.get_file_interface_list()
             if 'replication_session' in subset:
@@ -1732,6 +1782,7 @@ class Info(object):
             NFS_Servers=nfs_server,
             CIFS_Servers=cifs_server,
             Ethernet_ports=ethernet_port,
+            FC_ports=fc_port,
             File_interfaces=file_interface,
             Replication_sessions=replication_session
         )
@@ -1866,7 +1917,7 @@ def get_info_parameters():
                                             'file_system', 'snapshot',
                                             'nfs_export', 'smb_share',
                                             'user_quota', 'tree_quota', 'disk_group', 'nfs_server', 'cifs_server',
-                                            'ethernet_port', 'file_interface', 'replication_session']))
+                                            'ethernet_port', 'fc_port', 'file_interface', 'replication_session']))
 
 
 def main():
