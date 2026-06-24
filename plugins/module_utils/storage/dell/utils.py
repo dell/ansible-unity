@@ -37,15 +37,21 @@ try:
         UnityNfsShareList  # noqa   # pylint: disable=unused-import
     from storops.unity.resource.snap_schedule import UnitySnapScheduleList, \
         UnitySnapSchedule  # noqa   # pylint: disable=unused-import
-    from storops.unity.resource.replication_session import UnityReplicationSession  # noqa   # pylint: disable=unused-import
-    from storops.unity.enums import HostInitiatorTypeEnum, \
-        TieringPolicyEnum, ScheduleTypeEnum, DayOfWeekEnum, NodeEnum  # noqa   # pylint: disable=unused-import
-    from storops.unity.enums import HostLUNAccessEnum, HostTypeEnum, AccessPolicyEnum, \
-        FilesystemTypeEnum, FSSupportedProtocolEnum, FSFormatEnum  # noqa   # pylint: disable=unused-import
-    from storops.unity.enums import NFSTypeEnum, NFSShareDefaultAccessEnum, NFSShareSecurityEnum, \
-        FilesystemSnapAccessTypeEnum, FSLockingPolicyEnum  # noqa   # pylint: disable=unused-import
-    from storops.unity.enums import CifsShareOfflineAvailabilityEnum, NasServerUnixDirectoryServiceEnum, \
-        KdcTypeEnum, NodeEnum, FileInterfaceRoleEnum, ReplicationOpStatusEnum  # noqa   # pylint: disable=unused-import
+    # noqa  # pylint: disable=unused-import
+    from storops.unity.resource.replication_session import (
+        UnityReplicationSession, UnitySnapReplicationPolicy
+    )
+    # noqa  # pylint: disable=unused-import
+    from storops.unity.enums import (
+        HostInitiatorTypeEnum, TieringPolicyEnum, ScheduleTypeEnum,
+        DayOfWeekEnum, NodeEnum, HostLUNAccessEnum, HostTypeEnum,
+        AccessPolicyEnum, FilesystemTypeEnum, FSSupportedProtocolEnum,
+        FSFormatEnum, NFSTypeEnum, NFSShareDefaultAccessEnum, NFSShareSecurityEnum,
+        FilesystemSnapAccessTypeEnum, FSLockingPolicyEnum,
+        CifsShareOfflineAvailabilityEnum, NasServerUnixDirectoryServiceEnum,
+        KdcTypeEnum, NodeEnum, FileInterfaceRoleEnum, ReplicationOpStatusEnum,
+        QuotaPolicyEnum, RaidTypeEnum, RaidStripeWidthEnum, StoragePoolTypeEnum
+    )
     from storops.exception import UnityResourceNotFoundError, \
         StoropsConnectTimeoutError, UnityNfsShareNameExistedError  # noqa   # pylint: disable=unused-import
     from storops.connection.exceptions import HttpError, HTTPClientError  # noqa   # pylint: disable=unused-import
@@ -56,8 +62,6 @@ try:
     from storops.unity.resource.quota_config import UnityQuotaConfig, \
         UnityQuotaConfigList  # noqa   # pylint: disable=unused-import
     from storops.unity.resource.storage_resource import UnityStorageResource  # noqa   # pylint: disable=unused-import
-    from storops.unity.enums import QuotaPolicyEnum, RaidTypeEnum, \
-        RaidStripeWidthEnum, StoragePoolTypeEnum  # noqa   # pylint: disable=unused-import
     from storops.unity.resource.disk import UnityDisk, \
         UnityDiskList, UnityDiskGroup, UnityDiskGroupList  # noqa   # pylint: disable=unused-import
     from storops.unity.resource.cifs_server import UnityCifsServer  # noqa   # pylint: disable=unused-import

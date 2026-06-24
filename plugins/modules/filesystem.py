@@ -123,6 +123,13 @@ options:
     - Boolean variable, specifies whether or not to enable compression.
       Compression is supported only for thin filesystem.
     type: bool
+  is_advanced_dedup_enabled:
+    description:
+      - Boolean variable, specifies whether to enable advanced dedup for
+        the thin filesystem. C(data_reduction) must be enabled prior to
+        enabling C(is_advanced_dedup_enabled).
+    type: bool
+    version_added: '2.2.0'
   is_thin:
     description:
     - Boolean variable, specifies whether or not it is a thin filesystem.
@@ -286,6 +293,93 @@ options:
         type: str
         description:
         - Name of pool to allocate destination filesystem.
+      no_async_snap_replication:
+        type: bool
+        description:
+        - Indicates whether or not to enable snapshot replication in asynchronous
+          replication session.
+      hourly_snap_replication_policy:
+        version_added: '2.2.0'
+        type: dict
+        description:
+        - Describes or specifies the policy for replicating hourly scheduled
+          snaps of the filesystem.
+        suboptions:
+          is_replicating_snaps:
+            type: bool
+            description:
+            - Boolean to enable or disable hourly scheduled snapshots.
+            - C(true) - Scheduled snapshots will be replicated to the destination.
+            - C(false) - Scheduled snapshots will not be replicated to the
+              destination.
+          is_retention_same_as_source:
+            type: bool
+            description:
+            - Indicates whether or not the remote (destination) retention policy
+              applied for snapshots is the same as local (source) retention policy.
+            - It can only be applied if C(is_replicating_snaps) is set to C(true).
+            - C(true) - The same retention policy is applied to the destination
+              snapshots.
+            - C(false) - A customized policy is applied to the destination
+              snapshots.
+          is_auto_delete:
+            type: bool
+            description:
+            - Indicates whether or not the scheduled snapshots replicated to the
+              destination can be automatically deleted.
+            - It can only be applied if C(is_replicating_snaps) is set to C(true)
+              and C(is_retention_same_as_source) is set to C(false).
+            - C(true) - Snapshots can be automatically deleted by the system per
+              threshold settings.
+            - C(false) - Snapshots cannot be deleted automatically.
+          retention_duration:
+            type: int
+            description:
+            - Number of seconds after which the scheduled snapshots will expire
+              on the destination.
+            - It can only be applied if C(is_replicating_snaps) is C(true) and
+              C(is_retention_same_as_source) & C(is_auto_delete) are C(false).
+      daily_snap_replication_policy:
+        version_added: '2.2.0'
+        type: dict
+        description:
+        - Describes or specifies the policy for replicating daily scheduled
+          snaps of the filesystem.
+        suboptions:
+          is_replicating_snaps:
+            type: bool
+            description:
+            - Boolean to enable or disable daily scheduled snapshots.
+            - C(true) - Scheduled snapshots will be replicated to the destination.
+            - C(false) - Scheduled snapshots will not be replicated to the
+              destination.
+          is_retention_same_as_source:
+            type: bool
+            description:
+            - Indicates whether or not the remote (destination) retention policy
+              applied for snapshots is the same as local (source) retention policy.
+            - It can only be applied if C(is_replicating_snaps) is set to C(true).
+            - C(true) - The same retention policy is applied to the destination
+              snapshots.
+            - C(false) - A customized policy is applied to the destination
+              snapshots.
+          is_auto_delete:
+            type: bool
+            description:
+            - Indicates whether or not the scheduled snapshots replicated to the
+              destination can be automatically deleted.
+            - It can only be applied if C(is_replicating_snaps) is set to C(true)
+              and C(is_retention_same_as_source) is set to C(false).
+            - C(true) - Snapshots can be automatically deleted by the system per
+              threshold settings.
+            - C(false) - Snapshots cannot be deleted automatically.
+          retention_duration:
+            type: int
+            description:
+            - Number of seconds after which the scheduled snapshots will expire
+              on the destination.
+            - It can only be applied if C(is_replicating_snaps) is C(true) and
+              C(is_retention_same_as_source) & C(is_auto_delete) are C(false).
   replication_state:
     description:
     - State of the replication.
@@ -304,7 +398,7 @@ notes:
 
 EXAMPLES = r"""
 - name: Create FileSystem
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -316,7 +410,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Create FileSystem with quota configuration
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -333,7 +427,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Expand FileSystem size
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -344,7 +438,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Expand FileSystem size
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -355,7 +449,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify FileSystem smb_properties
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -369,7 +463,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Modify FileSystem Snap Schedule
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -379,7 +473,7 @@ EXAMPLES = r"""
     state: "{{state_present}}"
 
 - name: Get details of FileSystem using id
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -388,7 +482,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Delete a FileSystem using id
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -396,8 +490,8 @@ EXAMPLES = r"""
     filesystem_id: "rs_405"
     state: "absent"
 
-- name: Enable replication on the fs
-  filesystem:
+- name: Enable async replication on the filesystem
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -414,11 +508,15 @@ EXAMPLES = r"""
         remote_system_username: 'username'
         remote_system_password: 'password'
       destination_pool_name: "pool_test_1"
+      no_async_snap_replication: false
+      hourly_snap_replication_policy:
+        is_replicating_snaps: true
+        is_retention_same_as_source: true
     replication_state: "enable"
     state: "present"
 
-- name: Modify replication on the fs
-  filesystem:
+- name: Modify replication name and rpo on the filesystem
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -432,8 +530,35 @@ EXAMPLES = r"""
     replication_state: "enable"
     state: "present"
 
+- name: Enable async replication of hourly scheduled snaps
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "rs_405"
+    replication_params:
+      hourly_snap_replication_policy:
+        is_replicating_snaps: true
+        is_retention_same_as_source: true
+    replication_state: "enable"
+    state: "present"
+
+- name: Disable async replication of hourly scheduled snaps
+  dellemc.unity.filesystem:
+    unispherehost: "{{unispherehost}}"
+    username: "{{username}}"
+    password: "{{password}}"
+    validate_certs: "{{validate_certs}}"
+    filesystem_id: "rs_405"
+    replication_params:
+      hourly_snap_replication_policy:
+        is_replicating_snaps: false
+    replication_state: "enable"
+    state: "present"
+
 - name: Disable replication on the fs
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -443,7 +568,7 @@ EXAMPLES = r"""
     state: "present"
 
 - name: Disable replication by specifying replication_name on the fs
-  filesystem:
+  dellemc.unity.filesystem:
     unispherehost: "{{unispherehost}}"
     username: "{{username}}"
     password: "{{password}}"
@@ -479,6 +604,9 @@ filesystem_details:
         is_data_reduction_enabled:
             description: Whether or not compression enabled on this
                          filesystem.
+            type: bool
+        is_advanced_dedup_enabled:
+            description: Whether or not advanced deduplication is enabled.
             type: bool
         size_total_with_unit:
             description: Size of the filesystem with actual unit.
@@ -688,7 +816,7 @@ from ansible_collections.dellemc.unity.plugins.module_utils.storage.dell \
 
 LOG = utils.get_logger('filesystem')
 
-application_type = "Ansible/1.7.1"
+application_type = "Ansible/2.2.0"
 
 
 class Filesystem(object):
@@ -915,6 +1043,8 @@ class Filesystem(object):
             tiering_policy = self.module.params['tiering_policy']
             tiering_policy = self.get_tiering_policy_enum(tiering_policy) \
                 if tiering_policy else None
+            data_reduction = self.module.params.get('data_reduction')
+            is_advanced_dedup_enabled = self.module.params.get('is_advanced_dedup_enabled')
 
             obj_fs = utils.UnityFileSystem.create(
                 self.unity_conn._cli,
@@ -924,7 +1054,9 @@ class Filesystem(object):
                 size=size,
                 proto=supported_protocol,
                 is_thin=is_thin,
-                tiering_policy=tiering_policy)
+                tiering_policy=tiering_policy,
+                is_compression=data_reduction,
+                is_advanced_dedup_enabled=is_advanced_dedup_enabled)
 
             LOG.info("Successfully created file system , %s", obj_fs)
             return obj_fs
@@ -1001,6 +1133,11 @@ class Filesystem(object):
             if data_reduction is not None and \
                     data_reduction != obj_fs.is_data_reduction_enabled:
                 to_update.update({'is_compression': data_reduction})
+
+            is_advanced_dedup_enabled = self.module.params.get('is_advanced_dedup_enabled')
+            if is_advanced_dedup_enabled is not None and \
+                    is_advanced_dedup_enabled != obj_fs.is_advanced_dedup_enabled:
+                to_update.update({'is_advanced_dedup_enabled': is_advanced_dedup_enabled})
 
             access_policy = self.module.params['access_policy']
             if access_policy and self.get_access_policy_enum(
@@ -1108,6 +1245,8 @@ class Filesystem(object):
                 'is_thin',
                 'tiering_policy',
                 'is_compression',
+                'is_data_reduction_enabled',
+                'is_advanced_dedup_enabled',
                 'access_policy',
                 'locking_policy',
                 'description',
@@ -1440,6 +1579,48 @@ class Filesystem(object):
             LOG.error(errormsg)
             self.module.fail_json(msg=errormsg)
 
+        # Validate hourly and daily snap replication policy for asynchronous
+        # replication
+        hourly_snap_replication_policy = \
+            replication_params.get('hourly_snap_replication_policy')
+        daily_snap_replication_policy = \
+            replication_params.get('daily_snap_replication_policy')
+
+        for policy in [daily_snap_replication_policy, hourly_snap_replication_policy]:
+            if policy is not None:
+                is_replicating_snaps = policy.get('is_replicating_snaps')
+                is_retention_same_as_source = policy.get('is_retention_same_as_source')
+                is_auto_delete = policy.get('is_auto_delete')
+                retention_duration = policy.get('retention_duration')
+
+                # isReplicatingSnaps must be True to apply isRetentionSameAsSource,
+                # isAutoDelete, and retentionDuration properties for hourly and
+                # daily snap replication policies
+                if any(v is not None
+                       for v in [is_retention_same_as_source, is_auto_delete, retention_duration]) \
+                        and not is_replicating_snaps:
+                    errormsg = "'is_replicating_snaps' must be 'True' if " \
+                        "either one of 'is_retention_same_as_source' or " \
+                        "'is_auto_delete' or 'retention_duration' is specified."
+                    LOG.error(errormsg)
+                    self.module.fail_json(msg=errormsg)
+
+                # isAutoDelete can only be applied if isRetentionSameAsSource is
+                # False
+                if is_auto_delete and is_retention_same_as_source:
+                    errormsg = "'is_retention_same_as_source' must be 'False' " \
+                        "to enable 'is_auto_delete'."
+                    LOG.error(errormsg)
+                    self.module.fail_json(msg=errormsg)
+
+                # Retention duration can only be applied if isAutoDelete and
+                # isRetentionSameAsSource are both False
+                if retention_duration and (is_auto_delete or is_retention_same_as_source):
+                    errormsg = "Both 'is_retention_same_as_source' and " \
+                        "'is_auto_delete' must be 'False' to enable 'retention_duration'."
+                    LOG.error(errormsg)
+                    self.module.fail_json(msg=errormsg)
+
     def validate_create_replication_params(self, replication_params):
         ''' Validate replication params '''
 
@@ -1486,6 +1667,78 @@ class Filesystem(object):
             if ((replication_params['replication_mode'] or replication_params['rpo']) and
                     repl_session.max_time_out_of_sync != rpo):
                 modify_payload['max_time_out_of_sync'] = rpo
+
+            # Check whether to enable or disable async snap replication
+            no_async_snap_replication = replication_params.get('no_async_snap_replication')
+            if no_async_snap_replication is not None and \
+                    repl_session.no_async_snap_replication != no_async_snap_replication:
+                modify_payload['no_async_snap_replication'] = no_async_snap_replication
+
+            # Check whether hourly and daily snapshot replication policy has changed
+            hourly_snap_replication_policy = replication_params.get(
+                'hourly_snap_replication_policy')
+            daily_snap_replication_policy = replication_params.get(
+                'daily_snap_replication_policy')
+
+            if hourly_snap_replication_policy:
+                new_attribs = {}
+                is_replicating_snaps = hourly_snap_replication_policy.get(
+                    'is_replicating_snaps')
+                if is_replicating_snaps is not None and \
+                        repl_session.hourly_snap_replication_policy.is_replicating_snaps != is_replicating_snaps:
+                    new_attribs['is_replicating_snaps'] = is_replicating_snaps
+
+                is_retention_same_as_source = hourly_snap_replication_policy.get(
+                    'is_retention_same_as_source')
+                if is_retention_same_as_source is not None and \
+                        repl_session.hourly_snap_replication_policy.is_retention_same_as_source != is_retention_same_as_source:
+                    new_attribs['is_retention_same_as_source'] = is_retention_same_as_source
+
+                is_auto_delete = hourly_snap_replication_policy.get(
+                    'is_auto_delete')
+                if is_auto_delete is not None and \
+                        repl_session.hourly_snap_replication_policy.is_auto_delete != is_auto_delete:
+                    new_attribs['is_auto_delete'] = is_auto_delete
+
+                retention_duration = hourly_snap_replication_policy.get(
+                    'retention_duration')
+                if retention_duration is not None and \
+                        repl_session.hourly_snap_replication_policy.retention_duration != retention_duration:
+                    new_attribs['retention_duration'] = retention_duration
+
+                if new_attribs:
+                    modify_payload['hourly_snap_replication_policy'] = \
+                        utils.UnitySnapReplicationPolicy.to_embedded(**new_attribs)
+
+            if daily_snap_replication_policy:
+                new_attribs = {}
+                is_replicating_snaps = daily_snap_replication_policy.get(
+                    'is_replicating_snaps')
+                if is_replicating_snaps is not None and \
+                        repl_session.hourly_snap_replication_policy.is_replicating_snaps != is_replicating_snaps:
+                    new_attribs['is_replicating_snaps'] = is_replicating_snaps
+
+                is_retention_same_as_source = daily_snap_replication_policy.get(
+                    'is_retention_same_as_source')
+                if is_retention_same_as_source is not None and \
+                        repl_session.hourly_snap_replication_policy.is_retention_same_as_source != is_retention_same_as_source:
+                    new_attribs['is_retention_same_as_source'] = is_retention_same_as_source
+
+                is_auto_delete = daily_snap_replication_policy.get(
+                    'is_auto_delete')
+                if is_auto_delete is not None and \
+                        repl_session.hourly_snap_replication_policy.is_auto_delete != is_auto_delete:
+                    new_attribs['is_auto_delete'] = is_auto_delete
+
+                retention_duration = daily_snap_replication_policy.get(
+                    'retention_duration')
+                if retention_duration is not None and \
+                        repl_session.hourly_snap_replication_policy.retention_duration != retention_duration:
+                    new_attribs['retention_duration'] = retention_duration
+
+                if new_attribs:
+                    modify_payload['daily_snap_replication_policy'] = \
+                        utils.UnitySnapReplicationPolicy.to_embedded(**new_attribs)
 
             if modify_payload:
                 repl_session.modify(**modify_payload)
@@ -1625,6 +1878,8 @@ class Filesystem(object):
         state = self.module.params['state']
         snap_schedule_name = self.module.params['snap_schedule_name']
         snap_schedule_id = self.module.params['snap_schedule_id']
+        data_reduction = self.module.params.get('data_reduction')
+        is_advanced_dedup_enabled = self.module.params.get('is_advanced_dedup_enabled')
 
         # result is a dictionary to contain end state and FileSystem details
         changed = False
@@ -1673,6 +1928,10 @@ class Filesystem(object):
         if (cap_unit is not None) and not size:
             self.module.fail_json(msg="cap_unit can be specified along "
                                       "with size")
+
+        # advanced deduplication should only be enabled if data reduction is enabled
+        if is_advanced_dedup_enabled and not data_reduction:
+            self.module.fail_json(msg="To enable 'is_advanced_dedup_enabled' requires 'data_reduction' to be also enabled.")
 
         nas_server = None
         if nas_server_name or nas_server_id:
@@ -1828,12 +2087,36 @@ def get_replication_args_list(replication_params):
         else:
             replication_args_list['max_time_out_of_sync'] = -1
 
+    # Enable or disable async snap replication
+    no_async_snap_replication = replication_params.get('no_async_snap_replication')
+    if no_async_snap_replication is not None:
+        replication_args_list['no_async_snap_replication'] = no_async_snap_replication
+
+    # Hourly and Daily snap replication policy for asynchronous replication
+    # of scheduled snapshots
+    for policy_name in ['hourly_snap_replication_policy', 'daily_snap_replication_policy']:
+        policy = replication_params.get(policy_name)
+        if policy:
+            replication_args_list[policy_name] = utils.UnitySnapReplicationPolicy.to_embedded(**policy)
+
     return replication_args_list
 
 
 def get_filesystem_parameters():
     """This method provide parameters required for the ansible filesystem
        module on Unity"""
+
+    # argument spec for hourly and daily snap replication policy
+    snap_replication_policy_argument_spec = {
+        'type': 'dict',
+        'options': {
+            'is_replicating_snaps': {'type': 'bool', 'required': False},
+            'is_retention_same_as_source': {'type': 'bool', 'required': False},
+            'is_auto_delete': {'type': 'bool', 'required': False},
+            'retention_duration': {'type': 'int', 'required': False}
+        }
+    }
+
     return dict(
         filesystem_name=dict(required=False, type='str'),
         filesystem_id=dict(required=False, type='str'),
@@ -1846,6 +2129,7 @@ def get_filesystem_parameters():
         cap_unit=dict(required=False, type='str', choices=['GB', 'TB']),
         is_thin=dict(required=False, type='bool'),
         data_reduction=dict(required=False, type='bool'),
+        is_advanced_dedup_enabled=dict(required=False, type='bool'),
         supported_protocols=dict(required=False, type='str',
                                  choices=['NFS', 'CIFS', 'MULTIPROTOCOL']),
         smb_properties=dict(type='dict', options=dict(
@@ -1890,7 +2174,10 @@ def get_filesystem_parameters():
                                     remote_system_port=dict(type='int', required=False, default=443)
                                )),
             destination_pool_name=dict(type='str'),
-            destination_pool_id=dict(type='str')
+            destination_pool_id=dict(type='str'),
+            no_async_snap_replication=dict(type='bool'),
+            hourly_snap_replication_policy=dict(snap_replication_policy_argument_spec),
+            daily_snap_replication_policy=dict(snap_replication_policy_argument_spec),
         )),
         replication_state=dict(type='str', choices=['enable', 'disable']),
         state=dict(required=True, type='str', choices=['present', 'absent'])
